@@ -16,22 +16,6 @@
     "children":[]
   },
   {
-    "hide":false,
-    "icon":"HomeFilled",
-    "parentMenuCode":"non",
-    "path":"/microApp/order",
-    "permissionId":2378,
-    "menuCode":"SHOUYE",
-    "menuName":"工单管理",
-    "permissionType":{
-      "type":1,
-      "desc":"工单管理"
-    },
-    "rolePermissionOperation":[],
-    "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-    "children":[]
-  },
-  {
     "hide":true,
     "icon":"List",
     "parentMenuCode":"non",
@@ -3494,7 +3478,7 @@
         "hide":false,
         "icon":"Menu",
         "parentMenuCode":"QUANXIANGUANLI",
-        "path":"/microApp/bushManage/waiverApprox",
+        "path":"/bushManage/waiverApprox",
         "permissionId":2353,
         "menuCode":"CAIDANQUANXIAN",
         "menuName":"减免审批",
@@ -3510,7 +3494,7 @@
         "hide":false,
         "icon":"Menu",
         "parentMenuCode":"QUANXIANGUANLI",
-        "path":"/microApp/bushManage/settlementCertify",
+        "path":"/bushManage/settlementCertify",
         "permissionId":2472,
         "menuCode":"ANNIUQUANXIAN",
         "menuName":"结清证明",
@@ -3523,7 +3507,7 @@
         "hide":false,
         "icon":"Menu",
         "parentMenuCode":"QUANXIANGUANLI",
-        "path":"/microApp/bushManage/basicConfigure",
+        "path":"/bushManage/basicConfigure",
         "permissionId":2472,
         "menuCode":"ANNIUQUANXIAN",
         "menuName":"业务基础配置",

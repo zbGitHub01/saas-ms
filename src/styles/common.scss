@@ -96,27 +96,39 @@
 /* 外边距、内边距全局样式 */
 @for $i from 0 through 40 {
   .mt#{$i} {
-    margin-top: #{$i}px !important;
+    margin-top: #{$i}px;
   }
   .mr#{$i} {
-    margin-right: #{$i}px !important;
+    margin-right: #{$i}px;
   }
   .mb#{$i} {
-    margin-bottom: #{$i}px !important;
+    margin-bottom: #{$i}px;
   }
   .ml#{$i} {
-    margin-left: #{$i}px !important;
+    margin-left: #{$i}px;
   }
   .pt#{$i} {
-    padding-top: #{$i}px !important;
+    padding-top: #{$i}px;
   }
   .pr#{$i} {
-    padding-right: #{$i}px !important;
+    padding-right: #{$i}px;
   }
   .pb#{$i} {
-    padding-bottom: #{$i}px !important;
+    padding-bottom: #{$i}px;
   }
   .pl#{$i} {
-    padding-left: #{$i}px !important;
+    padding-left: #{$i}px;
   }
+}
+
+// * card 卡片样式
+.card-wrap {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  overflow-x: hidden;
+  background-color: var(--el-fill-color-blank);
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgb(0 0 0 / 5%);
 }

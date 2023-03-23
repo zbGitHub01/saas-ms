@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 //导入所有router
-const metaRouters = import.meta.glob('./modules/*.ts', { eager: true })
+const metaRouters = import.meta.glob('./modules/*.js', { eager: true })
 // * 处理路由表
 export const routerArray = []
 Object.keys(metaRouters).forEach(item => {
@@ -9,18 +9,11 @@ Object.keys(metaRouters).forEach(item => {
     routerArray.push(...metaRouters[item][key])
   })
 })
-
+console.log(routerArray)
 const routes = [
   {
     path: '/',
-    redirect: '/home/index',
-    component: () => import('@/views/home/index.vue')
-  },
-  {
-    path: '/login',
-    name: 'login',
-    meta: { title: '登录' },
-    component: () => import('@/views/login/index.vue')
+    redirect: '/home/index'
   },
   {
     path: '/home',
@@ -36,50 +29,34 @@ const routes = [
     ]
   },
   {
-    path: '/projectList',
-    component: () => import('@/layout/index.vue'),
-    redirect: '/projectList/index',
-    children: [
-      {
-        path: 'index',
-        name: 'projectList',
-        component: () => import('@/views/projectList/index.vue'),
-        meta: { keepAlive: true, title: '项目列表', icon: 'List' }
-      }
-    ]
+    path: '/login',
+    name: 'login',
+    meta: { title: '登录' },
+    component: () => import('@/views/login/index.vue')
+  },
+  ...routerArray,
+  {
+    path: '/403',
+    name: '403',
+    component: () => import('@/views/errorPage/403.vue'),
+    meta: { title: '403' }
   },
   {
-    path: '/microApp/order',
-    name: 'order',
-    meta: { title: '工单管理', icon: 'Setting' },
-    component: () => import('@/layout/index.vue')
+    path: '/404',
+    name: '404',
+    component: () => import('@/views/errorPage/404.vue'),
+    meta: { title: '404' }
   },
   {
-    path: '/bushManage',
-    name: 'bushManage',
-    meta: { title: '业务管理', icon: 'Setting' },
-    children: [
-      {
-        path: '/microApp/bushManage/waiverApprox',
-        name: 'WaiverApprox',
-        meta: { title: '减免审批', keepAlive: true },
-        component: () => import('@/layout/index.vue')
-      },
-      {
-        path: '/microApp/bushManage/settlementCertify',
-        name: 'SettlementCertify',
-        meta: { title: '结清证明', keepAlive: true },
-        component: () => import('@/layout/index.vue')
-      },
-      {
-        path: '/microApp/bushManage/basicConfigure',
-        name: 'BasicConfigure',
-        meta: { title: '业务基础配置', keepAlive: true },
-        component: import('@/layout/index.vue')
-      }
-    ]
+    path: '/500',
+    name: '500',
+    component: () => import('@/views/errorPage/500.vue'),
+    meta: { title: '500' }
   },
-  ...routerArray
+  {
+    path: '/:pathMatch(.*)',
+    redirect: { name: '404' }
+  }
 ]
 
 const router = createRouter({
