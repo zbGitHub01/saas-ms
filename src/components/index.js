@@ -4,11 +4,10 @@ import Pagination from './Pagination/index.vue'
 import OperationBar from './OperationBar/index.vue'
 
 export default {
-  install: app => {
-    console.log(app, '---app')
-    app.component('SvgIcon', SvgIcon)
-    app.component('FormWrap', FormWrap)
-    app.component('Pagination', Pagination)
-    app.component('OperationBar', OperationBar)
+  install: Vue => {
+    Vue.component('SvgIcon', SvgIcon)
+    Vue.component('FormWrap', FormWrap)
+    Vue.component('Pagination', Pagination)
+    Vue.component('OperationBar', OperationBar)
   }
 }

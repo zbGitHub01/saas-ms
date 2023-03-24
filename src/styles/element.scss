@@ -36,8 +36,14 @@
   }
 }
 
-.el-tabs__nav-wrap {
-  &::after {
-    content: none;
-  }
+//.el-tabs__nav-wrap {
+//  &::after {
+//    content: none;
+//  }
+//}
+.el-table th.el-table__cell {
+  background-color: #F8F8F8;
+}
+.el-input__wrapper {
+  width: 210px;
 }

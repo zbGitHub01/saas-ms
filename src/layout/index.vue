@@ -68,7 +68,7 @@ provide('refresh', refreshCurrentPage)
   }
   .el-main {
     box-sizing: border-box;
-    padding: 10px 13px;
+    padding: 12px 12px;
     /* 防止切换出现横向滚动条 */
     overflow-x: hidden;
     background: var(--color-main-bg);
