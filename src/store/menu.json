@@ -17,6 +17,53 @@
   },
   {
     "hide":false,
+    "icon":"Setting",
+    "parentMenuCode":"non",
+    "path":"/caseManage",
+    "permissionId":2462,
+    "menuCode":"ANJIANGUANLI",
+    "menuName":"案件管理",
+    "permissionType":{
+      "type":1,
+      "desc":"权限菜单"
+    },
+    "rolePermissionOperation":[],
+    "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
+    "children":[
+      {
+        "hide":false,
+        "icon":"UserFilled",
+        "parentMenuCode":"ANJIANGUANLI",
+        "path":"/caseManage/caseImport",
+        "permissionId":2280,
+        "menuCode":"SHUJUDAORU",
+        "menuName":"数据导入",
+        "permissionType":{
+          "type":1,
+          "desc":"权限菜单"
+        },
+        "rolePermissionOperation":[],
+        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide":false,
+        "icon":"UserFilled",
+        "parentMenuCode":"ANJIANGUANLI",
+        "path":"/caseManage/allCases",
+        "permissionId":2280,
+        "menuCode":"QUANBUANJIAN",
+        "menuName":"全部案件",
+        "permissionType":{
+          "type":1,
+          "desc":"权限菜单"
+        },
+        "rolePermissionOperation":[],
+        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      }
+    ]
+  },
+  {
+    "hide":false,
     "icon":"HomeFilled",
     "parentMenuCode":"non",
     "path":"/microApp/order",
