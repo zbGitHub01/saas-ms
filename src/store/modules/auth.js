@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import piniaPersistConfig from '@/utils/piniaPersist'
 import menuData from '../menu.json'
 
-
 export const filterMenu = (routes, isAll = false) => {
   if (routes.length === 0) return []
   let menuList = []
@@ -28,7 +27,7 @@ export const filterMenu = (routes, isAll = false) => {
 export const useAuthStore = defineStore('authStore', {
   state: () => ({
     isCollapse: false,
-    menuList: filterMenu(menuData),
+    menuList: filterMenu(menuData)
   }),
   actions: {
     async setCollapse() {

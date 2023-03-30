@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "svgo": "svgo -f src/assets/icons"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
@@ -32,6 +33,7 @@
     "eslint-plugin-vue": "^9.9.0",
     "prettier": "^2.8.4",
     "sass": "^1.59.3",
+    "svgo": "^2.8.0",
     "vite": "^4.1.0",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-svg-icons": "^2.0.1",

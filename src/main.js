@@ -8,14 +8,15 @@ import '@/styles/reset.scss'
 import '@/styles/common.scss'
 import '@/styles/element.scss'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'virtual:svg-icons-register'
-import svgIcon from '@/components/SvgIcon'
+import Components from '@/components'
 
 const app = createApp(App)
 app.use(pinia)
 app.use(router)
-app.use(ElementPlus)
-app.use(svgIcon)
+app.use(ElementPlus, { locale: zhCn })
+app.use(Components)
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
