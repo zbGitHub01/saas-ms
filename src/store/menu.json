@@ -59,6 +59,36 @@
         },
         "rolePermissionOperation":[],
         "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide":false,
+        "icon":"UserFilled",
+        "parentMenuCode":"ANJIANGUANLI",
+        "path":"/caseManage/assetEntrust",
+        "permissionId":2280,
+        "menuCode":"ZICHANWEITUO",
+        "menuName":"资产委托",
+        "permissionType":{
+          "type":1,
+          "desc":"权限菜单"
+        },
+        "rolePermissionOperation":[],
+        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide":false,
+        "icon":"UserFilled",
+        "parentMenuCode":"ANJIANGUANLI",
+        "path":"/caseManage/assetDispose",
+        "permissionId":2280,
+        "menuCode":"ZICHANJICHUPEIZHI",
+        "menuName":"资产基础配置",
+        "permissionType":{
+          "type":1,
+          "desc":"权限菜单"
+        },
+        "rolePermissionOperation":[],
+        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7"
       }
     ]
   },

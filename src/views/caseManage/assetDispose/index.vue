@@ -1,128 +1,83 @@
 <template>
-    <div class="card-wrap">
-        资产基础配置
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref, reactive, onMounted } from 'vue'
-  const isEditing = ref<boolean>(false)
-  const editDialog = ref()
-  const selectData = reactive({
-    peopleList: [] as any[], //员工列表
-    roleList: [] as any[], //角色列表
-  })
-  const selectDataSub = reactive({
-    peopleList: [] as any[], //员工列表
-    roleList: [] as any[], //角色列表
-  })
-  onMounted(() => {
-    getTableData()
-    getSelecData()
-  })
-  // 图片再处理
-  const url = ref<String>('')
-  const srcList = reactive([''])
-  // 公司信息
-  const state = reactive({
-    info: {
-      peopleId: null,
-      roleId: null,
-      picture: '',
+  <div class="card-wrap">
+    <el-tabs class="mb16" v-model="tabActive">
+      <el-tab-pane label="产品名录" name="1">
+        <ProductDirectory :selectData="selectData" />
+      </el-tab-pane>
+      <el-tab-pane label="入库批次" name="2">
+        <ReceiptBatch :selectData="selectData" />
+      </el-tab-pane>
+      <el-tab-pane label="债权方" name="3">
+        <CreditorList />
+      </el-tab-pane>
+    </el-tabs>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { reactive, ref, onMounted } from 'vue'
+import ProductDirectory from './ProductDirectory/index.vue'
+import ReceiptBatch from './ReceiptBatch/index.vue'
+import CreditorList from './CreditorList/index.vue'
+const selectData = reactive({
+  productList: [] as any[], //产品列表
+  orgList: [] as any[], //机构列表
+  packageList: [] as any[] //资产包类型
+})
+const tabActive = ref('1')
+onMounted(() => {
+  getSelecData()
+})
+const getSelecData = async () => {
+  // 请求得到数据
+  // const { code, data, msg } = await xx(params)
+  // if(code !== 200){
+  //   return ElMessage.error(msg)
+  // }
+  selectData.productList = [
+    {
+      id: 1,
+      text: '小花袋'
     },
-  })
-  // 获取公司信息
-  const getTableData = async () => {
-    const params = {
-      companyId: 1
+    {
+      id: 2,
+      text: '“360”借条'
+    },
+    {
+      id: 3,
+      text: '中腾信'
+    },
+    {
+      id: 4,
+      text: '万达袋'
     }
-    // 请求得到数据
-    // const { code, data, msg } = await xx(params)
-    // if(code !== 200){
-    //   return ElMessage.error(msg)
-    // }
-    const infoSub = {
-      peopleId: 1,
-      roleId: 1,
-      peopleName: '王小二',
-      phone: '12345678910',
-      picture: '',
+  ]
+  selectData.orgList = [
+    {
+      id: 1,
+      text: '小丽水海树信用管理有限公司花袋'
+    },
+    {
+      id: 2,
+      text: '浙江东岸科技有限公司'
     }
-    state.info = infoSub
-  }
-  // 获取下拉
-  const getSelecData = async () => {
-    // 请求得到数据
-    // const { code, data, msg } = await xx(form)
-    // if(code !== 200){
-    //   return ElMessage.error(msg)
-    // }
-    selectData.peopleList = [
-      {
-        id: 1,
-        text:'张三'
-      },
-      {
-        id: 2,
-        text:'李思'
-      },
-      {
-        id: 3,
-        text:'王五'
-      },
-      {
-        id: 4,
-        text:'八嘎'
-      },
-    ]
-    selectData.roleList = [
-      {
-        id: 1,
-        text: '超级管理员',
-      },
-      {
-        id: 2,
-        text: '经理',
-      },
-      {
-        id: 3,
-        text: '财务',
-      },
-      {
-        id: 4,
-        text: '技术',
-      }
-    ]
-  }
-  // 编辑 1修改主管理员 2修改注册手机号
-  const editInfo = (type: number) => {
-    if(type === 1){
-      // 剔除原始角色和账号
-      selectDataSub.peopleList = selectData.peopleList.filter(item=>{return item.id !== state.info.peopleId})
-      selectDataSub.roleList = selectData.roleList.filter(item=>{return item.id !== state.info.roleId})
+  ]
+  selectData.packageList = [
+    {
+      id: 1,
+      text: '资产包1'
+    },
+    {
+      id: 2,
+      text: '资产包2'
+    },
+    {
+      id: 3,
+      text: '资产包3'
     }
-    isEditing.value = true
-    editDialog.value.open(state.info, type)
-    console.log('编辑')
-  }
-  </script>
-  
-  <style lang="scss" scoped>
-  .table {
-    width: 100%;
-    tr {
-      td {
-        height: 30px;
-        line-height: 30px;
-        padding-left: 5px;
-        border: 2px solid #f0f2f5;
-        color: #909399;
-        &:nth-child(2n) {
-          color: black;
-          font-weight: 500;
-        }
-      }
-    }
-  }
-  </style>
-  
+  ]
+}
+</script>
+
+<style lang="scss" scoped>
+</style>

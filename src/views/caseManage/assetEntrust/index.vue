@@ -4,7 +4,7 @@
       <el-tab-pane label="当前委托" name="1"></el-tab-pane>
       <el-tab-pane label="委托历史" name="2"></el-tab-pane>
     </el-tabs>
-    <el-button type="primary" @click="addEntrust">新增委托</el-button>
+    <el-button type="primary" icon="CirclePlus" @click="addEntrust" v-if="tabActive === '1'">新增委托</el-button>
     <div class="mt20">
       <el-table :data="state.tableData" border>
         <el-table-column label="序" type="index" align="center" width="50" />
@@ -27,7 +27,11 @@
           min-width="150"
           v-if="tabActive === '1'"
         ></el-table-column>
-        <el-table-column label="委托协议" prop="xieyi" align="center" min-width="150"></el-table-column>
+        <el-table-column label="委托协议" prop="xieyi" align="center" min-width="150">
+          <template #default="scope">
+            <el-button link type="primary" @click="lookAgreement(scope.row)">查看</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="委托创建人" prop="people" align="center" min-width="150"></el-table-column>
         <el-table-column label="委托创建时间" prop="createTime" align="center" min-width="150"></el-table-column>
         <el-table-column
@@ -52,12 +56,12 @@
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
-    <AddEntrustDialog ref="addEntrustDialog" @getTableData="getTableData" :selectData="selectData"/>
+    <AddEntrustDialog ref="addEntrustDialog" @getTableData="getTableData" :selectData="selectData" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Plus } from '@element-plus/icons-vue'
+import { CirclePlus } from '@element-plus/icons-vue'
 import AddEntrustDialog from './components/AddEntrustDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
@@ -84,6 +88,7 @@ onMounted(() => {
   getSelecData()
 })
 const getTableData = async () => {
+  console.log('查询', form)
   // 请求得到数据
   // const { code, data, msg } = await xx(form)
   // if(code !== 200){
@@ -192,6 +197,10 @@ const toStop = (row: any) => {
       console.log(res)
     }
   )
+}
+// 查看协议
+const lookAgreement = (row: any) => {
+  window.open(row.url)
 }
 </script>
 

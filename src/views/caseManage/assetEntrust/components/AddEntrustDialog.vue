@@ -10,7 +10,7 @@
     <span>
       <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="right" label-width="120px">
         <el-form-item label="委托产品：" prop="productId">
-          <el-select v-model="form.productId" placeholder="请选择委托产品" clearable filterable>
+          <el-select v-model="form.productId" placeholder="请选择委托产品" clearable filterable @change="changeProduct">
             <el-option
               v-for="(item, index) in selectData.productList"
               :key="index"
@@ -46,6 +46,20 @@
             class="ml10"
           />
         </el-form-item>
+        <el-form-item label="委托协议：" prop="xieyi">
+          <el-upload
+            ref="upload"
+            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            :limit="1"
+            :on-exceed="handleExceed"
+            :on-success="handleSuccess"
+            :on-remove="handleRemove"
+          >
+            <template #trigger>
+              <el-button type="primary">上传</el-button>
+            </template>
+          </el-upload>
+        </el-form-item>
       </el-form>
     </span>
     <template #footer>
@@ -60,18 +74,37 @@
 <script lang="ts" setup>
 // 表单验证规则的类型
 import type { FormInstance, FormRules } from 'element-plus'
-import { ElMessage } from 'element-plus'
+import { ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 import { reactive, ref } from 'vue'
+// 上传
+const upload = ref<UploadInstance>()
+// 上传超过一个，覆盖原文件
+const handleExceed: UploadProps['onExceed'] = files => {
+  upload.value!.clearFiles()
+  const file = files[0] as UploadRawFile
+  file.uid = genFileId()
+  upload.value!.handleStart(file)
+  // console.log(upload.value!, file, URL.createObjectURL(file))
+  form.xieyi = URL.createObjectURL(file)
+}
+// 上传成功
+const handleSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+  // console.log(upload.value!, response, uploadFile)
+  form.xieyi = URL.createObjectURL(uploadFile.raw!)
+}
+// 删除文件
+const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
+  form.xieyi = ''
+}
 const form: any = reactive({
-  producId: null,
+  productId: null,
   zhaiquanfangId: null,
   weituofangId: null,
   shoutuofangId: null,
   deadline: '',
   xieyi: '' //协议
 })
-const time = ref<String>('') 
-const isAdded = ref<boolean>(false)
+const time = ref<String>('')
 // 接收props数据
 const props = defineProps<{
   selectData: {
@@ -85,29 +118,21 @@ const rules = reactive<FormRules>({
   productId: [{ required: true, trigger: 'change', message: '委托产品不能为空' }],
   zhaiquanfangId: [{ required: true, trigger: 'change', message: '债权方不能为空' }],
   shoutuofangId: [{ required: true, trigger: 'change', message: '受托方不能为空' }],
-  deadline: [{ required: true, trigger: 'blur', message: '委托时效不能为空' }],
+  deadline: [{ required: true, trigger: 'change', message: '委托时效不能为空' }],
+  xieyi: [{ required: true, trigger: 'change', message: '委托协议不能为空' }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (row: any, type: Number) => {
-  if (type === 1) {
-    isAdded.value = false
-  } else if (type === 2) {
-    form.name = row.employeeName
-    form.phone = row.phone
-    form.caseId = row.caseId
-    form.sex = row.sex
-    form.roleList = row.roleList
-    form.picture1 = row.picture1
-    form.picture2 = row.picture2
-  }
+const open = () => {
+  // 委托方数据从哪来？
+  form.weituofangId = 1
   dialogVisible.value = true
 }
 defineExpose({
   open
 })
-// 添加/编辑账号
+// 添加委托
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate(async valid => {
@@ -128,10 +153,16 @@ const submitForm = (formEl: FormInstance | undefined) => {
 const changeDate = (val: any) => {
   form.deadline = val
 }
+// 根据选择的产品，自动生成对应的债权方id
+const changeProduct = a => {
+  form.zhaiquanfangId = a
+}
 // 取消
 const cancelSubmit = (formEl: FormInstance | undefined) => {
   if (!formEl) return
+  upload.value!.clearFiles()
   formEl.resetFields()
+  time.value = ''
   dialogVisible.value = false
 }
 </script>
