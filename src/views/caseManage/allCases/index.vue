@@ -21,9 +21,6 @@ const selectData = reactive({
   packageList: [] as any[] //资产包类型
 })
 const tabActive = ref('1')
-// onMounted(() => {
-//   getSelecData()
-// })
 const getSelecData = async () => {
   // 请求得到数据
   // const { code, data, msg } = await xx(params)

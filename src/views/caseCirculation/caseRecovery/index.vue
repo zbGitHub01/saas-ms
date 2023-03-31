@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card-wrap">
     <FormWrap @search="getTableData" @reset="reset">
       <template #default>
         <el-form inline :model="form">

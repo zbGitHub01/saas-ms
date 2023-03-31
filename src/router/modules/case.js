@@ -30,6 +30,38 @@ const caseRouter = [
         meta: { title: '资产基础配置', icon: 'UserFilled' }
       }
     ]
+  },
+  {
+    path: '/caseCirculation',
+    name: 'caseCirculation',
+    component: () => import('@/layout/index.vue'),
+    meta: { title: '案件流转' },
+    children: [
+      {
+        path: '/caseCirculation/caseBank',
+        name: 'caseBank',
+        component: () => import('@/views/caseCirculation/caseBank/index.vue'),
+        meta: { title: '案件分库', icon: 'UserFilled' }
+      },
+      {
+        path: '/caseCirculation/caseAssignment',
+        name: 'caseAssignment',
+        component: () => import('@/views/caseCirculation/caseAssignment/index.vue'),
+        meta: { title: '案件委派', icon: 'UserFilled' }
+      },
+      {
+        path: '/caseCirculation/caseRecovery',
+        name: 'caseRecovery',
+        component: () => import('@/views/caseCirculation/caseRecovery/index.vue'),
+        meta: { title: '案件回收', icon: 'UserFilled' }
+      },
+      {
+        path: '/caseCirculation/caseConfiguration',
+        name: 'caseConfiguration',
+        component: () => import('@/views/caseCirculation/caseConfiguration/index.vue'),
+        meta: { title: '案件流转配置', icon: 'UserFilled' }
+      }
+    ]
   }
 ]
 

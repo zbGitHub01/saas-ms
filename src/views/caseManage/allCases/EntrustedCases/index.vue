@@ -39,43 +39,7 @@
         </el-form>
       </template>
     </FormWrap>
-    <div class="flx-justify-between" style="background-color: #f0f2f5">
-      <div class="flx-justify-between tab" style="justify-content:flex-start">
-        <div>图标</div>
-        <div>
-          <div>案件数量</div>
-          <div>{{ 261 }}</div>
-        </div>
-      </div>
-      <div class="flx-justify-between tab" style="justify-content:flex-start">
-        <div class="icon">图标</div>
-        <div>
-          <div>案人人数</div>
-          <div>{{ 261 }}</div>
-        </div>
-      </div>
-      <div class="flx-justify-between tab" style="justify-content:flex-start">
-        <div class="icon">图标</div>
-        <div>
-          <div>处置金额</div>
-          <div>{{ 261 }}</div>
-        </div>
-      </div>
-      <div class="flx-justify-between tab" style="justify-content:flex-start">
-        <div class="icon">图标</div>
-        <div>
-          <div>已还金额</div>
-          <div>{{ 261 }}</div>
-        </div>
-      </div>
-      <div class="flx-justify-between tab" style="justify-content:flex-start">
-        <div class="icon">图标</div>
-        <div>
-          <div>待还金额</div>
-          <div>{{ 261 }}</div>
-        </div>
-      </div>
-    </div>
+    <LabelData :labelData="state.labelData" />
     <div class="mt20">
       <el-table :data="state.tableData" border>
         <el-table-column label="案件ID" prop="caseId" align="center" min-width="150"></el-table-column>
@@ -115,7 +79,8 @@ const query = reactive({
 })
 const state = reactive({
   tableData: [] as any[],
-  total: 0
+  total: 0,
+  labelData: {} as any
 })
 const selectData = reactive({
   productList: [] as any[], //产品列表
@@ -168,6 +133,7 @@ const getTableData = async () => {
   state.tableData = tableDataSub
   query.page = 1
   state.total = 12
+  state.labelData.money = 444
 }
 const getSelecData = async () => {
   // 请求得到数据
@@ -227,8 +193,4 @@ const reset = () => {
 </script>
 
 <style lang="scss" scoped>
-.tab{
-  width: 18%;
-  background-color: #ffffff;
-}
 </style>
