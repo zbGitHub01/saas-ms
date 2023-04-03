@@ -116,6 +116,8 @@ listeningWindow()
 </style>
 <style lang="scss">
 body .el-popper.is-light {
-  background: #488dee;
+  .el-menu--popup-container {
+    background: #488dee;
+  }
 }
 </style>
