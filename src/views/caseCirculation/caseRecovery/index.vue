@@ -37,8 +37,6 @@
         <el-table-column label="剩余待还金额" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="临时标签" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="预警标签" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="IVR标签" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="机器人外呼标签" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="入库批次号" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="债权方" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="所属分库" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
@@ -48,7 +46,6 @@
         <el-table-column label="委案金额" prop="picihao" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="CPE" prop="zhaiquanfang" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="分案时间" prop="shoutuofang" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="特殊原因备注" prop="status" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column label="案件状态" prop="status" align="center" min-width="150" fixed="right"></el-table-column>
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
@@ -59,7 +56,7 @@
 <script lang="ts" setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-import { Close, VideoPause, VideoPlay, CirclePlus, Delete, Download, Document } from '@element-plus/icons-vue'
+import { Folder } from '@element-plus/icons-vue'
 const multipleTable = ref(null)
 const form: any = reactive({
   caseId: ''
@@ -80,59 +77,17 @@ const state = reactive({
 const operation = ref(1)
 const operationList = reactive([
   {
-    title: '关闭案件',
-    icon: 'Close',
+    title: '实时收回',
+    icon: 'Folder',
     isShow: true
     // isShow: this.hasPerm("disposal_case_close"),
-  },
-  {
-    title: '暂停案件',
-    icon: 'VideoPause',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_stop"),
-  },
-  {
-    title: '恢复案件',
-    icon: 'VideoPlay',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_ref"),
-  },
-  {
-    title: '添加临时标签',
-    icon: 'CirclePlus',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_addlabel"),
-  },
-  {
-    title: '删除临时标签',
-    icon: 'Delete',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_dellabel"),
-  },
-  {
-    title: '导出案件',
-    icon: 'Download',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_excase"),
-  },
-  {
-    title: '导出处置记录',
-    icon: 'Download',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_exrecord"),
-  },
-  {
-    title: '生成结清证明',
-    icon: 'Document',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_qing"),
   }
 ])
 onMounted(() => {
   getTableData()
 })
 const getTableData = async () => {
-  console.log('可管理案件搜索', form)
+  console.log('案件回收', form)
   // 请求得到数据
   // const { code, data, msg } = await xx(form)
   // if(code !== 200){
@@ -207,47 +162,16 @@ const handleClick = item => {
     ElMessage.warning('请先选择操作对象!')
   } else {
     switch (item) {
-      case '关闭案件':
-        open(item, 1)
-        break
-      case '暂停案件':
-        // this.form.caseStatus = 25;
-        open(item, 2)
-        break
-      case '恢复案件':
-        // this.form.caseStatus = 1;
-        warningModel(item, 3)
-        break
-      case '添加临时标签':
-        open(item, 4)
-        break
-      case '删除临时标签':
-        open(item, 5)
-        break
-      case '导出案件':
-        exportModel('EXPORT_CASE_FIELD', 0)
-        break
-      case '导出处置记录':
-        exportModel('EXPORT_FOLLOW_FIELD', 1)
-        break
-      case '生成结清证明':
-        certificate()
+      case '实时收回':
+        caseRecovery()
         break
       default:
         break
     }
   }
 }
-// 1关闭/2暂停案件 4添加临时标签/5删除临时标签
-const open = (item, type) => {
-  console.log(item,type)
-}
-// 导出案件/导出处置记录
-const exportModel = (field, type) => {}
-// 恢复案件
-const warningModel = (item, type) => {}
-// 生成结清证明
-const certificate = () => {}
+// 实时收回
+const caseRecovery = () => {}
 </script>
 
 <style lang="scss" scoped>
