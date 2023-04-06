@@ -1,13 +1,11 @@
 <template>
   <div class="card-wrap">
     <el-tabs class="mb16" v-model="tabActive">
-      <el-tab-pane label="可管理案件" name="1">
-        <ManageableCases/>
-      </el-tab-pane>
-      <el-tab-pane label="已委托案件" name="2">
-        <EntrustedCases/>
-      </el-tab-pane>
+      <el-tab-pane label="可管理案件" name="1"></el-tab-pane>
+      <el-tab-pane label="已委托案件" name="2"></el-tab-pane>
     </el-tabs>
+    <ManageableCases v-if="tabActive === '1'" />
+    <EntrustedCases v-if="tabActive === '2'" />
   </div>
 </template>
 

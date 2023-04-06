@@ -53,7 +53,7 @@ const caseRouter = [
         path: '/caseCirculation/caseRecovery',
         name: 'caseRecovery',
         component: () => import('@/views/caseCirculation/caseRecovery/index.vue'),
-        meta: { title: '案件回收', icon: 'UserFilled' }
+        meta: { title: '案件收回', icon: 'UserFilled' }
       },
       {
         path: '/caseCirculation/caseConfiguration',

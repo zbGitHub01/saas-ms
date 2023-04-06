@@ -144,7 +144,7 @@
         "path":"/caseCirculation/caseRecovery",
         "permissionId":2280,
         "menuCode":"ANJIANHUISHOU",
-        "menuName":"案件回收",
+        "menuName":"案件收回",
         "permissionType":{
           "type":1,
           "desc":"权限菜单"

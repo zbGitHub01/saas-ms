@@ -50,6 +50,7 @@
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
+    <CaseRecoveryDialog ref="caseRecoveryDialog" :taskId="state.taskId" :caseInfo="state.caseInfo" @get-table-data="getTableData" @fetchRecoverNowSelect="fetchRecoverNowSelect"/>
   </div>
 </template>
 
@@ -57,6 +58,7 @@
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Folder } from '@element-plus/icons-vue'
+import CaseRecoveryDialog from './components/CaseRecoveryDialog.vue'
 const multipleTable = ref(null)
 const form: any = reactive({
   caseId: ''
@@ -72,9 +74,12 @@ const state = reactive({
   total: 0,
   labelData: {} as any, //标签数据
   selectData: [] as any[], //选中项
-  handleparams: {} as any //操作的参数
+  handleparams: {} as any, //操作的参数
+  taskId: null,  //对选中数据操作的唯一标记id
+  caseInfo: {} as any //委案数据
 })
 const operation = ref(1)
+const caseRecoveryDialog = ref()
 const operationList = reactive([
   {
     title: '实时收回',
@@ -87,7 +92,7 @@ onMounted(() => {
   getTableData()
 })
 const getTableData = async () => {
-  console.log('案件回收', form)
+  console.log('案件收回', form)
   // 请求得到数据
   // const { code, data, msg } = await xx(form)
   // if(code !== 200){
@@ -171,7 +176,33 @@ const handleClick = item => {
   }
 }
 // 实时收回
-const caseRecovery = () => {}
+const caseRecovery = () => {
+  fetchRecoverNowSelect()
+  caseRecoveryDialog.value.open()
+}
+// 获取委案数据
+const fetchRecoverNowSelect = (isWithProductPublicDebt = true) => {
+  // 处理入参
+  let params = (operation.value === 1?Object.assign({}, state.handleparams):{ operateType: 2, ...form })
+  params['recoverType'] = 2
+  params.storeId = 2
+  params.isWithProductPublicDebt = isWithProductPublicDebt
+  console.log('委案数据参数：', params)
+  // 请求得到数据
+  // const { code, data, msg } = await xx(params)
+  // if(code !== 200){
+  //   return ElMessage.error(msg)
+  // }
+  // state.taskId = data.taskId
+  // state.caseInfo = data
+  state.taskId = 1
+  state.caseInfo = {
+    caseNum: 730330,
+    personNum: 350085,
+    taskId: 2210,
+    totalAmount: 1815372575.82,
+  }
+}
 </script>
 
 <style lang="scss" scoped>
