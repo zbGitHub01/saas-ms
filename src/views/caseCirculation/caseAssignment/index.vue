@@ -14,7 +14,7 @@
       <OperationBar v-model:active="operation">
         <template #default>
           <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow" plain type="primary" :icon="item.icon" @click="handleClick(item.title)">
+            <el-button v-if="item.isShow" type="primary" :icon="item.icon" @click="handleClick(item.title)">
               {{ item.title }}
             </el-button>
           </div>
@@ -26,30 +26,154 @@
       </div>
       <el-table :data="state.tableData" border @selection-change="handleSelectionChange" ref="multipleTable">
         <el-table-column type="selection" fixed align="center" width="55"></el-table-column>
-        <el-table-column label="案件ID" prop="caseId" align="center" min-width="150" fixed="left" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="产品" prop="productName" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column
+          label="案件ID"
+          prop="caseId"
+          align="center"
+          min-width="150"
+          fixed="left"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="产品"
+          prop="productName"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
         <el-table-column label="姓名" prop="name" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="证件号" prop="caseNo" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="手机号" prop="phone" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="处置金额" prop="money1" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="还款入账金额" prop="money2" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="减免金额" prop="money3" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="剩余待还金额" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="临时标签" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="预警标签" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="入库批次号" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="债权方" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="所属分库" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="分库时间" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="处置机构" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="委案时间" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="委案金额" prop="picihao" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="CPE" prop="zhaiquanfang" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="分案时间" prop="shoutuofang" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column
+          label="证件号"
+          prop="caseNo"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="手机号"
+          prop="phone"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="处置金额"
+          prop="money1"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="还款入账金额"
+          prop="money2"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="减免金额"
+          prop="money3"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="剩余待还金额"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="临时标签"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="预警标签"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="入库批次号"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="债权方"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="所属分库"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="分库时间"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="处置机构"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="委案时间"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="委案金额"
+          prop="picihao"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="CPE"
+          prop="zhaiquanfang"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="分案时间"
+          prop="shoutuofang"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
         <el-table-column label="案件状态" prop="status" align="center" min-width="150" fixed="right"></el-table-column>
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
+    <CaseAssignmentDialog
+      ref="caseAssignmentDialog"
+      :taskId="state.taskId"
+      :selectData="selectData"
+      :timeData="state.timeData"
+      @get-table-data="getTableData"
+      @fetchTimingSearch="fetchTimingSearch"
+      @toggleSelection="toggleSelection"
+    />
   </div>
 </template>
 
@@ -57,9 +181,15 @@
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Folder } from '@element-plus/icons-vue'
+import CaseAssignmentDialog from './components/CaseAssignmentDialog.vue'
 const multipleTable = ref(null)
 const form: any = reactive({
   caseId: ''
+})
+const selectData = reactive({
+  caseTypeList: [] as any[], //委案类型列表
+  orgList: [] as any[], //机构列表
+  defalutType: null //?
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 // 页码
@@ -72,19 +202,23 @@ const state = reactive({
   total: 0,
   labelData: {} as any, //标签数据
   selectData: [] as any[], //选中项
-  handleparams: {} as any //操作的参数
+  handleparams: {} as any, //操作的参数
+  taskId: null, //对选中数据操作的唯一标记id
+  timeData: {} as any //委案数据
 })
 const operation = ref(1)
+const caseAssignmentDialog = ref()
 const operationList = reactive([
   {
     title: '实时委案',
     icon: 'Folder',
     isShow: true
     // isShow: this.hasPerm("disposal_case_close"),
-  },
+  }
 ])
 onMounted(() => {
   getTableData()
+  getSelecData()
 })
 const getTableData = async () => {
   console.log('案件委派', form)
@@ -130,6 +264,45 @@ const getTableData = async () => {
   state.total = 12
   state.labelData.money = 444
 }
+const getSelecData = async () => {
+  // 请求得到数据
+  let params = {
+    codes: 'IVR_TAG,ROBOT_TAG,PRODUCT_LIST,BATCH_LIST,CREDITOR_LIST,DUTY_ORG_LIST,CASE_BATCH_TYPE,ENTRUST_TYPE',
+    orgCategoryId: 0
+  }
+  // const { code, data, msg } = await selectList(params)
+  // if(code !== 200){
+  //   return ElMessage.error(msg)
+  // }
+  // selectData.orgList = data.DUTY_ORG_LIST
+  // selectData.caseTypeList = data.ENTRUST_TYPE
+  // selectData.defalutType = data.batchTypeList.map(item => {
+  //   if (item.itemText === '普通批次') {
+  //     selectData.defalutType = item.itemId
+  //   }
+  // })
+  selectData.caseTypeList = [
+    {
+      id: 1,
+      text: '默认'
+    },
+    {
+      id: 2,
+      text: '综合案件-温泽（2022年9月）'
+    }
+  ]
+  selectData.orgList = [
+    {
+      id: 1,
+      text: '小丽水海树信用管理有限公司花袋'
+    },
+    {
+      id: 2,
+      text: '浙江东岸科技有限公司'
+    }
+  ]
+  selectData.defalutType = 92
+}
 // 重置
 const reset = () => {
   console.log('重置')
@@ -171,7 +344,50 @@ const handleClick = item => {
   }
 }
 // 实时委案
-const caseAssignment = () => {}
+const caseAssignment = () => {
+  fetchTimingSearch()
+  caseAssignmentDialog.value.open()
+}
+// 获取委案数据
+const fetchTimingSearch = (entrustStrategy = 1) => {
+  // 处理入参
+  let params = operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, ...form }
+  params.storeId = 2
+  params.entrustStrategy = entrustStrategy
+  console.log('委案数据参数：', params)
+  // 请求得到数据
+  // const { code, data, msg } = await xx(params)
+  // if(code !== 200){
+  //   return ElMessage.error(msg)
+  // }
+  // state.taskId = data.taskId
+  // state.timeData = data
+  if (entrustStrategy === 1) {
+    state.taskId = 1
+    state.timeData = {
+      caseNum: 1,
+      personNum: 1,
+      taskId: 2210,
+      totalAmount: 1
+    }
+  } else if (entrustStrategy === 2) {
+    state.taskId = 2
+    state.timeData = {
+      caseNum: 2,
+      personNum: 2,
+      taskId: 2210,
+      totalAmount: 2
+    }
+  } else {
+    state.taskId = 3
+    state.timeData = {
+      caseNum: 3,
+      personNum: 3,
+      taskId: 2210,
+      totalAmount: 4
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,8 +1,7 @@
 <template>
   <div class="card-wrap">
     <el-tabs class="mb16" v-model="tabActive" @tab-change="changTab">
-      <el-tab-pane v-for="item in state.tabList" :key="item.value" :label="item.title" :name="item.value">
-      </el-tab-pane>
+      <el-tab-pane v-for="item in state.tabList" :key="item.itemId" :label="item.itemText" :name="item.itemId"></el-tab-pane>
     </el-tabs>
     <FormWrap @search="getTableData" @reset="reset">
       <template #default>
@@ -18,7 +17,7 @@
       <OperationBar v-model:active="operation">
         <template #default>
           <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow" plain type="primary" :icon="item.icon" @click="handleClick(item.title)">
+            <el-button v-if="item.isShow" type="primary" :icon="item.icon" @click="handleClick(item.title)">
               {{ item.title }}
             </el-button>
           </div>
@@ -30,43 +29,167 @@
       </div>
       <el-table :data="state.tableData" border @selection-change="handleSelectionChange" ref="multipleTable">
         <el-table-column type="selection" fixed align="center" width="55"></el-table-column>
-        <el-table-column label="案件ID" prop="caseId" align="center" min-width="150" fixed="left" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="产品" prop="productName" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column
+          label="案件ID"
+          prop="caseId"
+          align="center"
+          min-width="150"
+          fixed="left"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="产品"
+          prop="productName"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
         <el-table-column label="姓名" prop="name" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="证件号" prop="caseNo" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="手机号" prop="phone" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="处置金额" prop="money1" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="还款入账金额" prop="money2" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="减免金额" prop="money3" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="剩余待还金额" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="临时标签" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="预警标签" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="入库批次号" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="债权方" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="所属分库" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="分库时间" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="处置机构" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="委案时间" prop="money4" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="委案金额" prop="picihao" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="CPE" prop="zhaiquanfang" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column label="分案时间" prop="shoutuofang" align="center" min-width="150" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column
+          label="证件号"
+          prop="caseNo"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="手机号"
+          prop="phone"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="处置金额"
+          prop="money1"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="还款入账金额"
+          prop="money2"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="减免金额"
+          prop="money3"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="剩余待还金额"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="临时标签"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="预警标签"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="入库批次号"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="债权方"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="所属分库"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="分库时间"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="处置机构"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="委案时间"
+          prop="money4"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="委案金额"
+          prop="picihao"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="CPE"
+          prop="zhaiquanfang"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="分案时间"
+          prop="shoutuofang"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
         <el-table-column label="案件状态" prop="status" align="center" min-width="150" fixed="right"></el-table-column>
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
+    <AddOrRemoveTagDialog ref="addOrRemoveTagDialog" :selectData="selectData" @submitForm="submitForm" />
+    <CaseBankDialog ref="caseBankDialog" :distList="state.distList" @get-table-data="getTableData" @exportChange="exportChange" @toggleSelection="toggleSelection" :resouerdist-list="state.tabList"/>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
+import AddOrRemoveTagDialog from './components/AddOrRemoveTagDialog.vue'
+import CaseBankDialog from './components/CaseBankDialog.vue'
 import { CirclePlus, Delete, Folder } from '@element-plus/icons-vue'
+const selectData = reactive({
+  tagList: [] as any[] //标签列表
+})
 const multipleTable = ref(null)
 const tabActive = ref('1')
 const form: any = reactive({
   caseId: ''
 })
 const originFormData = JSON.parse(JSON.stringify(form))
+const addOrRemoveTagDialog = ref()
+const caseBankDialog = ref()
 // 页码
 const query = reactive({
   page: 1,
@@ -79,6 +202,7 @@ const state = reactive({
   selectData: [] as any[], //选中项
   handleparams: {} as any, //操作的参数
   tabList: [] as any[], //分库列表
+  distList: {} as any //委案数据
 })
 const operation = ref(1)
 const operationList = reactive([
@@ -104,6 +228,7 @@ const operationList = reactive([
 onMounted(() => {
   getTableData()
   getTabList()
+  getSelecData()
 })
 // 获取表格数据
 const getTableData = async () => {
@@ -159,22 +284,30 @@ const getTabList = () => {
   // }
   state.tabList = [
     {
-      title: '待分库案件',
-      value: '1'
+      itemText: '待分库案件',
+      itemId: '1'
     },
     {
-      title: '委外处置库',
-      value: '2'
+      itemText: '委外处置库',
+      itemId: '2'
     },
     {
-      title: '智能处置库',
-      value: '3'
+      itemText: '智能处置库',
+      itemId: '3'
     },
     {
-      title: '勾销处置库',
-      value: '4'
-    },
+      itemText: '勾销处置库',
+      itemId: '4'
+    }
   ]
+}
+const getSelecData = async () => {
+  // 请求得到数据
+  // const { code, data, msg } = await xx(params)
+  // if(code !== 200){
+  //   return ElMessage.error(msg)
+  // }
+  selectData.tagList = ['111', '116', 'test1', 'test', '99', 'jjj', '测试']
 }
 // 重置
 const reset = () => {
@@ -209,10 +342,10 @@ const handleClick = item => {
   } else {
     switch (item) {
       case '添加临时标签':
-        open(item, 4)
+        open(1)
         break
       case '删除临时标签':
-        open(item, 5)
+        open(2)
         break
       case '案件分库':
         caseBank()
@@ -222,14 +355,55 @@ const handleClick = item => {
     }
   }
 }
-// 4添加临时标签/5删除临时标签
-const open = (item, type) => {
-  console.log(item,type)
+// 1添加临时标签/2删除临时标签
+const open = type => {
+  addOrRemoveTagDialog.value.open(type)
+}
+// 确认添加/删除临时标签
+const submitForm = (tempTagName, isDeleteAllRelationTag) => {
+  // 处理入参
+  let params = operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, ...form }
+  params.tempTagName = tempTagName
+  if (isDeleteAllRelationTag) {
+    params['isDeleteAllRelationTag'] = isDeleteAllRelationTag === true ? 1 : 0
+  }
+  console.log(params)
+  // 请求得到数据
+  // const { code, data, msg } = await xx(form)
+  // if(code !== 200){
+  //   return ElMessage.error(msg)
+  // }
+  ElMessage.success('操作成功！')
 }
 // 案件分库
-const caseBank = () => {}
+const caseBank = () => {
+  fetchCaseDistSelect()
+  caseBankDialog.value.open()
+}
+// 获取委案数据
+const fetchCaseDistSelect = (isWithProductPublicDebt = true) => {
+  // 处理入参
+  let params = operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, ...form }
+  params["storeId"] = Number(tabActive) //当前tab分库的id
+  params.isWithProductPublicDebt = isWithProductPublicDebt
+  console.log('委案数据参数：', params)
+  // 请求得到数据
+  // const { code, data, msg } = await caseDistSelect(params)
+  // if(code !== 200){
+  //   return ElMessage.error(msg)
+  // }
+  state.distList = {
+		"caseNum":1,
+		"personNum":1,
+		"taskId":2313,
+		"totalAmount":7266.75
+  }
+}
+const exportChange = (val) => {
+  fetchCaseDistSelect(!!val)
+}
 // 切换分库
-const changTab = (val) => {
+const changTab = val => {
   console.log(val)
   //改变参数，请求表格数据
   //注意查询的数据独立

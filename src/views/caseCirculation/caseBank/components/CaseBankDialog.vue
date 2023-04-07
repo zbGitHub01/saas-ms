@@ -1,8 +1,8 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    title="实时收回"
-    width="500px"
+    title="实时委案"
+    width="50%"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :show-close="false"
@@ -13,104 +13,96 @@
           <el-icon class="icon"><Memo /></el-icon>
           <div>
             <div class="title">选中案件数</div>
-            <div class="money">{{ props.caseInfo.caseNum }}</div>
+            <div class="money">{{ props.distList.caseNum }}</div>
           </div>
         </div>
         <div class="flx-justify-between tab">
           <el-icon class="icon"><UserFilled /></el-icon>
           <div>
             <div class="title">选中案人数</div>
-            <div class="money">{{ props.caseInfo.personNum }}</div>
+            <div class="money">{{ props.distList.personNum }}</div>
           </div>
         </div>
         <div class="flx-justify-between tab">
           <el-icon class="icon"><Money /></el-icon>
           <div>
             <div class="title">预计分库金额</div>
-            <div class="money">{{ props.caseInfo.totalAmount }}</div>
+            <div class="money">{{ props.distList.totalAmount }}</div>
           </div>
         </div>
       </div>
-      <el-form ref="ruleFormRef" label-position="right" label-width="90px">
-        <el-form-item label="操作维度：">
-          <el-radio-group v-model="isWithProductPublicDebt" @change="radioChange">
+      <el-divider></el-divider>
+      <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="130px">
+        <el-form-item label="操作维度：" prop="isWithProductPublicDebt">
+          <el-radio-group v-model="form.isWithProductPublicDebt" @change="radioChange">
             <el-radio :label="1">案人</el-radio>
             <el-radio :label="0">案件</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="留案案件：">
-          <el-radio-group v-model="radio">
-            <el-radio :label="0">不收回</el-radio>
-            <el-radio :label="1">强制收回</el-radio>
-          </el-radio-group>
+        <!-- 应该要剔除当前所在库 -->
+        <el-form-item label="目标案件库">
+          <el-select clearable v-model="form.bank" placeholder="请选择目标案件库">
+            <el-option v-for="item in resouerdistList" :key="item.itemId" :label="item.itemText" :value="item.itemId"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
     </span>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="cancelSubmit">取消</el-button>
-        <el-button type="primary" @click="submitForm">确定</el-button>
+        <el-button type="primary" @click="submitForm">确认委派</el-button>
       </span>
     </template>
   </el-dialog>
 </template>
   
 <script lang="ts" setup>
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { ref } from 'vue'
-const isWithProductPublicDebt = ref(1)
-const radio = ref(0)
+import { ElMessage } from 'element-plus'
+import { reactive, ref, onMounted } from 'vue'
+const form: any = reactive({
+  isWithProductPublicDebt: 1,
+  bank: null
+})
+const originFormData = JSON.parse(JSON.stringify(form))
 // 接收props数据
 const props = defineProps<{
-  caseInfo: any
-  taskId: any
+  distList: any //委案数据
+  resouerdistList: any[] //目标案件库
 }>()
-const emits = defineEmits(['getTableData', 'fetchRecoverNowSelect', 'toggleSelection'])
+const emits = defineEmits(['getTableData', 'exportChange', 'toggleSelection'])
 // 打开弹窗
 const dialogVisible = ref(false)
 const open = () => {
   dialogVisible.value = true
+  Object.assign(form, originFormData)
 }
 defineExpose({
   open
 })
-//确认回收
+// 确认委派
 const submitForm = () => {
-  ElMessageBox.confirm('是否确认本次操作?', '温馨提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(
-    () => {
-      const params = {
-        isRecoverRetain: radio.value,
-        taskId: props.taskId
-      }
-      console.log(params)
-      // 请求
-      // const { code, msg } = await xx(params)
-      // if(code !== 200){
-      //   return ElMessage.error(msg)
-      // }
-      ElMessage.success('操作成功！')
-      emits('getTableData')
-      emits('toggleSelection')
-      dialogVisible.value = false
-    },
-    res => {
-      ElMessage.info('已取消')
-      console.log(res)
-    }
-  )
+  let params = {
+    taskId: props.distList.taskId,
+    // sourceStoreId: xx , 当前所在库的id
+    targetStoreId: form.bank
+  }
+  console.log(params)
+  // 请求
+  // const { code, msg } = await caseEntrustSave(params)
+  // if(code !== 200){
+  //   return ElMessage.error(msg)
+  // }
+  ElMessage.success('分库成功！')
+  emits('toggleSelection')
+  emits('getTableData')
+  dialogVisible.value = false
 }
 // 取消
 const cancelSubmit = () => {
-  radio.value = 0
-  isWithProductPublicDebt.value = 1
   dialogVisible.value = false
 }
 const radioChange = val => {
-  emits('fetchRecoverNowSelect', !!val)
+  emits('exportChange', val)
 }
 </script>
   

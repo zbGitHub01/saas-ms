@@ -14,7 +14,7 @@
       <OperationBar v-model:active="operation">
         <template #default>
           <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow" plain type="primary" :icon="item.icon" @click="handleClick(item.title)">
+            <el-button v-if="item.isShow" type="primary" :icon="item.icon" @click="handleClick(item.title)">
               {{ item.title }}
             </el-button>
           </div>
@@ -50,7 +50,7 @@
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
-    <CaseRecoveryDialog ref="caseRecoveryDialog" :taskId="state.taskId" :caseInfo="state.caseInfo" @get-table-data="getTableData" @fetchRecoverNowSelect="fetchRecoverNowSelect"/>
+    <CaseRecoveryDialog ref="caseRecoveryDialog" :taskId="state.taskId" :caseInfo="state.caseInfo" @get-table-data="getTableData" @fetchRecoverNowSelect="fetchRecoverNowSelect" @toggleSelection="toggleSelection"/>
   </div>
 </template>
 

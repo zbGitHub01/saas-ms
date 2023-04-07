@@ -17,7 +17,7 @@
   },
   {
     "hide":false,
-    "icon":"Setting",
+    "icon":"Management",
     "parentMenuCode":"non",
     "path":"/caseManage",
     "permissionId":2462,
@@ -32,7 +32,7 @@
     "children":[
       {
         "hide":false,
-        "icon":"UserFilled",
+        "icon":"UploadFilled",
         "parentMenuCode":"ANJIANGUANLI",
         "path":"/caseManage/caseImport",
         "permissionId":2280,
@@ -47,7 +47,7 @@
       },
       {
         "hide":false,
-        "icon":"UserFilled",
+        "icon":"List",
         "parentMenuCode":"ANJIANGUANLI",
         "path":"/caseManage/allCases",
         "permissionId":2280,
@@ -62,7 +62,7 @@
       },
       {
         "hide":false,
-        "icon":"UserFilled",
+        "icon":"Promotion",
         "parentMenuCode":"ANJIANGUANLI",
         "path":"/caseManage/assetEntrust",
         "permissionId":2280,
@@ -77,7 +77,7 @@
       },
       {
         "hide":false,
-        "icon":"UserFilled",
+        "icon":"Management",
         "parentMenuCode":"ANJIANGUANLI",
         "path":"/caseManage/assetDispose",
         "permissionId":2280,
@@ -94,7 +94,7 @@
   },
   {
     "hide":false,
-    "icon":"Setting",
+    "icon":"Guide",
     "parentMenuCode":"non",
     "path":"/caseCirculation",
     "permissionId":2462,
@@ -109,7 +109,7 @@
     "children":[
       {
         "hide":false,
-        "icon":"UserFilled",
+        "icon":"Guide",
         "parentMenuCode":"ANJIANLIUZHUAN",
         "path":"/caseCirculation/caseBank",
         "permissionId":2280,
@@ -124,7 +124,7 @@
       },
       {
         "hide":false,
-        "icon":"UserFilled",
+        "icon":"Guide",
         "parentMenuCode":"ANJIANLIUZHUAN",
         "path":"/caseCirculation/caseAssignment",
         "permissionId":2280,
@@ -139,7 +139,7 @@
       },
       {
         "hide":false,
-        "icon":"UserFilled",
+        "icon":"Guide",
         "parentMenuCode":"ANJIANLIUZHUAN",
         "path":"/caseCirculation/caseRecovery",
         "permissionId":2280,
@@ -154,7 +154,7 @@
       },
       {
         "hide":false,
-        "icon":"UserFilled",
+        "icon":"Guide",
         "parentMenuCode":"ANJIANLIUZHUAN",
         "path":"/caseCirculation/caseConfiguration",
         "permissionId":2280,
