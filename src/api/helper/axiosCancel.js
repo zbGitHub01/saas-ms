@@ -61,3 +61,5 @@ export class AxiosCanceler {
     pendingMap = new Map()
   }
 }
+// 不需要被cancel的地址
+export const axiosCancelWhiteList = []

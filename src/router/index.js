@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { onBeforeEach } from './permission'
 
 //导入所有router
 const metaRouters = import.meta.glob('./modules/*.js', { eager: true })
@@ -9,7 +10,6 @@ Object.keys(metaRouters).forEach(item => {
     routerArray.push(...metaRouters[item][key])
   })
 })
-console.log(routerArray)
 const routes = [
   {
     path: '/',
@@ -33,6 +33,12 @@ const routes = [
     name: 'login',
     meta: { title: '登录' },
     component: () => import('@/views/login/index.vue')
+  },
+  {
+    path: '/loginInvite',
+    name: 'loginInvite',
+    meta: { title: '邀请登录' },
+    component: () => import('@/views/loginInvite/index.vue')
   },
   ...routerArray,
   {
@@ -64,5 +70,5 @@ const router = createRouter({
   routes,
   scrollBehavior: () => ({ left: 0, top: 0 })
 })
-
+onBeforeEach(router)
 export default router

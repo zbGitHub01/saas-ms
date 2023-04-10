@@ -24,3 +24,4 @@ export const phoneReg = /^((\+|00)86)?1\d{10}$/
 export const passwordReg = /^(?!([a-zA-Z]+|\d+)$)[a-zA-Z\d]{8,20}$/
 
 export const capitalized = /^[A-Z]/
+

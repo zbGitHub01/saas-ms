@@ -36,7 +36,6 @@ import SubItem from './components/SubItem.vue'
 const route = useRoute()
 const authStore = useAuthStore()
 const menuList = computed(() => authStore.menuList)
-console.log(menuList.value, '---xoxo')
 const isCollapse = computed(() => authStore.isCollapse)
 const activeMenu = computed(() => {
   if (route.meta.activeMenu) {

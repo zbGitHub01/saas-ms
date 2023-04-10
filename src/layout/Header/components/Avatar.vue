@@ -31,12 +31,13 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-// import { ElMessageBox } from 'element-plus'
+import { useRouter, useRoute } from 'vue-router'
+import { ElMessageBox } from 'element-plus'
 import { useGlobalStore } from '@/store'
 // import { SingleImageUploader } from '@/components/UploadFile'
 
 const router = useRouter()
+const route = useRoute()
 const globalStore = useGlobalStore()
 
 // 预览图地址
@@ -73,13 +74,13 @@ const submitForm = async () => {
 
 // 退出登录
 const logout = () => {
-  // ElMessageBox.confirm('您是否确认退出登录?', '温馨提示', {
-  //   confirmButtonText: '确定',
-  //   cancelButtonText: '取消',
-  //   type: 'warning'
-  // }).then(() => {
-  //   globalStore.clearUserInfo()
-  // })
+  ElMessageBox.confirm('您是否确认退出登录?', '温馨提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    globalStore.logout()
+  })
 }
 
 // 个人中心

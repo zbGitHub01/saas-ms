@@ -1,13 +1,18 @@
 import { generateApiFnc } from '@/api/helper/apiFncs'
+import http from '../index'
 
 const apiConfig = {
-  login: `POST /sys/login/on`,
-  msgCaptcha: `GET /sys/login/msgCaptcha`,
-  getCurrentUserInfo: `GET /sys/user/getCurrentUserInfo`,
-  resetPasswords: `POST /sys/user/resetPasswords`,
-  dropdownList: `GET /dict/dropdown/list`
+  userLogin: `POST /auth/oauth/token`,
+  mobileLogin: `POST /auth/mobile/token/sms`,
+  findTenantList: `GET /upms/client/user/tenant/list`
+}
+
+export const sendSmsCode = mobile => {
+  return http.get(`/upms/client/mobile/${mobile}`)
+}
+export const chooseTenant = tenantId => {
+  return http.get(`/upms/client/user/tenant/choose/${tenantId}`)
 }
 
 const apis = generateApiFnc(apiConfig)
-
 export default apis
