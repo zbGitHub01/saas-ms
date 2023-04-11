@@ -4,6 +4,39 @@
       <el-radio :label="0">在职员工</el-radio>
       <el-radio :label="1">离职员工</el-radio>
     </el-radio-group>
+    <FormWrap @search="onSearch" @reset="onReset">
+      <template #default>
+        <el-form :model="searchForm" inline>
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="searchForm.name" placeholder="请输入姓名" />
+          </el-form-item>
+          <el-form-item label="手机号" prop="mobile">
+            <el-input v-model="searchForm.mobile" placeholder="请输入手机号" />
+          </el-form-item>
+          <el-form-item label="账号状态" prop="userStatus">
+            <el-select v-model="searchForm.userStatus" placeholder="请选择账号状态">
+              <el-option label="启用" value="1" />
+              <el-option label="禁用" value="0" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="所属部门" prop="department">
+            <el-cascader
+              v-model="searchForm.department"
+              :options="[]"
+              :props="{ checkStrictly: true }"
+              clearable
+              placeholder="请选择所属部门"
+            />
+          </el-form-item>
+          <el-form-item label="部门角色" prop="role">
+            <el-select v-model="searchForm.role" placeholder="请选择部门角色">
+              <el-option label="角色1" value="1" />
+              <el-option label="角色2" value="0" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </template>
+    </FormWrap>
     <OperationBar>
       <template #default>
         <el-button type="primary" :icon="Plus" @click="inviteEmployeesShow = true">邀请员工</el-button>
@@ -34,11 +67,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import InviteEmployeesDialog from './components/InviteEmployeesDialog.vue'
 
 const type = ref(1)
+const searchForm = reactive({
+  name: null,
+  mobile: null,
+  userStatus: null,
+  department: null,
+  role: null
+})
+const onSearch = () => {}
+const onReset = () => {}
 const tableData = ref([{ name: '张兮兮' }])
 const inviteEmployeesShow = ref(false)
 const handleClick = (row) => {}

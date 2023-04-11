@@ -7,7 +7,7 @@ import { ElMessage } from 'element-plus'
 export const ResultEnum = {
   SUCCESS: 200,
   ERROR: 500,
-  OVERDUE: 401,
+  OVERDUE: 424,
   NOT_PERMISSION: 403,
   TIMEOUT: 30000,
   TYPE: 'success'
@@ -33,6 +33,9 @@ export const checkStatus = status => {
       break
     case 423:
       ElMessage.error('演示环境不能操作，如需了解联系我们！')
+      break
+    case 424:
+      ElMessage.error('令牌状态已过期，请重新登录！')
       break
     case 426:
       ElMessage.error('用户名不存在或密码错误！')

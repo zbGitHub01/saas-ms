@@ -41,9 +41,17 @@
 //    content: none;
 //  }
 //}
-.el-table th.el-table__cell {
-  background-color: #F8F8F8;
+.el-table {
+  --el-table-header-bg-color: #F8F8F8;
+}
+.el-dialog__body {
+  .el-input {
+    width: 220px;
+  }
 }
 .el-input__wrapper {
   width: 210px;
+}
+.el-tabs__content {
+  overflow: visible;
 }

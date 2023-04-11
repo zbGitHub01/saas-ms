@@ -9,7 +9,7 @@
     </el-form-item>
     <el-form-item v-if="!grantType" prop="code">
       <div class="input-box">
-        <el-input v-model="form.code" class="append-btn" placeholder="请输入验证码">
+        <el-input v-model="form.code" class="append-btn" placeholder="请输入验证码" @keyup.enter="onSubmit">
           <template #prefix>
             <el-icon class="input-icon"><Lock /></el-icon>
           </template>
@@ -20,7 +20,7 @@
       </div>
     </el-form-item>
     <el-form-item v-else prop="password">
-      <el-input v-model="form.password" show-password placeholder="请输入密码">
+      <el-input v-model="form.password" show-password placeholder="请输入密码" @keyup.enter="onSubmit">
         <template #prefix>
           <el-icon class="input-icon"><Lock /></el-icon>
         </template>

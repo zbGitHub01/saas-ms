@@ -13,9 +13,9 @@ export const onBeforeEach = router => {
     const globalStore = useGlobalStore()
     // * 在跳转路由之前，清除所有的请求
     axiosCanceler.removeAllPending()
-    // if (globalStore.token && to.path === '/login') {
-    //   next({ path: '/' })
-    // }
+    if (globalStore.token && globalStore.tenantId && to.path === '/login') {
+      next({ path: '/' })
+    }
     if (ROUTER_WHITE_LIST.includes(to.path)) return next()
     if (!globalStore.token || !globalStore.tenantId) {
       next({ path: `/login?redirect=${to.path}` })
