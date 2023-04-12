@@ -4,7 +4,7 @@
   </el-config-provider>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { computed } from 'vue'
 import { useGlobalStore } from '@/store'
 

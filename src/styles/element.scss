@@ -36,11 +36,11 @@
   }
 }
 
-//.el-tabs__nav-wrap {
-//  &::after {
-//    content: none;
-//  }
-//}
+.el-tabs__nav-wrap {
+  &::after {
+    content: none;
+  }
+}
 .el-table {
   --el-table-header-bg-color: #F8F8F8;
 }

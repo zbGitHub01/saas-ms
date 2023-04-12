@@ -10,7 +10,9 @@
       <el-tab-pane label="机构职位" name="3">
         <OrgPosition />
       </el-tab-pane>
-      <el-tab-pane label="机构角色" name="4"></el-tab-pane>
+      <el-tab-pane label="机构角色" name="4">
+        <OrgRole />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -20,8 +22,10 @@ import { ref } from 'vue'
 import AllEmployees from './AllEmployees/index.vue'
 import OrgDepartment from './OrgDepartment/index.vue'
 import OrgPosition from './OrgPosition/index.vue'
+import OrgRole from './OrgRole/index.vue'
 
 const tabActive = ref('1')
+
 </script>
 
 <style lang="scss" scoped></style>

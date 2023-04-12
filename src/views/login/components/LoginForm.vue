@@ -47,7 +47,8 @@ const emit = defineEmits(['success'])
 const globalStore = useGlobalStore()
 const formRef = ref()
 const form = reactive({
-  username: '15869164852',
+  // 15869164852
+  username: '13112345678',
   password: '',
   code: ''
 })

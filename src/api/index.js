@@ -64,7 +64,7 @@ class RequestHttp {
         if (!window.navigator.onLine) {
           return router.replace('500')
         }
-        return Promise.reject(error)
+        return response || error
       }
     )
   }
