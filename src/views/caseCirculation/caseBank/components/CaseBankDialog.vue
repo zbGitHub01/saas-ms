@@ -39,7 +39,6 @@
             <el-radio :label="0">案件</el-radio>
           </el-radio-group>
         </el-form-item>
-        <!-- 应该要剔除当前所在库 -->
         <el-form-item label="目标案件库">
           <el-select clearable v-model="form.bank" placeholder="请选择目标案件库">
             <el-option v-for="item in resouerdistList" :key="item.itemId" :label="item.itemText" :value="item.itemId"></el-option>
@@ -68,6 +67,7 @@ const originFormData = JSON.parse(JSON.stringify(form))
 const props = defineProps<{
   distList: any //委案数据
   resouerdistList: any[] //目标案件库
+  sourceStoreId: any
 }>()
 const emits = defineEmits(['getTableData', 'exportChange', 'toggleSelection'])
 // 打开弹窗
@@ -83,7 +83,7 @@ defineExpose({
 const submitForm = () => {
   let params = {
     taskId: props.distList.taskId,
-    // sourceStoreId: xx , 当前所在库的id
+    sourceStoreId: props.sourceStoreId, //当前所在库的id
     targetStoreId: form.bank
   }
   console.log(params)

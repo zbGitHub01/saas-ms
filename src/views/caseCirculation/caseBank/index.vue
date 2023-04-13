@@ -169,7 +169,7 @@
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
     <AddOrRemoveTagDialog ref="addOrRemoveTagDialog" :selectData="selectData" @submitForm="submitForm" />
-    <CaseBankDialog ref="caseBankDialog" :distList="state.distList" @get-table-data="getTableData" @exportChange="exportChange" @toggleSelection="toggleSelection" :resouerdist-list="state.tabList"/>
+    <CaseBankDialog ref="caseBankDialog" :distList="state.distList" :sourceStoreId="tabActive" @get-table-data="getTableData" @exportChange="exportChange" @toggleSelection="toggleSelection" :resouerdist-list="state.tabListSub"/>
   </div>
 </template>
 
@@ -202,7 +202,8 @@ const state = reactive({
   selectData: [] as any[], //选中项
   handleparams: {} as any, //操作的参数
   tabList: [] as any[], //分库列表
-  distList: {} as any //委案数据
+  tabListSub: []as any[], //剔除目标分库的分库列表
+  distList: {} as any, //委案数据
 })
 const operation = ref(1)
 const operationList = reactive([
@@ -377,14 +378,18 @@ const submitForm = (tempTagName, isDeleteAllRelationTag) => {
 }
 // 案件分库
 const caseBank = () => {
+  // 获取委案数据
   fetchCaseDistSelect()
+  // 剔除当前库的分库列表
+  state.tabListSub = state.tabList.filter(item=>item.itemId!=tabActive.value)
+  console.log(state.tabListSub, tabActive.value)
   caseBankDialog.value.open()
 }
 // 获取委案数据
 const fetchCaseDistSelect = (isWithProductPublicDebt = true) => {
   // 处理入参
   let params = operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, ...form }
-  params["storeId"] = Number(tabActive) //当前tab分库的id
+  params["storeId"] = Number(tabActive.value) //当前tab分库的id
   params.isWithProductPublicDebt = isWithProductPublicDebt
   console.log('委案数据参数：', params)
   // 请求得到数据
