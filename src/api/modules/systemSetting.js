@@ -10,7 +10,7 @@ const apiConfig = {
   addDept: `POST /upms/client/employee/dept/add`,
   editDept: `POST /upms/client/employee/dept/edit`,
   findDeptEmployeeList: `GET /upms/client/employee/dept/employee/list`,
-  updateDeptEmployee: `GET /upms/client/employee/dept/employee/updateDept`,
+  updateDeptEmployee: `POST /upms/client/employee/dept/employee/updateDept`,
   // 机构职位
   findPositionList: `GET /upms/client/employee/position/list`,
   addPosition: `POST /upms/client/employee/position/add`,

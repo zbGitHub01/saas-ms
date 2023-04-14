@@ -44,7 +44,12 @@
     </div>
   </div>
   <EditDeptDialog v-model:dialog-visible="deptVisible" :dept-tree="deptTree" :dept-item="deptItem" @change="fetchDeptTree" />
-  <EditEmployeeDialog v-model:dialog-visible="employeeVisible" :employee-item="employeeItem" @change="fetchEmployeeList" />
+  <EditEmployeeDialog
+    v-model:dialog-visible="employeeVisible"
+    :employee-item="employeeItem"
+    :detp-item="currDeptNode"
+    @change="fetchEmployeeList"
+  />
 </template>
 
 <script setup>

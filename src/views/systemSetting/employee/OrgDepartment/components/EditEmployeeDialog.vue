@@ -36,6 +36,7 @@
 import { ref, reactive, computed } from 'vue'
 import { useCommonStore } from '@/store/modules/common'
 import Apis from '@/api/modules/systemSetting'
+import { getPathByKey } from '@/utils'
 
 const props = defineProps({
   dialogVisible: {
@@ -43,6 +44,10 @@ const props = defineProps({
     default: false
   },
   employeeItem: {
+    type: Object || null,
+    default: null
+  },
+  deptItem: {
     type: Object || null,
     default: null
   }
@@ -55,7 +60,7 @@ const formRef = ref()
 const loading = ref(false)
 const form = reactive({
   employeeId: null,
-  deptId: [0]
+  deptId: []
 })
 const rules = reactive({
   employeeId: [{ required: true, message: '请选择员工', trigger: 'change' }],
@@ -65,9 +70,7 @@ const title = computed(() => (props.employeeItem ? '编辑员工' : '添加员�
 const deptTree = computed(() => commonStore.deptTree)
 
 const handleOpen = () => {
-  if (props.employeeItem) {
-    // form.deptId = [props.employeeItem.deptId]
-  }
+  form.deptId = getPathByKey(deptTree.value, props.deptItem.id)
 }
 const beforeClose = () => {
   formRef.value.resetFields()
