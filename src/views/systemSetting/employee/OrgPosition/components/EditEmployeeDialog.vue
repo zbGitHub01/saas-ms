@@ -11,16 +11,16 @@
   >
     <template #default>
       <el-form ref="formRef" class="form" :model="form" :rules="rules" label-width="100">
-        <el-form-item label="员工" prop="employeeId">
-          <el-select v-model="form.employeeId">
-            <el-option label="员工1" value="1"></el-option>
-            <el-option label="员工2" value="2"></el-option>
+        <el-form-item label="员工" prop="employeeIds">
+          <el-select v-if="!props.employeeItem" v-model="form.employeeIds" multiple clearable placeholder="请选择员工">
+            <el-option v-for="item in employeeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
+          <span v-else>{{ props.employeeItem.name }}</span>
         </el-form-item>
-        <el-form-item label="任职职位" prop="deptId">
-<!--          <el-select v-model="">-->
-<!--            <el-option></el-option>-->
-<!--          </el-select>-->
+        <el-form-item label="任职职位" prop="positionId">
+          <el-select v-model="form.positionId" :disabled="!props.employeeItem" placeholder="请选择任职职位">
+            <el-option v-for="item in props.positionList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
     </template>
@@ -40,9 +40,13 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  deptTree: {
+  positionList: {
     type: Array,
     default: () => {}
+  },
+  positionItem: {
+    type: Object || null,
+    default: null
   },
   employeeItem: {
     type: Object || null,
@@ -54,35 +58,48 @@ const emit = defineEmits(['update:dialogVisible', 'change'])
 const formRef = ref()
 const loading = ref(false)
 const form = reactive({
-  employeeId: null,
-  deptId: [0]
+  employeeIds: [],
+  positionId: null
 })
 const rules = reactive({
-  employeeId: [{ required: true, message: '请选择员工', trigger: 'change' }],
-  deptId: [{ required: true, message: '请选择所属部门', trigger: 'change' }]
+  employeeIds: [{ required: true, message: '请选择员工', trigger: 'change' }],
+  positionId: [{ required: true, message: '请选择所属部门', trigger: 'change' }]
 })
 const title = computed(() => (props.employeeItem ? '编辑员工' : '添加员工'))
+const employeeList = ref([])
 
-const handleOpen = () => {}
+const handleOpen = () => {
+  if (props.employeeItem) {
+    form.employeeIds = [props.employeeItem.id]
+  } else {
+    fetchEmployeeList()
+  }
+  console.log(props, '---props')
+  if (props.positionItem) {
+    form.positionId = props.positionItem.id
+  }
+}
 const beforeClose = () => {
   formRef.value.resetFields()
   emit('update:dialogVisible', false)
+}
+const fetchEmployeeList = async () => {
+  const { code, data } = await Apis.findNonPositionEmployee()
+  if (code === 200) {
+    employeeList.value = data
+  }
 }
 const onSubmit = async () => {
   console.log(form)
   const isValid = await formRef.value.validate().catch(() => {})
   if (!isValid) return
-  // const postData = {
-  //   name: form.name,
-  //   parentId: form.parentId.pop()
-  // }
-  // if (props.employeeItem) {
-  //   postData.id = props.employeeItem.id
-  // }
-  // const { code } = await Apis.addDept(postData)
-  // if (code === 200) {
-  //   emit('change')
-  // }
+  const postData = {
+    ...form
+  }
+  const { code } = await Apis.editPositionEmployee(postData)
+  if (code === 200) {
+    emit('change')
+  }
 }
 </script>
 

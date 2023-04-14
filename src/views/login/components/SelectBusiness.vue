@@ -13,6 +13,7 @@ import { useRouter } from 'vue-router'
 import Apis from '@/api/modules/user'
 import { useGlobalStore } from '@/store'
 
+const emit = defineEmits(['setPassword'])
 const router = useRouter()
 const globalStore = useGlobalStore()
 const tenantId = ref(null)
@@ -28,9 +29,12 @@ const fetchTenantList = async () => {
 fetchTenantList()
 
 const onSubmit = async () => {
-  const result = await globalStore.chooseTenant(tenantId.value)
-  if (result) {
+  const data = await globalStore.chooseTenant(tenantId.value)
+  if (!data) return
+  if (data.isSetPassword === 1) {
     await router.replace('/')
+  } else {
+    emit('setPassword', 2)
   }
 }
 </script>

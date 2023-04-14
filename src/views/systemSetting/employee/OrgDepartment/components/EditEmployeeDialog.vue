@@ -12,10 +12,7 @@
     <template #default>
       <el-form ref="formRef" class="form" :model="form" :rules="rules" label-width="100">
         <el-form-item label="员工" prop="employeeId">
-          <el-select v-model="form.employeeId">
-            <el-option label="员工1" value="1"></el-option>
-            <el-option label="员工2" value="2"></el-option>
-          </el-select>
+          <span>{{ props.employeeItem?.name }}</span>
         </el-form-item>
         <el-form-item label="所属部门" prop="deptId">
           <el-cascader
@@ -37,6 +34,7 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
+import { useCommonStore } from '@/store/modules/common'
 import Apis from '@/api/modules/systemSetting'
 
 const props = defineProps({
@@ -44,16 +42,14 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  deptTree: {
-    type: Array,
-    default: () => {}
-  },
   employeeItem: {
     type: Object || null,
     default: null
   }
 })
 const emit = defineEmits(['update:dialogVisible', 'change'])
+const commonStore = useCommonStore()
+console.log(commonStore)
 
 const formRef = ref()
 const loading = ref(false)
@@ -66,8 +62,13 @@ const rules = reactive({
   deptId: [{ required: true, message: '请选择所属部门', trigger: 'change' }]
 })
 const title = computed(() => (props.employeeItem ? '编辑员工' : '添加员工'))
+const deptTree = computed(() => commonStore.deptTree)
 
-const handleOpen = () => {}
+const handleOpen = () => {
+  if (props.employeeItem) {
+    // form.deptId = [props.employeeItem.deptId]
+  }
+}
 const beforeClose = () => {
   formRef.value.resetFields()
   emit('update:dialogVisible', false)
@@ -76,17 +77,13 @@ const onSubmit = async () => {
   console.log(form)
   const isValid = await formRef.value.validate().catch(() => {})
   if (!isValid) return
-  // const postData = {
-  //   name: form.name,
-  //   parentId: form.parentId.pop()
-  // }
-  // if (props.employeeItem) {
-  //   postData.id = props.employeeItem.id
-  // }
-  // const { code } = await Apis.addDept(postData)
-  // if (code === 200) {
-  //   emit('change')
-  // }
+  const postData = {
+    ...form
+  }
+  const { code } = await Apis.updateDeptEmployee(postData)
+  if (code === 200) {
+    emit('change')
+  }
 }
 </script>
 

@@ -17,7 +17,7 @@
         <el-form-item label="上级部门" prop="parentId">
           <el-cascader
             v-model="form.parentId"
-            :options="deptTree"
+            :options="_deptTree"
             clearable
             :props="{ label: 'name', value: 'id', checkStrictly: true }"
             placeholder="请选择上级部门"
@@ -27,7 +27,7 @@
     </template>
     <template #footer>
       <el-button @click="beforeClose">取 消</el-button>
-      <el-button type="primary" @click="onSubmit" :loading="loading">确 定</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit">确 定</el-button>
     </template>
   </el-dialog>
 </template>
@@ -35,6 +35,8 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import Apis from '@/api/modules/systemSetting'
+import cloneDeep from 'lodash/cloneDeep'
+import { getPathByKey } from '@/utils'
 
 const props = defineProps({
   dialogVisible: {
@@ -52,6 +54,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:dialogVisible', 'change'])
 
+const _deptTree = ref([])
 const formRef = ref()
 const loading = ref(false)
 const form = reactive({
@@ -64,23 +67,50 @@ const rules = reactive({
 })
 const title = computed(() => (props.deptItem ? '编辑部门' : '添加部门'))
 
-const handleOpen = () => {}
+const formatDeptData = () => {
+  if (!props.deptItem) {
+    return props.deptTree
+  }
+  const data = cloneDeep(props.deptTree)
+  function setData(data) {
+    data.forEach((item, index) => {
+      if (item.id === props.deptItem.id) {
+        data.splice(index, 1)
+      }
+      if (item.children && item.children.length) {
+        setData(item.children)
+      }
+    })
+  }
+  setData(data)
+  console.log(data, '---data')
+  return data
+}
+const handleOpen = () => {
+  if (props.deptItem) {
+    _deptTree.value = formatDeptData()
+    form.name = props.deptItem.name
+    const path = getPathByKey(props.deptItem.parentId, props.deptTree)
+    form.parentId = path.map(item => item.id)
+  }
+}
 const beforeClose = () => {
   formRef.value.resetFields()
   emit('update:dialogVisible', false)
 }
 const onSubmit = async () => {
-  console.log(form)
   const isValid = await formRef.value.validate().catch(() => {})
   if (!isValid) return
   const postData = {
     name: form.name,
-    parentId: form.parentId.pop()
+    parentId: form.parentId[form.parentId.length - 1]
   }
+  let apiFn = Apis.addDept
   if (props.deptItem) {
+    apiFn = Apis.editDept
     postData.id = props.deptItem.id
   }
-  const { code } = await Apis.addDept(postData)
+  const { code } = await apiFn(postData)
   if (code === 200) {
     emit('change')
     beforeClose()

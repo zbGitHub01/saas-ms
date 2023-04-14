@@ -6,12 +6,20 @@
         <el-button class="add-btn" size="small" :icon="Plus" @click="editDept(null)"></el-button>
       </div>
       <el-scrollbar class="scrollbar">
-        <el-tree :data="deptTree" node-key="id" :default-expanded-keys="[0]" highlight-current :props="defaultProps">
+        <el-tree
+          ref="treeRef"
+          :data="deptTree"
+          node-key="id"
+          default-expand-all
+          highlight-current
+          :props="defaultProps"
+          @node-click="nodeClick"
+        >
           <template #default="{ node, data }">
             <div class="custom-tree-node">
               <span>{{ data.name }}</span>
               <span class="operation">
-                <el-icon><Edit /></el-icon>
+                <el-icon @click.stop="editDept(data)"><Edit /></el-icon>
                 <el-icon><Delete /></el-icon>
               </span>
             </div>
@@ -23,25 +31,20 @@
     <div class="employee-wrap">
       <div class="title">
         员工列表
-        <el-button class="add-btn" size="small" :icon="Plus" @click="editEmployee(null)"></el-button>
+<!--        <el-button class="add-btn" size="small" :icon="Plus" @click="editEmployee(null)"></el-button>-->
       </div>
       <el-scrollbar class="scrollbar">
         <div class="tag-list">
-          <el-tag class="tag" v-for="(item, index) in employeeList" :key="index" size="large">
-            <span>{{ `${item.name}(${item.mobile})` }}</span>
-            <el-icon class="edit-icon"><Edit /></el-icon>
+          <el-tag v-for="(item, index) in employeeList" :key="index" class="tag" size="large">
+            <span>{{ `${item.name}(${item.phone})` }}</span>
+            <el-icon class="edit-icon" @click="editEmployee(item)"><Edit /></el-icon>
           </el-tag>
         </div>
       </el-scrollbar>
     </div>
   </div>
-  <EditDeptDialog v-model:dialog-visible="deptVisible" :dept-tree="deptTree" :dept-item="deptItem" @change="fetchEmployeeList" />
-  <EditEmployeeDialog
-    v-model:dialog-visible="employeeVisible"
-    :dept-tree="deptTree"
-    :employee-item="employeeItem"
-    @change="fetchEmployeeList"
-  />
+  <EditDeptDialog v-model:dialog-visible="deptVisible" :dept-tree="deptTree" :dept-item="deptItem" @change="fetchDeptTree" />
+  <EditEmployeeDialog v-model:dialog-visible="employeeVisible" :employee-item="employeeItem" @change="fetchEmployeeList" />
 </template>
 
 <script setup>
@@ -51,6 +54,7 @@ import Apis from '@/api/modules/systemSetting'
 import EditDeptDialog from './components/EditDeptDialog.vue'
 import EditEmployeeDialog from './components/EditEmployeeDialog.vue'
 
+const treeRef = ref()
 const deptTree = ref([
   {
     id: 0,
@@ -59,11 +63,8 @@ const deptTree = ref([
     children: []
   }
 ])
-const defaultProps = {
-  label: 'name',
-  value: 'id',
-}
-const employeeList = ref(Array(10).fill({ name: '张兮兮', mobile: '15167696520' }))
+const defaultProps = { label: 'name', value: 'id' }
+const employeeList = ref([])
 const deptVisible = ref(false)
 const employeeVisible = ref(false)
 let deptItem = null
@@ -80,10 +81,21 @@ const fetchDeptTree = async () => {
   const { code, data } = await Apis.findDeptTree()
   if (code === 200) {
     deptTree.value[0].children = data
+    console.log(deptTree.value)
   }
 }
 fetchDeptTree()
-const fetchEmployeeList = () => {}
+let currDeptNode = null
+const fetchEmployeeList = async () => {
+  const { code, data } = await Apis.findDeptEmployeeList({ deptId: currDeptNode.id })
+  if (code === 200) {
+    employeeList.value = data
+  }
+}
+const nodeClick = node => {
+  currDeptNode = node
+  fetchEmployeeList()
+}
 </script>
 
 <style lang="scss" scoped>

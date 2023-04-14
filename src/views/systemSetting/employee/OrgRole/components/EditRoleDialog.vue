@@ -65,10 +65,11 @@ const title = computed(() => (props.positionItem ? '编辑机构角色' : '添�
 
 const deptTree = ref([])
 const fetchDeptTree = async () => {
-  const { code, data } = await Apis.findDeptTree()
-  if (code === 200) {
-    deptTree.value = data
-  }
+  // const { code, data } = await Apis.findDeptTree()
+  // if (code === 200) {
+  //   deptTree.value = data
+  // }
+
 }
 fetchDeptTree()
 const handleOpen = () => {}
@@ -81,7 +82,7 @@ const onSubmit = async () => {
   if (!isValid) return
   loading.value = true
   const postData = { ...form }
-  postData.deptIds = form.deptIds.map(item => item.pop())
+  postData.deptIds = form.deptIds.map(item => item[item.length - 1])
   if (props.positionItem) {
     postData.id = props.positionItem.id
   }

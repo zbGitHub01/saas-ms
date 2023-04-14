@@ -51,9 +51,14 @@ const form = reactive({
 const rules = reactive({
   name: [{ required: true, message: '请输入职位名称', trigger: 'blur' }],
 })
-const title = computed(() => (props.deptItem ? '编辑机构职位' : '添加机构职位'))
+const title = computed(() => (props.positionItem ? '编辑机构职位' : '添加机构职位'))
 
-const handleOpen = () => {}
+const handleOpen = () => {
+  if (props.positionItem) {
+    form.name = props.positionItem.name
+    form.remark = props.positionItem.remark
+  }
+}
 const beforeClose = () => {
   formRef.value.resetFields()
   emit('update:dialogVisible', false)
@@ -63,10 +68,11 @@ const onSubmit = async () => {
   if (!isValid) return
   loading.value = true
   const postData = { ...form }
-  if (props.deptItem) {
+  if (props.positionItem) {
     postData.id = props.positionItem.id
   }
-  const { code } = await Apis.addPosition(postData)
+  let apiFn = props.positionItem ? Apis.editPosition : Apis.addPosition
+  const { code } = await apiFn(postData)
   loading.value = false
   if (code === 200) {
     emit('change')

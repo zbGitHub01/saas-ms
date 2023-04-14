@@ -30,9 +30,11 @@ import Tabs from './Tabs/index.vue'
 import Maximize from './Tabs/components/Maximize.vue'
 // import { cacheRouter } from '@/router'
 import { useGlobalStore } from '@/store'
+import { useCommonStore } from '@/store/modules/common'
 
 const cacheRouter = []
 const globalStore = useGlobalStore()
+const commonStore = useCommonStore()
 
 const maximize = computed(() => globalStore.maximize)
 
@@ -45,6 +47,13 @@ watch(
   }
 )
 
+// 预加载字段数据
+const preloadingDict = () => {
+  commonStore.fetchRoleList()
+  commonStore.fetchDeptTree()
+  commonStore.fetchPositionList()
+}
+preloadingDict()
 // 刷新当前页面
 const isRouterShow = ref(true)
 const refreshCurrentPage = val => (isRouterShow.value = val)

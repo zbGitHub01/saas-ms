@@ -8,8 +8,8 @@
     </div>
     <div class="login-right">
       <h1 class="title">{{ loginTitle[loginType] }}</h1>
-      <LoginForm v-if="loginType === 0" @success="successLogin" />
-      <SelectBusiness v-if="loginType === 1" />
+      <LoginForm v-if="loginType === 0" @success="setLoginType" />
+      <SelectBusiness v-if="loginType === 1" @set-password="setLoginType" />
       <SetPassword v-if="loginType === 2" />
     </div>
   </div>
@@ -28,13 +28,13 @@ const globalStore = useGlobalStore()
 const loginType = ref(0)
 const loginTitle = ref(['Hi，您好，请登录！', '请选择您的企业！', '请设置密码！'])
 
-const successLogin = () => {
+const setLoginType = type => {
   nextTick(() => {
-    loginType.value = 1
+    loginType.value = type
   })
 }
 if (globalStore.token) {
-  successLogin()
+  setLoginType(1)
 }
 </script>
 

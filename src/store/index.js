@@ -29,26 +29,32 @@ export const useGlobalStore = defineStore('globalStore', {
         Authorization: `Basic ${btoa('dongan:dongan')}`
       }
       const loginApiFn = params.grant_type === 'password' ? Apis.userLogin : Apis.mobileLogin
-      const data = await loginApiFn(stringify(params), { headers }).catch(() => {})
-      if (data) {
+      const data = await loginApiFn(stringify(params), { headers })
+      if (data && data.access_token) {
         this.token = `Bearer ${data.access_token}`
         this.refreshToken = data.refresh_token
+        return data
+      } else {
+        return null
       }
-      return data
     },
     async chooseTenant(tenantId) {
       const { code, data } = await chooseTenant(tenantId)
       if (code === 200) {
         this.tenantId = data.tenantId
+        return data
+      } else {
+        return null
       }
-      return code === 200
     },
-    logout(isLogout = false) {
+    async logout(isLogout = false) {
+      if (isLogout) {
+        await Apis.logout()
+      }
       localStorage.clear()
       this.token = ''
       this.refreshToken = ''
       this.tenantId = ''
-      console.log(router.currentRoute.value.fullPath)
       const path = isLogout ? '/login' : `/login?redirect=${router.currentRoute.value.fullPath}`
       router.push({ path })
       return true

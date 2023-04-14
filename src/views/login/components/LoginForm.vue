@@ -111,7 +111,7 @@ const onSubmit = async () => {
   }
   const result = await globalStore.login(postData)
   if (result) {
-    emit('success')
+    emit('success', 1)
   }
 }
 </script>

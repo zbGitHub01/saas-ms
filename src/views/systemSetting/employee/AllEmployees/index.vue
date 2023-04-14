@@ -1,37 +1,36 @@
 <template>
   <div class="mt16">
-    <el-radio-group class="mb20" v-model="type">
-      <el-radio :label="0">在职员工</el-radio>
-      <el-radio :label="1">离职员工</el-radio>
+    <el-radio-group v-model="isDimission" class="mb20">
+      <el-radio :label="1">在职员工</el-radio>
+      <el-radio :label="0">离职员工</el-radio>
     </el-radio-group>
-    <FormWrap @search="onSearch" @reset="onReset">
+    <FormWrap @search="fetchAllEmployees" @reset="onReset">
       <template #default>
         <el-form :model="searchForm" inline>
           <el-form-item label="姓名" prop="name">
             <el-input v-model="searchForm.name" placeholder="请输入姓名" />
           </el-form-item>
-          <el-form-item label="手机号" prop="mobile">
-            <el-input v-model="searchForm.mobile" placeholder="请输入手机号" />
+          <el-form-item label="手机号" prop="phone">
+            <el-input v-model="searchForm.phone" placeholder="请输入手机号" />
           </el-form-item>
-          <el-form-item label="账号状态" prop="userStatus">
-            <el-select v-model="searchForm.userStatus" placeholder="请选择账号状态">
-              <el-option label="启用" value="1" />
-              <el-option label="禁用" value="0" />
+          <el-form-item label="账号状态" prop="isDisable">
+            <el-select v-model="searchForm.isDisable" clearable placeholder="请选择账号状态">
+              <el-option label="启用" :value="0" />
+              <el-option label="禁用" :value="1" />
             </el-select>
           </el-form-item>
-          <el-form-item label="所属部门" prop="department">
+          <el-form-item label="所属部门" prop="deptId">
             <el-cascader
-              v-model="searchForm.department"
-              :options="[]"
-              :props="{ checkStrictly: true }"
+              v-model="searchForm.deptId"
+              :options="deptTree"
+              :props="{ checkStrictly: true, label: 'name', value: 'id' }"
               clearable
               placeholder="请选择所属部门"
             />
           </el-form-item>
-          <el-form-item label="部门角色" prop="role">
-            <el-select v-model="searchForm.role" placeholder="请选择部门角色">
-              <el-option label="角色1" value="1" />
-              <el-option label="角色2" value="0" />
+          <el-form-item label="部门角色" prop="roleId">
+            <el-select v-model="searchForm.roleId" clearable placeholder="请选择部门角色">
+              <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -40,52 +39,109 @@
     <OperationBar>
       <template #default>
         <el-button type="primary" :icon="Plus" @click="inviteEmployeesShow = true">邀请员工</el-button>
-        <el-button type="primary" :icon="Plus">添加员工</el-button>
+        <el-button type="primary" :icon="Upload" @click="batchImportVisible = true">批量导入</el-button>
       </template>
     </OperationBar>
-    <el-table :data="tableData">
-      <el-table-column label="员工ID" prop="name" min-width="150"></el-table-column>
+    <el-table :data="employeeList">
+      <el-table-column label="员工ID" prop="employeeId" min-width="150"></el-table-column>
       <el-table-column label="姓名" prop="name" min-width="150"></el-table-column>
-      <el-table-column label="手机" prop="name" width="160"></el-table-column>
-      <el-table-column label="证件号" prop="name" width="180"></el-table-column>
-      <el-table-column label="性别" prop="name" width="120"></el-table-column>
-      <el-table-column label="账号状态" prop="name" width="150"></el-table-column>
-      <el-table-column label="入职日期" prop="name" width="160"></el-table-column>
-      <el-table-column label="所属部门" prop="name" min-width="150"></el-table-column>
-      <el-table-column label="部门角色" prop="name" min-width="150"></el-table-column>
-      <el-table-column label="邀请人" prop="name" min-width="150"></el-table-column>
-      <el-table-column label="邀请时间" prop="name" min-width="150"></el-table-column>
+      <el-table-column label="手机" prop="phone" width="160"></el-table-column>
+      <el-table-column label="证件号" prop="idNo" width="180"></el-table-column>
+      <el-table-column label="性别" prop="sex" width="120"></el-table-column>
+      <el-table-column label="账号状态" prop="isDisable" width="150">
+        <template #default="scope">
+          <span :class="[scope.row.isDisable ? 'danger' : 'success']">{{ scope.row.isDisable ? '禁用' : '启用' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="入职日期" prop="entryDate" width="160"></el-table-column>
+      <el-table-column label="所属部门" prop="deptName" min-width="150"></el-table-column>
+      <el-table-column label="部门角色" prop="roleName" min-width="150"></el-table-column>
+      <el-table-column label="邀请人" prop="inviter" min-width="150"></el-table-column>
+      <el-table-column label="邀请时间" prop="inviteTime" min-width="150"></el-table-column>
       <el-table-column label="操作" prop="name" width="150" fixed="right">
         <template #default="scope">
-          <el-button type="primary" link @click="handleClick(scope.row)">启用</el-button>
-          <el-button type="primary" link @click="handleClick(scope.row)">离职</el-button>
+          <el-button :type="scope.row.isDisable ? 'success' : 'danger'" link @click="setStatus({ isDisable: 1 })">
+            {{ scope.row.isDisable ? '启用' : '禁用' }}
+          </el-button>
+          <el-button type="primary" link @click="setDimission(scope.row)">离职</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <pagination v-model:page-size="pageSize" v-model:page="page" :total="total" @pagination="fetchAllEmployees" />
   </div>
   <InviteEmployeesDialog v-model:dialog-visible="inviteEmployeesShow" />
+  <BatchImportDialog v-model:dialog-visible="batchImportVisible" />
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { Plus } from '@element-plus/icons-vue'
+import { ref, reactive, computed } from 'vue'
+import { Plus, Upload } from '@element-plus/icons-vue'
+import Apis from '@/api/modules/systemSetting'
 import InviteEmployeesDialog from './components/InviteEmployeesDialog.vue'
+import BatchImportDialog from './components/BatchImportDialog.vue'
+import { ElMessageBox } from 'element-plus'
+import { useCommonStore } from '@/store/modules/common'
 
-const type = ref(1)
+const commonStore = useCommonStore()
+const isDimission = ref(1)
 const searchForm = reactive({
   name: null,
-  mobile: null,
-  userStatus: null,
-  department: null,
-  role: null
+  phone: null,
+  isDisable: null,
+  deptId: [],
+  roleId: null
 })
-const onSearch = () => {}
+const total = ref(0)
+const page = ref(1)
+const pageSize = ref(10)
+
 const onReset = () => {}
-const tableData = ref([{ name: '张兮兮' }])
+const employeeList = ref([])
+const roleList = computed(() => commonStore.roleList)
+const deptTree = computed(() => commonStore.deptTree)
 const inviteEmployeesShow = ref(false)
-const handleClick = (row) => {}
+const batchImportVisible = ref(false)
+const fetchAllEmployees = async () => {
+  const deptId = searchForm.deptId
+  const params = {
+    ...searchForm,
+    isDisable: typeof searchForm.isDisable === 'number' ? searchForm.isDisable : null,
+    deptId: deptId.length ? deptId[deptId.length - 1] : null,
+    isDimission: isDimission.value,
+    page: page.value,
+    pageSize: pageSize.value
+  }
+  const { code, data } = await Apis.findAllEmployeeList(params)
+  if (code === 200) {
+    employeeList.value = data.data
+    total.value = data.total
+  }
+}
+fetchAllEmployees()
+const setStatus = async row => {
+  const isDisable = !row.isDisable
+  const isConfirm = await ElMessageBox.confirm(`是否确认${isDisable ? '禁用' : '启用'}该员工吗？`, '提示', { type: 'warning' })
+  if (!isConfirm) return
+  const { code } = await Apis.updateEmployeeStatus({ employeeId: row.employeeId, isDisable: Number(isDisable) })
+  if (code === 200) {
+    await fetchAllEmployees()
+  }
+}
+const setDimission = async row => {
+  const isConfirm = await ElMessageBox.confirm(`是否确认离职该员工吗？`, '提示', { type: 'warning' })
+  if (!isConfirm) return
+  const { code } = await Apis.updateEmployeeDimission({ employeeId: row.employeeId, isDimission: 1 })
+  if (code === 200) {
+    await fetchAllEmployees()
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-
+.success {
+  color: var(--el-color-success);
+}
+.danger {
+  color: var(--el-color-danger);
+}
 </style>

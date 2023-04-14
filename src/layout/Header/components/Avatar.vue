@@ -79,7 +79,7 @@ const logout = () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(async () => {
-    globalStore.logout()
+    globalStore.logout(true)
   })
 }
 

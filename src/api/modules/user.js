@@ -4,7 +4,9 @@ import http from '../index'
 const apiConfig = {
   userLogin: `POST /auth/oauth/token`,
   mobileLogin: `POST /auth/mobile/token/sms`,
-  findTenantList: `GET /upms/client/user/tenant/list`
+  findTenantList: `GET /upms/client/user/tenant/list`,
+  setPassword: `POST /upms/client/user/setPassword`,
+  logout: `DELETE /auth/token/logout`
 }
 
 export const sendSmsCode = mobile => {

@@ -20,13 +20,14 @@
           highlight-current
           :props="defaultProps"
           :filter-node-method="filterNode"
+          @node-click="nodeClick"
         >
-          <template #default="{ node, data }">
+          <template #default="{ data }">
             <div class="custom-tree-node">
               <span>{{ data.name }}</span>
               <span class="operation">
-                <el-icon><Edit /></el-icon>
-                <el-icon><Delete /></el-icon>
+                <el-icon @click.stop="editPosition(data)"><Edit /></el-icon>
+                <el-icon @click.stop="delPosition(data)"><Delete /></el-icon>
               </span>
             </div>
           </template>
@@ -37,34 +38,32 @@
     <div class="employee-wrap">
       <div class="title">
         员工列表
-        <el-button class="add-btn" size="small" :icon="Plus" @click="editEmployee(null)"></el-button>
+        <el-button v-if="currPositionNode.id" class="add-btn" size="small" :icon="Plus" @click="editEmployee(null)"></el-button>
       </div>
       <el-scrollbar class="scrollbar">
         <div class="tag-list">
           <el-tag v-for="(item, index) in employeeList" :key="index" class="tag" size="large">
-            <span>{{ `${item.name}(${item.mobile})` }}</span>
+            <span>{{ `${item.name}(${item.phone})` }}</span>
             <el-icon class="edit-icon"><Edit /></el-icon>
           </el-tag>
         </div>
       </el-scrollbar>
     </div>
   </div>
-  <EditPositionDialog
-    v-model:dialog-visible="positionVisible"
-    :position-item="positionItem"
-    @change="fetchEmployeeList"
-  />
+  <EditPositionDialog v-model:dialog-visible="positionVisible" :position-item="positionItem" @change="fetchPositionList" />
   <EditEmployeeDialog
     v-model:dialog-visible="employeeVisible"
     :position-list="positionList"
     :employee-item="employeeItem"
-    @change="fetchEmployeeList"
+    :position-item="currPositionNode"
+    @change="fetchPositionList"
   />
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { Plus, Edit, Delete, Search } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import Apis from '@/api/modules/systemSetting'
 import EditEmployeeDialog from './components/EditEmployeeDialog.vue'
 import EditPositionDialog from './components/EditPositionDialog.vue'
@@ -77,13 +76,22 @@ const defaultProps = {
   value: 'id'
 }
 const positionVisible = ref(false)
-let positionItem = null
+let positionItem = ref(null)
 const editPosition = item => {
-  positionItem = item
+  positionItem.value = item
   positionVisible.value = true
 }
+const delPosition = async item => {
+  const isConfirm = await ElMessageBox.confirm(`确定删除该机构职位吗？`, '提示', { type: 'warning' }).catch(() => {})
+  if (!isConfirm) return
+  const { code } = await Apis.delPosition({ id: item.id })
+  if (code === 200) {
+    ElMessage.success('删除成功')
+    await fetchPositionList()
+  }
+}
 
-const employeeList = ref(Array(10).fill({ name: '张兮兮', mobile: '15167696520' }))
+const employeeList = ref([])
 const employeeVisible = ref(false)
 let employeeItem = null
 const editEmployee = item => {
@@ -96,13 +104,25 @@ const onSearch = () => {
 const filterNode = (value, data) => {
   return data.name.includes(value)
 }
-const fetchEmployeeList = async () => {
+const fetchPositionList = async () => {
   const { code, data } = await Apis.findPositionList({ name: '' })
   if (code === 200) {
     positionList.value = data
   }
 }
-fetchEmployeeList()
+fetchPositionList()
+
+let currPositionNode = ref({})
+const fetchEmployeeList = async () => {
+  const { code, data } = await Apis.findPositionEmployeeList({ positionId: currPositionNode.value.id })
+  if (code === 200) {
+    employeeList.value = data
+  }
+}
+const nodeClick = node => {
+  currPositionNode.value = node
+  fetchEmployeeList()
+}
 </script>
 
 <style lang="scss" scoped>
