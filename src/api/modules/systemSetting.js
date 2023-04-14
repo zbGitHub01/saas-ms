@@ -28,6 +28,9 @@ const apiConfig = {
   findNonRoleList: `GET /upms/client/employee/role/employee/nonRoleList`,
   addRoleEmployee: `GET /upms/client/employee/role/employee/add`,
   removeRoleEmployee: `GET /upms/client/employee/role/employee/remove`,
+
+  // 部门权限
+  findPermissionDeptTree: `GET /upms/client/permission/dept/tree`
 }
 
 const apis = generateApiFnc(apiConfig)

@@ -25,7 +25,6 @@ import OrgPosition from './OrgPosition/index.vue'
 import OrgRole from './OrgRole/index.vue'
 
 const tabActive = ref('1')
-
 </script>
 
 <style lang="scss" scoped></style>

@@ -15,7 +15,7 @@
           :props="defaultProps"
           @node-click="nodeClick"
         >
-          <template #default="{ node, data }">
+          <template #default="{ data }">
             <div class="custom-tree-node">
               <span>{{ data.name }}</span>
               <span class="operation">
