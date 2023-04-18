@@ -11,17 +11,35 @@
       <el-option label="测试3" value="3"></el-option>
       <el-option label="测试4" value="4"></el-option>
     </el-select>
+    <el-date-picker v-model="value1" type="date" />
+    <div class="calendar-wrap">
+      <el-calendar v-model="newDate" />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
+// import DateTable from 'element-plus/es/components/date-picker/src/props/basic-date-table'
 
+const newDate = ref(new Date())
 const route = useRoute()
 const testValue = ref('1')
+const value1 = ref(new Date())
 const test = 'test'
 const device = 'device'
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.calendar-wrap {
+  width: 340px;
+  :deep(.el-calendar-table .el-calendar-day) {
+    height: auto;
+    text-align: center;
+  }
+  :deep(.el-calendar-table td) {
+    border: none;
+  }
+}
+</style>
