@@ -5,6 +5,7 @@
     "parentMenuCode":"non",
     "path":"/home/index",
     "permissionId":2377,
+    "isChecked":true,
     "menuCode":"SHOUYE",
     "menuName":"首页",
     "permissionType":{
@@ -15,2047 +16,14 @@
     "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
     "children":[]
   },
-  {
-    "hide":true,
-    "icon":"List",
-    "parentMenuCode":"non",
-    "path":"/task/index",
-    "permissionId":2273,
-    "menuCode":"RENWUYEMIAN",
-    "menuName":"任务页面",
-    "permissionType":{
-      "type":1,
-      "desc":"权限菜单"
-    },
-    "rolePermissionOperation":[],
-    "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-    "children":[
-      {
-        "hide":false,
-        "icon":"Menu",
-        "parentMenuCode":"RENWUYEMIAN",
-        "path":"/task/index",
-        "permissionId":2301,
-        "menuCode":"BAOJIAJINGBIAO",
-        "menuName":"报价竞标",
-        "permissionType":{
-          "type":1,
-          "desc":"权限菜单"
-        },
-        "rolePermissionOperation":[],
-        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-        "children":[
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"BAOJIAJINGBIAO",
-            "path":"/task/index/approxAcquitDecks",
-            "permissionId":2287,
-            "menuCode":"SHOUGOUJUECESHENPI",
-            "menuName":"收购决策审批",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"SHOUGOUJUECESHENPI",
-                "path":null,
-                "permissionId":2283,
-                "menuCode":"SHOUGOUJUECESHENPI_BAOJIAQUJIAN",
-                "menuName":"报价区间",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"SHOUGOUJUECESHENPI",
-                "path":null,
-                "permissionId":2396,
-                "menuCode":"SHOUGOUJUECESHENPI_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"SHOUGOUJUECESHENPI",
-                "path":null,
-                "permissionId":2408,
-                "menuCode":"SHOUGOUJUECESHENPI_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"BAOJIAJINGBIAO",
-            "path":"/task/index/externBid",
-            "permissionId":2309,
-            "menuCode":"WAIBUJINGBIAO",
-            "menuName":"外部竞标",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"WAIBUJINGBIAO",
-                "path":null,
-                "permissionId":2277,
-                "menuCode":"WAIBUJINGBIAO_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"WAIBUJINGBIAO",
-                "path":null,
-                "permissionId":2292,
-                "menuCode":"WAIBUJINGBIAO_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"WAIBUJINGBIAO",
-                "path":null,
-                "permissionId":2465,
-                "menuCode":"WAIBUJINGBIAO_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"BAOJIAJINGBIAO",
-            "path":"/task/index/paySecureDeposit",
-            "permissionId":2418,
-            "menuCode":"JIAONABAOZHENGJIN",
-            "menuName":"缴纳保证金",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIAONABAOZHENGJIN",
-                "path":null,
-                "permissionId":2318,
-                "menuCode":"JIAONABAOZHENGJIN_XUJIAOBAOZHENGJIN",
-                "menuName":"需缴保证金",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIAONABAOZHENGJIN",
-                "path":null,
-                "permissionId":2346,
-                "menuCode":"JIAONABAOZHENGJIN_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIAONABAOZHENGJIN",
-                "path":null,
-                "permissionId":2363,
-                "menuCode":"JIAONABAOZHENGJIN_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIAONABAOZHENGJIN",
-                "path":null,
-                "permissionId":2398,
-                "menuCode":"JIAONABAOZHENGJIN_SHIJIAOJINE",
-                "menuName":"实缴金额",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIAONABAOZHENGJIN",
-                "path":null,
-                "permissionId":2468,
-                "menuCode":"JIAONABAOZHENGJIN_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "hide":false,
-        "icon":"Menu",
-        "parentMenuCode":"RENWUYEMIAN",
-        "path":"/task/index/declaration",
-        "permissionId":2303,
-        "menuCode":"XIANGMUSHENBAO",
-        "menuName":"项目申报",
-        "permissionType":{
-          "type":1,
-          "desc":"权限菜单"
-        },
-        "rolePermissionOperation":[],
-        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-        "children":[
-          {
-            "hide":false,
-            "icon":null,
-            "parentMenuCode":"XIANGMUSHENBAO",
-            "path":null,
-            "permissionId":2295,
-            "menuCode":"XIANGMUSHENBAO_TIANJIASHENHEREN",
-            "menuName":"添加审核人",
-            "permissionType":{
-              "type":2,
-              "desc":"按钮"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[]
-          },
-          {
-            "hide":false,
-            "icon":null,
-            "parentMenuCode":"XIANGMUSHENBAO",
-            "path":null,
-            "permissionId":2320,
-            "menuCode":"XIANGMUSHENBAO_TIANJIADAIBANREN",
-            "menuName":"添加待办人",
-            "permissionType":{
-              "type":2,
-              "desc":"按钮"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[]
-          },
-          {
-            "hide":false,
-            "icon":null,
-            "parentMenuCode":"XIANGMUSHENBAO",
-            "path":null,
-            "permissionId":2409,
-            "menuCode":"XIANGMUSHENBAO_CUIBAN",
-            "menuName":"催办",
-            "permissionType":{
-              "type":2,
-              "desc":"按钮"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[]
-          }
-        ]
-      },
-      {
-        "hide":false,
-        "icon":"Menu",
-        "parentMenuCode":"RENWUYEMIAN",
-        "path":"/task/index",
-        "permissionId":2313,
-        "menuCode":"ZICHANCHUZHI",
-        "menuName":"资产处置",
-        "permissionType":{
-          "type":1,
-          "desc":"权限菜单"
-        },
-        "rolePermissionOperation":[],
-        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-        "children":[
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANCHUZHI",
-            "path":"/task/index/repaymentAccountEntry",
-            "permissionId":2307,
-            "menuCode":"HAIKUANZHANGHULURU",
-            "menuName":"还款账户录入",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"HAIKUANZHANGHULURU",
-                "path":null,
-                "permissionId":2350,
-                "menuCode":"HAIKUANZHANGHULURU_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"HAIKUANZHANGHULURU",
-                "path":null,
-                "permissionId":2401,
-                "menuCode":"HAIKUANZHANGHULURU_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"HAIKUANZHANGHULURU",
-                "path":null,
-                "permissionId":2474,
-                "menuCode":"HAIKUANZHANGHULURU_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANCHUZHI",
-            "path":"/task/index/caseWarehousing",
-            "permissionId":2308,
-            "menuCode":"ANJIANRUKU",
-            "menuName":"案件入库",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ANJIANRUKU",
-                "path":null,
-                "permissionId":2294,
-                "menuCode":"ANJIANRUKU_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ANJIANRUKU",
-                "path":null,
-                "permissionId":2305,
-                "menuCode":"ANJIANRUKU_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ANJIANRUKU",
-                "path":null,
-                "permissionId":2448,
-                "menuCode":"ANJIANRUKU_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANCHUZHI",
-            "path":"/task/index/sensitiveUserExclusion",
-            "permissionId":2328,
-            "menuCode":"MINGANYONGHUPAICHU",
-            "menuName":"敏感用户排除",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"MINGANYONGHUPAICHU",
-                "path":null,
-                "permissionId":2347,
-                "menuCode":"MINGANYONGHUPAICHU_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"MINGANYONGHUPAICHU",
-                "path":null,
-                "permissionId":2361,
-                "menuCode":"MINGANYONGHUPAICHU_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"MINGANYONGHUPAICHU",
-                "path":null,
-                "permissionId":2480,
-                "menuCode":"MINGANYONGHUPAICHU_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANCHUZHI",
-            "path":"/task/index/repaymentDataEntry",
-            "permissionId":2441,
-            "menuCode":"FENGBAOQIHAIKUANSHUJURUZHANG",
-            "menuName":"封包期还款数据入账",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FENGBAOQIHAIKUANSHUJURUZHANG",
-                "path":null,
-                "permissionId":2274,
-                "menuCode":"FENGBAOQIHAIKUANSHUJURUZHANG_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FENGBAOQIHAIKUANSHUJURUZHANG",
-                "path":null,
-                "permissionId":2311,
-                "menuCode":"FENGBAOQIHAIKUANSHUJURUZHANG_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FENGBAOQIHAIKUANSHUJURUZHANG",
-                "path":null,
-                "permissionId":2385,
-                "menuCode":"FENGBAOQIHAIKUANSHUJURUZHANG_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":null,
-            "parentMenuCode":"ZICHANCHUZHI",
-            "path":null,
-            "permissionId":2451,
-            "menuCode":"FUJIANZILIAOGUANLIAN",
-            "menuName":"附件资料关联",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FUJIANZILIAOGUANLIAN",
-                "path":null,
-                "permissionId":2293,
-                "menuCode":"FUJIANZILIAOGUANLIAN_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FUJIANZILIAOGUANLIAN",
-                "path":null,
-                "permissionId":2327,
-                "menuCode":"FUJIANZILIAOGUANLIAN_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FUJIANZILIAOGUANLIAN",
-                "path":null,
-                "permissionId":2420,
-                "menuCode":"FUJIANZILIAOGUANLIAN_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "hide":false,
-        "icon":"Menu",
-        "parentMenuCode":"RENWUYEMIAN",
-        "path":"/task/index",
-        "permissionId":2380,
-        "menuCode":"ZICHANPINGGU",
-        "menuName":"资产评估",
-        "permissionType":{
-          "type":1,
-          "desc":"权限菜单"
-        },
-        "rolePermissionOperation":[],
-        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-        "children":[
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANPINGGU",
-            "path":"/task/index/assetManageMarketResearch",
-            "permissionId":2324,
-            "menuCode":"ZIGUANSHICHANGDIAOYAN",
-            "menuName":"资管市场调研",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZIGUANSHICHANGDIAOYAN",
-                "path":null,
-                "permissionId":2312,
-                "menuCode":"ZIGUANSHICHANGDIAOYAN_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZIGUANSHICHANGDIAOYAN",
-                "path":null,
-                "permissionId":2338,
-                "menuCode":"ZIGUANSHICHANGDIAOYAN_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZIGUANSHICHANGDIAOYAN",
-                "path":null,
-                "permissionId":2469,
-                "menuCode":"ZIGUANSHICHANGDIAOYAN_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANPINGGU",
-            "path":"/task/index/confirmCurrentCycle",
-            "permissionId":2394,
-            "menuCode":"HUIBENZHOUQIQUEREN",
-            "menuName":"回本周期确认",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"HUIBENZHOUQIQUEREN",
-                "path":null,
-                "permissionId":2315,
-                "menuCode":"HUIBENZHOUQIQUEREN_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"HUIBENZHOUQIQUEREN",
-                "path":null,
-                "permissionId":2325,
-                "menuCode":"HUIBENZHOUQIQUEREN_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"HUIBENZHOUQIQUEREN",
-                "path":null,
-                "permissionId":2426,
-                "menuCode":"HUIBENZHOUQIQUEREN_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANPINGGU",
-            "path":"/task/index/collectValueData",
-            "permissionId":2397,
-            "menuCode":"SHOUJIPINGGUSHUJU",
-            "menuName":"收集评估数据",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"SHOUJIPINGGUSHUJU",
-                "path":null,
-                "permissionId":2331,
-                "menuCode":"SHOUJIPINGGUSHUJU_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"SHOUJIPINGGUSHUJU",
-                "path":null,
-                "permissionId":2384,
-                "menuCode":"SHOUJIPINGGUSHUJU_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"SHOUJIPINGGUSHUJU",
-                "path":null,
-                "permissionId":2416,
-                "menuCode":"SHOUJIPINGGUSHUJU_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANPINGGU",
-            "path":"/task/index/legalAffairDispatchReport",
-            "permissionId":2430,
-            "menuCode":"FAWUJINDIAOBAOGAO",
-            "menuName":"法务尽调报告",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FAWUJINDIAOBAOGAO",
-                "path":null,
-                "permissionId":2355,
-                "menuCode":"FAWUJINDIAOBAOGAO_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FAWUJINDIAOBAOGAO",
-                "path":null,
-                "permissionId":2365,
-                "menuCode":"FAWUJINDIAOBAOGAO_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FAWUJINDIAOBAOGAO",
-                "path":null,
-                "permissionId":2440,
-                "menuCode":"FAWUJINDIAOBAOGAO_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANPINGGU",
-            "path":"/task/index/overDataReport",
-            "permissionId":2446,
-            "menuCode":"YUNYINGSHUJUBAOGAO",
-            "menuName":"运营数据报告",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"YUNYINGSHUJUBAOGAO",
-                "path":null,
-                "permissionId":2310,
-                "menuCode":"YUNYINGSHUJUBAOGAO_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"YUNYINGSHUJUBAOGAO",
-                "path":null,
-                "permissionId":2392,
-                "menuCode":"YUNYINGSHUJUBAOGAO_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"YUNYINGSHUJUBAOGAO",
-                "path":null,
-                "permissionId":2427,
-                "menuCode":"YUNYINGSHUJUBAOGAO_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "hide":false,
-        "icon":"Menu",
-        "parentMenuCode":"RENWUYEMIAN",
-        "path":"/task/index",
-        "permissionId":2414,
-        "menuCode":"ZICHANJIAOGE",
-        "menuName":"资产交割",
-        "permissionType":{
-          "type":1,
-          "desc":"权限菜单"
-        },
-        "rolePermissionOperation":[],
-        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-        "children":[
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANJIAOGE",
-            "path":"/task/index/loanDataSupplement",
-            "permissionId":2278,
-            "menuCode":"JIEKUANSHUJUBUCHONG",
-            "menuName":"借款数据补充",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIEKUANSHUJUBUCHONG",
-                "path":null,
-                "permissionId":2359,
-                "menuCode":"JIEKUANSHUJUBUCHONG_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIEKUANSHUJUBUCHONG",
-                "path":null,
-                "permissionId":2383,
-                "menuCode":"JIEKUANSHUJUBUCHONG_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIEKUANSHUJUBUCHONG",
-                "path":null,
-                "permissionId":2472,
-                "menuCode":"JIEKUANSHUJUBUCHONG_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANJIAOGE",
-            "path":"/task/index/loanDataDelivery",
-            "permissionId":2323,
-            "menuCode":"JIEKUANSHUJUJIAOGE",
-            "menuName":"借款数据交割",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIEKUANSHUJUJIAOGE",
-                "path":null,
-                "permissionId":2300,
-                "menuCode":"JIEKUANSHUJUJIAOGE_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIEKUANSHUJUJIAOGE",
-                "path":null,
-                "permissionId":2405,
-                "menuCode":"JIEKUANSHUJUJIAOGE_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"JIEKUANSHUJUJIAOGE",
-                "path":null,
-                "permissionId":2466,
-                "menuCode":"JIEKUANSHUJUJIAOGE_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANJIAOGE",
-            "path":"/task/index/debtTransferNotice",
-            "permissionId":2329,
-            "menuCode":"ZHAIZHUANTONGZHI",
-            "menuName":"债转通知",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHAIZHUANTONGZHI",
-                "path":null,
-                "permissionId":2290,
-                "menuCode":"ZHAIZHUANTONGZHI_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHAIZHUANTONGZHI",
-                "path":null,
-                "permissionId":2412,
-                "menuCode":"ZHAIZHUANTONGZHI_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHAIZHUANTONGZHI",
-                "path":null,
-                "permissionId":2473,
-                "menuCode":"ZHAIZHUANTONGZHI_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANJIAOGE",
-            "path":"/task/index/confirmDockingType",
-            "permissionId":2360,
-            "menuCode":"QUERENDUIJIEFANGSHI",
-            "menuName":"确认对接方式",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"QUERENDUIJIEFANGSHI",
-                "path":null,
-                "permissionId":2297,
-                "menuCode":"QUERENDUIJIEFANGSHI_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"QUERENDUIJIEFANGSHI",
-                "path":null,
-                "permissionId":2326,
-                "menuCode":"QUERENDUIJIEFANGSHI_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"QUERENDUIJIEFANGSHI",
-                "path":null,
-                "permissionId":2373,
-                "menuCode":"QUERENDUIJIEFANGSHI_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANJIAOGE",
-            "path":"/task/index/repaymentDataDelivery",
-            "permissionId":2423,
-            "menuCode":"FENGBAOQIHAIKUANSHUJUJIAOGE",
-            "menuName":"封包期还款数据交割",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FENGBAOQIHAIKUANSHUJUJIAOGE",
-                "path":null,
-                "permissionId":2319,
-                "menuCode":"FENGBAOQIHAIKUANSHUJUJIAOGE_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FENGBAOQIHAIKUANSHUJUJIAOGE",
-                "path":null,
-                "permissionId":2344,
-                "menuCode":"FENGBAOQIHAIKUANSHUJUJIAOGE_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"FENGBAOQIHAIKUANSHUJUJIAOGE",
-                "path":null,
-                "permissionId":2482,
-                "menuCode":"FENGBAOQIHAIKUANSHUJUJIAOGE_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANJIAOGE",
-            "path":"/task/index/paperListDelivery",
-            "permissionId":2425,
-            "menuCode":"ZHIZHIQINGDANJIAOGE",
-            "menuName":"纸质清单交割",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHIZHIQINGDANJIAOGE",
-                "path":null,
-                "permissionId":2354,
-                "menuCode":"ZHIZHIQINGDANJIAOGE_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHIZHIQINGDANJIAOGE",
-                "path":null,
-                "permissionId":2374,
-                "menuCode":"ZHIZHIQINGDANJIAOGE_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHIZHIQINGDANJIAOGE",
-                "path":null,
-                "permissionId":2402,
-                "menuCode":"ZHIZHIQINGDANJIAOGE_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANJIAOGE",
-            "path":"/task/index/eAccessoriesSupplement",
-            "permissionId":2431,
-            "menuCode":"DIANZIFUJIANBUCHONG",
-            "menuName":"电子附件补充",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"DIANZIFUJIANBUCHONG",
-                "path":null,
-                "permissionId":2299,
-                "menuCode":"DIANZIFUJIANBUCHONG_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"DIANZIFUJIANBUCHONG",
-                "path":null,
-                "permissionId":2341,
-                "menuCode":"DIANZIFUJIANBUCHONG_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"DIANZIFUJIANBUCHONG",
-                "path":null,
-                "permissionId":2435,
-                "menuCode":"DIANZIFUJIANBUCHONG_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANJIAOGE",
-            "path":"/task/index/eAccessoriesDelivery",
-            "permissionId":2450,
-            "menuCode":"DIANZIFUJIANJIAOGE",
-            "menuName":"电子附件交割",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"DIANZIFUJIANJIAOGE",
-                "path":null,
-                "permissionId":2306,
-                "menuCode":"DIANZIFUJIANJIAOGE_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"DIANZIFUJIANJIAOGE",
-                "path":null,
-                "permissionId":2345,
-                "menuCode":"DIANZIFUJIANJIAOGE_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"DIANZIFUJIANJIAOGE",
-                "path":null,
-                "permissionId":2399,
-                "menuCode":"DIANZIFUJIANJIAOGE_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANJIAOGE",
-            "path":"/task/index/dataCleanVerification",
-            "permissionId":2461,
-            "menuCode":"SHUJUQINGXIXIAOYAN",
-            "menuName":"数据清洗校验",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"SHUJUQINGXIXIAOYAN",
-                "path":null,
-                "permissionId":2286,
-                "menuCode":"SHUJUQINGXIXIAOYAN_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"SHUJUQINGXIXIAOYAN",
-                "path":null,
-                "permissionId":2422,
-                "menuCode":"SHUJUQINGXIXIAOYAN_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"SHUJUQINGXIXIAOYAN",
-                "path":null,
-                "permissionId":2428,
-                "menuCode":"SHUJUQINGXIXIAOYAN_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"ZICHANJIAOGE",
-            "path":"/task/index/paperListSupplement",
-            "permissionId":2478,
-            "menuCode":"ZHIZHIQINGDANBUCHONG",
-            "menuName":"纸质清单补充",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHIZHIQINGDANBUCHONG",
-                "path":null,
-                "permissionId":2279,
-                "menuCode":"ZHIZHIQINGDANBUCHONG_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHIZHIQINGDANBUCHONG",
-                "path":null,
-                "permissionId":2289,
-                "menuCode":"ZHIZHIQINGDANBUCHONG_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHIZHIQINGDANBUCHONG",
-                "path":null,
-                "permissionId":2445,
-                "menuCode":"ZHIZHIQINGDANBUCHONG_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "hide":false,
-        "icon":"Menu",
-        "parentMenuCode":"RENWUYEMIAN",
-        "path":"/task/index",
-        "permissionId":2455,
-        "menuCode":"HETONGQIANSHU",
-        "menuName":"合同签署",
-        "permissionType":{
-          "type":1,
-          "desc":"权限菜单"
-        },
-        "rolePermissionOperation":[],
-        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-        "children":[
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"HETONGQIANSHU",
-            "path":"/task/index/paymentTransfer",
-            "permissionId":2336,
-            "menuCode":"ZHIFUZHUANRANGKUAN",
-            "menuName":"支付转让款",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHIFUZHUANRANGKUAN",
-                "path":null,
-                "permissionId":2291,
-                "menuCode":"ZHIFUZHUANRANGKUAN_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHIFUZHUANRANGKUAN",
-                "path":null,
-                "permissionId":2375,
-                "menuCode":"ZHIFUZHUANRANGKUAN_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHIFUZHUANRANGKUAN",
-                "path":null,
-                "permissionId":2476,
-                "menuCode":"ZHIFUZHUANRANGKUAN_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHIFUZHUANRANGKUAN",
-                "path":null,
-                "permissionId":2485,
-                "menuCode":"ZHIFUZHUANRANGKUAN_FUKUANJINE",
-                "menuName":"付款金额",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"HETONGQIANSHU",
-            "path":"/task/index/dataTransferDemand",
-            "permissionId":2390,
-            "menuCode":"ZHUANRANGSHUJUXUQIU",
-            "menuName":"转让数据需求",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHUANRANGSHUJUXUQIU",
-                "path":null,
-                "permissionId":2378,
-                "menuCode":"ZHUANRANGSHUJUXUQIU_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHUANRANGSHUJUXUQIU",
-                "path":null,
-                "permissionId":2391,
-                "menuCode":"ZHUANRANGSHUJUXUQIU_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"ZHUANRANGSHUJUXUQIU",
-                "path":null,
-                "permissionId":2456,
-                "menuCode":"ZHUANRANGSHUJUXUQIU_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"HETONGQIANSHU",
-            "path":"/task/index/openPaybackAccount",
-            "permissionId":2404,
-            "menuCode":"KAISHEHUIKUANZHANGHU",
-            "menuName":"开设回款账户",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"KAISHEHUIKUANZHANGHU",
-                "path":null,
-                "permissionId":2330,
-                "menuCode":"KAISHEHUIKUANZHANGHU_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"KAISHEHUIKUANZHANGHU",
-                "path":null,
-                "permissionId":2411,
-                "menuCode":"KAISHEHUIKUANZHANGHU_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"KAISHEHUIKUANZHANGHU",
-                "path":null,
-                "permissionId":2419,
-                "menuCode":"KAISHEHUIKUANZHANGHU_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"HETONGQIANSHU",
-            "path":"/task/index/contractSign",
-            "permissionId":2444,
-            "menuCode":"QIANSHUHETONG",
-            "menuName":"签署合同",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"QIANSHUHETONG",
-                "path":null,
-                "permissionId":2357,
-                "menuCode":"QIANSHUHETONG_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"QIANSHUHETONG",
-                "path":null,
-                "permissionId":2437,
-                "menuCode":"QIANSHUHETONG_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"QIANSHUHETONG",
-                "path":null,
-                "permissionId":2479,
-                "menuCode":"QIANSHUHETONG_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          },
-          {
-            "hide":false,
-            "icon":"Menu",
-            "parentMenuCode":"HETONGQIANSHU",
-            "path":"/task/index/drawContract",
-            "permissionId":2454,
-            "menuCode":"NIDINGHETONG",
-            "menuName":"拟定合同",
-            "permissionType":{
-              "type":1,
-              "desc":"权限菜单"
-            },
-            "rolePermissionOperation":[],
-            "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-            "children":[
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"NIDINGHETONG",
-                "path":null,
-                "permissionId":2335,
-                "menuCode":"NIDINGHETONG_TIANJIASHENHEREN",
-                "menuName":"添加审核人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"NIDINGHETONG",
-                "path":null,
-                "permissionId":2382,
-                "menuCode":"NIDINGHETONG_CUIBAN",
-                "menuName":"催办",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              },
-              {
-                "hide":false,
-                "icon":null,
-                "parentMenuCode":"NIDINGHETONG",
-                "path":null,
-                "permissionId":2457,
-                "menuCode":"NIDINGHETONG_TIANJIADAIBANREN",
-                "menuName":"添加待办人",
-                "permissionType":{
-                  "type":2,
-                  "desc":"按钮"
-                },
-                "rolePermissionOperation":[],
-                "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-                "children":[]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
+
   {
     "hide":false,
     "icon":"List",
     "parentMenuCode":"non",
     "path":"/projectList/index",
     "permissionId":2433,
+    "isChecked": true,
     "menuCode":"XIANGMULIEBIAO",
     "menuName":"项目列表",
     "permissionType":{
@@ -2071,6 +39,7 @@
         "parentMenuCode":"XIANGMULIEBIAO",
         "path":null,
         "permissionId":2342,
+        "isChecked": true,
         "menuCode":"XIANGMULIEBIAO_FAQIXINXIANGMU",
         "menuName":"发起新项目",
         "permissionType":{
@@ -2087,6 +56,7 @@
         "parentMenuCode":"XIANGMULIEBIAO",
         "path":null,
         "permissionId":2358,
+        "isChecked": true,
         "menuCode":"XIANGMULIEBIAO_CHAXUN",
         "menuName":"查询",
         "permissionType":{
@@ -2103,6 +73,7 @@
         "parentMenuCode":"XIANGMULIEBIAO",
         "path":"/task/index",
         "permissionId":2442,
+        "isChecked": true,
         "menuCode":"XIANGMUXIANGQING",
         "menuName":"项目详情",
         "permissionType":{
@@ -2117,7 +88,8 @@
             "icon":null,
             "parentMenuCode":"XIANGMUXIANGQING",
             "path":null,
-            "permissionId":2281,
+            "permissionId":2287,
+            "isChecked": true,
             "menuCode":"XIANGMUXIANGQING_JIHUO",
             "menuName":"激活",
             "permissionType":{
@@ -2134,6 +106,7 @@
             "parentMenuCode":"XIANGMUXIANGQING",
             "path":null,
             "permissionId":2288,
+            "isChecked": true,
             "menuCode":"XIANGMUXIANGQING_SHANCHU",
             "menuName":"删除",
             "permissionType":{
@@ -2150,6 +123,7 @@
             "parentMenuCode":"XIANGMUXIANGQING",
             "path":null,
             "permissionId":2387,
+            "isChecked": true,
             "menuCode":"XIANGMUXIANGQING_GUANBI",
             "menuName":"关闭",
             "permissionType":{
@@ -2166,6 +140,7 @@
             "parentMenuCode":"XIANGMUXIANGQING",
             "path":null,
             "permissionId":2458,
+            "isChecked": true,
             "menuCode":"XIANGMUXIANGQING_WANJIE",
             "menuName":"完结",
             "permissionType":{
@@ -2182,6 +157,7 @@
             "parentMenuCode":"XIANGMUXIANGQING",
             "path":null,
             "permissionId":2483,
+            "isChecked": true,
             "menuCode":"XIANGMUXIANGQING_CHAXUN",
             "menuName":"查询",
             "permissionType":{
@@ -2202,6 +178,7 @@
     "parentMenuCode":"non",
     "path":"/systemSetting",
     "permissionId":2462,
+    "isChecked": true,
     "menuCode":"XITONGSHEZHI",
     "menuName":"系统设置",
     "permissionType":{
@@ -2217,6 +194,7 @@
         "parentMenuCode":"XITONGSHEZHI",
         "path":"/systemSetting/employee",
         "permissionId":2280,
+        "isChecked": true,
         "menuCode":"YUANGONGGUANLI",
         "menuName":"员工管理",
         "permissionType":{
@@ -2232,6 +210,7 @@
         "parentMenuCode":"XITONGSHEZHI",
         "path":"/systemSetting/authManage",
         "permissionId":2281,
+        "isChecked": true,
         "menuCode":"YUANGONGGUANLI",
         "menuName":"权限管理",
         "permissionType":{
@@ -2247,6 +226,7 @@
         "parentMenuCode":"XITONGSHEZHI",
         "path":"/systemSetting/taskMsg",
         "permissionId":2337,
+        "isChecked": true,
         "menuCode":"RENWU&XIAOXI",
         "menuName":"任务&消息",
         "permissionType":{
@@ -2262,6 +242,7 @@
             "parentMenuCode":"RENWU&XIAOXI",
             "path":"/systemSetting/taskMsg/taskSetting",
             "permissionId":2447,
+            "isChecked": true,
             "menuCode":"RENWUSHEZHI",
             "menuName":"任务设置",
             "permissionType":{
@@ -2277,6 +258,7 @@
                 "parentMenuCode":"RENWUSHEZHI",
                 "path":null,
                 "permissionId":2362,
+                "isChecked": true,
                 "menuCode":"RENWUSHEZHI_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2295,6 +277,7 @@
             "parentMenuCode":"RENWU&XIAOXI",
             "path":"/systemSetting/taskMsg/taskSet",
             "permissionId":2317,
+            "isChecked": false,
             "menuCode":"RENWUJI",
             "menuName":"任务集",
             "permissionType":{
@@ -2310,6 +293,7 @@
                 "parentMenuCode":"RENWUJI",
                 "path":null,
                 "permissionId":2349,
+                "isChecked": true,
                 "menuCode":"RENWUJI_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2326,6 +310,7 @@
                 "parentMenuCode":"RENWUJI",
                 "path":null,
                 "permissionId":2351,
+                "isChecked": true,
                 "menuCode":"RENWUJI_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -2342,6 +327,7 @@
                 "parentMenuCode":"RENWUJI",
                 "path":null,
                 "permissionId":2406,
+                "isChecked": true,
                 "menuCode":"RENWUJI_TIANJIARENWUJI",
                 "menuName":"添加任务集",
                 "permissionType":{
@@ -2360,6 +346,7 @@
             "parentMenuCode":"RENWU&XIAOXI",
             "path":"/systemSetting/taskMsg/taskGroupSetting",
             "permissionId":2415,
+            "isChecked": true,
             "menuCode":"RENWUZUSHEZHI",
             "menuName":"任务组设置",
             "permissionType":{
@@ -2375,6 +362,7 @@
                 "parentMenuCode":"RENWUZUSHEZHI",
                 "path":null,
                 "permissionId":2371,
+                "isChecked": true,
                 "menuCode":"RENWUZUSHEZHI_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2391,6 +379,7 @@
                 "parentMenuCode":"RENWUZUSHEZHI",
                 "path":null,
                 "permissionId":2381,
+                "isChecked": true,
                 "menuCode":"RENWUZUSHEZHI_TIANJIARENWUZU",
                 "menuName":"添加任务组",
                 "permissionType":{
@@ -2407,6 +396,7 @@
                 "parentMenuCode":"RENWUZUSHEZHI",
                 "path":null,
                 "permissionId":2386,
+                "isChecked": true,
                 "menuCode":"RENWUZUSHEZHI_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -2425,6 +415,7 @@
             "parentMenuCode":"RENWU&XIAOXI",
             "path":"/systemSetting/taskMsg/processSetting",
             "permissionId":2314,
+            "isChecked": true,
             "menuCode":"LIUCHENGPEIZHI",
             "menuName":"流程配置",
             "permissionType":{
@@ -2440,6 +431,7 @@
                 "parentMenuCode":"LIUCHENGPEIZHI",
                 "path":null,
                 "permissionId":2334,
+                "isChecked": true,
                 "menuCode":"LIUCHENGPEIZHI_TIANJIAMORENLIUCHENG",
                 "menuName":"添加默认流程",
                 "permissionType":{
@@ -2456,6 +448,7 @@
                 "parentMenuCode":"LIUCHENGPEIZHI",
                 "path":null,
                 "permissionId":2368,
+                "isChecked": true,
                 "menuCode":"LIUCHENGPEIZHI_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2472,6 +465,7 @@
                 "parentMenuCode":"LIUCHENGPEIZHI",
                 "path":null,
                 "permissionId":2413,
+                "isChecked": true,
                 "menuCode":"LIUCHENGPEIZHI_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -2490,6 +484,7 @@
             "parentMenuCode":"RENWU&XIAOXI",
             "path":"/systemSetting/taskMsg/messageSetting",
             "permissionId":2333,
+            "isChecked": true,
             "menuCode":"XIAOXISHEZHI",
             "menuName":"消息设置",
             "permissionType":{
@@ -2505,6 +500,7 @@
                 "parentMenuCode":"XIAOXISHEZHI",
                 "path":null,
                 "permissionId":2366,
+                "isChecked": true,
                 "menuCode":"XIAOXISHEZHI_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2525,6 +521,7 @@
         "parentMenuCode":"XITONGSHEZHI",
         "path":"/systemSetting/business",
         "permissionId":2477,
+        "isChecked": true,
         "menuCode":"YEWUYAOSU",
         "menuName":"业务要素",
         "permissionType":{
@@ -2540,6 +537,7 @@
             "parentMenuCode":"YEWUYAOSU",
             "path":"/systemSetting/business/productBatch",
             "permissionId":2275,
+            "isChecked": true,
             "menuCode":"RUKUCHANPIN/PICI",
             "menuName":"入库产品/批次",
             "permissionType":{
@@ -2555,6 +553,7 @@
                 "parentMenuCode":"RUKUCHANPIN/PICI",
                 "path":null,
                 "permissionId":2321,
+                "isChecked": true,
                 "menuCode":"RUKUCHANPIN/PICI_TIANJIARUKUCHANPIN",
                 "menuName":"添加入库产品",
                 "permissionType":{
@@ -2571,6 +570,7 @@
                 "parentMenuCode":"RUKUCHANPIN/PICI",
                 "path":null,
                 "permissionId":2388,
+                "isChecked": true,
                 "menuCode":"RUKUCHANPIN/PICI_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -2587,6 +587,7 @@
                 "parentMenuCode":"RUKUCHANPIN/PICI",
                 "path":null,
                 "permissionId":2452,
+                "isChecked": true,
                 "menuCode":"RUKUCHANPIN/PICI_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2603,6 +604,7 @@
                 "parentMenuCode":"RUKUCHANPIN/PICI",
                 "path":null,
                 "permissionId":2463,
+                "isChecked": true,
                 "menuCode":"RUKUCHANPIN/PICI_RUKUCHANPIN",
                 "menuName":"入库产品",
                 "permissionType":{
@@ -2621,6 +623,7 @@
             "parentMenuCode":"YEWUYAOSU",
             "path":"/systemSetting/business/batch",
             "permissionId":2470,
+            "isChecked": true,
             "menuCode":"RUKUPICI",
             "menuName":"入库批次",
             "permissionType":{
@@ -2636,6 +639,7 @@
                 "parentMenuCode":"RUKUPICI",
                 "path":"/systemSetting/business/batch",
                 "permissionId":2403,
+                "isChecked": true,
                 "menuCode":"RUKUPICI_RUKUPICI",
                 "menuName":"入库批次",
                 "permissionType":{
@@ -2652,6 +656,7 @@
                 "parentMenuCode":"RUKUPICI",
                 "path":null,
                 "permissionId":2282,
+                "isChecked": true,
                 "menuCode":"RUKUPICI_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -2668,6 +673,7 @@
                 "parentMenuCode":"RUKUPICI",
                 "path":null,
                 "permissionId":2379,
+                "isChecked": true,
                 "menuCode":"RUKUPICI_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2684,6 +690,7 @@
                 "parentMenuCode":"RUKUPICI",
                 "path":null,
                 "permissionId":2417,
+                "isChecked": true,
                 "menuCode":"RUKUPICI_TIANJIARUKUPICI",
                 "menuName":"添加入库批次",
                 "permissionType":{
@@ -2702,6 +709,7 @@
             "parentMenuCode":"YEWUYAOSU",
             "path":"/systemSetting/business/assetType",
             "permissionId":2298,
+            "isChecked": true,
             "menuCode":"ZICHANLEIXING",
             "menuName":"资产类型",
             "permissionType":{
@@ -2717,6 +725,7 @@
                 "parentMenuCode":"ZICHANLEIXING",
                 "path":"/systemSetting/business/assetType",
                 "permissionId":2339,
+                "isChecked": true,
                 "menuCode":"ZICHANLEIXING_ZICHANLEIXING",
                 "menuName":"资产类型",
                 "permissionType":{
@@ -2733,6 +742,7 @@
                 "parentMenuCode":"ZICHANLEIXING",
                 "path":null,
                 "permissionId":2367,
+                "isChecked": true,
                 "menuCode":"ZICHANLEIXING_TIANJIAZICHANLEIXING",
                 "menuName":"添加资产类型",
                 "permissionType":{
@@ -2749,6 +759,7 @@
                 "parentMenuCode":"ZICHANLEIXING",
                 "path":null,
                 "permissionId":2429,
+                "isChecked": true,
                 "menuCode":"ZICHANLEIXING_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2765,6 +776,7 @@
                 "parentMenuCode":"ZICHANLEIXING",
                 "path":null,
                 "permissionId":2460,
+                "isChecked": true,
                 "menuCode":"ZICHANLEIXING_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -2783,6 +795,7 @@
             "parentMenuCode":"YEWUYAOSU",
             "path":"/systemSetting/business/packageBuyer",
             "permissionId":2284,
+            "isChecked": true,
             "menuCode":"GOUBAOZHUTI",
             "menuName":"购包主体",
             "permissionType":{
@@ -2798,6 +811,7 @@
                 "parentMenuCode":"GOUBAOZHUTI",
                 "path":"/systemSetting/business/packageBuyer",
                 "permissionId":2407,
+                "isChecked": true,
                 "menuCode":"GOUBAOZHUTI_GOUBAOZHUTI",
                 "menuName":"购包主体",
                 "permissionType":{
@@ -2814,6 +828,7 @@
                 "parentMenuCode":"GOUBAOZHUTI",
                 "path":null,
                 "permissionId":2285,
+                "isChecked": true,
                 "menuCode":"GOUBAOZHUTI_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -2830,6 +845,7 @@
                 "parentMenuCode":"GOUBAOZHUTI",
                 "path":null,
                 "permissionId":2364,
+                "isChecked": true,
                 "menuCode":"GOUBAOZHUTI_TIANJIAGOUBAOZHUTI",
                 "menuName":"添加购包主体",
                 "permissionType":{
@@ -2846,6 +862,7 @@
                 "parentMenuCode":"GOUBAOZHUTI",
                 "path":null,
                 "permissionId":2424,
+                "isChecked": true,
                 "menuCode":"GOUBAOZHUTI_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2864,6 +881,7 @@
             "parentMenuCode":"YEWUYAOSU",
             "path":"/systemSetting/business/dataField",
             "permissionId":2389,
+            "isChecked": true,
             "menuCode":"SHUJUZIDUAN",
             "menuName":"数据字段",
             "permissionType":{
@@ -2879,6 +897,7 @@
                 "parentMenuCode":"SHUJUZIDUAN",
                 "path":null,
                 "permissionId":2296,
+                "isChecked": true,
                 "menuCode":"SHUJUZIDUAN_TIANJIASHUJUZIDUAN",
                 "menuName":"添加数据字段",
                 "permissionType":{
@@ -2895,6 +914,7 @@
                 "parentMenuCode":"SHUJUZIDUAN",
                 "path":null,
                 "permissionId":2340,
+                "isChecked": true,
                 "menuCode":"SHUJUZIDUAN_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2911,6 +931,7 @@
                 "parentMenuCode":"SHUJUZIDUAN",
                 "path":null,
                 "permissionId":2453,
+                "isChecked": true,
                 "menuCode":"SHUJUZIDUAN_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -2929,6 +950,7 @@
             "parentMenuCode":"YEWUYAOSU",
             "path":"/systemSetting/business/fieldCategory",
             "permissionId":2393,
+            "isChecked": true,
             "menuCode":"ZIDUANFENLEI",
             "menuName":"字段分类",
             "permissionType":{
@@ -2944,6 +966,7 @@
                 "parentMenuCode":"ZIDUANFENLEI",
                 "path":null,
                 "permissionId":2356,
+                "isChecked": true,
                 "menuCode":"ZIDUANFENLEI_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -2960,6 +983,7 @@
                 "parentMenuCode":"ZIDUANFENLEI",
                 "path":null,
                 "permissionId":2438,
+                "isChecked": true,
                 "menuCode":"ZIDUANFENLEI_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -2976,6 +1000,7 @@
                 "parentMenuCode":"ZIDUANFENLEI",
                 "path":null,
                 "permissionId":2464,
+                "isChecked": true,
                 "menuCode":"ZIDUANFENLEI_TIANJIAZIDUANFENLEI",
                 "menuName":"添加字段分类",
                 "permissionType":{
@@ -2994,6 +1019,7 @@
             "parentMenuCode":"YEWUYAOSU",
             "path":"/systemSetting/business/dataList",
             "permissionId":2370,
+            "isChecked": true,
             "menuCode":"ZILIAOQINGDAN",
             "menuName":"资料清单",
             "permissionType":{
@@ -3009,6 +1035,7 @@
                 "parentMenuCode":"ZILIAOQINGDAN",
                 "path":null,
                 "permissionId":2304,
+                "isChecked": true,
                 "menuCode":"ZILIAOQINGDAN_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -3025,6 +1052,7 @@
                 "parentMenuCode":"ZILIAOQINGDAN",
                 "path":null,
                 "permissionId":2322,
+                "isChecked": true,
                 "menuCode":"ZILIAOQINGDAN_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -3041,6 +1069,7 @@
                 "parentMenuCode":"ZILIAOQINGDAN",
                 "path":null,
                 "permissionId":2410,
+                "isChecked": true,
                 "menuCode":"ZILIAOQINGDAN_TIANJIAZILIAOQINGDAN",
                 "menuName":"添加资料清单",
                 "permissionType":{
@@ -3059,6 +1088,7 @@
             "parentMenuCode":"YEWUYAOSU",
             "path":"/systemSetting/business/dataCategory",
             "permissionId":2400,
+            "isChecked": true,
             "menuCode":"ZILIAOFENLEI",
             "menuName":"资料分类",
             "permissionType":{
@@ -3074,6 +1104,7 @@
                 "parentMenuCode":"ZILIAOFENLEI",
                 "path":null,
                 "permissionId":2276,
+                "isChecked": true,
                 "menuCode":"ZILIAOFENLEI_TIANJIAZILIAOFENLEI",
                 "menuName":"添加资料分类",
                 "permissionType":{
@@ -3090,6 +1121,7 @@
                 "parentMenuCode":"ZILIAOFENLEI",
                 "path":null,
                 "permissionId":2302,
+                "isChecked": true,
                 "menuCode":"ZILIAOFENLEI_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -3106,6 +1138,7 @@
                 "parentMenuCode":"ZILIAOFENLEI",
                 "path":null,
                 "permissionId":2332,
+                "isChecked": true,
                 "menuCode":"ZILIAOFENLEI_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -3124,6 +1157,7 @@
             "parentMenuCode":"YEWUYAOSU",
             "path":"/systemSetting/business/transactionStructure",
             "permissionId":2436,
+            "isChecked": true,
             "menuCode":"JIAOYIJIAGOU",
             "menuName":"交易架构",
             "permissionType":{
@@ -3139,6 +1173,7 @@
                 "parentMenuCode":"JIAOYIJIAGOU",
                 "path":null,
                 "permissionId":2432,
+                "isChecked": true,
                 "menuCode":"JIAOYIJIAGOU_BIANJI",
                 "menuName":"编辑",
                 "permissionType":{
@@ -3155,6 +1190,7 @@
                 "parentMenuCode":"JIAOYIJIAGOU",
                 "path":null,
                 "permissionId":2434,
+                "isChecked": true,
                 "menuCode":"JIAOYIJIAGOU_SHANCHU",
                 "menuName":"删除",
                 "permissionType":{
@@ -3171,6 +1207,7 @@
                 "parentMenuCode":"JIAOYIJIAGOU",
                 "path":null,
                 "permissionId":2443,
+                "isChecked": true,
                 "menuCode":"JIAOYIJIAGOU_TIANJIAJIAOYIJIAGOU",
                 "menuName":"添加交易架构",
                 "permissionType":{
@@ -3192,7 +1229,8 @@
     "icon":"UserFilled",
     "parentMenuCode":"non",
     "path":"/auth",
-    "permissionId":2280,
+    "permissionId":3280,
+    "isChecked": true,
     "menuCode":"QUANXIANGUANLI",
     "menuName":"权限管理",
     "permissionType":{
@@ -3206,6 +1244,7 @@
         "parentMenuCode":"QUANXIANGUANLI",
         "path":"/auth/menu",
         "permissionId":2353,
+        "isChecked": true,
         "menuCode":"CAIDANQUANXIAN",
         "menuName":"菜单管理",
         "permissionType":{
@@ -3222,6 +1261,7 @@
         "parentMenuCode":"QUANXIANGUANLI",
         "path":"/auth/button",
         "permissionId":2472,
+        "isChecked": true,
         "menuCode":"ANNIUQUANXIAN",
         "menuName":"按钮管理",
         "permissionType":{
@@ -3237,7 +1277,8 @@
     "icon":"UserFilled",
     "parentMenuCode":"non",
     "path":"/bushManage",
-    "permissionId":2280,
+    "permissionId":3281,
+    "isChecked": true,
     "menuCode":"QUANXIANGUANLI",
     "menuName":"业务管理",
     "permissionType":{
@@ -3251,6 +1292,7 @@
         "parentMenuCode":"QUANXIANGUANLI",
         "path":"/bushManage/waiverApprox",
         "permissionId":2353,
+        "isChecked": true,
         "menuCode":"CAIDANQUANXIAN",
         "menuName":"减免审批",
         "permissionType":{
@@ -3266,7 +1308,8 @@
         "icon":"Menu",
         "parentMenuCode":"QUANXIANGUANLI",
         "path":"/bushManage/settlementCertify",
-        "permissionId":2472,
+        "permissionId":3471,
+        "isChecked": true,
         "menuCode":"ANNIUQUANXIAN",
         "menuName":"结清证明",
         "permissionType":{
@@ -3279,7 +1322,8 @@
         "icon":"Menu",
         "parentMenuCode":"QUANXIANGUANLI",
         "path":"/bushManage/basicConfigure",
-        "permissionId":2472,
+        "permissionId":3472,
+        "isChecked": true,
         "menuCode":"ANNIUQUANXIAN",
         "menuName":"业务基础配置",
         "permissionType":{

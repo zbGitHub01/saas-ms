@@ -8,11 +8,12 @@
           ref="treeRef"
           show-checkbox
           :data="menuList"
-          node-key="id"
+          node-key="permissionId"
           default-expand-all
           highlight-current
           :props="defaultProps"
           @node-click="nodeClick"
+          @check="onCheck"
         />
       </el-scrollbar>
     </div>
@@ -20,33 +21,109 @@
       <div class="title">操作/数据权限</div>
       <div class="table-wrap">
         <el-table :data="dataPermission" default-expand-all border row-key="permissionId">
+          <el-table-column type="selection" width="55" reserve-selection align="center" />
           <el-table-column prop="menuName" label="操作" width="220" />
           <el-table-column label="数据范围">
-            <template #default="scope">不限</template>
+            <template #default="scope">
+              <el-tag class="tag" @click="onSetDataRange(scope.row)">
+                <span>不限</span>
+                <el-icon class="filter-icon"><Filter /></el-icon>
+              </el-tag>
+            </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
+    <DataRangeDrawer v-model:drawer-visible="drawerVisible" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
+import DataRangeDrawer from './DataRangeDrawer.vue'
+import Apis from '@/api/modules/systemSetting'
 import menuData from '@/store/menu.json'
 import cloneDeep from 'lodash/cloneDeep'
+import { Filter } from '@element-plus/icons-vue'
 
+const props = defineProps({
+  permissionType: {
+    type: String,
+    default: 'dept'
+  },
+  currNode: {
+    type: Object,
+    default: () => {
+      return {}
+    },
+    required: true
+  }
+})
 const defaultProps = {
   label: 'menuName',
   value: 'permissionId'
 }
+const treeRef = ref()
 const menuList = ref(formatMenuData(menuData))
 const dataPermission = ref([])
-console.log(menuList.value, '---menuList')
+const drawerVisible = ref(false)
+const permissionParams = computed(() => {
+  const paramsConfig = {
+    dept: { deptId: props.currNode.id },
+    role: { roleId: props.currNode.id },
+    employee: { employeeId: props.currNode.id }
+  }
+  return paramsConfig[props.permissionType]
+})
+
+const getCheckedKeys = () => {
+  const checkedKeys = []
+  function getIds(data) {
+    data.forEach(item => {
+      if (item.isChecked) {
+        if (item.children && item.children.length) {
+          getIds(item.children)
+          const isAllChildChecked = item.children.find(child => !child.isChecked)
+          if (!isAllChildChecked) {
+            checkedKeys.push(item.permissionId)
+          } else {
+            item.isChecked = false
+          }
+        } else {
+          checkedKeys.push(item.permissionId)
+        }
+      }
+    })
+  }
+  getIds(cloneDeep(menuList.value))
+  return checkedKeys
+}
 const nodeClick = data => {
-  console.log(data, '--node')
   dataPermission.value = data.data
 }
-
+let prevCheckedKeys = []
+const onCheck = (data, node) => {
+  console.log(data, node, prevCheckedKeys, '---onCheck')
+  const allChecked = [...node.checkedKeys, ...node.halfCheckedKeys]
+  const isChecked = prevCheckedKeys.length < allChecked.length
+  let permissionIds = []
+  if (isChecked) {
+    permissionIds = allChecked.filter(item => !prevCheckedKeys.includes(item))
+  } else {
+    permissionIds = prevCheckedKeys.filter(item => !allChecked.includes(item))
+  }
+  console.log(permissionIds, '---permissionIds')
+  prevCheckedKeys = allChecked
+}
+const fetchPermission = async () => {
+  const apiConfigFn = {
+    dept: Apis.findPermissionDeptPermit,
+    role: Apis.findPermissionRolePermit,
+    employee: Apis.fetchPermissionEmployeePermit
+  }
+  const { code, data } = await apiConfigFn[props.permissionType](permissionParams.value)
+  console.log(code, data)
+}
 function formatMenuData(data) {
   function formatMenu(data) {
     data.forEach(item => {
@@ -64,6 +141,19 @@ function formatMenuData(data) {
   formatMenu(data)
   return data
 }
+
+const onSetDataRange = data => {
+  drawerVisible.value = true
+  console.log(data, '--data')
+}
+onMounted(() => {
+  nextTick(() => {
+    const checkedKeys = getCheckedKeys()
+    treeRef.value.setCheckedKeys(checkedKeys)
+    console.log(checkedKeys, '--checkedKeys')
+  })
+})
+defineExpose({ fetchPermission })
 </script>
 
 <style lang="scss" scoped>
@@ -92,7 +182,8 @@ function formatMenuData(data) {
   height: 100%;
 }
 .scrollbar {
-  height: calc(100% - 116px);
+  //height: 300px;
+  height: calc(100% - 100px);
 }
 .tree {
   margin-top: 10px;
@@ -100,5 +191,15 @@ function formatMenuData(data) {
 .table-wrap {
   margin-left: -1px;
   margin-top: -1px;
+}
+.tag {
+  cursor: pointer;
+  :deep(.el-tag__content) {
+    display: flex;
+    align-items: center;
+  }
+  .filter-icon {
+    margin-left: 4px;
+  }
 }
 </style>

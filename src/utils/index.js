@@ -6,6 +6,7 @@ export const aesEncrypt = (word, keyWord = 'dongancloudsaas+') => {
   return encrypted.toString()
 }
 
+// 子查父路径
 export const getPathByKey = (curKey, data) => {
   let result = []
   let traverse = (curKey, path, data) => {
