@@ -47,6 +47,15 @@ export const useGlobalStore = defineStore('globalStore', {
         return null
       }
     },
+    async acceptInvite(userCode) {
+      const { code, data } = await Apis.acceptInvite({ code: userCode })
+      if (code === 200) {
+        this.tenantId = data.tenantId
+        return data
+      } else {
+        return null
+      }
+    },
     async logout(isLogout = false) {
       if (isLogout) {
         await Apis.logout()

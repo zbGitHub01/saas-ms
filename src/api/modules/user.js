@@ -6,7 +6,8 @@ const apiConfig = {
   mobileLogin: `POST /auth/mobile/token/sms`,
   findTenantList: `GET /upms/client/user/tenant/list`,
   setPassword: `POST /upms/client/user/setPassword`,
-  logout: `DELETE /auth/token/logout`
+  logout: `DELETE /auth/token/logout`,
+  acceptInvite: `GET /upms/client/user/invite/accept`
 }
 
 export const sendSmsCode = mobile => {

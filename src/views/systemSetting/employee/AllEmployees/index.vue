@@ -114,7 +114,7 @@ const fetchAllEmployees = async () => {
   const { code, data } = await Apis.findAllEmployeeList(params)
   if (code === 200) {
     employeeList.value = data.data
-    total.value = data.total
+    total.value = Number(data.total)
   }
 }
 fetchAllEmployees()

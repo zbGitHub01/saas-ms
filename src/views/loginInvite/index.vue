@@ -7,23 +7,24 @@
       </div>
     </div>
     <div class="login-right">
-      <h1 class="title">张兮兮，你好！</h1>
-      <h2>丽水海量企业管理合伙企业(有限合伙)邀请您加入公司！</h2>
+      <h1 class="title">{{ inviteInfo.name }}，你好！</h1>
+      <h2>{{ inviteInfo.tenantName }}邀请您加入公司！</h2>
       <div class="cell">
         <div class="label">任职部门：</div>
-        <div class="value">财务中心-清算部</div>
+        <div class="value">{{ inviteInfo.deptName }}</div>
       </div>
       <div class="cell">
         <div class="label">担任职位：</div>
-        <div class="value">清算专员</div>
+        <div class="value">{{ inviteInfo.positionName }}</div>
       </div>
       <el-form ref="formRef" class="form" :model="form" :rules="rules" hide-required-asterisk size="large">
         <el-form-item prop="username">
-          <el-input v-model="form.username" placeholder="请输入手机号码">
+          <el-input v-model="form.username" :maxlength="11" placeholder="请输入手机号码">
             <template #prefix>
               <el-icon class="input-icon"><Iphone /></el-icon>
             </template>
           </el-input>
+          <p class="tip">请输入您的员工登记手机号码：{{ inviteInfo.phone }}</p>
         </el-form-item>
         <el-form-item prop="code">
           <div class="input-box">
@@ -50,15 +51,21 @@
 
 <script setup>
 import { computed, reactive, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import logoUrl from '@/assets/images/logo-black.png'
 import loginBg from '@/assets/images/login-bg2.png'
+import Apis from '@/api/modules/systemSetting'
 import { phoneReg } from '@/utils/validate'
 import { sendSmsCode } from '@/api/modules/user'
+import { useGlobalStore } from '@/store'
 
+const route = useRoute()
+const router = useRouter()
+const globalStore = useGlobalStore()
+const inviteInfo = ref({})
 const formRef = ref()
 const form = reactive({
-  username: '15869164852',
-  password: '',
+  username: '',
   code: ''
 })
 const validateUsername = (rule, value, callback) => {
@@ -72,13 +79,22 @@ const validateUsername = (rule, value, callback) => {
 }
 const rules = reactive({
   username: [{ validator: validateUsername, trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
   code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
 })
 
 const gapTime = ref(61)
 const verifyContent = computed(() => (gapTime.value < 61 && gapTime.value > 0 ? `${gapTime.value}秒后重新获取` : '获取验证码'))
 
+const fetchInviteUserInfo = async () => {
+  const userCode = route.query.code
+  if (!userCode) {
+    return
+  }
+  const { code, data } = await Apis.findInviteUserInfo({ code: userCode })
+  if (code === 200) {
+    inviteInfo.value = data
+  }
+}
 const sendSMS = async () => {
   if (gapTime.value < 61 && gapTime.value > 0) {
     return
@@ -104,7 +120,34 @@ const fetchSendSmsCode = async () => {
   const { code } = await sendSmsCode(form.username)
   return code === 200
 }
-const onSubmit = async () => {}
+const acceptInvite = async () => {
+  const userCode = route.query.code
+  if (!userCode) {
+    return
+  }
+  const data = await globalStore.acceptInvite(userCode)
+  if (data) {
+    if (data.isSetPassword === 0) {
+      await router.replace('/login?setPassword=1')
+    }
+    await router.replace('/')
+  }
+}
+const onSubmit = async () => {
+  const isValidate = await formRef.value?.validate().catch(() => false)
+  if (!isValidate) return
+  const postData = {
+    grant_type: 'SMS',
+    mobile: `SMS@${form.username}`,
+    code: form.code
+  }
+  const result = await globalStore.login(postData)
+  if (result) {
+    await acceptInvite()
+  }
+}
+
+fetchInviteUserInfo()
 </script>
 
 <style lang="scss" scoped>
@@ -148,7 +191,9 @@ const onSubmit = async () => {}
   width: 700px;
   height: 100%;
   background-color: #eaf3ff;
-  h1, h2, .cell {
+  h1,
+  h2,
+  .cell {
     width: 400px;
     text-align: left;
   }
@@ -234,6 +279,10 @@ const onSubmit = async () => {}
       background-color: #eaf3ff;
     }
   }
+}
+.tip {
+  font-size: 12px;
+  color: var(--el-color-warning);
 }
 @media screen and (max-width: 1100px) {
   .login-left {

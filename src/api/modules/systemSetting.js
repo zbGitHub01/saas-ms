@@ -5,6 +5,8 @@ const apiConfig = {
   findAllEmployeeList: `POST /upms/client/employee/page`,
   updateEmployeeStatus: `GET /upms/client/employee/updateStatus`,
   updateEmployeeDimission: `GET /upms/client/employee/updateDimission`,
+  inviteEmployee: `POST /upms/client/employee/invite`,
+  findInviteUserInfo: `GET /upms/client/user/invite/get`,
   // 机构部门
   findDeptTree: `GET /upms/client/employee/dept/tree`,
   addDept: `POST /upms/client/employee/dept/add`,
