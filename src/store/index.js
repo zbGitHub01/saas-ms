@@ -7,10 +7,7 @@ import router from '@/router'
 
 export const useGlobalStore = defineStore('globalStore', {
   state: () => ({
-    userInfo: {
-      username: '沃德妈耶',
-      avatar: '//asfile.donganzichan.cn/assets/image/20220623/b2a2ae4a3223435aa0cf67304658e188.gif'
-    },
+    userInfo: {},
     token: '',
     refreshToken: '',
     tenantId: '',
@@ -36,6 +33,12 @@ export const useGlobalStore = defineStore('globalStore', {
         return data
       } else {
         return null
+      }
+    },
+    async fetchUserInfo() {
+      const { code, data } = await Apis.findUserInfo()
+      if (code === 200) {
+        this.userInfo = data
       }
     },
     async chooseTenant(tenantId) {

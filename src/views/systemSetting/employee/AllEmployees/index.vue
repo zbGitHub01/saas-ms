@@ -1,8 +1,8 @@
 <template>
   <div class="mt16">
-    <el-radio-group v-model="isDimission" class="mb20">
-      <el-radio :label="1">在职员工</el-radio>
-      <el-radio :label="0">离职员工</el-radio>
+    <el-radio-group v-model="isDimission" @change="fetchAllEmployees" class="mb20">
+      <el-radio :label="0">在职员工</el-radio>
+      <el-radio :label="1">离职员工</el-radio>
     </el-radio-group>
     <FormWrap @search="fetchAllEmployees" @reset="onReset">
       <template #default>
@@ -57,10 +57,10 @@
       <el-table-column label="所属部门" prop="deptName" min-width="150"></el-table-column>
       <el-table-column label="部门角色" prop="roleName" min-width="150"></el-table-column>
       <el-table-column label="邀请人" prop="inviter" min-width="150"></el-table-column>
-      <el-table-column label="邀请时间" prop="inviteTime" min-width="150"></el-table-column>
-      <el-table-column label="操作" prop="name" width="150" fixed="right">
+      <el-table-column label="邀请时间" prop="inviteTime" min-width="200"></el-table-column>
+      <el-table-column label="操作" prop="name" width="150" align="center" fixed="right">
         <template #default="scope">
-          <el-button :type="scope.row.isDisable ? 'success' : 'danger'" link @click="setStatus({ isDisable: 1 })">
+          <el-button :type="scope.row.isDisable ? 'success' : 'danger'" link @click="setStatus(scope.row)">
             {{ scope.row.isDisable ? '启用' : '禁用' }}
           </el-button>
           <el-button type="primary" link @click="setDimission(scope.row)">离职</el-button>
@@ -83,7 +83,7 @@ import { ElMessageBox } from 'element-plus'
 import { useCommonStore } from '@/store/modules/common'
 
 const commonStore = useCommonStore()
-const isDimission = ref(1)
+const isDimission = ref(0)
 const searchForm = reactive({
   name: null,
   phone: null,
@@ -117,10 +117,11 @@ const fetchAllEmployees = async () => {
     total.value = Number(data.total)
   }
 }
-fetchAllEmployees()
 const setStatus = async row => {
   const isDisable = !row.isDisable
-  const isConfirm = await ElMessageBox.confirm(`是否确认${isDisable ? '禁用' : '启用'}该员工吗？`, '提示', { type: 'warning' })
+  const isConfirm = await ElMessageBox.confirm(`是否确认${isDisable ? '禁用' : '启用'}该员工吗？`, '提示', {
+    type: 'warning'
+  }).catch(() => {})
   if (!isConfirm) return
   const { code } = await Apis.updateEmployeeStatus({ employeeId: row.employeeId, isDisable: Number(isDisable) })
   if (code === 200) {
@@ -128,13 +129,14 @@ const setStatus = async row => {
   }
 }
 const setDimission = async row => {
-  const isConfirm = await ElMessageBox.confirm(`是否确认离职该员工吗？`, '提示', { type: 'warning' })
+  const isConfirm = await ElMessageBox.confirm(`是否确认离职该员工吗？`, '提示', { type: 'warning' }).catch(() => {})
   if (!isConfirm) return
   const { code } = await Apis.updateEmployeeDimission({ employeeId: row.employeeId, isDimission: 1 })
   if (code === 200) {
     await fetchAllEmployees()
   }
 }
+fetchAllEmployees()
 </script>
 
 <style lang="scss" scoped>

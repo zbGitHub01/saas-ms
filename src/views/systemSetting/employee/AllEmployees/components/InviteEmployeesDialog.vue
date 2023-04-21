@@ -124,7 +124,6 @@ const onSubmit = async () => {
   if (code === 200) {
     successMounted(data)
   }
-  console.log(form, '---form')
 }
 </script>
 

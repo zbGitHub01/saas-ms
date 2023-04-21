@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import PermissionSetting from '../components/PermissionSetting.vue'
 import Apis from '@/api/modules/systemSetting'
 
@@ -41,7 +41,9 @@ fetchDeptTree()
 const currDeptNode = ref({})
 const nodeClick = node => {
   currDeptNode.value = node
-  permissionRef.value.fetchPermission()
+  nextTick(() => {
+    permissionRef.value.fetchPermission()
+  })
 }
 </script>
 

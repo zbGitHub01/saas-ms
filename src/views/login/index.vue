@@ -17,7 +17,6 @@
 
 <script setup>
 import { ref, nextTick } from 'vue'
-import { useRoute } from 'vue-router'
 import logoUrl from '@/assets/images/logo-black.png'
 import loginBg from '@/assets/images/login-bg1.png'
 import LoginForm from './components/LoginForm.vue'
@@ -25,7 +24,6 @@ import SelectBusiness from './components/SelectBusiness.vue'
 import SetPassword from './components/SetPassword.vue'
 import { useGlobalStore } from '@/store'
 
-const route = useRoute()
 const globalStore = useGlobalStore()
 const loginType = ref(0)
 const loginTitle = ref(['Hi，您好，请登录！', '请选择您的企业！', '请设置密码！'])
@@ -36,8 +34,7 @@ const setLoginType = type => {
   })
 }
 if (globalStore.token) {
-  const loginType = route.query.setPassword ? 2 : 1
-  setLoginType(loginType)
+  setLoginType(1)
 }
 </script>
 

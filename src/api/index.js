@@ -27,7 +27,6 @@ class RequestHttp {
         if (!config.headers.noLoading) {
           showFullScreenLoading()
         }
-        console.log(config.headers, '----headers')
         const headers = { ...config.headers }
         if (globalState.token && !headers.Authorization) {
           headers.Authorization = globalState.token

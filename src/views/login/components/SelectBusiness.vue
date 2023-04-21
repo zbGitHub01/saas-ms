@@ -31,6 +31,7 @@ fetchTenantList()
 const onSubmit = async () => {
   const data = await globalStore.chooseTenant(tenantId.value)
   if (!data) return
+  await globalStore.fetchUserInfo()
   if (data.isSetPassword === 1) {
     await router.replace('/')
   } else {

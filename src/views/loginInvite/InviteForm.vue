@@ -1,4 +1,14 @@
 <template>
+  <h1 class="title">{{ inviteInfo.name }}，你好！</h1>
+  <h2>{{ inviteInfo.tenantName }}邀请您加入公司！</h2>
+  <div class="cell">
+    <div class="label">任职部门：</div>
+    <div class="value">{{ inviteInfo.deptName }}</div>
+  </div>
+  <div class="cell">
+    <div class="label">担任职位：</div>
+    <div class="value">{{ inviteInfo.positionName }}</div>
+  </div>
   <el-form ref="formRef" class="form" :model="form" :rules="rules" hide-required-asterisk size="large">
     <el-form-item prop="username">
       <el-input v-model="form.username" :maxlength="11" placeholder="请输入手机号码">
@@ -6,10 +16,11 @@
           <el-icon class="input-icon"><Iphone /></el-icon>
         </template>
       </el-input>
+      <p class="tip">请输入您的员工登记手机号码：{{ inviteInfo.phone }}</p>
     </el-form-item>
-    <el-form-item v-if="!grantType" prop="code">
+    <el-form-item prop="code">
       <div class="input-box">
-        <el-input v-model="form.code" class="append-btn" placeholder="请输入验证码" @keyup.enter="onSubmit">
+        <el-input v-model="form.code" class="append-btn" placeholder="请输入验证码">
           <template #prefix>
             <el-icon class="input-icon"><Lock /></el-icon>
           </template>
@@ -19,37 +30,31 @@
         </el-button>
       </div>
     </el-form-item>
-    <el-form-item v-else prop="password">
-      <el-input v-model="form.password" show-password placeholder="请输入密码" @keyup.enter="onSubmit">
-        <template #prefix>
-          <el-icon class="input-icon"><Lock /></el-icon>
-        </template>
-      </el-input>
-    </el-form-item>
     <el-form-item>
       <el-button class="btn" type="primary" @click="onSubmit">登 录</el-button>
     </el-form-item>
-    <div class="foot-btn">
-      <el-button type="primary" link @click="switchLogin">{{ grantType === 0 ? '密码登录' : '验证码登录' }}</el-button>
+    <div class="tips">
+      <span>完成登录即代表成功加入企业</span>
     </div>
   </el-form>
 </template>
 
 <script setup>
-import { reactive, ref, computed } from 'vue'
-import { useGlobalStore } from '@/store'
+import { computed, reactive, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import Apis from '@/api/modules/systemSetting'
 import { phoneReg } from '@/utils/validate'
-import { aesEncrypt } from '@/utils'
+import { useGlobalStore } from '@/store'
 import { sendSmsCode } from '@/api/modules/user'
 
-const emit = defineEmits(['success'])
-
+const emit = defineEmits(['change'])
+const route = useRoute()
+const router = useRouter()
 const globalStore = useGlobalStore()
+const inviteInfo = ref({})
 const formRef = ref()
 const form = reactive({
-  // 15869164852
-  username: '13112345678',
-  password: '',
+  username: '',
   code: ''
 })
 const validateUsername = (rule, value, callback) => {
@@ -63,16 +68,22 @@ const validateUsername = (rule, value, callback) => {
 }
 const rules = reactive({
   username: [{ validator: validateUsername, trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
   code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
 })
-const grantType = ref(0)
-const switchLogin = () => {
-  grantType.value = grantType.value === 0 ? 1 : 0
-}
+
 const gapTime = ref(61)
 const verifyContent = computed(() => (gapTime.value < 61 && gapTime.value > 0 ? `${gapTime.value}秒后重新获取` : '获取验证码'))
 
+const fetchInviteUserInfo = async () => {
+  const userCode = route.query.code
+  if (!userCode) {
+    return
+  }
+  const { code, data } = await Apis.findInviteUserInfo({ code: userCode })
+  if (code === 200) {
+    inviteInfo.value = data
+  }
+}
 const sendSMS = async () => {
   if (gapTime.value < 61 && gapTime.value > 0) {
     return
@@ -98,27 +109,71 @@ const fetchSendSmsCode = async () => {
   const { code } = await sendSmsCode(form.username)
   return code === 200
 }
+const acceptInvite = async () => {
+  const userCode = route.query.code
+  if (!userCode) {
+    return
+  }
+  const data = await globalStore.acceptInvite(userCode)
+  if (data) {
+    if (data.isSetPassword === 0) {
+      emit('change', 0)
+    } else {
+      await router.replace('/')
+    }
+  }
+}
 const onSubmit = async () => {
   const isValidate = await formRef.value?.validate().catch(() => false)
   if (!isValidate) return
-  const postData = { grant_type: grantType.value ? 'password' : 'SMS' }
-  if (grantType.value === 1) {
-    postData.username = form.username
-    postData.password = aesEncrypt(form.password)
-  } else {
-    postData.mobile = `SMS@${form.username}`
-    postData.code = form.code
+  const postData = {
+    grant_type: 'SMS',
+    mobile: `SMS@${form.username}`,
+    code: form.code
   }
   const result = await globalStore.login(postData)
   if (result) {
-    emit('success', 1)
+    await acceptInvite()
   }
 }
+
+fetchInviteUserInfo()
 </script>
 
 <style lang="scss" scoped>
+h1,
+h2,
+.cell {
+  width: 400px;
+  text-align: left;
+}
+.title {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--el-color-primary);
+  margin-bottom: 10px;
+}
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.cell {
+  display: flex;
+  font-size: 18px;
+  .value {
+    font-weight: bold;
+  }
+}
+:deep(.el-input__wrapper) {
+  width: 400px;
+  height: 46px;
+  box-shadow: none;
+  border: 1px solid #ced2d9;
+}
 .form {
   width: 400px;
+  margin-top: 60px;
   :deep(.el-input__wrapper) {
     //width: 400px;
     height: 46px;
@@ -136,22 +191,46 @@ const onSubmit = async () => {
       height: 44px;
     }
   }
-}
-.append-btn {
-  width: 268px;
-}
-.code-btn {
-  display: inline-block;
-  width: 120px;
-  text-align: right;
+  .append-btn {
+    width: 268px;
+  }
+  .code-btn {
+    display: inline-block;
+    width: 120px;
+    text-align: right;
+  }
 }
 .btn {
   width: 100%;
   height: 46px;
-  box-shadow: 0 10px 20px 0 rgba(49, 120, 255, 0.35);
+  box-shadow: 0px 10px 20px 0px rgba(49, 120, 255, 0.35);
 }
-.foot-btn {
+.tips {
+  position: relative;
+  margin-top: 36px;
+  font-size: 12px;
+  color: #666;
+  line-height: 26px;
   text-align: center;
-  margin-top: 10px;
+  &:after {
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    top: 14px;
+    z-index: 0;
+    content: '';
+    height: 1px;
+    background-color: #ccc;
+  }
+  span {
+    position: relative;
+    padding: 0 10px;
+    z-index: 2;
+    background-color: #eaf3ff;
+  }
+}
+.tip {
+  font-size: 12px;
+  color: var(--el-color-warning);
 }
 </style>

@@ -138,7 +138,7 @@ const checkRole = node => {
   fetchRoleDeptList()
 }
 const delDept = async item => {
-  const isConfirm = await ElMessageBox.confirm('是否确认移除授权部门？', '提示', { type: 'warning' })
+  const isConfirm = await ElMessageBox.confirm('是否确认移除授权部门？', '提示', { type: 'warning' }).catch(() => {})
   if (!isConfirm) return
   const { code } = await Apis.removeDept({ deptId: item.id, roleId: currRoleNode.id })
   if (code === 200) {
@@ -167,7 +167,7 @@ const addEmployee = () => {
   employeeVisible.value = true
 }
 const delEmployee = async item => {
-  const isConfirm = await ElMessageBox.confirm('是否确认移除员工角色？', '提示', { type: 'warning' })
+  const isConfirm = await ElMessageBox.confirm('是否确认移除员工角色？', '提示', { type: 'warning' }).catch(() => {})
   if (!isConfirm) return
   const { code } = await Apis.removeRoleEmployee({ employeeId: item.id, roleId: currRoleNode.id })
   if (code === 200) {

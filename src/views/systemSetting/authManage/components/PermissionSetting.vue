@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-wrap">
+  <div class="permission-wrap">
     <div class="flex-block br1">
       <div class="title">权限选项</div>
       <el-scrollbar class="scrollbar">
@@ -13,16 +13,20 @@
           highlight-current
           :props="defaultProps"
           @node-click="nodeClick"
-          @check="onCheck"
+          @check="onMenuCheck"
         />
       </el-scrollbar>
     </div>
     <div class="flex-container">
       <div class="title">操作/数据权限</div>
       <div class="table-wrap">
-        <el-table :data="dataPermission" default-expand-all border row-key="permissionId">
-          <el-table-column type="selection" width="55" reserve-selection align="center" />
-          <el-table-column prop="menuName" label="操作" width="220" />
+        <el-table class="table" :data="dataPermission" height="100%" default-expand-all border row-key="id">
+          <el-table-column type="selection" width="55" reserve-selection align="center">
+            <template #default="scope">
+              <el-checkbox v-model="scope.row.isChecked" @change="checkboxChange($event, scope.row)" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="操作" width="220" />
           <el-table-column label="数据范围">
             <template #default="scope">
               <el-tag class="tag" @click="onSetDataRange(scope.row)">
@@ -40,11 +44,12 @@
 
 <script setup>
 import { ref, computed, onMounted, nextTick } from 'vue'
+import { Filter } from '@element-plus/icons-vue'
 import DataRangeDrawer from './DataRangeDrawer.vue'
 import Apis from '@/api/modules/systemSetting'
-import menuData from '@/store/menu.json'
+import menuData from './permissionData.json'
 import cloneDeep from 'lodash/cloneDeep'
-import { Filter } from '@element-plus/icons-vue'
+import { setUpTree, setDownTree } from '@/utils/tree'
 
 const props = defineProps({
   permissionType: {
@@ -60,11 +65,11 @@ const props = defineProps({
   }
 })
 const defaultProps = {
-  label: 'menuName',
-  value: 'permissionId'
+  label: 'name',
+  value: 'id  '
 }
 const treeRef = ref()
-const menuList = ref(formatMenuData(menuData))
+const menuList = ref([])
 const dataPermission = ref([])
 const drawerVisible = ref(false)
 const permissionParams = computed(() => {
@@ -76,6 +81,19 @@ const permissionParams = computed(() => {
   return paramsConfig[props.permissionType]
 })
 
+const fetchPermission = async () => {
+  const apiConfigFn = {
+    dept: Apis.findPermissionDeptPermit,
+    role: Apis.findPermissionRolePermit,
+    employee: Apis.fetchPermissionEmployeePermit
+  }
+  const { code, data } = await apiConfigFn[props.permissionType](permissionParams.value)
+  console.log(code, data)
+  if (code === 200) {
+    menuList.value = formatMenuData(menuData)
+  }
+}
+// 菜单权限操作
 const getCheckedKeys = () => {
   const checkedKeys = []
   function getIds(data) {
@@ -98,12 +116,16 @@ const getCheckedKeys = () => {
   getIds(cloneDeep(menuList.value))
   return checkedKeys
 }
+
+let rootOperationId = null
 const nodeClick = data => {
+  console.log(data, '---data')
+  rootOperationId = data.id
   dataPermission.value = data.data
 }
 let prevCheckedKeys = []
-const onCheck = (data, node) => {
-  console.log(data, node, prevCheckedKeys, '---onCheck')
+const onMenuCheck = (data, node) => {
+  console.log(data, node, prevCheckedKeys, '---onMenuCheck')
   const allChecked = [...node.checkedKeys, ...node.halfCheckedKeys]
   const isChecked = prevCheckedKeys.length < allChecked.length
   let permissionIds = []
@@ -115,21 +137,13 @@ const onCheck = (data, node) => {
   console.log(permissionIds, '---permissionIds')
   prevCheckedKeys = allChecked
 }
-const fetchPermission = async () => {
-  const apiConfigFn = {
-    dept: Apis.findPermissionDeptPermit,
-    role: Apis.findPermissionRolePermit,
-    employee: Apis.fetchPermissionEmployeePermit
-  }
-  const { code, data } = await apiConfigFn[props.permissionType](permissionParams.value)
-  console.log(code, data)
-}
+// 过滤出权限类型是菜单权限的children
 function formatMenuData(data) {
   function formatMenu(data) {
     data.forEach(item => {
       const firstChild = item.children && item.children.length ? item.children[0] : null
       if (firstChild) {
-        if (firstChild.permissionType.type !== 1) {
+        if (firstChild.type !== 1) {
           item.data = cloneDeep(item.children)
           item.children = null
         } else {
@@ -141,24 +155,44 @@ function formatMenuData(data) {
   formatMenu(data)
   return data
 }
-
 const onSetDataRange = data => {
   drawerVisible.value = true
   console.log(data, '--data')
+}
+
+// 页面按钮权限操作
+const checkboxChange = (value, row) => {
+  console.log(value, row, '----row')
+  const permissionIds = [row.id]
+  if (value && row.parentId !== rootOperationId) {
+    const parentIds = setUpTree(dataPermission.value, row.parentId, node => {
+      node.isChecked = value
+    }).map(item => item.id)
+    permissionIds.push(...parentIds)
+    console.log(parentIds, '---parentIds')
+  }
+  if (row.children && row.children.length) {
+    const allChildrenIds = setDownTree(row.children, node => {
+      node.isChecked = value
+    }).map(item => item.id)
+    permissionIds.push(...allChildrenIds)
+    console.log(allChildrenIds, '---allChildren')
+  }
+  console.log(permissionIds, '---permissionIds')
 }
 onMounted(() => {
   nextTick(() => {
     const checkedKeys = getCheckedKeys()
     treeRef.value.setCheckedKeys(checkedKeys)
-    console.log(checkedKeys, '--checkedKeys')
   })
 })
 defineExpose({ fetchPermission })
 </script>
 
 <style lang="scss" scoped>
-.flex-wrap {
+.permission-wrap {
   display: flex;
+  height: calc(100% - 54px);
   .title {
     display: flex;
     align-items: center;
@@ -178,19 +212,24 @@ defineExpose({ fetchPermission })
   }
 }
 .flex-container {
+  //display: flex;
+  //flex-direction: column;
   flex: 1;
   height: 100%;
 }
 .scrollbar {
-  //height: 300px;
-  height: calc(100% - 100px);
+  height: calc(100% - 44px);
 }
 .tree {
   margin-top: 10px;
 }
 .table-wrap {
+  height: calc(100% - 44px);
   margin-left: -1px;
   margin-top: -1px;
+  //.table {
+  //  height: 100%;
+  //}
 }
 .tag {
   cursor: pointer;

@@ -36,7 +36,7 @@
 import { ref, reactive, computed } from 'vue'
 import Apis from '@/api/modules/systemSetting'
 import cloneDeep from 'lodash/cloneDeep'
-import { getPathByKey } from '@/utils'
+import { getPathByKey } from '@/utils/tree'
 
 const props = defineProps({
   dialogVisible: {
