@@ -49,19 +49,6 @@ const routes = [
     ]
   },
   {
-    path: '/systemSetting/companyInfo',
-    component: () => import('@/layout/index.vue'),
-    redirect: '/systemSetting/companyInfo/index',
-    children: [
-      {
-        path: 'index',
-        name: 'companyInfo',
-        component: () => import('@/views/systemSetting/companyInfo/index.vue'),
-        meta: { keepAlive: true, title: '公司信息管理' }
-      }
-    ]
-  },
-  {
     path: '/microApp/order',
     name: 'order',
     meta: { title: '工单管理', icon: 'Setting' },

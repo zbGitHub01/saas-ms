@@ -2488,21 +2488,6 @@
       },
       {
         "hide":false,
-        "icon":"UserFilled",
-        "parentMenuCode":"XITONGSHEZHI",
-        "path":"/systemSetting/companyInfo",
-        "permissionId":2280,
-        "menuCode":"GONGSIXINXIGUANLI",
-        "menuName":"公司信息管理",
-        "permissionType":{
-          "type":1,
-          "desc":"权限菜单"
-        },
-        "rolePermissionOperation":[],
-        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7"
-      },
-      {
-        "hide":false,
         "icon":"Document",
         "parentMenuCode":"XITONGSHEZHI",
         "path":"/systemSetting/taskMsg",
