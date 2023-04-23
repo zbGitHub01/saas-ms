@@ -1,13 +1,13 @@
 <template>
   <div class="card-wrap">
-    <div>主管理员变更</div>
+    <div class="title mb20">主管理员变更</div>
     <div>
       当前主管理员：
-      <span>赵千寻 / 13545456778</span>
+      <span class="name ml20">赵千寻 / 13545456778</span>
     </div>
-    <el-button type="primary" plain style="margin: 20px 0 20px 110px" @click="editInfo(1)">修改</el-button>
+    <el-button type="primary" plain style="margin: 20px 0 40px 135px" @click="editInfo(1)">修改</el-button>
     <el-divider />
-    <div>租户企业信息</div>
+    <div class="title mb5">租户企业信息</div>
     <table class="mt20 table">
       <tbody>
         <tr>
@@ -194,18 +194,45 @@ const editInfo = (type: number) => {
 </script>
 
 <style lang="scss" scoped>
-.table {
+.title{
+  font-weight: 500;
+}
+.name{
+    font-weight: 500;
+    font-size: 20px;
+}
+// .table {
+//   width: 100%;
+//   tr {
+//     td {
+//       height: 30px;
+//       line-height: 30px;
+//       padding-left: 5px;
+//       border: 2px solid #f0f2f5;
+//       color: #909399;
+//       &:nth-child(2n) {
+//         color: black;
+//         font-weight: 500;
+//       }
+//     }
+//   }
+// }
+.table{
   width: 100%;
-  tr {
-    td {
+  tr{
+    td{
       height: 30px;
       line-height: 30px;
       padding-left: 5px;
-      border: 2px solid #f0f2f5;
-      color: #909399;
-      &:nth-child(2n) {
-        color: black;
+      border: 2px solid #F0F2F5;
+      color:#909399;
+      &:nth-child(2n){
+        color:black;
         font-weight: 500;
+        width: 160px;
+      }
+      &:nth-child(2n+1){
+        width: 100px;
       }
     }
   }
