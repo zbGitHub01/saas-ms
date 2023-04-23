@@ -18,7 +18,13 @@ const systemRouter = [
         name: 'authManage',
         meta: { title: '权限管理', icon: 'UserFilled' },
         component: () => import('@/views/systemSetting/authManage/index.vue')
-      }
+      },
+      {
+        path: '/systemSetting/companyInfo',
+        name: 'companyInfo',
+        meta: { title: '公司信息管理', icon: 'OfficeBuilding' },
+        component: () => import('@/views/systemSetting/companyInfo/index.vue')
+      },
     ]
   }
 ]
