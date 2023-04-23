@@ -1,9 +1,7 @@
-import Layout from '@/layout'
-
 const caseAcceptRouter = [
   {
     path: '/caseAcceptManage',
-    component: Layout,
+    component: () => import('@/layout/index.vue'),
     redirect: '',
     name: 'caseAcceptManage',
     meta: { title: '案件受理和缴费', icon: 'case-accept-icon' },

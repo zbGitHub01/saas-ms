@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
         [VITE_BASE_URL]: {
           // target: 'http://192.168.0.74:9010',
           // target: 'https://test-mng.donganzichan.cn/',
-          target: 'http://192.168.10.74:9999',
+          target: 'https://operation-test.dongancloud.com',
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, '')
         }

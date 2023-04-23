@@ -36,14 +36,17 @@
   }
 }
 
-// * card 卡片样式
-.card-wrap {
-  height: 100%;
-  box-sizing: border-box;
-  padding: 20px;
-  overflow-x: hidden;
-  background-color: var(--el-fill-color-blank);
-  border: 1px solid var(--el-border-color-light);
-  border-radius: 4px;
-  box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+.el-table {
+  --el-table-header-bg-color: #F8F8F8;
+}
+.el-dialog__body {
+  .el-input {
+    width: 220px;
+  }
+}
+.el-input__wrapper {
+  width: 210px;
+}
+.el-tabs__content {
+  overflow: visible;
 }

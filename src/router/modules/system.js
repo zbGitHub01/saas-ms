@@ -11,20 +11,13 @@ const systemRouter = [
         path: '/systemSetting/employee',
         name: 'employee',
         meta: { title: '员工管理', icon: 'UserFilled' },
-        children: [
-          {
-            path: '/systemSetting/employee/info',
-            name: 'employeeInfo',
-            component: () => import('@/views/systemSetting/business/businessInfo/index.vue'),
-            meta: { title: '员工信息', icon: 'Menu' }
-          },
-          {
-            path: '/systemSetting/employee/department',
-            name: 'department',
-            component: () => import('@/views/systemSetting/business/departmentSetting/index.vue'),
-            meta: { title: '部门设置', keepAlive: true, icon: 'Menu' }
-          }
-        ]
+        component: () => import('@/views/systemSetting/employee/index.vue')
+      },
+      {
+        path: '/systemSetting/authManage',
+        name: 'authManage',
+        meta: { title: '权限管理', icon: 'UserFilled' },
+        component: () => import('@/views/systemSetting/authManage/index.vue')
       }
     ]
   }
