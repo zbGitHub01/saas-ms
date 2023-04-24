@@ -1,144 +1,151 @@
 [
   {
-    "id": 1,
-    "parentId": 0,
-    "order": null,
-    "children": [
-      {
-        "id": 2,
-        "parentId": 1,
-        "order": null,
-        "children": [
-          {
-            "id": 4,
-            "parentId": 2,
-            "order": null,
-            "children": [],
-            "name": "机构部门",
-            "code": "",
-            "path": "",
-            "icon": null,
-            "type": 2,
-            "clientId": "client",
-            "tag": null,
-            "state": 1,
-            "sort": null,
-            "permissionBenefitType": 2,
-            "dataScope": null,
-            "isChecked": 0,
-            "source": {
-              "id": 13,
-              "name": "分销部",
-              "bizType": 3
-            }
-          }
-        ],
-        "name": "员工管理",
-        "code": "",
-        "path": "",
-        "icon": null,
-        "type": 1,
-        "clientId": "client",
-        "tag": "",
-        "state": 1,
-        "sort": null,
-        "permissionBenefitType": 2,
-        "dataScope": null,
-        "isChecked": 0,
-        "source": {
-          "id": 13,
-          "name": "分销部",
-          "bizType": 3
-        }
-      }
-    ],
     "name": "首页",
     "code": "HOME",
-    "path": "/home/index",
     "icon": "home",
+    "path": "/home/index",
     "type": 1,
-    "clientId": "client",
-    "tag": "大额",
-    "state": 1,
-    "sort": null,
-    "permissionBenefitType": 2,
-    "dataScope": null,
-    "isChecked": 0,
-    "source": {
-      "id": 13,
-      "name": "分销部",
-      "bizType": 3
-    }
+    "children": null
   },
   {
-    "id": 1,
-    "parentId": 0,
-    "order": null,
+    "name": "合作机构管理",
+    "code": "COOPER_ORGAN_MANAGE",
+    "icon": "copper-organ",
+    "path": "/cooperativeOrganizationManage",
+    "type": 1,
     "children": [
       {
-        "id": 2,
-        "parentId": 1,
-        "order": null,
+        "name": "合作机构名录",
+        "code": "DIRECTORY",
+        "icon": "",
+        "path": "/cooperativeOrganizationManage/directory",
+        "type": 1
+      },
+      {
+        "name": "合作机构准入设置",
+        "code": "ACCESS_SETTING",
+        "icon": "",
+        "path": "/cooperativeOrganizationManage/accessSetting",
+        "type": 1
+      },
+      {
+        "name": "所有准入审批工单",
+        "code": "ALL_ACCESS",
+        "icon": "",
+        "path": "/cooperativeOrganizationManage/allAccess",
+        "type": 1
+      },
+      {
+        "name": "准入审批",
+        "code": "ACCESS_APPROVAL",
+        "icon": "",
+        "path": "/cooperativeOrganizationManage/accessApproval",
+        "type": 1
+      },
+      {
+        "name": "准入合规审批",
+        "code": "COMPLIANCE_APPROVAL",
+        "icon": "",
+        "path": "/cooperativeOrganizationManage/complianceApproval",
+        "type": 1
+      },
+      {
+        "name": "机构选项设置",
+        "code": "OPTION_SETTING",
+        "icon": "",
+        "path": "/cooperativeOrganizationManage/optionSetting",
+        "type": 1
+      },
+      {
+        "name": "上游合作邀请管理",
+        "code": "INVITE_MANAGE",
+        "icon": "",
+        "path": "/cooperativeOrganizationManage/inviteManage",
+        "type": 1
+      }
+    ]
+  },
+  {
+    "name": "系统设置",
+    "code": "SYSTEM",
+    "icon": "system",
+    "path": "/systemSetting",
+    "type": 1,
+    "children": [
+      {
+        "name": "员工管理",
+        "code": "EMPLOYEE_MANAGE",
+        "icon": null,
+        "path": "/systemSetting/employeeManage",
+        "type": 1,
         "children": [
           {
-            "id": 4,
-            "parentId": 2,
-            "order": null,
-            "children": [],
-            "name": "机构部门",
-            "code": "",
-            "path": "",
+            "name": "所有员工",
+            "code": "ALL_EMPLOYEE",
             "icon": null,
-            "type": 2,
-            "clientId": "client",
-            "tag": null,
-            "state": 1,
-            "sort": null,
-            "permissionBenefitType": 2,
-            "dataScope": null,
-            "isChecked": 0,
-            "source": {
-              "id": 13,
-              "name": "分销部",
-              "bizType": 3
-            }
+            "path": "",
+            "type": 2
+          },
+          {
+            "name": "机构部门",
+            "code": "ORG_DEPT",
+            "icon": null,
+            "path": "",
+            "type": 2
+          },
+          {
+            "name": "机构职位",
+            "code": "ORG_POSITION",
+            "icon": null,
+            "path": "",
+            "type": 2
+          },
+          {
+            "name": "机构角色",
+            "code": "ORG_ROLE",
+            "icon": null,
+            "path": "",
+            "type": 2
           }
-        ],
-        "name": "员工管理",
-        "code": "",
-        "path": "",
+        ]
+      },
+      {
+        "name": "权限管理",
+        "code": "AUTH_MANAGE",
         "icon": null,
+        "path": "/systemSetting/authManage",
         "type": 1,
-        "clientId": "client",
-        "tag": "",
-        "state": 1,
-        "sort": null,
-        "permissionBenefitType": 2,
-        "dataScope": null,
-        "isChecked": 0,
-        "source": {
-          "id": 13,
-          "name": "分销部",
-          "bizType": 3
-        }
+        "children": [
+          {
+            "name": "部门权限",
+            "code": "DEPT_AUTH",
+            "icon": null,
+            "path": "",
+            "type": 2
+          },
+          {
+            "name": "角色权限",
+            "code": "ROLE_AUTH",
+            "icon": null,
+            "path": "",
+            "type": 2
+          },
+          {
+            "name": "员工最终权限",
+            "code": "EMPLOYEE_AUTH",
+            "icon": null,
+            "path": "",
+            "type": 2
+          }
+        ]
+      },
+      {
+        "name": "公司信息管理",
+        "code": "COMPANY_INFO",
+        "icon": "system",
+        "path": "/systemSetting/companyInfo",
+        "type": 1
       }
-    ],
-    "name": "系统设置",
-    "code": "system",
-    "path": "",
-    "icon": null,
-    "type": 1,
-    "clientId": "client",
-    "tag": "大额",
-    "state": 1,
-    "sort": null,
-    "permissionBenefitType": 2,
-    "dataScope": null,
-    "isChecked": 0,
-    "source": {
-      "id": 13,
-      "name": "分销部",
-      "bizType": 3
-    }
-  },
+    ]
+  }
 ]
