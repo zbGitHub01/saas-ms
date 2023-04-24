@@ -1,0 +1,144 @@
+[
+  {
+    "id": 1,
+    "parentId": 0,
+    "order": null,
+    "children": [
+      {
+        "id": 2,
+        "parentId": 1,
+        "order": null,
+        "children": [
+          {
+            "id": 4,
+            "parentId": 2,
+            "order": null,
+            "children": [],
+            "name": "机构部门",
+            "code": "",
+            "path": "",
+            "icon": null,
+            "type": 2,
+            "clientId": "client",
+            "tag": null,
+            "state": 1,
+            "sort": null,
+            "permissionBenefitType": 2,
+            "dataScope": null,
+            "isChecked": 0,
+            "source": {
+              "id": 13,
+              "name": "分销部",
+              "bizType": 3
+            }
+          }
+        ],
+        "name": "员工管理",
+        "code": "",
+        "path": "",
+        "icon": null,
+        "type": 1,
+        "clientId": "client",
+        "tag": "",
+        "state": 1,
+        "sort": null,
+        "permissionBenefitType": 2,
+        "dataScope": null,
+        "isChecked": 0,
+        "source": {
+          "id": 13,
+          "name": "分销部",
+          "bizType": 3
+        }
+      }
+    ],
+    "name": "首页",
+    "code": "HOME",
+    "path": "/home/index",
+    "icon": "home",
+    "type": 1,
+    "clientId": "client",
+    "tag": "大额",
+    "state": 1,
+    "sort": null,
+    "permissionBenefitType": 2,
+    "dataScope": null,
+    "isChecked": 0,
+    "source": {
+      "id": 13,
+      "name": "分销部",
+      "bizType": 3
+    }
+  },
+  {
+    "id": 1,
+    "parentId": 0,
+    "order": null,
+    "children": [
+      {
+        "id": 2,
+        "parentId": 1,
+        "order": null,
+        "children": [
+          {
+            "id": 4,
+            "parentId": 2,
+            "order": null,
+            "children": [],
+            "name": "机构部门",
+            "code": "",
+            "path": "",
+            "icon": null,
+            "type": 2,
+            "clientId": "client",
+            "tag": null,
+            "state": 1,
+            "sort": null,
+            "permissionBenefitType": 2,
+            "dataScope": null,
+            "isChecked": 0,
+            "source": {
+              "id": 13,
+              "name": "分销部",
+              "bizType": 3
+            }
+          }
+        ],
+        "name": "员工管理",
+        "code": "",
+        "path": "",
+        "icon": null,
+        "type": 1,
+        "clientId": "client",
+        "tag": "",
+        "state": 1,
+        "sort": null,
+        "permissionBenefitType": 2,
+        "dataScope": null,
+        "isChecked": 0,
+        "source": {
+          "id": 13,
+          "name": "分销部",
+          "bizType": 3
+        }
+      }
+    ],
+    "name": "系统设置",
+    "code": "system",
+    "path": "",
+    "icon": null,
+    "type": 1,
+    "clientId": "client",
+    "tag": "大额",
+    "state": 1,
+    "sort": null,
+    "permissionBenefitType": 2,
+    "dataScope": null,
+    "isChecked": 0,
+    "source": {
+      "id": 13,
+      "name": "分销部",
+      "bizType": 3
+    }
+  },
+]

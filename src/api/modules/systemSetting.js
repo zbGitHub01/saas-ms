@@ -34,13 +34,19 @@ const apiConfig = {
   // 部门权限
   findPermissionDeptTree: `GET /upms/client/permission/dept/tree`,
   findPermissionDeptPermit: `GET /upms/client/permission/dept/permit/List`,
+  addPermissionDeptPermit: `POST /upms/client/permission/dept/permit/add`,
+  removePermissionDeptPermit: `POST /upms/client/permission/dept/permit/remove`,
   // 角色权限
   findPermissionRoleList: `GET /upms/client/permission/role/list`,
   findPermissionRolePermit: `GET /upms/client/permission/role/permit/List`,
+  addPermissionRolePermit: `POST /upms/client/permission/role/permit/add`,
+  removePermissionRolePermit: `POST /upms/client/permission/role/permit/remove`,
   // 员工权限
   findPermissionEmployeeDeptTree: `GET /upms/client/permission/employee/dept/tree`,
   findPermissionEmployeeList: `GET /upms/client/permission/employee/list`,
   fetchPermissionEmployeePermit: `GET /upms/client/permission/employee/permit/list`,
+  addPermissionEmployeePermit: `POST /upms/client/permission/employee/permit/add`,
+  removePermissionEmployeePermit: `POST /upms/client/permission/employee/permit/remove`,
 }
 
 const apis = generateApiFnc(apiConfig)

@@ -23,7 +23,6 @@ const fetchTenantList = async () => {
   if (code === 200 && data.length) {
     tenantList.value = data
     tenantId.value = data[0].tenantId
-    console.log(data)
   }
 }
 fetchTenantList()

@@ -8,14 +8,14 @@ export const filterMenu = (routes, isAll = false) => {
   const deepCloneRoutes = JSON.parse(JSON.stringify(routes))
   deepCloneRoutes.map((el, index) => {
     if (isAll) {
-      el.permissionType.type == 1 && (menuList[index] = el)
-      el.permissionType.type == 1 &&
+      el.permissionType.type === 1 && (menuList[index] = el)
+      el.permissionType.type === 1 &&
         el.children &&
         el.children.length &&
         (menuList[index].children = filterMenu(el.children, isAll).filter(item => item))
     } else {
-      el.permissionType.type == 1 && !el.hide && menuList.push(el)
-      el.permissionType.type == 1 &&
+      el.permissionType.type === 1 && !el.hide && menuList.push(el)
+      el.permissionType.type === 1 &&
         !el.hide &&
         el.children &&
         el.children.length &&
