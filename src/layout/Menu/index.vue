@@ -92,7 +92,6 @@ listeningWindow()
   :deep(.el-menu-item:hover) {
     //background-color: var(--el-color-primary);
     background-color: rgba(255, 255, 255, 0.08);
-    color: #ffffff !important;
     border-radius: 4px;
   }
   //:deep(.el-popper.is-light) {

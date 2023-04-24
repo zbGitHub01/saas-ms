@@ -76,3 +76,16 @@ export const setDownTree = (treeData, processor = () => {}) => {
   traverse(treeData)
   return allChildren
 }
+
+export const filterMenu = treeData => {
+  const menuList = []
+  treeData.forEach((item, index) => {
+    if (item.type === 1) {
+      menuList.push(item)
+      if (item.children && item.children.length) {
+        menuList[index].children = filterMenu(item.children)
+      }
+    }
+  })
+  return menuList
+}
