@@ -28,7 +28,6 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 
@@ -40,11 +39,12 @@ const userList = ref([])
 const form = reactive({
   handlerId: ''
 })
+const defaultForm = JSON.parse(JSON.stringify(form))
 const rules = reactive<FormRules>({
   handlerId: [{ required: true, message: '请选择审批人', trigger: 'change' }]
 })
 const open = (item?: any) => {
-  item?.id && Object.assign(form, item)
+  item?.id ? Object.assign(form, item) : Object.assign(form, defaultForm)
   employeeList()
   dialogVisible.value = true
 }

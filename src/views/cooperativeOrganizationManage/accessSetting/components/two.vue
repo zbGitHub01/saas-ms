@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { ElMessage } from 'element-plus'
 const props = defineProps<{
@@ -64,8 +64,7 @@ const onSave = async () => {
     }
     params.push(temItem)
   })
-  // TODO：参数确定
-  const { code } = awaitApis.configFiledUpdate(params)
+  const { code } = await Apis.configFiledUpdate(params)
   if (code !== 200) return
   ElMessage.success('保存成功')
   getConfigList()

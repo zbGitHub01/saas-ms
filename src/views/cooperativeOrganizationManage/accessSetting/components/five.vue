@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { useConfirm } from '@/hooks/useConfirm'
 import exitReasonDialog from './exitReasonDialog.vue'
@@ -23,11 +23,11 @@ import Apis from '@/api/modules/cooperativeOrganization'
 const props = defineProps<{
   categoryId: string
 }>()
+const tableData = ref<any[]>([])
 const exitReasonDialogRef = ref()
-const addReason = (item: any) => {
+const addReason = (item?: any) => {
   exitReasonDialogRef.value.open(props.categoryId, item)
 }
-const tableData = ref<any[]>([])
 const deleteReason = async (id: number) => {
   await useConfirm('删除', Apis.configDelete, { id })
   getConfigList()
