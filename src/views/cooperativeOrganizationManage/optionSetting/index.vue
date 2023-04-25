@@ -53,6 +53,7 @@ const taskModelState = reactive({
   type: 'ORG_TASK_MODEL',
   detail: {
     title: '作业模式选项',
+    isForm: true,
     name: '作业模式',
     label: '作业模式:',
     placeholder: '请输入作业模式'
