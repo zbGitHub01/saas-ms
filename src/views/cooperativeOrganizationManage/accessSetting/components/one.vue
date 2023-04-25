@@ -4,7 +4,9 @@
       <div class="item-warp">
         <div class="img-warp">
           <img class="img" :src="index < 3 ? defaultAvatar : orgAvatar" />
-          <div class="ar" id="arrow1"></div>
+          <div class="arrow-rd">
+            <svg-icon name="long-arrow-rd" />
+          </div>
         </div>
         <div class="content-wrap" v-if="index < 2">
           <span>{{ item.nodeName }}</span>
@@ -45,7 +47,9 @@
     <div class="item-warp">
       <div class="img-warp">
         <img class="img" src="https://pic.sucaibar.com/pic/201307/16/311d33c37b.png" />
-        <div class="ar" id="arrow1"></div>
+        <div class="arrow-rd">
+          <svg-icon name="long-arrow-rd" />
+        </div>
       </div>
       <div class="content-wrap" @click="onSelect('add')">
         <span class="item-add">添加审批人</span>
@@ -227,28 +231,11 @@ defineExpose({
         border-radius: 50%;
         border: 1px solid rgba(255, 255, 255, 0);
       }
-      #arrow1 {
-        margin: 68px 0 0 10px;
-        position: relative;
-        width: 15px;
-        height: 15px;
-        border-top: 3px solid #11a144;
-        border-right: 3px solid #11a144;
-        transform: rotate(-225deg);
-      }
-      #arrow1:after {
-        content: ' ';
-        width: 3px;
-        height: 85px;
-        background-color: #11a144;
-        -webkit-transform: rotate(45deg);
-        transform: rotate(45deg);
-        position: absolute;
-        left: -52px;
-        right: 0;
-        top: 32px;
-        bottom: 0;
-        margin: auto;
+      .arrow-rd {
+        font-size: 88px;
+        margin-left: -26px;
+        margin-top: -22px;
+        width: 20px;
       }
     }
   }

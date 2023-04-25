@@ -102,7 +102,27 @@
       </template>
     </FormWrap>
     <el-table :data="state.tableData">
-      <el-table-column label="机构名称" prop="companyName" min-width="150"></el-table-column>
+      <el-table-column label="机构名称" prop="companyName" width="210">
+        <template #default="scope">
+          <div style="display:flex;align-items:center">
+            <el-tooltip
+              effect="dark"
+              v-if="scope.row.companyName.length>10"
+              :content="scope.row.companyName"
+              placement="top"
+            >
+              <div>{{scope.row.companyName.substring(0,10)+'...'}}</div>
+            </el-tooltip>
+            <div v-else>{{scope.row.companyName}}</div>
+            <svg-icon
+              v-if="scope.row.isRisk === 1"
+              class="risk-icon"
+              name="risk"
+              @click="onRisk(scope.row.logId)"
+            />
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="邀请时间" prop="inviteTime" min-width="180"></el-table-column>
       <el-table-column label="提交审核时间" prop="submitTime" min-width="180"></el-table-column>
       <el-table-column label="准入通过时间" prop="checkTime" min-width="180" v-if="approveType === '1'"></el-table-column>
@@ -142,6 +162,7 @@
       @pagination="getTableData"
     />
     <approval-progress-dialog ref="approvalProgressDialogRef"></approval-progress-dialog>
+    <risk-dialog ref="riskDialogRef"></risk-dialog>
     <detail-drawer ref="detailDrawerRef" :approve-type="approveType" @get-table-data="getTableData"></detail-drawer>
   </div>
 </template>
@@ -150,6 +171,7 @@
 import { reactive, ref, onMounted, nextTick } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import approvalProgressDialog from '../components/approvalProgressDialog.vue'
+import riskDialog from '../components/riskDialog.vue'
 import detailDrawer from './components/detailDrawer.vue'
 const approveType = ref('all')
 const tabPaneData = ref([
@@ -256,9 +278,19 @@ const onProgress = (id: number, type: string) => {
 const onDetail = (logId: any) => {
   detailDrawerRef.value.open(logId)
 }
+const riskDialogRef = ref()
+const onRisk = id => {
+  riskDialogRef.value.open(id)
+}
 onMounted(async () => {
   getTableData()
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.risk-icon {
+  font-size: 24px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+</style>

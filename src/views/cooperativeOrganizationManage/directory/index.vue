@@ -101,7 +101,27 @@
       </template>
     </FormWrap>
     <el-table :data="state.tableData">
-      <el-table-column label="机构名称" prop="orgTitle" min-width="150"></el-table-column>
+      <el-table-column label="机构名称" prop="companyName" width="210">
+        <template #default="scope">
+          <div style="display:flex;align-items:center">
+            <el-tooltip
+              effect="dark"
+              v-if="scope.row.companyName.length>10"
+              :content="scope.row.companyName"
+              placement="top"
+            >
+              <div>{{scope.row.companyName.substring(0,10)+'...'}}</div>
+            </el-tooltip>
+            <div v-else>{{scope.row.companyName}}</div>
+            <svg-icon
+              v-if="scope.row.isRisk === 1"
+              class="risk-icon"
+              name="risk"
+              @click="onRisk(scope.row.logId)"
+            />
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="合作状态" prop="accessStatusName" min-width="150"></el-table-column>
       <el-table-column label="委外经理" prop="entrustStaffName" min-width="150"></el-table-column>
       <!-- TODO:字段名 -->
@@ -115,13 +135,13 @@
       <el-table-column label="业务运营负责人" prop="username" min-width="150"></el-table-column>
       <el-table-column label="负责人手机号" prop="userPhone" min-width="150"></el-table-column>
       <!-- TODO:字段名 -->
-      <el-table-column label="最近准入时间" prop="name" min-width="150"></el-table-column>
+      <el-table-column label="最近准入时间" prop="name" min-width="180"></el-table-column>
       <el-table-column label="对接邮箱" prop="mail" min-width="150"></el-table-column>
       <el-table-column label="机构类型" prop="orgCategoryText" min-width="150"></el-table-column>
       <el-table-column label="风险等级" prop="orgLevelText" min-width="150"></el-table-column>
       <el-table-column label="机构注册人" prop="registerUsername" min-width="150"></el-table-column>
       <el-table-column label="注册手机号" prop="registerPhone" min-width="150"></el-table-column>
-      <el-table-column label="注册时间" prop="registerTime" min-width="150"></el-table-column>
+      <el-table-column label="注册时间" prop="registerTime" min-width="180"></el-table-column>
       <el-table-column label="接案状态" prop="isConnection" min-width="150">
         <template #default="scope">
           <el-switch
@@ -194,6 +214,7 @@
     <suspend-operation-dialog ref="suspendOperationDialogRef" @getTableData="getTableData"></suspend-operation-dialog>
     <open-com-dialog ref="openComDialogRef" @getTableData="getTableData"></open-com-dialog>
     <stop-com-dialog ref="stopComDialogRef" @getTableData="getTableData"></stop-com-dialog>
+    <risk-dialog ref="riskDialogRef"></risk-dialog>
   </div>
 </template>
 
@@ -339,10 +360,20 @@ const getSelectList = async () => {
   if (option2.code !== 200) return
   optionData.orgLevelList = option2.data
 }
+const riskDialogRef = ref()
+const onRisk = id => {
+  riskDialogRef.value.open(id)
+}
 onMounted(async () => {
   getSelectList()
   getTableData()
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.risk-icon {
+  font-size: 24px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+</style>
