@@ -163,7 +163,7 @@
         <div v-else>
           <SingleImageUploader
             v-model="state.tenantInfo.businessLicense"
-            :actionSub="'/api/upms/client/sys-file/upload'"
+            :actionSub="'/upms/client/sys-file/upload'"
             :width="'240px'"
             :height="'140px'"
           />
@@ -204,13 +204,13 @@
         <div v-else class="flx-justify-between">
           <SingleImageUploader
             v-model="state.tenantInfo.legalPersonFrontUrl"
-            :actionSub="'/api/upms/client/sys-file/upload'"
+            :actionSub="'/upms/client/sys-file/upload'"
             :width="'240px'"
             :height="'140px'"
           />
           <SingleImageUploader
             v-model="state.tenantInfo.legalPersonBackUrl"
-            :actionSub="'/api/upms/client/sys-file/upload'"
+            :actionSub="'/upms/client/sys-file/upload'"
             :width="'240px'"
             :height="'140px'"
           />
@@ -237,7 +237,7 @@
         <div v-else>
           <SingleImageUploader
             v-model="state.tenantInfo.logo"
-            :actionSub="'/api/upms/client/sys-file/upload'"
+            :actionSub="'/upms/client/sys-file/upload'"
             :width="'108px'"
             :height="'108px'"
           />
