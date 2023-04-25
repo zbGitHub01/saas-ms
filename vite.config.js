@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       host: '0.0.0.0',
-      port: 8001,
+      port: 8005,
       open: true,
       cors: true,
       hmr: true,

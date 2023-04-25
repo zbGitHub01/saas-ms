@@ -68,8 +68,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import defaultAvatar from '@/assets/Images/ava.png'
-import orgAvatar from '@/assets/Images/logo1.png'
+import defaultAvatar from '@/assets/images/ava.png'
+import orgAvatar from '@/assets/images/logo1.png'
 import approverDialog from './approverDialog.vue'
 import { ElMessage } from 'element-plus'
 import { useConfirm } from '@/hooks/useConfirm'

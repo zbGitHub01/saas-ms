@@ -4,14 +4,14 @@
       <div class="title">权限选项</div>
       <el-scrollbar class="scrollbar">
         <el-tree
-          class="tree"
           ref="treeRef"
+          class="tree"
           show-checkbox
-          :data="menuList"
-          node-key="permissionId"
+          :data="menuTree"
+          node-key="id"
           default-expand-all
           highlight-current
-          :props="defaultProps"
+          :props="treeProps"
           @node-click="nodeClick"
           @check="onMenuCheck"
         />
@@ -20,7 +20,15 @@
     <div class="flex-container">
       <div class="title">操作/数据权限</div>
       <div class="table-wrap">
-        <el-table class="table" :data="dataPermission" height="100%" default-expand-all border row-key="id">
+        <el-table
+          class="table"
+          :data="dataPermission.data"
+          height="100%"
+          default-expand-all
+          border
+          row-key="id"
+          @selection-change="selectionChange"
+        >
           <el-table-column type="selection" width="55" reserve-selection align="center">
             <template #default="scope">
               <el-checkbox v-model="scope.row.isChecked" @change="checkboxChange($event, scope.row)" />
@@ -43,11 +51,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { Filter } from '@element-plus/icons-vue'
 import DataRangeDrawer from './DataRangeDrawer.vue'
 import Apis from '@/api/modules/systemSetting'
-import menuData from './permissionData.json'
+// import menuData from './permissionData.json'
 import cloneDeep from 'lodash/cloneDeep'
 import { setUpTree, setDownTree } from '@/utils/tree'
 
@@ -64,37 +72,108 @@ const props = defineProps({
     required: true
   }
 })
-const defaultProps = {
+const treeProps = {
   label: 'name',
   value: 'id  '
 }
 const treeRef = ref()
-const menuList = ref([])
-const dataPermission = ref([])
+const menuTree = ref([])
+// 权限配置数据
+const dataPermission = ref({
+  data: []
+})
 const drawerVisible = ref(false)
-const permissionParams = computed(() => {
+// 查询、添加、删除接口权限参数配置
+const permissionConfig = computed(() => {
   const paramsConfig = {
-    dept: { deptId: props.currNode.id },
-    role: { roleId: props.currNode.id },
-    employee: { employeeId: props.currNode.id }
+    dept: {
+      params: { deptId: props.currNode.id },
+      permissionListApiFn: Apis.findPermissionDeptPermit,
+      addPermission: Apis.addPermissionDeptPermit,
+      removePermission: Apis.removePermissionDeptPermit
+    },
+    role: {
+      params: { roleId: props.currNode.id },
+      permissionListApiFn: Apis.findPermissionRolePermit,
+      addPermission: Apis.addPermissionRolePermit,
+      removePermission: Apis.removePermissionRolePermit
+    },
+    employee: {
+      params: { employeeId: props.currNode.id },
+      permissionListApiFn: Apis.fetchPermissionEmployeePermit,
+      addPermission: Apis.addPermissionEmployeePermit,
+      removePermission: Apis.removePermissionEmployeePermit
+    }
   }
   return paramsConfig[props.permissionType]
 })
-
-const fetchPermission = async () => {
-  const apiConfigFn = {
-    dept: Apis.findPermissionDeptPermit,
-    role: Apis.findPermissionRolePermit,
-    employee: Apis.fetchPermissionEmployeePermit
-  }
-  const { code, data } = await apiConfigFn[props.permissionType](permissionParams.value)
-  console.log(code, data)
+let prevCheckedKeys = [] // 存储菜单权限选中ids
+const fetchPermission = async (isRefresh = false) => {
+  const { code, data } = await permissionConfig.value.permissionListApiFn(permissionConfig.value.params)
   if (code === 200) {
-    menuList.value = formatMenuData(menuData)
+    menuTree.value = formatMenuData(cloneDeep(data))
+    console.log(menuTree.value)
+    // 选择部门|角色|员工,清空操作数据权限数据
+    if (isRefresh) {
+      dataPermission.value = { data: [] }
+      await nextTick(() => {
+        const checkedKeys = getCheckedKeys(menuTree.value)
+        prevCheckedKeys = checkedKeys
+        treeRef.value.setCheckedKeys(checkedKeys)
+      })
+    } else {
+      await nextTick(() => {
+        treeRef.value.setCurrentKey(dataPermission.value.id)
+        const currentNode = treeRef.value.getCurrentNode()
+        if (currentNode) {
+          dataPermission.value = currentNode
+        }
+      })
+    }
+  }
+}
+const addPermission = async permissionIds => {
+  const postData = {
+    ...permissionConfig.value.params,
+    permissionIds
+  }
+  const { code } = await permissionConfig.value.addPermission(postData)
+  if (code !== 200) {
+    await fetchPermission()
+  }
+}
+const removePermission = async permissionIds => {
+  const postData = {
+    ...permissionConfig.value.params,
+    permissionIds
+  }
+  const { code } = await permissionConfig.value.removePermission(postData)
+  if (code !== 200) {
+    await fetchPermission()
   }
 }
 // 菜单权限操作
-const getCheckedKeys = () => {
+const nodeClick = data => {
+  console.log(data, '---data')
+  dataPermission.value = data
+}
+
+const onMenuCheck = (data, node) => {
+  const allChecked = [...node.checkedKeys, ...node.halfCheckedKeys]
+  const isChecked = prevCheckedKeys.length < allChecked.length
+  let permissionIds = []
+  if (isChecked) {
+    permissionIds = allChecked.filter(item => !prevCheckedKeys.includes(item))
+    addPermission(permissionIds)
+  } else {
+    permissionIds = prevCheckedKeys.filter(item => !allChecked.includes(item))
+    removePermission(permissionIds)
+  }
+  prevCheckedKeys = allChecked
+  console.log(permissionIds, '----permissionIds')
+}
+// 获取菜单权限选中id
+const getCheckedKeys = tree => {
   const checkedKeys = []
   function getIds(data) {
     data.forEach(item => {
@@ -103,44 +182,24 @@ const getCheckedKeys = () => {
           getIds(item.children)
           const isAllChildChecked = item.children.find(child => !child.isChecked)
           if (!isAllChildChecked) {
-            checkedKeys.push(item.permissionId)
+            checkedKeys.push(item.id)
           } else {
             item.isChecked = false
           }
         } else {
-          checkedKeys.push(item.permissionId)
+          checkedKeys.push(item.id)
         }
       }
     })
   }
-  getIds(cloneDeep(menuList.value))
+  getIds(tree)
   return checkedKeys
-}
-
-let rootOperationId = null
-const nodeClick = data => {
-  console.log(data, '---data')
-  rootOperationId = data.id
-  dataPermission.value = data.data
-}
-let prevCheckedKeys = []
-const onMenuCheck = (data, node) => {
-  console.log(data, node, prevCheckedKeys, '---onMenuCheck')
-  const allChecked = [...node.checkedKeys, ...node.halfCheckedKeys]
-  const isChecked = prevCheckedKeys.length < allChecked.length
-  let permissionIds = []
-  if (isChecked) {
-    permissionIds = allChecked.filter(item => !prevCheckedKeys.includes(item))
-  } else {
-    permissionIds = prevCheckedKeys.filter(item => !allChecked.includes(item))
-  }
-  console.log(permissionIds, '---permissionIds')
-  prevCheckedKeys = allChecked
 }
 // 过滤出权限类型是菜单权限的children
 function formatMenuData(data) {
   function formatMenu(data) {
     data.forEach(item => {
+      item.isChecked = !!item.isChecked
       const firstChild = item.children && item.children.length ? item.children[0] : null
       if (firstChild) {
         if (firstChild.type !== 1) {
@@ -162,30 +221,36 @@ const onSetDataRange = data => {
 
 // 页面按钮权限操作
 const checkboxChange = (value, row) => {
-  console.log(value, row, '----row')
   const permissionIds = [row.id]
-  if (value && row.parentId !== rootOperationId) {
-    const parentIds = setUpTree(dataPermission.value, row.parentId, node => {
+  if (value && row.parentId !== dataPermission.value.id) {
+    const parentIds = setUpTree(dataPermission.value.data, row.parentId, node => {
       node.isChecked = value
     }).map(item => item.id)
     permissionIds.push(...parentIds)
-    console.log(parentIds, '---parentIds')
   }
   if (row.children && row.children.length) {
     const allChildrenIds = setDownTree(row.children, node => {
       node.isChecked = value
     }).map(item => item.id)
     permissionIds.push(...allChildrenIds)
-    console.log(allChildrenIds, '---allChildren')
   }
-  console.log(permissionIds, '---permissionIds')
+  if (value) {
+    addPermission(permissionIds)
+  } else {
+    removePermission(permissionIds)
+  }
 }
-onMounted(() => {
-  nextTick(() => {
-    const checkedKeys = getCheckedKeys()
-    treeRef.value.setCheckedKeys(checkedKeys)
-  })
-})
+const selectionChange = rows => {
+  const isChecked = !!rows.length
+  const permissionIds = setDownTree(dataPermission.value.data, node => {
+    node.isChecked = isChecked
+  }).map(item => item.id)
+  if (isChecked) {
+    addPermission(permissionIds)
+  } else {
+    removePermission(permissionIds)
+  }
+}
 defineExpose({ fetchPermission })
 </script>
 

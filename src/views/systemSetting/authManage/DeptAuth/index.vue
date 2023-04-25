@@ -42,7 +42,7 @@ const currDeptNode = ref({})
 const nodeClick = node => {
   currDeptNode.value = node
   nextTick(() => {
-    permissionRef.value.fetchPermission()
+    permissionRef.value.fetchPermission(true)
   })
 }
 </script>

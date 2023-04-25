@@ -54,7 +54,7 @@ fetchDeptTree()
 const currRoleNode = ref({})
 const nodeClick = node => {
   currRoleNode.value = node
-  permissionRef.value.fetchPermission()
+  permissionRef.value.fetchPermission(true)
 }
 const filterNode = (value, data) => {
   return data.name.includes(value)

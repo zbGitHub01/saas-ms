@@ -8,10 +8,10 @@ const systemRouter = [
     },
     children: [
       {
-        path: '/systemSetting/employee',
-        name: 'employee',
+        path: '/systemSetting/employeeManage',
+        name: 'employeeManage',
         meta: { title: '员工管理', icon: 'UserFilled' },
-        component: () => import('@/views/systemSetting/employee/index.vue')
+        component: () => import('@/views/systemSetting/employeeManage/index.vue')
       },
       {
         path: '/systemSetting/authManage',
