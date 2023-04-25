@@ -212,11 +212,6 @@ import suspendOperationDialog from './components/suspendOperationDialog.vue'
 import openComDialog from './components/openComDialog.vue'
 import stopComDialog from './components/stopComDialog.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
-interface stateParams {
-  [key: string]: any
-  total: number
-  tableData: any[]
-}
 const optionData = reactive({
   accessOptions: [],
   orgLevelList: [],
@@ -228,14 +223,14 @@ const queryParams = reactive({
   page: 1,
   pageSize: 10
 })
-const state = reactive<stateParams>({
+const state = reactive({
   total: 0,
   tableData: [],
   firstAccessTime: [],
   accessTime: [],
   registerTime: []
 })
-const form: any = reactive({
+const form = reactive({
   orgTitle: '',
   entrustStaffName: '',
   accessStatus: '',
@@ -247,11 +242,11 @@ const form: any = reactive({
 })
 const defaultForm = JSON.parse(JSON.stringify(form))
 const getTableData = async () => {
-  // const params = handleForm()
-  // const { code, data } = await Apis.clientOrgList({ ...params, ...queryParams })
-  // if (code !== 200) return
-  // state.tableData = data.data
-  // state.total = data.total
+  const params = handleForm()
+  const { code, data } = await Apis.clientOrgList({ ...params, ...queryParams })
+  if (code !== 200) return
+  state.tableData = data.data
+  state.total = data.total
 }
 const handleForm = () => {
   const timeEnum = ['firstAccessTime', 'accessTime', 'registerTime']
