@@ -9,38 +9,19 @@
   >
     <span>
       <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="top" label-width="100px">
-        <el-form-item label="新主管理员：" prop="peopleId" v-if="title === '变更主管理员'">
-          <el-select v-model="form.peopleId" placeholder="请从员工账号中选择新主管理员" clearable filterable style="width: 290px">
-            <el-option
-              v-for="(item, index) in selectData.peopleList"
-              :key="index"
-              :label="item.text"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item v-if="title === '变更注册手机号'">原注册手机号: {{ phone }}</el-form-item>
-        <el-form-item label="验证码：" prop="oldCode">
-          <el-input v-model="form.oldCode" placeholder="请输入验证码" clearable style="width: 180px"></el-input>
+        <el-form-item v-if="title === '变更注册手机号'">原注册手机号: {{ form.oldPhone }}</el-form-item>
+        <el-form-item label="验证码：" prop="oldPhoneSmsCode">
+          <el-input v-model="form.oldPhoneSmsCode" placeholder="请输入验证码" clearable></el-input>
           <el-button type="primary" class="ml10" @click="getSmsCode(1)" :disabled="disabled">{{ smsTxt }}</el-button>
-          <div style="color: #e6a23c">验证码将送法到手机号{{ phone }}，点击获取验证码后请注意查收</div>
+          <div style="color: #e6a23c; font-size: 12px">验证码将送法到手机号{{ form.oldPhone }}，点击获取验证码后请注意查收</div>
         </el-form-item>
-        <el-form-item label="新注册手机号：" prop="newPhone" v-if="title === '变更注册手机号'">
-          <el-input v-model="form.newPhone" placeholder="请输入新注册手机号" clearable style="width: 290px"></el-input>
+        <el-form-item label="新注册手机号：" prop="newPhone">
+          <el-input v-model="form.newPhone" placeholder="请输入新注册手机号" clearable></el-input>
         </el-form-item>
-        <el-form-item label="验证码：" prop="newCode" v-if="title === '变更注册手机号'">
-          <el-input v-model="form.newCode" placeholder="请输入验证码" clearable style="width: 180px"></el-input>
+        <el-form-item label="验证码：" prop="newPhoneSmsCode">
+          <el-input v-model="form.newPhoneSmsCode" placeholder="请输入验证码" clearable></el-input>
           <el-button type="primary" class="ml10" @click="getSmsCode(2)" :disabled="disabledSub">{{ smsTxtSub }}</el-button>
-          <div style="color: #e6a23c">验证码将送法到手机号{{ form.newPhone }}，点击获取验证码后请注意查收</div>
-        </el-form-item>
-        <el-form-item
-          :label="`请为原主管理员账号${peopleName} / ${phone}指定角色：`"
-          prop="roleId"
-          v-if="title === '变更主管理员'"
-        >
-          <el-select v-model="form.roleId" placeholder="请选择角色" clearable filterable style="width: 290px">
-            <el-option v-for="(item, index) in selectData.roleList" :key="index" :label="item.text" :value="item.id"></el-option>
-          </el-select>
+          <div style="color: #e6a23c; font-size: 12px">验证码将送法到手机号{{ form.newPhone }}，点击获取验证码后请注意查收</div>
         </el-form-item>
       </el-form>
     </span>
@@ -57,28 +38,19 @@
 // 表单验证规则的类型
 import type { FormInstance, FormRules } from 'element-plus'
 import { ref, reactive } from 'vue'
+import Apis from '@/api/modules/company'
 import { ElMessage } from 'element-plus'
-// 接收props数据
-const props = defineProps<{
-  selectData: {
-    peopleList: any[]
-    roleList: any[]
-  }
-}>()
 const form: any = reactive({
-  peopleId: null,
-  roleId: null,
-  oldCode: '',
-  newCode: '',
-  newPhone: ''
+  newPhone: '', //新手机号
+  newPhoneSmsCode: '', //新手机号验证码
+  oldPhone: '', //旧手机号
+  oldPhoneSmsCode: '', //旧手机号验证码
+  tenantId: null //租户主键ID
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-const phone = ref<String>('')
 const title = ref<String>('')
-const peopleName = ref<String>('')
 const smsTxt = ref<String>('获取验证码')
 const smsTxtSub = ref<String>('获取验证码')
-
 const disabled = ref<boolean>(false)
 const disabledSub = ref<boolean>(false)
 
@@ -102,23 +74,18 @@ const validateCode = (rule, value, callback) => {
 }
 const ruleFormRef = ref<FormInstance>()
 const rules = reactive<FormRules>({
-  roleId: [{ required: true, trigger: 'change', message: '必须为原主管理员指定角色' }],
-  oldCode: [{ required: true, trigger: 'blur', validator: validateCode }],
-  newCode: [{ required: true, trigger: 'blur', validator: validateCode }],
+  newPhoneSmsCode: [{ required: true, trigger: 'blur', validator: validateCode }],
+  oldPhoneSmsCode: [{ required: true, trigger: 'blur', validator: validateCode }],
   newPhone: [{ required: true, trigger: 'blur', validator: validateUsername }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (row: any, type: number) => {
-  if (type === 1) {
-    title.value = '变更主管理员'
-  } else if (type === 2) {
-    title.value = '变更注册手机号'
-  }
-  peopleName.value = row.peopleName
-  phone.value = row.phone
+const open = (row: any) => {
+  title.value = '变更注册手机号'
   Object.assign(form, originFormData)
+  form.oldPhone = row.registerPhone
+  form.tenantId = row.id
   dialogVisible.value = true
 }
 defineExpose({
@@ -127,13 +94,17 @@ defineExpose({
 //获取验证码 1为原手机号验证码 2新手机号验证码
 const getSmsCode = async (type: number) => {
   if (type === 1) {
+    if (!form.oldPhone) {
+      return ElMessage.error('手机号不能为空！')
+    }
     let params = {
-      phone: phone.value
+      operateType: 3, //1：更新主管理员 2：更新注册人-新手机号 3:更新注册人-旧手机号
+      phone: form.oldPhone,
+      tenantId: form.tenantId
     }
     // 发送请求
-    // const { code, data, msg } = await xx(params)
-    // if (code !== 200) {
-    ElMessage.success('验证码已发送，请留意接收验证码的手机号【' + phone.value + '】')
+    await Apis.sendSms(params)
+    ElMessage.success('验证码已发送，请留意接收验证码的手机号【' + form.oldPhone + '】')
     disabled.value = true
     //倒计时
     let min = 60
@@ -146,15 +117,16 @@ const getSmsCode = async (type: number) => {
       }
     }, 1000)
   } else if (type === 2) {
-    let params = {
-      phone: form.newPhone
-    }
     if (form.newPhone.length !== 11 && form.newPhone.length !== '^1\\d{10}$') {
       return ElMessage.error('请输入正确的号码')
     }
+    let params = {
+      operateType: 2, //1：更新主管理员 2：更新注册人-新手机号 3:更新注册人-旧手机号
+      phone: form.newPhone,
+      tenantId: form.tenantId
+    }
     // 发送请求
-    // const { code, data, msg } = await xx(params)
-    // if (code !== 200) {
+    await Apis.sendSms(params)
     ElMessage.success('验证码已发送，请留意接收验证码的手机号【' + form.newPhone + '】')
     disabledSub.value = true
     //倒计时
@@ -176,10 +148,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       console.log(form)
       // 发送请求
-      // const { code, data, msg } = await xx(form)
-      // if(code !== 200){
-      //   return ElMessage.error(msg)
-      // }
+      await Apis.updateRegister(form)
       emits('getTableData')
       formEl.resetFields()
       dialogVisible.value = false
@@ -195,5 +164,8 @@ const cancelSubmit = (formEl: FormInstance | undefined) => {
 </script>
       
 <style lang="scss" scoped>
+:deep(.el-dialog__body .el-input) {
+  width: 280px;
+}
 </style>
       
