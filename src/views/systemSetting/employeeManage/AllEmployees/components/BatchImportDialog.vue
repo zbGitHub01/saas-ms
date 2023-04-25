@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     class="dialog"
-    title="邀请员工"
+    title="批量导入"
     :model-value="props.dialogVisible"
     width="450px"
     append-to-body

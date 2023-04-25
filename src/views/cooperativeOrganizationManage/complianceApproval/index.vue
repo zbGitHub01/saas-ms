@@ -1,6 +1,6 @@
 <template>
   <div class="card-wrap">
-    <el-tabs class="mb12" v-model="approveType">
+    <el-tabs class="mb12" v-model="approveType" @tab-click="onSearch">
       <el-tab-pane
         v-for="item in tabPaneData"
         :key="item.name"
@@ -15,14 +15,7 @@
             <el-input v-model="form.companyName" placeholder="请输入机构名称"></el-input>
           </el-form-item>
           <el-form-item label="注册人姓名">
-            <el-select v-model="form.registerId" placeholder="请选择注册人姓名">
-              <el-option
-                v-for="item in optionData.userList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
+            <el-input v-model="form.username" placeholder="请输入注册人姓名"></el-input>
           </el-form-item>
           <el-form-item label="注册手机号">
             <el-input v-model="form.phone" placeholder="请输入注册手机号"></el-input>
@@ -32,7 +25,7 @@
           </el-form-item>
           <el-form-item label="注册时间">
             <el-date-picker
-              v-model="state.createTime"
+              v-model="state.registerTime"
               type="daterange"
               value-format="YYYY-MM-DD"
               range-separator="至"
@@ -40,7 +33,6 @@
               end-placeholder="结束时间"
             />
           </el-form-item>
-          <!-- TODO -->
           <el-form-item label="准入邀请时间">
             <el-date-picker
               v-model="state.inviteTime"
@@ -51,11 +43,9 @@
               end-placeholder="结束时间"
             />
           </el-form-item>
-          <!-- TODO -->
           <el-form-item label="委外经理">
-            <el-input v-model="form.entrustStaffId" placeholder="请输入委外经理"></el-input>
+            <el-input v-model="form.entrustStaffName" placeholder="请输入委外经理"></el-input>
           </el-form-item>
-          <!-- TODO -->
           <el-form-item label="合规审批提交时间" v-if="approveType !== '0'">
             <el-date-picker
               v-model="state.submitTime"
@@ -75,13 +65,12 @@
       <el-table-column label="注册人姓名" prop="username" min-width="150"></el-table-column>
       <el-table-column label="对接邮箱" prop="mail" min-width="150"></el-table-column>
       <el-table-column label="注册手机号" prop="phone" min-width="150"></el-table-column>
-      <el-table-column label="注册时间" prop="createTime" min-width="150"></el-table-column>
+      <el-table-column label="注册时间" prop="registerTime" min-width="150"></el-table-column>
       <el-table-column label="审批截止日" prop="lastApplyTime" min-width="150"></el-table-column>
       <!-- TODO -->
       <el-table-column label="邮箱" prop="name" min-width="150"></el-table-column>
       <el-table-column label="邀请人" prop="inviteName" min-width="150"></el-table-column>
-      <!-- TODO -->
-      <el-table-column label="委外经理" prop="name" min-width="150"></el-table-column>
+      <el-table-column label="委外经理" prop="entrustStaffName" min-width="150"></el-table-column>
       <el-table-column
         label="合规审批提交时间"
         prop="submitTime"
@@ -98,7 +87,7 @@
           <el-button
             type="primary"
             link
-            @click="onDetail(scope.row)"
+            @click="onDetail(scope.row.logId)"
           >{{ approveType === '0' ? '查看资料并审核' : '查看资料/审核结果' }}</el-button>
         </template>
       </el-table-column>
@@ -110,12 +99,12 @@
       @pagination="getTableData"
     />
     <approval-progress-dialog ref="approvalProgressDialogRef"></approval-progress-dialog>
-    <detail-drawer ref="detailDrawerRef" :approve-type="approveType"></detail-drawer>
+    <detail-drawer ref="detailDrawerRef" :approve-type="approveType" @get-table-data="getTableData"></detail-drawer>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import approvalProgressDialog from '../components/approvalProgressDialog.vue'
 import detailDrawer from './components/detailDrawer.vue'
@@ -138,63 +127,53 @@ const tabPaneData = ref([
     label: '已失效'
   }
 ])
-interface stateParams {
-  [key: string]: any
-  total: number
-  tableData: any[]
-}
-const optionData = reactive({
-  accessOptions: [],
-  userList: []
-})
 const queryParams = reactive({
   page: 1,
   pageSize: 10
 })
-const state = reactive<stateParams>({
+const state = reactive({
   total: 0,
   tableData: [],
-  createTime: [],
+  registerTime: [],
   inviteTime: [],
   submitTime: []
 })
-const form: any = reactive({
+const form = reactive({
   companyName: '',
-  registerId: '',
+  username: '',
   phone: '',
-  inviteName: ''
+  inviteName: '',
+  entrustStaffName: ''
 })
 const defaultForm = JSON.parse(JSON.stringify(form))
 const getTableData = async () => {
   const params = handleForm()
+  params.approveType = Number(approveType.value)
   const { code, data } = await Apis.registerAuditComplianceList({ ...params, ...queryParams })
   if (code !== 200) return
   state.tableData = data.data
   state.total = data.total
 }
-const getOptionList = async () => {
-  const { code, data } = await Apis.registerAuditComplianceUserList()
-  if (code !== 200) return
-  optionData.userList = data ?? []
-}
 const handleForm = () => {
-  const timeEnum = ['createTime', 'inviteTime', 'submitTime']
+  const timeEnum = ['registerTime', 'inviteTime', 'submitTime']
   timeEnum.forEach(item => {
     if (state[item].length === 0) {
-      form[`${item}Str`] = ''
+      form[`${item}Start`] = ''
       form[`${item}End`] = ''
     } else {
-      form[`${item}Str`] = state[item][0]
+      form[`${item}Start`] = state[item][0]
       form[`${item}End`] = state[item][1]
     }
   })
   return form
 }
 const onSearch = () => {
-  getTableData()
+  nextTick(() => {
+    getTableData()
+  })
 }
 const onReset = () => {
-  state.createTime = []
+  state.registerTime = []
   state.inviteTime = []
   state.submitTime = []
   Object.assign(form, defaultForm)
@@ -205,11 +184,10 @@ const onProgress = (id: number, type: string) => {
   approvalProgressDialogRef.value.open(id, type)
 }
 const detailDrawerRef = ref()
-const onDetail = (row: any) => {
-  detailDrawerRef.value.open(row)
+const onDetail = id => {
+  detailDrawerRef.value.open(id)
 }
 onMounted(async () => {
-  getOptionList()
   getTableData()
 })
 </script>

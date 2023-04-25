@@ -59,7 +59,7 @@
         <div style="color: #3178ff; word-wrap: break-word">{{ link.url }}</div>
         <div>
           该链接已关联邀请人：
-          <span class="color-f00">{{ link.user }}</span>
+          <span class="color-f00">{{ userInfo.username }}</span>
         </div>
         <div class="mt30 color-ff9921">
           请告知被邀请方注册并完成企业认证后，即可进入与
@@ -75,7 +75,7 @@
         </div>
         <div class="mt12">
           已关联邀请人：
-          <span class="color-f00">{{ link.user }}</span>
+          <span class="color-f00">{{ userInfo.username }}</span>
         </div>
       </div>
     </div>
@@ -97,20 +97,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 // TODO:员工名、租户名需替换
 import Apis from '@/api/modules/cooperativeOrganization'
 import type { FormInstance, FormRules } from 'element-plus'
 import { phoneReg } from '@/utils/validate'
+import { useGlobalStore } from '@/store/index'
+const GlobalStore = useGlobalStore()
+
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const dialogVisible = ref(false)
-interface linkData {
-  type: number
-  url: string
-  user: string
-}
-const link = reactive<linkData>({
+const link = reactive({
   type: 1,
   url: 'https://www.dongancloud.com/#/about',
   user: '张三'
@@ -185,6 +183,7 @@ const getOptionList = async () => {
 defineExpose({
   open
 })
+const userInfo = computed(() => GlobalStore.userInfo)
 </script>
 
 <style scoped lang="scss">

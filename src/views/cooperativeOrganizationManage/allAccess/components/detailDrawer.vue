@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, nextTick } from 'vue'
 import accessData from './../../components/accessData/index.vue'
 import complianceInfo from './../../components/complianceDeter/info.vue'
 import complianceResult from './../../components/complianceDeter/result.vue'

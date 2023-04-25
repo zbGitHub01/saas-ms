@@ -50,3 +50,16 @@
 .el-tabs__content {
   overflow: visible;
 }
+
+// sensitivity-tooltip样式
+.sensitivity-tooltip {
+  color: #f56c6c;
+  border-color: #fde2e2 !important;
+  background-color: #fef0f0 !important;
+  .popper__arrow {
+    border-right-color: #fde2e2 !important;
+    &::after {
+      border-right-color: #fef0f0 !important;
+    }
+  }
+}

@@ -225,6 +225,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import ErrorTooltip from '../ErrorTooltip.vue'
+import { downloadFile } from '@/utils'
 // 接收props数据
 const props = defineProps<{
   tabActive: {
@@ -506,7 +507,7 @@ const infoMap = new Map([
   ]
 ])
 const onExport = (url: string) => {
-  exportMethod(url, '_blank')
+  downloadFile(url)
 }
 const isSensitiveInfo = (type, value) => {
   if (!props.detailData || !type) return false

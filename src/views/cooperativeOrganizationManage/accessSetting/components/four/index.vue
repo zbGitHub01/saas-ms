@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import score from './score.vue'
 import decisionTag from './decisionTag.vue'
 import standard from './standard.vue'

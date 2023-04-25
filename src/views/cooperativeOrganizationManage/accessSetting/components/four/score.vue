@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { CircleClose } from '@element-plus/icons-vue'
 import { useConfirm } from '@/hooks/useConfirm'

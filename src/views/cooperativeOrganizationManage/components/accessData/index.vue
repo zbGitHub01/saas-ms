@@ -50,12 +50,312 @@
 import { ref, onMounted, onUpdated, onUnmounted } from 'vue'
 import detailContent from './detailContent.vue'
 const listBoxStateHis = ref(true) // 点击导航栏时，暂时停止监听页面滚动
-const tabPaneData = ref<any[]>([])
+const tabPaneData = ref([
+  {
+    sysFieldDetails: [
+      {
+        field: 'company_profile',
+        fieldName: '公司介绍',
+        id: 1,
+        isOpen: 1,
+        isSure: 1
+      },
+      {
+        field: 'business_time',
+        fieldName: '处置业务运营开始时间',
+        id: 2,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'business_license',
+        fieldName: '营业执照',
+        id: 3,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'ip_address',
+        fieldName: '固定IP地址',
+        id: 4,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'org_chart',
+        fieldName: '组织架构图',
+        id: 5,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'main_job_responsibilities',
+        fieldName: '主要岗位职责',
+        id: 6,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'company_people',
+        fieldName: '公司人数',
+        id: 7,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'company_culture',
+        fieldName: '公司文化',
+        id: 8,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'social_credit_code',
+        fieldName: '统一社会信用代码',
+        id: 33,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'access_certificate',
+        fieldName: '入网证明',
+        id: 34,
+        isOpen: 1,
+        isSure: 0
+      }
+    ],
+    type: 1,
+    typeName: '公司概况'
+  },
+  {
+    sysFieldDetails: [
+      {
+        field: 'legal_person',
+        fieldName: '法定代表人',
+        id: 9,
+        isOpen: 1,
+        isSure: 1
+      },
+      {
+        field: 'control_person',
+        fieldName: '企业实际控制人',
+        id: 10,
+        isOpen: 1,
+        isSure: 1
+      },
+      {
+        field: 'charge_person',
+        fieldName: '企业经营负责人',
+        id: 11,
+        isOpen: 1,
+        isSure: 1
+      },
+      {
+        field: 'business_person',
+        fieldName: '专职负责承接我司业务运营负责人',
+        id: 12,
+        isOpen: 1,
+        isSure: 1
+      }
+    ],
+    type: 2,
+    typeName: '主要人员信息'
+  },
+  {
+    sysFieldDetails: [
+      {
+        field: 'address',
+        fieldName: '办公地点',
+        id: 13,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'environment_url',
+        fieldName: '场地环境照片',
+        id: 14,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'contract_url',
+        fieldName: '办公场地租赁合同',
+        id: 15,
+        isOpen: 1,
+        isSure: 0
+      }
+    ],
+    type: 3,
+    typeName: '办公地点'
+  },
+  {
+    sysFieldDetails: [
+      {
+        field: 'org_product_json',
+        fieldName: '合作机构和产品',
+        id: 16,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'cooperation_url',
+        fieldName: '合作证明',
+        id: 17,
+        isOpen: 1,
+        isSure: 0
+      }
+    ],
+    type: 4,
+    typeName: '公司合作情况及业绩排名'
+  },
+  {
+    sysFieldDetails: [
+      {
+        field: 'hardware',
+        fieldName: '公司硬件设施',
+        id: 18,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'software',
+        fieldName: '公司软件技术',
+        id: 19,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'monitorInfo',
+        fieldName: '安防监控配备情况',
+        id: 35,
+        isOpen: 1,
+        isSure: 1
+      }
+    ],
+    type: 5,
+    typeName: '公司设备设施'
+  },
+  {
+    sysFieldDetails: [
+      {
+        field: 'system_url',
+        fieldName: '招聘制度',
+        id: 20,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'register_url',
+        fieldName: '公司花名册',
+        id: 21,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'training',
+        fieldName: '培训制度',
+        id: 22,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'check',
+        fieldName: '内部稽核制度',
+        id: 23,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'complaint',
+        fieldName: '投诉处理制度',
+        id: 24,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'security',
+        fieldName: '信息安全保密机制',
+        id: 25,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'emergency',
+        fieldName: '突发事件应急预案和机制',
+        id: 26,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'phone_manage',
+        fieldName: '手机管理制度',
+        id: 27,
+        isOpen: 1,
+        isSure: 0
+      }
+    ],
+    type: 6,
+    typeName: '公司管理制度'
+  },
+  {
+    sysFieldDetails: [
+      {
+        field: 'operation_disposal_process',
+        fieldName: '作业处置流程',
+        id: 28,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'complaint_handling_process',
+        fieldName: '投诉案件处置流程',
+        id: 29,
+        isOpen: 1,
+        isSure: 0
+      }
+    ],
+    type: 7,
+    typeName: '工作流程'
+  },
+  {
+    sysFieldDetails: [
+      {
+        field: 'account',
+        fieldName: '对公账户',
+        id: 30,
+        isOpen: 1,
+        isSure: 0
+      },
+      {
+        field: 'tax',
+        fieldName: '开票信息',
+        id: 31,
+        isOpen: 1,
+        isSure: 0
+      }
+    ],
+    type: 8,
+    typeName: '财务相关信息'
+  },
+  {
+    sysFieldDetails: [
+      {
+        field: 'advantage',
+        fieldName: '公司优势',
+        id: 32,
+        isOpen: 1,
+        isSure: 0
+      }
+    ],
+    type: 9,
+    typeName: '其他信息'
+  }
+])
 const tabActive = ref('1')
-const userTabPaneData = ref<any[]>([])
+const userTabPaneData = ref([])
 const userTabActive = ref('')
 const detailData = ref({})
-const hitList = ref<any[]>([])
+const hitList = ref([])
 const itemInfo = ref({})
 const detailJsonMapData = ref({})
 // 接收props数据
@@ -112,320 +412,8 @@ const scrollChange = () => {
   }
 }
 // 字段详情
-const otherSysFieldList = async () => {
-  // const { code, data } = await otherSysFieldList()
-  // if (code !== 200) return
-  // tabPaneData.value = data
-  const data = [
-    {
-      sysFieldDetails: [
-        {
-          field: 'company_profile',
-          fieldName: '公司介绍',
-          id: 1,
-          isOpen: 1,
-          isSure: 1
-        },
-        {
-          field: 'business_time',
-          fieldName: '处置业务运营开始时间',
-          id: 2,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'business_license',
-          fieldName: '营业执照',
-          id: 3,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'ip_address',
-          fieldName: '固定IP地址',
-          id: 4,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'org_chart',
-          fieldName: '组织架构图',
-          id: 5,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'main_job_responsibilities',
-          fieldName: '主要岗位职责',
-          id: 6,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'company_people',
-          fieldName: '公司人数',
-          id: 7,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'company_culture',
-          fieldName: '公司文化',
-          id: 8,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'social_credit_code',
-          fieldName: '统一社会信用代码',
-          id: 33,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'access_certificate',
-          fieldName: '入网证明',
-          id: 34,
-          isOpen: 1,
-          isSure: 0
-        }
-      ],
-      type: 1,
-      typeName: '公司概况'
-    },
-    {
-      sysFieldDetails: [
-        {
-          field: 'legal_person',
-          fieldName: '法定代表人',
-          id: 9,
-          isOpen: 1,
-          isSure: 1
-        },
-        {
-          field: 'control_person',
-          fieldName: '企业实际控制人',
-          id: 10,
-          isOpen: 1,
-          isSure: 1
-        },
-        {
-          field: 'charge_person',
-          fieldName: '企业经营负责人',
-          id: 11,
-          isOpen: 1,
-          isSure: 1
-        },
-        {
-          field: 'business_person',
-          fieldName: '专职负责承接我司业务运营负责人',
-          id: 12,
-          isOpen: 1,
-          isSure: 1
-        }
-      ],
-      type: 2,
-      typeName: '主要人员信息'
-    },
-    {
-      sysFieldDetails: [
-        {
-          field: 'address',
-          fieldName: '办公地点',
-          id: 13,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'environment_url',
-          fieldName: '场地环境照片',
-          id: 14,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'contract_url',
-          fieldName: '办公场地租赁合同',
-          id: 15,
-          isOpen: 1,
-          isSure: 0
-        }
-      ],
-      type: 3,
-      typeName: '办公地点'
-    },
-    {
-      sysFieldDetails: [
-        {
-          field: 'org_product_json',
-          fieldName: '合作机构和产品',
-          id: 16,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'cooperation_url',
-          fieldName: '合作证明',
-          id: 17,
-          isOpen: 1,
-          isSure: 0
-        }
-      ],
-      type: 4,
-      typeName: '公司合作情况及业绩排名'
-    },
-    {
-      sysFieldDetails: [
-        {
-          field: 'hardware',
-          fieldName: '公司硬件设施',
-          id: 18,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'software',
-          fieldName: '公司软件技术',
-          id: 19,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'monitorInfo',
-          fieldName: '安防监控配备情况',
-          id: 35,
-          isOpen: 1,
-          isSure: 1
-        }
-      ],
-      type: 5,
-      typeName: '公司设备设施'
-    },
-    {
-      sysFieldDetails: [
-        {
-          field: 'system_url',
-          fieldName: '招聘制度',
-          id: 20,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'register_url',
-          fieldName: '公司花名册',
-          id: 21,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'training',
-          fieldName: '培训制度',
-          id: 22,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'check',
-          fieldName: '内部稽核制度',
-          id: 23,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'complaint',
-          fieldName: '投诉处理制度',
-          id: 24,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'security',
-          fieldName: '信息安全保密机制',
-          id: 25,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'emergency',
-          fieldName: '突发事件应急预案和机制',
-          id: 26,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'phone_manage',
-          fieldName: '手机管理制度',
-          id: 27,
-          isOpen: 1,
-          isSure: 0
-        }
-      ],
-      type: 6,
-      typeName: '公司管理制度'
-    },
-    {
-      sysFieldDetails: [
-        {
-          field: 'operation_disposal_process',
-          fieldName: '作业处置流程',
-          id: 28,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'complaint_handling_process',
-          fieldName: '投诉案件处置流程',
-          id: 29,
-          isOpen: 1,
-          isSure: 0
-        }
-      ],
-      type: 7,
-      typeName: '工作流程'
-    },
-    {
-      sysFieldDetails: [
-        {
-          field: 'account',
-          fieldName: '对公账户',
-          id: 30,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'tax',
-          fieldName: '开票信息',
-          id: 31,
-          isOpen: 1,
-          isSure: 0
-        }
-      ],
-      type: 8,
-      typeName: '财务相关信息'
-    },
-    {
-      sysFieldDetails: [
-        {
-          field: 'advantage',
-          fieldName: '公司优势',
-          id: 32,
-          isOpen: 1,
-          isSure: 0
-        },
-        {
-          field: 'defaultUser',
-          fieldName: '处置系统默认账号开设对象选择',
-          id: 36,
-          isOpen: 1,
-          isSure: 1
-        }
-      ],
-      type: 9,
-      typeName: '其他信息'
-    }
-  ]
-  tabPaneData.value = data
-  userTabPaneData.value = data.filter((item: any) => item.type === 2)[0].sysFieldDetails
+const sysFieldList = async () => {
+  userTabPaneData.value = tabPaneData.value.filter((item: any) => item.type === 2)[0].sysFieldDetails
   userTabActive.value = userTabPaneData.value[0].field
 }
 const onTab = (e?: any) => {
@@ -436,7 +424,7 @@ const handleData = (info: any, list: []) => {
   detailData.value = info
   hitList.value = list
   tabActive.value = '1'
-  otherSysFieldList()
+  sysFieldList()
   let temData = JSON.parse(JSON.stringify(info))
   temData.jsonMap = temData.jsonMap ? eval('(' + temData.jsonMap + ')') : {}
   for (let i = 1; i < 10; i++) {

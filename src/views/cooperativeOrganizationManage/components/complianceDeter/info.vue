@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <div class="pt12">
       <span>处置经验判断：</span>
-      <span style="font-weight: bold">{{ detail.companyTypeName || '新成立处置机构' }}</span>
+      <span style="font-weight: bold">{{ complianceInfo.companyTypeName }}</span>
     </div>
     <el-form
       ref="ruleFormRef"
@@ -83,7 +83,7 @@
         <div class="mb18">
           <div>
             <span style="font-weight: bold">准入结论：</span>
-            <span>{{ detail.companyTypeName }} ≥ {{ detail.score }} 予以准入</span>
+            <span>{{ complianceInfo.companyTypeName }} ≥ {{ complianceInfo.score }} 予以准入</span>
           </div>
           <div style="display: flex; margin: 12px 0 0 80px">
             <el-radio-group v-model="form.accessType" class="score-standard" size="small">
@@ -117,7 +117,7 @@
           </div>
         </div>
       </div>
-      <div>
+      <div class="mt20">
         <el-form-item label="备注：" label-width="54px" prop="remark">
           <el-input
             style="width: 400px"
@@ -130,40 +130,30 @@
       </div>
     </el-form>
     <div class="info-footer">
-      <el-button @click="handleClose">取 消</el-button>
-      <el-button type="primary" @click="submitForm">提 交</el-button>
+      <el-button @click="onClose">取 消</el-button>
+      <el-button type="primary" @click="submitForm(ruleFormRef)">提 交</el-button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-// import {
-//   otherRegisterApproveJump,
-//   otherRegisterApproveSecond,
-//   otherConfigList,
-//   findSensitiveOrgHit
-// } from '@/api/orgmanage'
+import Apis from '@/api/modules/cooperativeOrganization'
+import ApisCommon from '@/api/modules/common'
+const emits = defineEmits(['handleClose', 'getList'])
 const props = defineProps({
-  isVisible: {
-    type: Boolean
-  },
   isBlackListHit: {
     type: Boolean
-  },
-  registerId: {
-    type: Number
   }
 })
-const emit = defineEmits(['update:isVisible', 'getTableData'])
-const detail = ref({})
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const tagList = ref([])
 const refuseReasonList = ref([])
+const complianceInfo = ref({})
 const formHead = [
   {
     name: '打分项',
@@ -191,6 +181,7 @@ const form = reactive({
   scoreList: [{}],
   day: ''
 })
+const defaultForm = JSON.parse(JSON.stringify(form))
 const rules = reactive<FormRules>({
   scoreItem: [{ required: true, message: '请输入分数', trigger: 'blur' }],
   tagId: [{ required: true, message: '请选择判定标签', trigger: 'change' }],
@@ -210,13 +201,13 @@ const changeScore = (scoreItem: any, scoreIndex: number) => {
   })
   form.score += Number(scoreItem.score)
 }
-const handleClose = () => {
+const onClose = () => {
   ruleFormRef.value?.resetFields()
-  emit('update:isVisible', false)
+  emits('handleClose')
 }
 const doSave = () => {
   const params = {
-    registerId: detail.value.registerId,
+    logId: complianceInfo.value.logId,
     ...form
   }
   const temArray = []
@@ -232,19 +223,19 @@ const doSave = () => {
     temArray.push(temItem)
   })
   params.approveJson = JSON.stringify(temArray)
-  // params.accessType = this.form.data.score < this.detail.score ? 1 : 0
+  // params.accessType = this.form.data.score < complianceInfo.value.score ? 1 : 0
   params.tagName = tagList.value.filter(item => item.id === form.tagId)[0].name
   params.reason = params.reasonId ? refuseReasonList.value.filter(item => item.id === form.reasonId)[0].name : ''
   delete params.scoreList
-  otherRegisterApproveSecond(params)
+  registerApprove(params)
 }
-// 第二个审批
-const otherRegisterApproveSecond = async (params: any) => {
-  // const { code, data } = await otherRegisterApproveSecond(params)
-  // if (code !== 200) return
+// 合规审批
+const registerApprove = async (params: any) => {
+  const { code, data } = await Apis.registerAuditComplianceApprove(params)
+  if (code !== 200) return
+  emits('getList')
   ElMessage.success('操作成功')
-  emit('getTableData')
-  handleClose()
+  onClose()
 }
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -254,266 +245,32 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     }
   })
 }
-// 跳转合规审批
-const otherRegisterApproveJump = async () => {
-  // const { code, data } = await otherRegisterApproveSecond({ registerId: props.registerId })
-  // if (code !== 200) return
-  //  detail.value = data ?? {}
-  detail.value = {
-    applyId: 206,
-    companyTypeName: '有经验处置机构',
-    registerId: 60,
-    score: 80
-  }
+const handleData = (val: any) => {
+  // Object.assign(form, defaultForm)
+  complianceInfo.value = val
+  getInfoData()
 }
-// 获取数据
+// 获取数据 type 0:审批失效设置 1:准入更新配置 2:拒绝原因和准入周期设置 3:合规评分卡配置 4:机构退出原因配置 5:机构类型标准 6:判定标签
 const getInfoData = async () => {
-  // const { code3, data3 } = await otherConfigList({ type: 3 })
-  // // if (code3 !== 200) return
-  // const temData = data3 || []
-  const temData = [
-    {
-      createName: '夏胜超',
-      createTime: '2021-11-25 19:39:22',
-      day: null,
-      id: 48,
-      json: '[{"scoreCriteria":"极好","scoreValue":15},{"scoreCriteria":"一般","scoreValue":10},{"scoreCriteria":"太一般","scoreValue":6}]',
-      name: '人不好',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 3,
-      userName: null
-    },
-    {
-      createName: '夏胜超',
-      createTime: '2021-12-29 16:21:19',
-      day: null,
-      id: 50,
-      json: '[{"scoreCriteria":"号","scoreValue":15},{"scoreCriteria":"一般","scoreValue":10},{"scoreCriteria":"调一版了","scoreValue":8}]',
-      name: '涨得帅',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 3,
-      userName: null
-    },
-    {
-      createName: '夏胜超',
-      createTime: '2021-12-29 16:21:56',
-      day: null,
-      id: 51,
-      json: '[{"scoreCriteria":"很多","scoreValue":15},{"scoreCriteria":"及格","scoreValue":10},{"scoreCriteria":"差一点","scoreValue":8}]',
-      name: '资料重组',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 3,
-      userName: null
-    },
-    {
-      createName: '夏胜超',
-      createTime: '2021-12-29 16:22:45',
-      day: null,
-      id: 52,
-      json: '[{"scoreCriteria":"大城市","scoreValue":15},{"scoreCriteria":"2-3线城市","scoreValue":10},{"scoreCriteria":"4-5线城市","scoreValue":8}]',
-      name: '地址选址',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 3,
-      userName: null
-    },
-    {
-      createName: '夏胜超',
-      createTime: '2021-12-29 16:23:31',
-      day: null,
-      id: 53,
-      json: '[{"scoreCriteria":"99+人","scoreValue":15},{"scoreCriteria":"30+人","scoreValue":10},{"scoreCriteria":"10+人","scoreValue":8}]',
-      name: '员工人数',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 3,
-      userName: null
-    },
-    {
-      createName: '夏胜超',
-      createTime: '2021-12-29 16:24:52',
-      day: null,
-      id: 54,
-      json: '[{"scoreCriteria":"1000万+","scoreValue":15},{"scoreCriteria":"500万+","scoreValue":10},{"scoreCriteria":"100万+","scoreValue":8}]',
-      name: '法人资产',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 3,
-      userName: null
-    },
-    {
-      createName: '夏胜超',
-      createTime: '2021-12-29 16:26:00',
-      day: null,
-      id: 55,
-      json: '[{"scoreCriteria":"写字楼","scoreValue":10},{"scoreCriteria":"厂楼","scoreValue":8},{"scoreCriteria":"居民楼","scoreValue":6}]',
-      name: '公司环境',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 3,
-      userName: null
-    }
-  ]
+  const data3 = await ApisCommon.findConfigList({ type: 3, orgCategoryId: complianceInfo.value.orgCategoryId })
+  if (data3.code !== 200) return
+  const temData = data3.data || []
   temData.forEach((item: any) => {
     item.json = JSON.parse(item.json)
     item.json = item.json.filter((child: any) => child.scoreValue)
     item.remark = ''
   })
   form.scoreList = JSON.parse(JSON.stringify(temData))
-  // const { code6, data6 } = await otherConfigList({ type: 6 })
-  // // if (code6 !== 200) return
-  // tagList.value = data6 || []
-  tagList.value = [
-    {
-      createName: null,
-      createTime: '2021-11-09 16:20:52',
-      day: null,
-      id: 26,
-      json: null,
-      name: '优秀资质机构',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 6,
-      userName: null
-    },
-    {
-      createName: null,
-      createTime: '2021-11-09 16:21:07',
-      day: null,
-      id: 27,
-      json: null,
-      name: '良好资质机构',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 6,
-      userName: null
-    },
-    {
-      createName: null,
-      createTime: '2021-11-09 16:21:14',
-      day: null,
-      id: 28,
-      json: null,
-      name: '一般姿势机构',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 6,
-      userName: null
-    },
-    {
-      createName: null,
-      createTime: '2021-11-09 16:21:57',
-      day: null,
-      id: 29,
-      json: null,
-      name: '劣质资质机构',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 6,
-      userName: null
-    },
-    {
-      createName: null,
-      createTime: '2021-11-09 16:26:44',
-      day: null,
-      id: 38,
-      json: null,
-      name: '删除标签222',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 6,
-      userName: null
-    }
-  ]
-  // const { code2, data2 } = await otherConfigList({ type: 2 })
-  // // if (code2 !== 200) return
-  // refuseReasonList.value = data2 || []
-  refuseReasonList.value = [
-    {
-      createName: null,
-      createTime: '2021-11-08 16:35:16',
-      day: 7,
-      id: 19,
-      json: null,
-      name: '资料不足',
-      score: null,
-      state: 1,
-      symbol: null,
-      type: 2,
-      userName: null
-    },
-    {
-      createName: null,
-      createTime: '2021-11-08 16:35:25',
-      day: 7,
-      id: 20,
-      json: null,
-      name: '资料不符合政策',
-      score: null,
-      state: 1,
-      symbol: null,
-      type: 2,
-      userName: null
-    },
-    {
-      createName: null,
-      createTime: '2021-11-08 16:35:36',
-      day: 120,
-      id: 21,
-      json: null,
-      name: '法人是老赖',
-      score: null,
-      state: 1,
-      symbol: null,
-      type: 2,
-      userName: null
-    },
-    {
-      createName: null,
-      createTime: '2021-11-09 16:07:06',
-      day: 1,
-      id: 22,
-      json: null,
-      name: '评分太低',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 2,
-      userName: null
-    },
-    {
-      createName: 'gaodongxu',
-      createTime: '2023-04-11 15:19:21',
-      day: 1111222,
-      id: 58,
-      json: null,
-      name: 'kakakak',
-      score: null,
-      state: 0,
-      symbol: null,
-      type: 2,
-      userName: null
-    }
-  ]
+  const data6 = await ApisCommon.findConfigList({ type: 6, orgCategoryId: complianceInfo.value.orgCategoryId })
+  if (data6.code !== 200) return
+  tagList.value = data6.data || []
+
+  const data2 = await ApisCommon.findConfigList({ type: 2, orgCategoryId: complianceInfo.value.orgCategoryId })
+  if (data2.code !== 200) return
+  refuseReasonList.value = data2.data || []
 }
-onMounted(() => {
-  getInfoData()
-  otherRegisterApproveJump()
+defineExpose({
+  handleData
 })
 </script>
 

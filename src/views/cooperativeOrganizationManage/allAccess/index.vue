@@ -63,7 +63,7 @@
               end-placeholder="结束时间"
             />
           </el-form-item>
-          <el-form-item label="准入状态" v-if="approveType === 'all' || approveType === '0'">
+          <el-form-item label="准入状态" v-if="approveType === 'all' || approveType === '4'">
             <el-select v-model="form.accessStatus" placeholder="请选择准入状态">
               <el-option
                 v-for="item in optionData.accessOptions"
@@ -115,7 +115,7 @@
         label="准入状态"
         prop="name"
         min-width="150"
-        v-if="approveType === 'all' || approveType === '0'"
+        v-if="approveType === 'all' || approveType === '4'"
       ></el-table-column>
       <el-table-column label="注册手机号" prop="phone" min-width="150"></el-table-column>
       <el-table-column label="注册人姓名" prop="username" min-width="150"></el-table-column>
@@ -159,7 +159,7 @@ const tabPaneData = ref([
     label: '全部'
   },
   {
-    name: '0',
+    name: '4',
     label: '审核中'
   },
   {
@@ -177,11 +177,6 @@ const tabPaneData = ref([
 ])
 const approvalProgressDialogRef = ref()
 const detailDrawerRef = ref()
-interface stateParams {
-  [key: string]: any
-  total: number
-  tableData: any[]
-}
 const optionData = reactive({
   accessOptions: [],
   userList: []
@@ -190,14 +185,14 @@ const queryParams = reactive({
   page: 1,
   pageSize: 10
 })
-const state = reactive<stateParams>({
+const state = reactive({
   total: 0,
   tableData: [],
   createTime: [],
   value8: [],
   value11: []
 })
-const form: any = reactive({
+const form = reactive({
   companyName: '',
   entrustStaffId: '',
   accessStatus: '',
@@ -209,21 +204,16 @@ const form: any = reactive({
 })
 const defaultForm = JSON.parse(JSON.stringify(form))
 const getTableData = async () => {
-  state.tableData = [
-    {
-      id: 22
-    }
-  ]
-  // const params = handleForm()
-  // const { code, data, total } = await Apis.registerAuditList({ ...params, ...queryParams })
-  // if (code !== 200) return
-  // state.tableData = data
-  // state.total = total
+  const params = handleForm()
+  const { code, data, total } = await Apis.registerAuditAllList({ ...params, ...queryParams })
+  if (code !== 200) return
+  state.tableData = data
+  state.total = total
 }
 const getOptionList = async () => {
-  // const { code, data } = await Apis.registerAuditUserList()
-  // if (code !== 200) return
-  // optionData.userList = data
+  const { code, data } = await Apis.registerAuditAllUserList()
+  if (code !== 200) return
+  optionData.userList = data
 }
 const handleForm = () => {
   const timeEnum = ['createTime', 'value8', 'value11']

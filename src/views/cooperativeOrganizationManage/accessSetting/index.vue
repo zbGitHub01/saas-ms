@@ -38,9 +38,9 @@ import four from './components/four/index.vue'
 import five from './components/five.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 const categoryId = ref('')
-const pageTabName = ref('one')
-const currentTabRef = ref()
 const categoryData = ref([])
+const currentTabRef = ref()
+const pageTabName = ref('one')
 const pageTabData = reactive([
   {
     label: '准入审批流和时效配置',

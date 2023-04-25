@@ -1,7 +1,9 @@
 import copy from './modules/copy'
+import tabVisible from './modules/tabVisible'
 
 const directivesList = {
-  copy
+  copy,
+  tabVisible
 }
 
 const directives = {
