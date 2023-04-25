@@ -31,7 +31,6 @@
     <div class="employee-wrap">
       <div class="title">
         员工列表
-<!--        <el-button class="add-btn" size="small" :icon="Plus" @click="editEmployee(null)"></el-button>-->
       </div>
       <el-scrollbar class="scrollbar">
         <div class="tag-list">
@@ -47,7 +46,7 @@
   <EditEmployeeDialog
     v-model:dialog-visible="employeeVisible"
     :employee-item="employeeItem"
-    :detp-item="currDeptNode"
+    :dept-item="currDeptNode"
     @change="fetchEmployeeList"
   />
 </template>
@@ -74,23 +73,21 @@ const deptVisible = ref(false)
 const employeeVisible = ref(false)
 let deptItem = null
 let employeeItem = null
+let currDeptNode = null
+
 const editDept = item => {
   deptItem = item
   deptVisible.value = true
 }
-const editEmployee = item => {
-  employeeItem = item
-  employeeVisible.value = true
-}
+
 const fetchDeptTree = async () => {
   const { code, data } = await Apis.findDeptTree()
   if (code === 200) {
     deptTree.value[0].children = data
-    console.log(deptTree.value)
   }
 }
 fetchDeptTree()
-let currDeptNode = null
+
 const fetchEmployeeList = async () => {
   const { code, data } = await Apis.findDeptEmployeeList({ deptId: currDeptNode.id })
   if (code === 200) {
@@ -101,6 +98,11 @@ const nodeClick = node => {
   currDeptNode = node
   fetchEmployeeList()
 }
+const editEmployee = item => {
+  console.log(item, '---item', currDeptNode)
+  employeeItem = item
+  employeeVisible.value = true
+}
 </script>
 
 <style lang="scss" scoped>
@@ -110,6 +112,8 @@ const nodeClick = node => {
   height: calc(100vh - 214px);
 }
 .department-wrap {
+  display: flex;
+  flex-direction: column;
   width: 260px;
   height: 100%;
 }

@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="title"
+    :title="title + '员工'"
     :model-value="props.dialogVisible"
     width="450px"
     append-to-body
@@ -33,6 +33,7 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
+import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/systemSetting'
 
 const props = defineProps({
@@ -65,7 +66,7 @@ const rules = reactive({
   employeeIds: [{ required: true, message: '请选择员工', trigger: 'change' }],
   positionId: [{ required: true, message: '请选择所属部门', trigger: 'change' }]
 })
-const title = computed(() => (props.employeeItem ? '编辑员工' : '添加员工'))
+const title = computed(() => (props.employeeItem ? '编辑' : '添加'))
 const employeeList = ref([])
 
 const handleOpen = () => {
@@ -74,7 +75,6 @@ const handleOpen = () => {
   } else {
     fetchEmployeeList()
   }
-  console.log(props, '---props')
   if (props.positionItem) {
     form.positionId = props.positionItem.id
   }
@@ -90,15 +90,18 @@ const fetchEmployeeList = async () => {
   }
 }
 const onSubmit = async () => {
-  console.log(form)
   const isValid = await formRef.value.validate().catch(() => {})
   if (!isValid) return
   const postData = {
     ...form
   }
+  loading.value = true
   const { code } = await Apis.editPositionEmployee(postData)
+  loading.value = false
   if (code === 200) {
     emit('change')
+    ElMessage.success(title.value + '成功')
+    beforeClose()
   }
 }
 </script>

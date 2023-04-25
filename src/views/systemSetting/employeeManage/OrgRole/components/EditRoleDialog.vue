@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="title"
+    :title="title + '机构角色'"
     :model-value="props.dialogVisible"
     width="450px"
     append-to-body
@@ -31,6 +31,8 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
+import { ElMessage } from 'element-plus'
+import { useCommonStore } from '@/store/modules/common'
 import Apis from '@/api/modules/systemSetting'
 
 const props = defineProps({
@@ -50,6 +52,7 @@ const cascaderProps = {
   checkStrictly: true,
   multiple: true
 }
+const commonStore = useCommonStore()
 const formRef = ref()
 const loading = ref(false)
 const form = reactive({
@@ -61,35 +64,40 @@ const rules = reactive({
   name: [{ required: true, message: '请输入职位名称', trigger: 'blur' }],
   deptIds: [{ required: true, message: '请选择授权部门', trigger: 'change' }]
 })
-const title = computed(() => (props.positionItem ? '编辑机构角色' : '添加机构角色'))
+const title = computed(() => (props.positionItem ? '编辑' : '添加'))
 
-const deptTree = ref([])
-const fetchDeptTree = async () => {
-  // const { code, data } = await Apis.findDeptTree()
-  // if (code === 200) {
-  //   deptTree.value = data
-  // }
-
+const deptTree = computed(() => commonStore.deptTree)
+const handleOpen = () => {
+  if (props.positionItem) {
+    form.name = props.positionItem.name
+    form.remark = props.positionItem.remark
+    fetchRoleDeptList()
+  }
 }
-fetchDeptTree()
-const handleOpen = () => {}
 const beforeClose = () => {
   formRef.value.resetFields()
   emit('update:dialogVisible', false)
 }
+const fetchRoleDeptList = async () => {
+  const { code, data } = await Apis.findRoleDeptList({ roleId: props.positionItem.id })
+  if (code === 200) {
+    form.deptIds = data.map(item => item.id)
+  }
+}
 const onSubmit = async () => {
   const isValid = await formRef.value.validate().catch(() => {})
   if (!isValid) return
-  loading.value = true
   const postData = { ...form }
   postData.deptIds = form.deptIds.map(item => item[item.length - 1])
   if (props.positionItem) {
     postData.id = props.positionItem.id
   }
+  loading.value = true
   const { code } = await Apis.editRole(postData)
   loading.value = false
   if (code === 200) {
     emit('change')
+    ElMessage.success(title.value + '成功')
     beforeClose()
   }
 }

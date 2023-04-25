@@ -69,7 +69,10 @@ const upload = ref<UploadInstance>()
 const uploadAction = computed(() => {
   // const baseUrl = (import.meta.env.VITE_BASE_URL || '').replace(/\/+$/, '')
   // return `${baseUrl}${((props.action || '') + '/').replace(/\/{2,}/g, '/')}`
-  return props.actionSub
+  const baseUrl = import.meta.env.VITE_BASE_URL
+  const suffix = props.actionSub || '/'
+  const url = (baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`) + (suffix.startsWith('/') ? suffix.slice(1) : suffix)
+  return url
 })
 const allowedTypes = computed(() => {
   return props.types.map(type => imageFormatMap[type])

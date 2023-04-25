@@ -2,11 +2,11 @@
   <div>
     <div class="banner-wrap">
       <div class="info-container">
-        <h1>Hi，刘文涛</h1>
-        <p class="message">问候语问候语问候语问候语问候语问候语！</p>
+        <h1>Hi，{{ userInfo.username }}</h1>
+        <p class="message">今天又是充满希望的一天！</p>
         <p class="user-id">
           账号ID：
-          <strong>ZW9527</strong>
+          <strong>{{ userInfo.id }}</strong>
         </p>
       </div>
       <img class="banner" :src="bannerUrl" alt="banner" />
@@ -75,13 +75,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { Plus, CircleCheckFilled, DeleteFilled } from '@element-plus/icons-vue'
-// import { useRoute } from 'vue-router'
+import { ref, computed } from 'vue'
+import { useGlobalStore } from '@/store'
+import { Plus } from '@element-plus/icons-vue'
 import bannerUrl from '@/assets/images/home-img.png'
 import tool1Url from '@/assets/images/tool1.png'
 import tool2Url from '@/assets/images/tool2.png'
 
+const globalStore = useGlobalStore()
+const userInfo = computed(() => globalStore.userInfo)
 const newDate = ref(new Date())
 const notIfMessage = ref(0)
 const todoActive = ref(0)

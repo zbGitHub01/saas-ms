@@ -1,4 +1,3 @@
-import http from '../index'
 import { generateApiFnc } from '@/api/helper/apiFncs'
 
 const apiConfig = {
@@ -13,7 +12,7 @@ const apiConfig = {
   addDept: `POST /upms/client/employee/dept/add`,
   editDept: `POST /upms/client/employee/dept/edit`,
   findDeptEmployeeList: `GET /upms/client/employee/dept/employee/list`,
-  updateDeptEmployee: `POST /upms/client/employee/dept/employee/updateDept`,
+  updateDeptEmployee: `GET /upms/client/employee/dept/employee/updateDept`,
   // 机构职位
   findPositionList: `GET /upms/client/employee/position/list`,
   addPosition: `POST /upms/client/employee/position/add`,
@@ -24,7 +23,7 @@ const apiConfig = {
   editPositionEmployee: `POST /upms/client/employee/position/employee/updatePosition`,
   // 机构角色
   findRoleList: `GET /upms/client/employee/role/list`,
-  editRole: `POST /upms/client/employee/role`,
+  editRole: `POST /upms/client/employee/role/save`,
   findRoleDeptList: `GET /upms/client/employee/role/getDeptList`,
   removeDept: `GET /upms/client/employee/role`,
   findRoleEmployeeList: `GET /upms/client/employee/role/employee/list`,

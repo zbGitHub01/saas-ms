@@ -44,7 +44,7 @@
         <div class="tag-list">
           <el-tag v-for="(item, index) in employeeList" :key="index" class="tag" size="large">
             <span>{{ `${item.name}(${item.phone})` }}</span>
-            <el-icon class="edit-icon"><Edit /></el-icon>
+            <el-icon class="edit-icon" @click="editEmployee(item)"><Edit /></el-icon>
           </el-tag>
         </div>
       </el-scrollbar>
@@ -56,12 +56,12 @@
     :position-list="positionList"
     :employee-item="employeeItem"
     :position-item="currPositionNode"
-    @change="fetchPositionList"
+    @change="fetchEmployeeList"
   />
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { Plus, Edit, Delete, Search } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import Apis from '@/api/modules/systemSetting'
@@ -132,6 +132,8 @@ const nodeClick = node => {
   height: calc(100vh - 214px);
 }
 .department-wrap {
+  display: flex;
+  flex-direction: column;
   width: 260px;
   height: 100%;
 }

@@ -8,6 +8,8 @@ import router from '@/router'
 export const useGlobalStore = defineStore('globalStore', {
   state: () => ({
     userInfo: {},
+    tenantInfo: {},
+    tenantList: [],
     token: '',
     refreshToken: '',
     tenantId: '',
@@ -41,10 +43,19 @@ export const useGlobalStore = defineStore('globalStore', {
         this.userInfo = data
       }
     },
+    async fetchTenantList() {
+      const { code, data } = await Apis.findTenantList()
+      if (code === 200 && data.length) {
+        this.tenantList = data
+        return data
+      }
+      return []
+    },
     async chooseTenant(tenantId) {
       const { code, data } = await chooseTenant(tenantId)
       if (code === 200) {
         this.tenantId = data.tenantId
+        this.tenantInfo = data
         return data
       } else {
         return null

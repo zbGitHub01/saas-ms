@@ -61,6 +61,8 @@ const nodeClick = node => {
   }
 }
 .flex-block {
+  display: flex;
+  flex-direction: column;
   width: 260px;
   height: 100%;
 }

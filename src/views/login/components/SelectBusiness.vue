@@ -8,20 +8,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import Apis from '@/api/modules/user'
 import { useGlobalStore } from '@/store'
 
 const emit = defineEmits(['setPassword'])
 const router = useRouter()
 const globalStore = useGlobalStore()
 const tenantId = ref(null)
-const tenantList = ref([])
+const tenantList = computed(() => globalStore.tenantList)
 const fetchTenantList = async () => {
-  const { code, data } = await Apis.findTenantList()
-  if (code === 200 && data.length) {
-    tenantList.value = data
+  const data = await globalStore.fetchTenantList()
+  if (data.length) {
     tenantId.value = data[0].tenantId
   }
 }
