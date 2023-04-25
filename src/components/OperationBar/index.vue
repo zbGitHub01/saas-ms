@@ -1,7 +1,7 @@
 <template>
   <div class="operation-bar">
     <div class="operation-bar-left">
-      <el-dropdown class="dropdown" trigger="click" @command="handleCommand">
+      <el-dropdown v-if="active" class="dropdown" trigger="click" @command="handleCommand">
         <span class="el-dropdown-link">
           {{ dropdownList[props.active - 1] }}
           <el-icon><ArrowDown /></el-icon>
@@ -28,13 +28,12 @@ import { ArrowDown } from '@element-plus/icons-vue'
 const props = defineProps({
   active: {
     type: Number,
-    default: 1
+    default: 0
   }
 })
 const emit = defineEmits(['update:active'])
 const dropdownList = ref(['对选中项操作', '对查询结果操作'])
 const handleCommand = val => {
-  console.log(val, '----val')
   emit('update:active', val)
 }
 </script>

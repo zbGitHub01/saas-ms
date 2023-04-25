@@ -27,7 +27,7 @@
               <div class="custom-tree-node">
                 <span>{{ data.name }}</span>
                 <span class="operation">
-                  <el-icon @click="editRole(data)"><Edit /></el-icon>
+                  <el-icon @click.stop="editRole(data)"><Edit /></el-icon>
                   <el-icon><Delete /></el-icon>
                 </span>
               </div>
@@ -53,7 +53,7 @@
             <div class="custom-tree-node">
               <span>{{ data.name }}</span>
               <span class="operation">
-                <el-icon @click="delDept(data)"><Delete /></el-icon>
+                <el-icon @click.stop="delDept(data)"><Delete /></el-icon>
               </span>
             </div>
           </template>
@@ -76,7 +76,7 @@
       </el-scrollbar>
     </div>
   </div>
-  <EditRoleDialog v-model:dialog-visible="roleVisible" :item="roleItem" @change="fetchRoleList" />
+  <EditRoleDialog v-model:dialog-visible="roleVisible" :position-item="roleItem" @change="fetchRoleList" />
   <AddEmployeeDialog
     v-model:dialog-visible="employeeVisible"
     :dept-item="currDeptNode"
@@ -116,7 +116,7 @@ const roleList = ref([])
 const roleDeptList = ref([])
 const employeeList = ref([])
 const fetchRoleList = async () => {
-  const { code, data } = await Apis.findRoleList({ name: '' })
+  const { code, data } = await Apis.findRoleList()
   if (code === 200) {
     roleList.value = data
   }
@@ -128,7 +128,6 @@ const fetchRoleDeptList = async () => {
   const { code, data } = await Apis.findRoleDeptList({ roleId: currRoleNode.id })
   if (code === 200) {
     roleDeptList.value = data
-    // roleDeptList.value = [{ id: 1, name: '商务中心' }]
   }
 }
 const checkRole = node => {
@@ -193,6 +192,8 @@ const delEmployee = async item => {
   }
 }
 .column-wrap {
+  display: flex;
+  flex-direction: column;
   width: 260px;
   height: 100%;
 }

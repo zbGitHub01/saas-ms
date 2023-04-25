@@ -83,7 +83,6 @@ const formatDeptData = () => {
     })
   }
   setData(data)
-  console.log(data, '---data')
   return data
 }
 const handleOpen = () => {
@@ -92,6 +91,8 @@ const handleOpen = () => {
     form.name = props.deptItem.name
     const path = getPathByKey(props.deptItem.parentId, props.deptTree)
     form.parentId = path.map(item => item.id)
+  } else {
+    _deptTree.value = props.deptTree
   }
 }
 const beforeClose = () => {

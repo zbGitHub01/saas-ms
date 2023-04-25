@@ -8,7 +8,17 @@
       <!--      <SearchMenu />-->
       <AssemblySize />
       <Fullscreen />
-      <span class="username">{{ userInfo?.username }}</span>
+      <el-dropdown trigger="click">
+        <span class="username">
+          hi，{{ userInfo?.username }}-{{ tenantInfo.tenantName }}
+          <el-icon class="el-icon--right"><arrow-down /></el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-item v-for="item in tenantList" :key="item.tenantId" @click="chooseTenant(item)">
+            {{ item.name }}
+          </el-dropdown-item>
+        </template>
+      </el-dropdown>
       <Avatar />
     </div>
   </div>
@@ -23,8 +33,15 @@ import AssemblySize from './components/AssemblySize.vue'
 import Avatar from './components/Avatar.vue'
 import { useGlobalStore } from '@/store/index'
 
-const GlobalStore = useGlobalStore()
-const userInfo = computed(() => GlobalStore.userInfo)
+const globalStore = useGlobalStore()
+const userInfo = computed(() => globalStore.userInfo)
+const tenantInfo = computed(() => globalStore.tenantInfo)
+const tenantList = computed(() => globalStore.tenantList)
+
+const chooseTenant = async item => {
+  // if (item.tenantId === tenantInfo.value.tenantId) return
+  await globalStore.chooseTenant(item.tenantId)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -45,5 +62,6 @@ const userInfo = computed(() => GlobalStore.userInfo)
   margin: 0 20px 0 0;
   font-size: 15px;
   color: rgb(0 0 0 / 75%);
+  cursor: pointer;
 }
 </style>
