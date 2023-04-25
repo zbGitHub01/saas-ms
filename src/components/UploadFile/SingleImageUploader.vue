@@ -7,7 +7,10 @@
     :before-upload="beforeUpload"
     :on-remove="handleRemove"
     :on-exceed="handleOnExceed"
-    :style="{'height':height, 'width':width}"
+    :style="{ height: height, width: width }"
+    :headers="headers"
+    :show-file-list="false"
+    :data="data"
   >
     <div class="upload-previewer">
       <div
@@ -17,11 +20,11 @@
           backgroundImage: `url('${modelValue}')`
         }"
       >
-        <el-icon @click.stop="clearFiles" class="image-delete-icon">
+        <el-icon @click.stop="clearFiles" class="image-delete-icon" :style="{ height: height, width: width }">
           <Delete />
         </el-icon>
       </div>
-      <el-icon v-else class="image-uploader-icon" :style="{'height':height, 'width':width}"><Plus /></el-icon>
+      <el-icon v-else class="image-uploader-icon" :style="{ height: height, width: width }"><Plus /></el-icon>
     </div>
   </el-upload>
 </template>
@@ -30,9 +33,15 @@
 import type { UploadProps, UploadInstance, UploadRawFile } from 'element-plus'
 import { genFileId, ElMessage } from 'element-plus'
 import { computed, ref } from 'vue'
+import { useGlobalStore } from '@/store'
 
 import { Plus } from '@element-plus/icons-vue'
-
+const globalState = useGlobalStore()
+const headers = computed(() => {
+  return {
+    Authorization: globalState.token
+  }
+})
 type ImageFormat = 'GIF' | 'JPEG' | 'PNG'
 interface Props {
   modelValue?: string | null
@@ -40,6 +49,8 @@ interface Props {
   types?: Array<ImageFormat>
   width?: String
   height?: String
+  actionSub?: string
+  data?: Object
 }
 
 const imageFormatMap: Record<ImageFormat, string> = {
@@ -55,10 +66,13 @@ const props = withDefaults(defineProps<Props>(), {
 const emits = defineEmits(['update:modelValue'])
 
 const upload = ref<UploadInstance>()
-
 const uploadAction = computed(() => {
   // const baseUrl = (import.meta.env.VITE_BASE_URL || '').replace(/\/+$/, '')
   // return `${baseUrl}${((props.action || '') + '/').replace(/\/{2,}/g, '/')}`
+  const baseUrl = import.meta.env.VITE_BASE_URL
+  const suffix = props.actionSub || '/'
+  const url = (baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`) + (suffix.startsWith('/') ? suffix.slice(1) : suffix)
+  return url
 })
 const allowedTypes = computed(() => {
   return props.types.map(type => imageFormatMap[type])
@@ -69,7 +83,7 @@ const allowedTypes = computed(() => {
  * @param response
  */
 const handleSuccess: UploadProps['onSuccess'] = response => {
-  emits('update:modelValue', response.data.fileUrl)
+  emits('update:modelValue', response.data.url) //展示需带前缀
 }
 
 /**
@@ -78,7 +92,6 @@ const handleSuccess: UploadProps['onSuccess'] = response => {
 const handleRemove: UploadProps['onRemove'] = () => {
   emits('update:modelValue', '')
 }
-
 /**
  * 处理超出限制
  * @param files

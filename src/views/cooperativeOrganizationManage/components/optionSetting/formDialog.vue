@@ -55,6 +55,7 @@ const form = reactive({
   name: null,
   isOpen: 0
 })
+const defaultForm = JSON.parse(JSON.stringify(form))
 const rules = reactive<FormRules>({
   name: [{ required: true, message: '请输入内容', trigger: 'blur' }]
 })
@@ -66,7 +67,7 @@ const open = (stateData: any, type: string, row?: any) => {
   detailData.pageType = type
   detailData.formType = stateData.type
   dialogTitle.value = type === 'add' ? `添加${name}` : `编辑${name}`
-  row?.id && Object.assign(form, row)
+  row?.id ? Object.assign(form, row) : Object.assign(form, defaultForm)
   dialogVisible.value = true
 }
 const doSave = () => {

@@ -12,74 +12,97 @@
         <div style="height: 100%">
           <div style="height: calc(100% - 50px)">
             <h4>准入报告审批</h4>
+            <div
+              class="approval-type"
+              v-if="props.approveType !== '0' && props.approveType !== '4'"
+            >
+              <img
+                :src="`/src/assets/images/approval-${Number(props.approveType)}.png`"
+                alt="approveType"
+              />
+            </div>
             <div class="flx-align-center pt10 pb10">
               <div class="mr40">
                 <span class="color-999">机构名：</span>
-                {{ state.detail.orgName }}
+                {{ detailData.companyName }}
               </div>
               <div class="mr40">
                 <span class="color-999">注册人姓名：</span>
-                {{ state.detail.userName }}
+                {{ detailData.userName }}
               </div>
               <div class="mr40">
                 <span class="color-999">注册手机号：</span>
-                {{ state.detail.phone }}
+                {{ detailData.phone }}
               </div>
             </div>
             <div style="height: calc(100% - 66px)">
-              <access-data :scrollTop="260" accessId="compliance-personal-info"></access-data>
+              <access-data
+                :scrollTop="260"
+                accessId="compliance-personal-info"
+                :accessDetail="detailData"
+                ref="accessDataRef"
+              ></access-data>
             </div>
           </div>
-          <div class="operate-btn">
+          <div class="operate-btn" v-if="props.approveType === '0'">
             <el-button @click="onApproval(1)" type="danger" plain>审批拒绝</el-button>
             <el-button @click="onApproval(0)" type="primary" plain>审批通过</el-button>
           </div>
         </div>
       </template>
     </el-drawer>
-    <approve-operate ref="approveOperateRef"></approve-operate>
+    <approve-operate ref="approveOperateRef" @get-List="getList" @handle-close="handleClose"></approve-operate>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, nextTick } from 'vue'
 import accessData from './../../components/accessData/index.vue'
 import approveOperate from './approveOperate.vue'
+import Apis from '@/api/modules/cooperativeOrganization'
+const emits = defineEmits(['getTableData'])
 const props = defineProps<{
   approveType: string
 }>()
 const drawer = ref(false)
 const direction = ref('rtl')
+const logId = ref()
+const detailData = ref({})
+const accessDataRef = ref()
 const approveOperateRef = ref()
 const hitList = ref([])
-interface stateParams {
-  [key: string]: any
-  detail: any
-}
-const state = reactive<stateParams>({
-  detail: {},
-  value4: []
-})
 const handleClose = () => {
   drawer.value = false
 }
 const onApproval = (type: number) => {
   const temData = {
-    pageHandlerResult: state.detail.handlerResult,
-    registerId: state.detail.registerId
+    pageHandlerResult: detailData.value.handlerResult,
+    registerId: detailData.value.registerId,
+    logId: detailData.value.logId
   }
   approveOperateRef.value.open(type, temData, hitList.value)
 }
-const open = (detail: any) => {
-  state.detail = {
-    approveType: 1
-  }
+const open = (id: any) => {
+  logId.value = id
   drawer.value = true
-  // state.detail = detail
-  // fetchOrgBlacklistHit(detail)
+  nextTick(() => {
+    registerDetail()
+    fetchOrgBlacklistHit(id)
+  })
 }
-const fetchOrgBlacklistHit = async (detail: any) => {
-  // const { code, data } = await findRegisterOrgBlacklistHit({ registerId: detail.registerId })
+const getList = () => {
+  emits('getTableData')
+}
+const registerDetail = async () => {
+  const { code, data } = await Apis.registerAuditDetail({
+    logId: logId.value
+  })
+  if (code !== 200) return
+  detailData.value = data
+  accessDataRef.value.handleData(detailData.value, hitList.value)
+}
+const fetchOrgBlacklistHit = (id: number) => {
+  // const { code, data } = Apis.findRegisterOrgBlacklistHit({ registerId: id })
   // if (code !== 200) return
   // hitList.value = data
 }
@@ -105,6 +128,17 @@ defineExpose({
   .operate-btn {
     position: absolute;
     bottom: 20px;
+  }
+  .approval-type {
+    position: absolute;
+    width: 99px;
+    height: 80px;
+    left: 80px;
+    top: 16px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 </style>

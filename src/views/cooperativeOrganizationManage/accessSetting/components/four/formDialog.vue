@@ -39,12 +39,13 @@ const form = reactive({
   name: '',
   optionId: ''
 })
+const defaultForm = JSON.parse(JSON.stringify(form))
 const rules = reactive<FormRules>({
   name: [{ required: true, message: '请输入标签名称', trigger: 'blur' }]
 })
 const open = (categoryId: string, item?: any) => {
   dialogTitle.value = item?.id ? '编辑标签' : '添加标签'
-  item?.id && Object.assign(form, item)
+  item?.id ? Object.assign(form, item) : Object.assign(form, defaultForm)
   form.optionId = categoryId
   dialogVisible.value = true
 }

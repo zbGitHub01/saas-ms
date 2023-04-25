@@ -38,11 +38,12 @@ const form = reactive({
   name: '',
   optionId: ''
 })
+const defaultForm = JSON.parse(JSON.stringify(form))
 const rules = reactive<FormRules>({
   name: [{ required: true, message: '请输入退出原因', trigger: 'blur' }]
 })
 const open = (categoryId: string, item?: any) => {
-  item?.id && Object.assign(form, item)
+  item?.id ? Object.assign(form, item) : Object.assign(form, defaultForm)
   form.optionId = categoryId
   dialogVisible.value = true
 }

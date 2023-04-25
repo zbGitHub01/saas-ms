@@ -20,25 +20,35 @@
           <div class="flx-align-center pt10 pb10">
             <div class="mr40">
               <span class="color-999">机构名：</span>
-              {{ state.detail.orgName }}
+              {{ detailData.companyName }}
             </div>
             <div class="mr40">
               <span class="color-999">注册人姓名：</span>
-              {{ state.detail.userName }}
+              {{ detailData.userName }}
             </div>
             <div class="mr40">
               <span class="color-999">注册手机号：</span>
-              {{ state.detail.phone }}
+              {{ detailData.phone }}
             </div>
           </div>
           <div style="height: calc(100% - 66px)">
-            <access-data :scrollTop="260" accessId="compliance-personal-info"></access-data>
+            <access-data
+              :scrollTop="260"
+              accessId="compliance-personal-info"
+              :accessDetail="detailData"
+              ref="accessDataRef"
+            ></access-data>
           </div>
         </div>
         <div class="pl30 pr10">
           <h4>合规判定</h4>
           <div style="height: calc(100% - 20px)">
-            <compliance-info v-model:isVisible="drawer" v-if="props.approveType === '0'"></compliance-info>
+            <compliance-info
+              v-if="props.approveType === '0'"
+              @get-List="getList"
+              ref="complianceInfoRef"
+              @handle-close="handleClose"
+            ></compliance-info>
             <compliance-result v-else></compliance-result>
           </div>
         </div>
@@ -48,107 +58,60 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, nextTick } from 'vue'
 import accessData from './../../components/accessData/index.vue'
 import complianceInfo from './../../components/complianceDeter/info.vue'
 import complianceResult from './../../components/complianceDeter/result.vue'
-// import { getUserMenuPermission, addOrUpdateUserMenuPermission } from '@/api/modules/user'
+import Apis from '@/api/modules/cooperativeOrganization'
+const emits = defineEmits(['getTableData'])
 const props = defineProps<{
   approveType: string
 }>()
 const drawer = ref(false)
 const direction = ref('rtl')
-interface User {
-  id: number
-  date: string
-  name: string
-  address: string
-  hasChildren?: boolean
-  children?: User[]
-}
-interface stateParams {
-  [key: string]: any
-  detail: any
-  tableData: User[]
-}
-const state = reactive<stateParams>({
-  detail: {},
-  tableData: [],
-  value4: []
-})
+const logId = ref()
+const detailData = ref({})
+const complianceData = ref({})
+const accessDataRef = ref()
+const complianceInfoRef = ref()
+const hitList = ref([])
 const handleClose = () => {
   drawer.value = false
 }
-const open = (detail: any) => {
-  state.detail = {
-    approveType: 1
-  }
+const open = (id: any) => {
+  logId.value = id
   drawer.value = true
-  // state.detail = detail
+  nextTick(() => {
+    registerDetail()
 
-  getUserList()
+    fetchOrgBlacklistHit(id)
+  })
 }
-
-const getUserList = async () => {
-  // const { code, data } = await getUserMenuPermission({
-  //   globalUserUuid: state.detail.globalUserUuid,
-  //   roleId: state.detail.roleId
-  // })
+const getList = () => {
+  emits('getTableData')
+}
+const registerDetail = async () => {
+  const { code, data } = await Apis.registerAuditComplianceDetail({
+    logId: logId.value
+  })
+  if (code !== 200) return
+  detailData.value = data
+  accessDataRef.value.handleData(detailData.value, hitList.value)
+  approveJumpDetail(detailData.value.orgCategoryId)
+}
+const approveJumpDetail = async orgCategoryId => {
+  const { code, data } = await Apis.registerAuditComplianceApproveJump({
+    logId: logId.value
+  })
+  if (code !== 200) return
+  complianceData.value = { ...data, orgCategoryId }
+  complianceInfoRef.value.handleData(complianceData.value)
+}
+const fetchOrgBlacklistHit = (id: number) => {
+  // const { code, data } = Apis.findRegisterOrgBlacklistHit({ registerId: id })
   // if (code !== 200) return
-  state.tableData = [
-    {
-      id: 1,
-      date: '2016-05-02',
-      name: 'wangxiaohu',
-      address: 'No. 189, Grove St, Los Angeles'
-    },
-    {
-      id: 2,
-      date: '2016-05-04',
-      name: 'wangxiaohu',
-      address: 'No. 189, Grove St, Los Angeles'
-    },
-    {
-      id: 3,
-      date: '2016-05-01',
-      name: 'wangxiaohu',
-      address: 'No. 189, Grove St, Los Angeles',
-      children: [
-        {
-          id: 31,
-          date: '2016-05-01',
-          name: 'wangxiaohu',
-          address: 'No. 189, Grove St, Los Angeles'
-        },
-        {
-          id: 32,
-          date: '2016-05-01',
-          name: 'wangxiaohu',
-          address: 'No. 189, Grove St, Los Angeles'
-        }
-      ]
-    },
-    {
-      id: 4,
-      date: '2016-05-03',
-      name: 'wangxiaohu',
-      address: 'No. 189, Grove St, Los Angeles'
-    }
-  ]
+  // hitList.value = data
 }
-// const basicInfoDialogRef = ref()
-// const onBasicInfo = () => {
-//   basicInfoDialogRef.value.open()
-// }
-// const historyEditionRef = ref()
-// const onHistoryEdition = () => {
-//   const data = {}
-//   historyEditionRef.value.open(data)
-// }
-const imgUrl = computed(() => {
-  const type = Number(state.detail.approveType)
-  return `@/assets/images/approval-${type}.png`
-})
 defineExpose({
   open
 })

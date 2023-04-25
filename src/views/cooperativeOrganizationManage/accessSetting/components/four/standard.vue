@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { ElMessage } from 'element-plus'
 const props = defineProps<{
@@ -122,7 +122,7 @@ defineExpose({
     margin-top: 20px;
   }
 }
-:v-deep(.el-input-number .el-input__inner) {
+:deep(.el-input-number .el-input__inner) {
   text-align: left;
 }
 </style>

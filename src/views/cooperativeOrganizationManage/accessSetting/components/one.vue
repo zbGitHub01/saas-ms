@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, nextTick, onMounted } from 'vue'
+import { ref } from 'vue'
 import defaultAvatar from '@/assets/images/ava.png'
 import orgAvatar from '@/assets/images/logo1.png'
 import approverDialog from './approverDialog.vue'
@@ -78,7 +78,13 @@ const props = defineProps<{
   categoryId: string
 }>()
 const templateData = ref([])
-const selectData = reactive({})
+const selectData = ref({
+  type: '',
+  day: '',
+  nodeName: '',
+  step: '',
+  id: ''
+})
 const approverDialogRef = ref()
 // 添加重选审批人
 const onSelect = (type: string, item?: any) => {
@@ -194,7 +200,6 @@ defineExpose({
     .item-end {
       margin-top: 10px;
     }
-
     .select_warp {
       display: flex;
       .btn {
@@ -214,7 +219,6 @@ defineExpose({
         color: #d9001b;
       }
     }
-
     .img-warp {
       .img {
         width: 36px;

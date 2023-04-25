@@ -19,21 +19,19 @@ const apiConfig = {
 
   // 准入审批
   registerAuditList: `POST /upms/client/register/audit/list`, // 审批列表
-  registerAuditUserList: `GET /upms/client/register/audit/userList`, // 下拉注册人名称列表
   registerAuditApproveProgress: `GET upms/client/register/audit/approve/progress`, // 审批进程
   registerAuditDetail: `GET /upms/client/register/audit/detail`, // 准入信息
   registerAuditApprove: `POST /upms/client/register/audit/approve`, // 审批
 
   // 合规审批
   registerAuditComplianceList: `POST /upms/client/register/audit/compliance/list`, // 审批列表
-  registerAuditComplianceUserList: `GET /upms/client/register/audit/compliance/userList`, // 下拉注册人名称列表
   registerAuditComplianceApproveProgress: `GET upms/client/register/audit/compliance/approve/progress`, // 审批进程
   registerAuditComplianceDetail: `GET /upms/client/register/audit/compliance/detail`, // 准入信息
-  registerAuditComplianceApproveSecond: `POST /upms/client/register/audit/compliance/approve/second`, // 第二个审批
+  registerAuditComplianceApproveJump: `GET /upms/client/register/audit/compliance/approve/jump`, // 跳转合规审批
+  registerAuditComplianceApprove: `POST /upms/client/register/audit/compliance/approve`, // 合规审批
 
   // 所有准入审批工单
   registerAuditAllList: `POST /upms/client/register/audit/all/list`, // 审批列表
-  registerAuditAllUserList: `GET /upms/client/register/audit/all/userList`, // 下拉注册人名称列表
   registerAuditAllApproveProgress: `GET upms/client/register/audit/all/approve/progress`, // 审批进程
   registerAuditAllDetail: `GET /upms/client/register/audit/all/detail`, // 准入信息
 
