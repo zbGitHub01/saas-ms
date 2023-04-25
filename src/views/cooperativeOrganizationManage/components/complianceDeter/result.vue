@@ -2,7 +2,7 @@
   <div style="height: 100%">
     <div class="mt12">
       <span>处置经验判断：</span>
-      <span style="font-weight: bold">{{ detail.companyTypeName || '新成立处置机构' }}</span>
+      <span style="font-weight: bold">{{ complianceInfo.companyTypeName }}</span>
     </div>
     <div class="form-wrap" v-if="approveLogData.score > 0">
       <div class="form-list">
@@ -85,11 +85,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { QuestionFilled } from '@element-plus/icons-vue'
-// import { otherRegisterApproveJump, otherRegisterApproveLog } from '@/api/orgmanage'
-const detail = ref({})
+import Apis from '@/api/modules/cooperativeOrganization'
 const approveLogData = ref({})
+const emits = defineEmits(['handleClose'])
+const props = defineProps({
+  isBlackListHit: {
+    type: Boolean
+  }
+})
+const complianceInfo = ref({})
 const formHead = [
   {
     name: '打分项',
@@ -109,45 +115,18 @@ const formHead = [
   }
 ]
 // 合规审批详情
-const otherRegisterApproveLog = (applyId: number) => {
-  // const { code, data } = await otherRegisterApproveSecond({ applyId })
-  // if (code !== 200) return
-  //  approveLogData.value = data ?? {}
-  //  approveLogData.value.approveJson = JSON.parse(data.approveJson)
-  const temData = {
-    accessType: 0,
-    applyId: 206,
-    approveJson:
-      '[{"id":48,"json":[{"scoreCriteria":"极好","scoreValue":15},{"scoreCriteria":"一般","scoreValue":10},{"scoreCriteria":"太一般","scoreValue":8}],"name":"人不好","score":"10","remark":"的范德萨发"},{"id":50,"json":[{"scoreCriteria":"号","scoreValue":15},{"scoreCriteria":"一般","scoreValue":10},{"scoreCriteria":"调一版了","scoreValue":8}],"name":"涨得帅","score":"10","remark":"士大夫撒"},{"id":51,"json":[{"scoreCriteria":"很多","scoreValue":15},{"scoreCriteria":"及格","scoreValue":10},{"scoreCriteria":"差一点","scoreValue":8}],"name":"资料重组","score":"10","remark":"啥地方"},{"id":52,"json":[{"scoreCriteria":"大城市","scoreValue":15},{"scoreCriteria":"2-3线城市","scoreValue":10},{"scoreCriteria":"4-5线城市","scoreValue":8}],"name":"地址选址","score":"10","remark":"是否"},{"id":53,"json":[{"scoreCriteria":"99+人","scoreValue":15},{"scoreCriteria":"30+人","scoreValue":10},{"scoreCriteria":"10+人","scoreValue":8}],"name":"员工人数","score":"10","remark":"沙发"},{"id":54,"json":[{"scoreCriteria":"1000万+","scoreValue":15},{"scoreCriteria":"500万+","scoreValue":10},{"scoreCriteria":"100万+","scoreValue":8}],"name":"法人资产","score":"10","remark":"啥地方"},{"id":55,"json":[{"scoreCriteria":"写字楼","scoreValue":10},{"scoreCriteria":"厂楼","scoreValue":8},{"scoreCriteria":"居民楼","scoreValue":6}],"name":"公司环境","score":"10","remark":"啥地方"}]',
-    companyTypeName: '有经验处置机构',
-    id: 20,
-    reason:
-      '"scoreValue":15},{"scoreCriteria":"2-3线城市","scoreValue":10},{"scoreCriteria":"4-5线城市","scoreValue":8}],"name":"地址选址","score":"10","remark":"是否"},{"id":53,"json":[{"scoreCriteria":"99+人","scoreValue":15},{"scoreCriteria":"30+人","scoreValue":10},{"scoreCriteria":"10+人","scoreValue":8}],"name":"员工人数","score":"10","remark":"沙发"},{"id":54,"json":[{"scoreCriteria":"1000万+","scoreValue":15},{"scoreCriteria":"500万+","scoreValue":10},{"scoreCriteria":"100万+","scoreValue":8}],"name":"法人资产","score":"10","remark":"啥地方"},{"id":55,"json":[{"scoreCriteria":"写字楼","scoreValue":10},{"scoreCriteria":"厂楼","scoreValue":8},{"scoreC',
-    registerId: 60,
-    remark:
-      '第三方都是范德萨范德萨scoreValue":15},{"scoreCriteria":"2-3线城市","scoreValue":10},{"scoreCriteria":"4-5线城市","scoreValue":8}],"name":"地址选址","score":"10","remark":"是否"},{"id":53,"json":[{"scoreCriteria":"99+人","scoreValue":15},{"scoreCriteria":"30+人","scoreValue":10},{"scoreCriteria":"10+人","scoreValue":8}],"name":"员工人数","score":"10","remark":"沙发"},{"id":54,"json":[{"scoreCriteria":"1000万+","scoreValue":15},{"scoreCriteria":"500万+","scoreValue":10},{"scoreCriteria":"100万+","scoreValue":8}],"name":"法人资产","score":"10","remark":"啥地方"},{"id":55,"json":[{"scoreCriteria":"写字楼","scoreValue":10},{"scoreCriteria":"厂楼","scoreValue":8},{"scoreC',
-    score: 70,
-    tagName: '良好资质机构'
-  }
-  approveLogData.value = temData ?? {}
-  approveLogData.value.approveJson = JSON.parse(temData.approveJson)
+const registerApproveLog = async () => {
+  const { code, data } = await Apis.registerAuditComplianceApproveLog({ logId: complianceInfo.value.logId })
+  if (code !== 200) return
+  approveLogData.value = data ?? {}
+  approveLogData.value.approveJson = JSON.parse(data.approveJson)
 }
-// 跳转合规审批
-const otherRegisterApproveJump = async () => {
-  // const { code, data } = await otherRegisterApproveSecond({ registerId: props.registerId })
-  // if (code !== 200) return
-  //  detail.value = data ?? {}
-  // otherRegisterApproveLog(detail.value.applyId)
-  detail.value = {
-    applyId: 206,
-    companyTypeName: '有经验处置机构',
-    registerId: 60,
-    score: 80
-  }
-  otherRegisterApproveLog(detail.value.applyId)
+const handleData = (val: any) => {
+  complianceInfo.value = val
+  registerApproveLog()
 }
-onMounted(() => {
-  otherRegisterApproveJump()
+defineExpose({
+  handleData
 })
 </script>
 

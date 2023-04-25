@@ -49,7 +49,7 @@
               ref="complianceInfoRef"
               @handle-close="handleClose"
             ></compliance-info>
-            <compliance-result v-else></compliance-result>
+            <compliance-result v-else ref="complianceResultRef" @handle-close="handleClose"></compliance-result>
           </div>
         </div>
       </div>
@@ -74,6 +74,7 @@ const detailData = ref({})
 const complianceData = ref({})
 const accessDataRef = ref()
 const complianceInfoRef = ref()
+const complianceResultRef = ref()
 const hitList = ref([])
 const handleClose = () => {
   drawer.value = false
@@ -83,7 +84,6 @@ const open = (id: any) => {
   drawer.value = true
   nextTick(() => {
     registerDetail()
-
     fetchOrgBlacklistHit(id)
   })
 }
@@ -104,8 +104,10 @@ const approveJumpDetail = async orgCategoryId => {
     logId: logId.value
   })
   if (code !== 200) return
-  complianceData.value = { ...data, orgCategoryId }
-  complianceInfoRef.value.handleData(complianceData.value)
+  complianceData.value = { ...data, orgCategoryId, logId: logId.value }
+  props.approveType === '0'
+    ? complianceInfoRef.value.handleData(complianceData.value)
+    : complianceResultRef.value.handleData(complianceData.value)
 }
 const fetchOrgBlacklistHit = (id: number) => {
   // const { code, data } = Apis.findRegisterOrgBlacklistHit({ registerId: id })

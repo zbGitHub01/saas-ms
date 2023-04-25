@@ -246,7 +246,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   })
 }
 const handleData = (val: any) => {
-  // Object.assign(form, defaultForm)
   complianceInfo.value = val
   getInfoData()
 }
@@ -314,12 +313,13 @@ defineExpose({
     .el-form-item__label {
       line-height: 48px;
     }
-    .el-radio {
+    :deep(.el-radio) {
       margin-bottom: 10px;
       margin-left: 0px;
       margin-right: 10px;
+      padding: 0 10px 0 2px;
     }
-    .el-radio__input {
+    :deep(.el-radio__input) {
       display: none;
     }
   }

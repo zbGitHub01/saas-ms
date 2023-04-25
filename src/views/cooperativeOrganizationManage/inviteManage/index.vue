@@ -5,32 +5,48 @@
       <div v-if="inviteData.length === 0" class="empty-text">暂无合作邀请</div>
       <div v-for="(item, index) in inviteData" :key="index" class="flx-justify-between pb40 mb40">
         <div>
-          <div v-if="item.time1" class="tip-text">
-            <span class="mr12">{{ item.time1 }}</span>
-            收到
+          <div class="tip-text" v-if="item.submitDate">
+            <div class="mr40" v-if="item.inviteDate">准入邀请时间：{{ item.inviteDate }}</div>
+            <div v-if="item.submitDate">准入提交时间：{{ item.submitDate }}</div>
           </div>
-          <div v-if="item.time2" class="tip-text">
-            <div class="mr40">准入邀请时间：{{ item.time2 }}</div>
-            <div>准入提交时间：{{ item.time3 }}</div>
+          <div v-else class="tip-text">
+            <span class="mr12">{{ item.inviteDate }}</span>
+            收到
           </div>
           <div
             class="org-text mt8 mb8"
-            :class="{ 'color-999': item.status === 5 }"
+            :class="{ 'color-999': item.inviteStatus === 7 }"
           >{{ item.orgName }}</div>
-          <div v-if="item.time1" class="tip-text">的合作邀请，点击进入该公司的合作准入流程</div>
+          <div v-if="!item.submitDate" class="tip-text">的合作邀请，点击进入该公司的合作准入流程</div>
         </div>
-        <div class="flx-align-center">
+        <div class="flx-align-center" @click="jump(item)">
           <div>
             <div
               class="status-text"
-              :style="{ color: statusData(item.status, 'color') }"
-            >{{ statusData(item.status, 'text') }}</div>
+              :style="{ color: statusData(item.inviteStatus, 'color') }"
+            >{{ statusData(item.inviteStatus, 'text') }}</div>
             <div
               class="tip-text"
-              :style="{ color: statusData(item.status, 'color') }"
-            >{{ item.tip }}</div>
+              v-if="item.inviteStatus === 5"
+              :style="{ color: statusData(item.inviteStatus, 'color') }"
+            >准入通过时间：{{ item.accessTime }}</div>
+            <div
+              class="tip-text"
+              v-if="item.inviteStatus === 6"
+              :style="{ color: statusData(item.inviteStatus, 'color') }"
+            >准入拒绝时间：{{ item.approveRejectTime }}</div>
+            <div
+              v-if="item.inviteStatus === 7"
+              class="tip-text"
+              :style="{ color: statusData(item.inviteStatus, 'color') }"
+            >{{ item.failureReason }}</div>
+            <div
+              v-if="[1,2,3,4].includes(item.inviteStatus)"
+              class="tip-text"
+              :style="{ color: statusData(item.inviteStatus, 'color') }"
+            >{{ statusData(item.inviteStatus, 'tip') }}</div>
           </div>
-          <div class="tip-text ml4" style="font-size: 24px" v-if="[1, 3, 4].includes(item.status)">
+          <div class="tip-text ml4" style="font-size: 24px" v-if="item.inviteStatus === 1">
             <el-icon>
               <ArrowRightBold />
             </el-icon>
@@ -44,67 +60,32 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from 'vue'
 import { ArrowRightBold } from '@element-plus/icons-vue'
-const inviteData = ref<any[]>([])
-const data = [
-  {
-    time1: '2021-12-30 13:43:38',
-    orgName: '江苏西岸企业管理咨询有限公司 ',
-    status: 1,
-    tip: ''
-  },
-  {
-    time2: '2021-12-30 13:43:38',
-    time3: '2021-12-04 13:43:38',
-    orgName: '江苏西岸企业管理咨询有限公司 ',
-    status: 2,
-    tip: '准入通过时间：2021-11-12 23:23:30'
-  },
-  {
-    time2: '2021-12-30 13:43:38',
-    time3: '2021-12-30 13:43:38',
-    orgName: '江苏西岸企业管理咨询有限公司 ',
-    status: 3,
-    tip: '准入资料提交成功，请等待审核结果'
-  },
-  {
-    time2: '2021-12-30 13:43:38',
-    time3: '2021-12-30 13:43:38',
-    orgName: '江苏西岸企业管理咨询有限公司 ',
-    status: 4,
-    tip: '准入拒绝时间：2021-09-10 23:23:30'
-  },
-  {
-    time1: '2021-12-30 13:43:38',
-    orgName: '江苏西岸企业管理咨询有限公司 ',
-    status: 5,
-    tip: '超时未提供准入资料'
-  },
-  {
-    time2: '2021-12-30 13:43:38',
-    time3: '2021-12-30 13:43:38',
-    orgName: '江苏西岸企业管理咨询有限公司 ',
-    status: 5,
-    tip: '审批超时'
+import Apis from '@/api/modules/cooperativeOrganization'
+const inviteData = ref([])
+const jump = item => {
+  if (item.inviteStatus === 1) {
+    window.open(item.url, '_blank')
   }
-]
+}
 const statusData = computed(() => {
   return (val: number, type: string) => {
     const statusMap = new Map([
-      [1, { text: '填写准入资料', color: '#1c9979' }],
-      [2, { text: '合作中', color: '#5488f9' }],
-      [3, { text: '审核中', color: '#ff9921' }],
-      [4, { text: '审核未通过', color: '#ff4f0a' }],
-      [5, { text: '已失效', color: '#999' }]
+      [1, { text: '待提交准入资料', color: '#1FD881' }],
+      [2, { text: '审核中-待邀请人审核', color: '#FFBE29', tip: '准入资料提交成功，请等待审核结果' }],
+      [3, { text: '审核中-待合规审核', color: '#FFBE29', tip: '准入资料提交成功，请等待审核结果' }],
+      [4, { text: '审核中-待最终审核', color: '#FFBE29', tip: '准入资料提交成功，请等待审核结果' }],
+      [5, { text: '审核通过', color: '#247FFF' }],
+      [6, { text: '审核未通过', color: '#F03B3B' }],
+      [7, { text: '已失效', color: '#666666' }]
     ])
     const temObj = statusMap.get(val)
     return temObj[type]
   }
 })
 const getTableData = async () => {
-  // const { code, data } = await otherRegisterApproveAllList({ ...params, ...queryParams })
-  // if (code !== 200) return
+  const { code, data } = await Apis.registerInviteList()
+  if (code !== 200) return
   inviteData.value = data
-  // state.total = data.total
 }
 onMounted(async () => {
   getTableData()

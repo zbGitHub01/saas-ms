@@ -206,7 +206,6 @@ const optionData = reactive({
     { id: 6, name: '审核未通过' },
     { id: 7, name: '失效' }
   ],
-  userList: [],
   rejectReasonList: []
 })
 const queryParams = reactive({

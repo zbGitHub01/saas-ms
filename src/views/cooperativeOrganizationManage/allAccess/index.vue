@@ -1,6 +1,6 @@
 <template>
   <div class="card-wrap">
-    <el-tabs class="mb12" v-model="approveType">
+    <el-tabs class="mb12" v-model="approveType" @tab-click="onSearch">
       <el-tab-pane
         v-for="item in tabPaneData"
         :key="item.name"
@@ -14,28 +14,22 @@
           <el-form-item label="机构名称">
             <el-input v-model="form.companyName" placeholder="请输入机构名称"></el-input>
           </el-form-item>
-          <el-form-item label="注册人姓名" v-if="approveType !== '3'">
-            <el-select v-model="form.value5" placeholder="请选择注册人姓名">
-              <el-option
-                v-for="item in optionData.userList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
+          <el-form-item label="注册人姓名">
+            <el-input v-model="form.username" placeholder="请输入注册人姓名"></el-input>
           </el-form-item>
-          <el-form-item label="业务运营负责人" v-if="approveType === '3'">
+          <!-- TODO -->
+          <!-- <el-form-item label="业务运营负责人" v-if="approveType === '3'">
             <el-input v-model="form.value6" placeholder="请输入业务运营负责人"></el-input>
-          </el-form-item>
+          </el-form-item>-->
           <el-form-item label="注册手机号">
-            <el-input v-model="form.value6" placeholder="请输入注册手机号"></el-input>
+            <el-input v-model="form.phone" placeholder="请输入注册手机号"></el-input>
           </el-form-item>
           <el-form-item label="邀请人" v-if="approveType !== '3'">
-            <el-input v-model="form.entrustStaffId" placeholder="请输入邀请人"></el-input>
+            <el-input v-model="form.inviteName" placeholder="请输入邀请人"></el-input>
           </el-form-item>
           <el-form-item label="注册时间" v-if="approveType !== '3'">
             <el-date-picker
-              v-model="state.createTime"
+              v-model="state.registerTime"
               type="daterange"
               value-format="YYYY-MM-DD"
               range-separator="至"
@@ -45,7 +39,7 @@
           </el-form-item>
           <el-form-item label="邀请时间">
             <el-date-picker
-              v-model="state.value8"
+              v-model="state.inviteTime"
               type="daterange"
               value-format="YYYY-MM-DD"
               range-separator="至"
@@ -55,7 +49,7 @@
           </el-form-item>
           <el-form-item label="准入提交时间">
             <el-date-picker
-              v-model="state.value11"
+              v-model="state.submitTime"
               type="daterange"
               value-format="YYYY-MM-DD"
               range-separator="至"
@@ -64,9 +58,9 @@
             />
           </el-form-item>
           <el-form-item label="准入状态" v-if="approveType === 'all' || approveType === '4'">
-            <el-select v-model="form.accessStatus" placeholder="请选择准入状态">
+            <el-select v-model="form.inviteStatus" placeholder="请选择准入状态">
               <el-option
-                v-for="item in optionData.accessOptions"
+                v-for="item in optionData.inviteStatusOptions"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
@@ -75,7 +69,7 @@
           </el-form-item>
           <el-form-item label="准入通过时间" v-if="approveType === 'all' || approveType === '1'">
             <el-date-picker
-              v-model="state.value11"
+              v-model="state.accessTime"
               type="daterange"
               value-format="YYYY-MM-DD"
               range-separator="至"
@@ -85,7 +79,7 @@
           </el-form-item>
           <el-form-item label="失效时间" v-if="approveType === '3'">
             <el-date-picker
-              v-model="state.value11"
+              v-model="state.lastApplyTime"
               type="daterange"
               value-format="YYYY-MM-DD"
               range-separator="至"
@@ -93,7 +87,8 @@
               end-placeholder="结束时间"
             />
           </el-form-item>
-          <el-form-item label="拒绝人" v-if="approveType === '2'">
+          <!-- TODO -->
+          <!-- <el-form-item label="拒绝人" v-if="approveType === '2'">
             <el-select v-model="form.value5" placeholder="请选择拒绝人">
               <el-option
                 v-for="item in optionData.userList"
@@ -102,29 +97,33 @@
                 :value="item.value"
               ></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item>-->
         </el-form>
       </template>
     </FormWrap>
     <el-table :data="state.tableData">
       <el-table-column label="机构名称" prop="companyName" min-width="150"></el-table-column>
-      <el-table-column label="邀请时间" prop="name" min-width="180"></el-table-column>
+      <el-table-column label="邀请时间" prop="inviteTime" min-width="180"></el-table-column>
       <el-table-column label="提交审核时间" prop="submitTime" min-width="180"></el-table-column>
-      <el-table-column label="准入通过时间" prop="name" min-width="180" v-if="approveType === '1'"></el-table-column>
+      <el-table-column label="准入通过时间" prop="checkTime" min-width="180" v-if="approveType === '1'"></el-table-column>
       <el-table-column
         label="准入状态"
-        prop="name"
+        prop="inviteStatus"
         min-width="150"
         v-if="approveType === 'all' || approveType === '4'"
-      ></el-table-column>
+      >
+        <template #default="scope">
+          <div>{{ inviteStatusText(scope.row.inviteStatus) }}</div>
+        </template>
+      </el-table-column>
       <el-table-column label="注册手机号" prop="phone" min-width="150"></el-table-column>
       <el-table-column label="注册人姓名" prop="username" min-width="150"></el-table-column>
       <el-table-column label="注册邮箱" prop="mail" min-width="150"></el-table-column>
-      <el-table-column label="注册时间" prop="createTime" min-width="180"></el-table-column>
-      <el-table-column label="机构类型" prop="name" min-width="150"></el-table-column>
+      <el-table-column label="注册时间" prop="registerTime" min-width="180"></el-table-column>
+      <el-table-column label="机构类型" prop="orgTypeName" min-width="150"></el-table-column>
       <el-table-column label="邀请人" prop="inviteName" min-width="150"></el-table-column>
-      <el-table-column label="失效时间" prop="name" min-width="180" v-if="approveType === '3'"></el-table-column>
-      <el-table-column label="委外经理" prop="name" min-width="150"></el-table-column>
+      <el-table-column label="失效时间" prop="lastApplyTime" min-width="180" v-if="approveType === '3'"></el-table-column>
+      <el-table-column label="委外经理" prop="entrustStaffName" min-width="150"></el-table-column>
       <el-table-column label="审批进度" prop="name" width="110" fixed="right">
         <template #default="scope">
           <el-button type="primary" link @click="onProgress(scope.row.applyId, 'all')">查看进度</el-button>
@@ -143,12 +142,12 @@
       @pagination="getTableData"
     />
     <approval-progress-dialog ref="approvalProgressDialogRef"></approval-progress-dialog>
-    <detail-drawer ref="detailDrawerRef" :approve-type="approveType"></detail-drawer>
+    <detail-drawer ref="detailDrawerRef" :approve-type="approveType" @get-table-data="getTableData"></detail-drawer>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, nextTick } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import approvalProgressDialog from '../components/approvalProgressDialog.vue'
 import detailDrawer from './components/detailDrawer.vue'
@@ -178,7 +177,16 @@ const tabPaneData = ref([
 const approvalProgressDialogRef = ref()
 const detailDrawerRef = ref()
 const optionData = reactive({
-  accessOptions: [],
+  inviteStatusOptions: [
+    { id: 0, name: '待企业认证' },
+    { id: 1, name: '待提交准入审核' },
+    { id: 2, name: '审核中-待邀请人审核' },
+    { id: 3, name: '审核中-待合规审核' },
+    { id: 4, name: '审核中-待最终审核' },
+    { id: 5, name: '审核通过' },
+    { id: 6, name: '审核未通过' },
+    { id: 7, name: '失效' }
+  ],
   userList: []
 })
 const queryParams = reactive({
@@ -188,35 +196,35 @@ const queryParams = reactive({
 const state = reactive({
   total: 0,
   tableData: [],
-  createTime: [],
-  value8: [],
-  value11: []
+  registerTime: [],
+  inviteTime: [],
+  submitTime: [],
+  accessTime: [],
+  lastApplyTime: []
 })
 const form = reactive({
   companyName: '',
-  entrustStaffId: '',
-  accessStatus: '',
-  orgLevelId: '',
-  value5: '',
-  value6: '',
-  value9: '',
-  value10: ''
+  username: '',
+  // value6: '',
+  phone: '',
+  inviteName: '',
+  inviteStatus: ''
+  // value5: ''
 })
 const defaultForm = JSON.parse(JSON.stringify(form))
 const getTableData = async () => {
   const params = handleForm()
-  const { code, data, total } = await Apis.registerAuditAllList({ ...params, ...queryParams })
+  params.approveType = approveType.value === 'all' ? '' : Number(approveType.value)
+  const { code, data } = await Apis.registerAuditAllList({ ...params, ...queryParams })
   if (code !== 200) return
-  state.tableData = data
-  state.total = total
+  state.tableData = data.data
+  state.total = data.total
 }
-const getOptionList = async () => {
-  const { code, data } = await Apis.registerAuditAllUserList()
-  if (code !== 200) return
-  optionData.userList = data
+const inviteStatusText = val => {
+  return optionData.inviteStatusOptions.find(item => item.id === val)?.name
 }
 const handleForm = () => {
-  const timeEnum = ['createTime', 'value8', 'value11']
+  const timeEnum = ['registerTime', 'inviteTime', 'submitTime', 'accessTime', 'lastApplyTime']
   timeEnum.forEach(item => {
     if (state[item].length === 0) {
       form[`${item}Start`] = ''
@@ -229,12 +237,16 @@ const handleForm = () => {
   return form
 }
 const onSearch = () => {
-  getTableData()
+  nextTick(() => {
+    getTableData()
+  })
 }
 const onReset = () => {
-  state.createTime = []
-  state.value8 = []
-  state.value11 = []
+  state.registerTime = []
+  state.inviteTime = []
+  state.submitTime = []
+  state.accessTime = []
+  state.lastApplyTime = []
   Object.assign(form, defaultForm)
   getTableData()
 }
@@ -245,7 +257,6 @@ const onDetail = (logId: any) => {
   detailDrawerRef.value.open(logId)
 }
 onMounted(async () => {
-  getOptionList()
   getTableData()
 })
 </script>

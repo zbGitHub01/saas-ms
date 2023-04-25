@@ -29,6 +29,7 @@ const apiConfig = {
   registerAuditComplianceDetail: `GET /upms/client/register/audit/compliance/detail`, // 准入信息
   registerAuditComplianceApproveJump: `GET /upms/client/register/audit/compliance/approve/jump`, // 跳转合规审批
   registerAuditComplianceApprove: `POST /upms/client/register/audit/compliance/approve`, // 合规审批
+  registerAuditComplianceApproveLog: `GET /upms/client/register/audit/compliance/approve/log`, // 合规审批详情
 
   // 所有准入审批工单
   registerAuditAllList: `POST /upms/client/register/audit/all/list`, // 审批列表
@@ -43,7 +44,10 @@ const apiConfig = {
   clientOrgDetail: `GET /upms/client/org/detail`, // 机构详情
   clientOrgOpenCooperation: `POST /upms/client/org/openCooperation`, // 开启合作
   clientOrgTerminateCooperation: `POST /upms/client/org/terminateCooperation`, // 终止合作
-  clientOrgSetStopJob: `POST /upms/client/org/setStopJob` // 设置是否暂停作业
+  clientOrgSetStopJob: `POST /upms/client/org/setStopJob`, // 设置是否暂停作业
+
+  // 上游合作邀请管理
+  registerInviteList: `GET /upms/client/register/inviteList` // 上游邀请合作记录
 }
 
 const apis = generateApiFnc(apiConfig)
