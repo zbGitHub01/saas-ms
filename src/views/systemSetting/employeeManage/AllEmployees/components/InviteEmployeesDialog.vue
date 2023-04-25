@@ -105,6 +105,7 @@ const handleOpen = () => {
   fetchOptions()
 }
 const beforeClose = () => {
+  formRef.value.resetFields()
   emit('update:dialogVisible', false)
 }
 const successMounted = code => {
