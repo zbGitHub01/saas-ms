@@ -75,6 +75,8 @@ const filterNode = (value, data) => {
   }
 }
 .flex-block {
+  display: flex;
+  flex-direction: column;
   width: 260px;
   height: 100%;
 }

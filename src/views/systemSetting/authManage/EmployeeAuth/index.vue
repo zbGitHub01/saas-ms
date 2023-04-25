@@ -104,6 +104,8 @@ fetchDeptTree()
   }
 }
 .flex-block {
+  display: flex;
+  flex-direction: column;
   width: 220px;
   height: 100%;
 }
