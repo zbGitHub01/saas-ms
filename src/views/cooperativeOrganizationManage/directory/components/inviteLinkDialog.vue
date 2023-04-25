@@ -63,14 +63,14 @@
         </div>
         <div class="mt30 color-ff9921">
           请告知被邀请方注册并完成企业认证后，即可进入与
-          <span class="color-f00">{{ link.user }}</span>
+          <span class="color-f00">{{ tenantInfo.tenantName }}</span>
           的准入流程
         </div>
       </div>
       <div v-if="link.type === 3">
         <div>
           请告知被邀请方,
-          <span class="color-f00">{{ link.user }}</span>
+          <span class="color-f00">{{ tenantInfo.tenantName }}</span>
           的准入邀请已准备完成，登录后即可提交准入资料（登录作业系统也可完成准入提交）
         </div>
         <div class="mt12">
@@ -98,7 +98,6 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
-// TODO:员工名、租户名需替换
 import Apis from '@/api/modules/cooperativeOrganization'
 import type { FormInstance, FormRules } from 'element-plus'
 import { phoneReg } from '@/utils/validate'
@@ -184,6 +183,7 @@ defineExpose({
   open
 })
 const userInfo = computed(() => GlobalStore.userInfo)
+const tenantInfo = computed(() => GlobalStore.tenantInfo)
 </script>
 
 <style scoped lang="scss">
