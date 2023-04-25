@@ -26,7 +26,7 @@
         <el-button plain type="primary" @click="submit" v-if="isEditing">确定</el-button>
       </div>
     </div>
-    <el-descriptions class="margin-top" title="" :column="3" size="large" border>
+    <el-descriptions title="" :column="3" size="large" border>
       <!-- <template #extra>
       <el-button type="primary">Operation</el-button>
     </template> -->
@@ -35,7 +35,7 @@
           <div class="cell-item">公司名</div>
         </template>
         <div v-if="!isEditing">{{ state.tenantInfo.name }}</div>
-        <el-input v-else v-model="state.tenantInfo.name" clearable placeholder="请输入企业名"></el-input>
+        <el-input v-else v-model="state.tenantInfo.name" clearable placeholder="请输入公司名"></el-input>
       </el-descriptions-item>
       <el-descriptions-item label-align="center">
         <template #label>
@@ -296,11 +296,13 @@ const getTableData = async () => {
   state.tenantInfo = data
   // 处理地址（省市区和详细地址）
   state.tenantInfo.addressSub1 = [
-    state.tenantInfo.provinceId + ',' + state.tenantInfo.provinceName,
-    state.tenantInfo.cityId + ',' + state.tenantInfo.cityName,
-    state.tenantInfo.areaId + ',' + state.tenantInfo.areaName
+    (state.tenantInfo.provinceId || '') + ',' + (state.tenantInfo.provinceName || ''),
+    (state.tenantInfo.cityId || '') + ',' + (state.tenantInfo.cityName || ''),
+    (state.tenantInfo.areaId || '') + ',' + (state.tenantInfo.areaName || '')
   ]
-  state.tenantInfo.addressSub2 = [state.tenantInfo.provinceName, state.tenantInfo.cityName, state.tenantInfo.areaName].join('/')
+  state.tenantInfo.addressSub2 = [state.tenantInfo.provinceName, state.tenantInfo.cityName, state.tenantInfo.areaName]
+    .filter(el => !!el)
+    .join('/')
   state.tenantInfoSub = JSON.parse(JSON.stringify(state.tenantInfo))
 }
 // 获取下拉
@@ -377,12 +379,13 @@ const submit = async () => {
     areaId: null,
     areaName: '' //区
   }
-  params.provinceId = Number(state.tenantInfo.addressSub1[0].split(',')[0])
-  params.provinceName = state.tenantInfo.addressSub1[0].split(',')[1]
-  params.cityId = Number(state.tenantInfo.addressSub1[1].split(',')[0])
-  params.cityName = state.tenantInfo.addressSub1[1].split(',')[1]
-  params.areaId = Number(state.tenantInfo.addressSub1[2]?.split(',')[0]) || null
-  params.areaName = state.tenantInfo.addressSub1[2]?.split(',')[1]
+  state.tenantInfo.addressSub1 = state.tenantInfo.addressSub1 ? state.tenantInfo.addressSub1 : []
+  params.provinceId = Number((state.tenantInfo.addressSub1[0] || '').split(',')[0]) || null
+  params.provinceName = state.tenantInfo.addressSub1[0]?.split(',')[1] || undefined
+  params.cityId = Number((state.tenantInfo.addressSub1[1] || '').split(',')[0]) || null
+  params.cityName = state.tenantInfo.addressSub1[1]?.split(',')[1] || undefined
+  params.areaId = Number((state.tenantInfo.addressSub1[2] || '').split(',')[0]) || null
+  params.areaName = state.tenantInfo.addressSub1[2]?.split(',')[1] || undefined
   console.log(params)
   await Apis1.tenantEdit(params)
   ElMessage.success('修改成功！')
@@ -396,14 +399,14 @@ const edit = (type: number) => {
 }
 // 校验身份证
 const changeIdNo = (event: any) => {
-  if (!event) {
-    ElMessage.error('法定代表人身份证号不能为空！')
-    return
-  }
-  if (event.length !== 18) {
-    ElMessage.error('请输入正确的18位身份证号！')
-    return
-  }
+  // if (!event) {
+  //   ElMessage.error('法定代表人身份证号不能为空！')
+  //   return
+  // }
+  // if (event.length !== 18) {
+  //   ElMessage.error('请输入正确的18位身份证号！')
+  //   return
+  // }
   return true
 }
 </script>

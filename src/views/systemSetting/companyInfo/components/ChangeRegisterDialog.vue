@@ -2,7 +2,7 @@
   <el-dialog
     v-model="dialogVisible"
     :title="title"
-    width="450px"
+    width="430px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :show-close="false"
@@ -164,8 +164,5 @@ const cancelSubmit = (formEl: FormInstance | undefined) => {
 </script>
       
 <style lang="scss" scoped>
-:deep(.el-dialog__body .el-input) {
-  width: 280px;
-}
 </style>
       

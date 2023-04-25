@@ -2,17 +2,17 @@
   <el-dialog
     v-model="dialogVisible"
     :title="title"
-    width="450px"
+    width="430px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :show-close="false"
   >
     <span>
       <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="top" label-width="100px">
-        <el-form-item label="新主管理员：" prop="adminId" width="300">
+        <el-form-item label="新主管理员：" prop="adminId">
           <el-select
             v-model="form.adminId"
-            placeholder="请从员工账号中选择新主管理员"
+            placeholder="请选择新主管理员"
             clearable
             filterable
             @change="selectAdmin($event)"
@@ -170,8 +170,5 @@ const selectAdmin = val => {
 </script>
       
 <style lang="scss" scoped>
-:deep(.el-dialog__body .el-input) {
-  width: 280px;
-}
 </style>
       
