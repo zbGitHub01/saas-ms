@@ -63,7 +63,7 @@
       <el-table-column label="机构注册ID" prop="logId" min-width="150" align="center"></el-table-column>
       <el-table-column label="机构名称" prop="companyName" width="210" align="center">
         <template #default="scope">
-          <div style="display:flex;align-items:center">
+          <div style="display:flex;align-items:center;justify-content: center;">
             <el-tooltip
               effect="dark"
               v-if="scope.row.companyName.length>10"
