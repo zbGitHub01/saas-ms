@@ -101,9 +101,9 @@
       </template>
     </FormWrap>
     <el-table :data="state.tableData">
-      <el-table-column label="机构名称" prop="companyName" width="210">
+      <el-table-column label="机构名称" prop="companyName" width="210" align="center">
         <template #default="scope">
-          <div style="display:flex;align-items:center">
+          <div style="display:flex;align-items:center;justify-content: center;">
             <el-tooltip
               effect="dark"
               v-if="scope.row.companyName.length>10"
@@ -122,27 +122,27 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="合作状态" prop="accessStatusName" min-width="150"></el-table-column>
-      <el-table-column label="委外经理" prop="entrustStaffName" min-width="150"></el-table-column>
+      <el-table-column label="合作状态" prop="accessStatusName" min-width="150" align="center"></el-table-column>
+      <el-table-column label="委外经理" prop="entrustStaffName" min-width="150" align="center"></el-table-column>
       <!-- TODO:字段名 -->
-      <el-table-column label="邀请人" prop="name" min-width="150"></el-table-column>
-      <el-table-column label="员工数" prop="staffCount" min-width="150">
+      <el-table-column label="邀请人" prop="name" min-width="150" align="center"></el-table-column>
+      <el-table-column label="员工数" prop="staffCount" min-width="150" align="center">
         <template #default="scope">
           <span style="vertical-align: middle">{{ scope.row.staffCount }}</span>
           <el-button type="primary" link @click="onUserNumDrawer(scope.row)">查看</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="业务运营负责人" prop="username" min-width="150"></el-table-column>
-      <el-table-column label="负责人手机号" prop="userPhone" min-width="150"></el-table-column>
+      <el-table-column label="业务运营负责人" prop="username" min-width="150" align="center"></el-table-column>
+      <el-table-column label="负责人手机号" prop="userPhone" min-width="150" align="center"></el-table-column>
       <!-- TODO:字段名 -->
-      <el-table-column label="最近准入时间" prop="name" min-width="180"></el-table-column>
-      <el-table-column label="对接邮箱" prop="mail" min-width="150"></el-table-column>
-      <el-table-column label="机构类型" prop="orgCategoryText" min-width="150"></el-table-column>
-      <el-table-column label="风险等级" prop="orgLevelText" min-width="150"></el-table-column>
-      <el-table-column label="机构注册人" prop="registerUsername" min-width="150"></el-table-column>
-      <el-table-column label="注册手机号" prop="registerPhone" min-width="150"></el-table-column>
-      <el-table-column label="注册时间" prop="registerTime" min-width="180"></el-table-column>
-      <el-table-column label="接案状态" prop="isConnection" min-width="150">
+      <el-table-column label="最近准入时间" prop="name" min-width="180" align="center"></el-table-column>
+      <el-table-column label="对接邮箱" prop="mail" min-width="150" align="center"></el-table-column>
+      <el-table-column label="机构类型" prop="orgCategoryText" min-width="150" align="center"></el-table-column>
+      <el-table-column label="风险等级" prop="orgLevelText" min-width="150" align="center"></el-table-column>
+      <el-table-column label="机构注册人" prop="registerUsername" min-width="150" align="center"></el-table-column>
+      <el-table-column label="注册手机号" prop="registerPhone" min-width="150" align="center"></el-table-column>
+      <el-table-column label="注册时间" prop="registerTime" min-width="180" align="center"></el-table-column>
+      <el-table-column label="接案状态" prop="isConnection" min-width="150" align="center">
         <template #default="scope">
           <el-switch
             v-model="scope.row.isConnection"
@@ -152,17 +152,17 @@
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="组织架构" prop="name" min-width="150">
+      <el-table-column label="组织架构" prop="name" min-width="150" align="center">
         <template #default="scope">
           <el-button type="primary" link @click="onOrgStructureDrawer(scope.row)">查看</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="角色设置" prop="name" min-width="150">
+      <el-table-column label="角色设置" prop="name" min-width="150" align="center">
         <template #default="scope">
           <el-button type="primary" link @click="onRoleSettingDrawer(scope.row)">查看</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="操作" prop="name" width="320" fixed="right">
+      <el-table-column label="操作" prop="name" width="320" fixed="right" align="center">
         <template #default="scope">
           <el-button type="primary" link @click="onOrgDetail(scope.row)">查看/编辑</el-button>
           <el-button

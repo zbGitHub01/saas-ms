@@ -28,7 +28,7 @@
               </div>
               <div class="mr40">
                 <span class="color-999">注册人姓名：</span>
-                {{ detailData.userName }}
+                {{ detailData.username }}
               </div>
               <div class="mr40">
                 <span class="color-999">注册手机号：</span>

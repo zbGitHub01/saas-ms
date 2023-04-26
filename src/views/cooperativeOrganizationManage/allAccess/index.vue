@@ -102,9 +102,9 @@
       </template>
     </FormWrap>
     <el-table :data="state.tableData">
-      <el-table-column label="机构名称" prop="companyName" width="210">
+      <el-table-column label="机构名称" prop="companyName" width="210" align="center">
         <template #default="scope">
-          <div style="display:flex;align-items:center">
+          <div style="display:flex;align-items:center;justify-content: center;">
             <el-tooltip
               effect="dark"
               v-if="scope.row.companyName.length>10"
@@ -123,33 +123,46 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="邀请时间" prop="inviteTime" min-width="180"></el-table-column>
-      <el-table-column label="提交审核时间" prop="submitTime" min-width="180"></el-table-column>
-      <el-table-column label="准入通过时间" prop="checkTime" min-width="180" v-if="approveType === '1'"></el-table-column>
+      <el-table-column label="邀请时间" prop="inviteTime" min-width="180" align="center"></el-table-column>
+      <el-table-column label="提交审核时间" prop="submitTime" min-width="180" align="center"></el-table-column>
+      <el-table-column
+        label="准入通过时间"
+        prop="checkTime"
+        min-width="180"
+        v-if="approveType === '1'"
+        align="center"
+      ></el-table-column>
       <el-table-column
         label="准入状态"
         prop="inviteStatus"
         min-width="150"
         v-if="approveType === 'all' || approveType === '4'"
+        align="center"
       >
         <template #default="scope">
           <div>{{ inviteStatusText(scope.row.inviteStatus) }}</div>
         </template>
       </el-table-column>
-      <el-table-column label="注册手机号" prop="phone" min-width="150"></el-table-column>
-      <el-table-column label="注册人姓名" prop="username" min-width="150"></el-table-column>
-      <el-table-column label="注册邮箱" prop="mail" min-width="150"></el-table-column>
-      <el-table-column label="注册时间" prop="registerTime" min-width="180"></el-table-column>
-      <el-table-column label="机构类型" prop="orgTypeName" min-width="150"></el-table-column>
-      <el-table-column label="邀请人" prop="inviteName" min-width="150"></el-table-column>
-      <el-table-column label="失效时间" prop="lastApplyTime" min-width="180" v-if="approveType === '3'"></el-table-column>
-      <el-table-column label="委外经理" prop="entrustStaffName" min-width="150"></el-table-column>
-      <el-table-column label="审批进度" prop="name" width="110" fixed="right">
+      <el-table-column label="注册手机号" prop="phone" min-width="150" align="center"></el-table-column>
+      <el-table-column label="注册人姓名" prop="username" min-width="150" align="center"></el-table-column>
+      <el-table-column label="注册邮箱" prop="mail" min-width="150" align="center"></el-table-column>
+      <el-table-column label="注册时间" prop="registerTime" min-width="180" align="center"></el-table-column>
+      <el-table-column label="机构类型" prop="orgTypeName" min-width="150" align="center"></el-table-column>
+      <el-table-column label="邀请人" prop="inviteName" min-width="150" align="center"></el-table-column>
+      <el-table-column
+        label="失效时间"
+        prop="lastApplyTime"
+        min-width="180"
+        v-if="approveType === '3'"
+        align="center"
+      ></el-table-column>
+      <el-table-column label="委外经理" prop="entrustStaffName" min-width="150" align="center"></el-table-column>
+      <el-table-column label="审批进度" prop="name" width="110" fixed="right" align="center">
         <template #default="scope">
           <el-button type="primary" link @click="onProgress(scope.row.applyId, 'all')">查看进度</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="操作" prop="name" width="190" fixed="right">
+      <el-table-column label="操作" prop="name" width="190" fixed="right" align="center">
         <template #default="scope">
           <el-button type="primary" link @click="onDetail(scope.row.logId)">查看资料/合规审批结果</el-button>
         </template>

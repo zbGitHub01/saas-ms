@@ -26,7 +26,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="验证码：" prop="smsCode">
-          <el-input v-model="form.smsCode" placeholder="请输入验证码" clearable></el-input>
+          <el-input v-model="form.smsCode" placeholder="请输入验证码" clearable maxlength="6"></el-input>
           <el-button type="primary" class="ml10" @click="getSmsCode" :disabled="disabled">{{ smsTxt }}</el-button>
           <div style="color: #e6a23c; font-size: 12px">验证码将送法到手机号{{ form.adminPhone }}，点击获取验证码后请注意查收</div>
         </el-form-item>
@@ -99,10 +99,8 @@ const emits = defineEmits(['getTableData'])
 const dialogVisible = ref(false)
 const open = (row: any) => {
   title.value = '变更主管理员'
-
   admin.value = row.admin
   adminPhone.value = row.adminPhone
-  // phone.value = row.phone
   Object.assign(form, originFormData)
   form.oldAdminId = row.adminId
   form.tenantId = row.id

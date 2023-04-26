@@ -17,7 +17,8 @@
         v-if="modelValue"
         class="preview"
         :style="{
-          backgroundImage: `url('${modelValue}')`
+          backgroundImage: `url('${modelValue}')`,
+          backgroundSize: fillMode,
         }"
       >
         <el-icon @click.stop="clearFiles" class="image-delete-icon" :style="{ height: height, width: width }">
@@ -51,6 +52,7 @@ interface Props {
   height?: String
   actionSub?: string
   data?: Object
+  fillMode?: string;
 }
 
 const imageFormatMap: Record<ImageFormat, string> = {
@@ -61,7 +63,8 @@ const imageFormatMap: Record<ImageFormat, string> = {
 
 const props = withDefaults(defineProps<Props>(), {
   action: '/other/file/upload',
-  types: () => ['GIF', 'JPEG', 'PNG']
+  types: () => ['GIF', 'JPEG', 'PNG'],
+  fillMode: 'contain',
 })
 const emits = defineEmits(['update:modelValue'])
 
