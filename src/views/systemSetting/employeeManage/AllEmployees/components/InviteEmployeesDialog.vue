@@ -109,7 +109,8 @@ const beforeClose = () => {
   emit('update:dialogVisible', false)
 }
 const successMounted = code => {
-  const inviteUrl = `${window.location.origin}/#/loginInvite?code=${code}`
+  const { origin, pathname } = window.location
+  const inviteUrl = `${origin + pathname}#/loginInvite?code=${code}`
   link.value = inviteUrl
 }
 const onSubmit = async () => {
