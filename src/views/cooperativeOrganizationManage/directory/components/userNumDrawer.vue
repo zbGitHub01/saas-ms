@@ -67,21 +67,21 @@
         </template>
       </FormWrap>
       <el-table :data="state.tableData">
-        <el-table-column label="系统工号" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="姓名" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="职位" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="手机号" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="证件号" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="角色权限" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="是否接案" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="性别" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="入职日期" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="账号状态" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="钉钉" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="录入人" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="录入时间" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="修改人" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="修改时间" prop="name" min-width="150"></el-table-column>
+        <el-table-column label="系统工号" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="姓名" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="职位" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="手机号" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="证件号" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="角色权限" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="是否接案" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="性别" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="入职日期" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="账号状态" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="钉钉" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="录入人" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="录入时间" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="修改人" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="修改时间" prop="name" min-width="150" align="center"></el-table-column>
       </el-table>
     </template>
   </el-drawer>

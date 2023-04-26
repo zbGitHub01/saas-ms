@@ -8,9 +8,9 @@
       append-to-body
     >
       <el-table :data="state.tableData">
-        <el-table-column label="更新时间" prop="createTime" min-width="300"></el-table-column>
-        <el-table-column label="操作人" prop="createName" min-width="250"></el-table-column>
-        <el-table-column label="操作" prop="name">
+        <el-table-column label="更新时间" prop="createTime" min-width="300" align="center"></el-table-column>
+        <el-table-column label="操作人" prop="createName" min-width="250" align="center"></el-table-column>
+        <el-table-column label="操作" prop="name" align="center">
           <template #default="scope">
             <el-button type="primary" link @click="onDetail(scope.row)">查看</el-button>
           </template>

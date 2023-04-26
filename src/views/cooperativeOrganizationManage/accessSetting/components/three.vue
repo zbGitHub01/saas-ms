@@ -6,9 +6,9 @@
         <el-button type="primary" size="small" @click="addReason" :icon="Plus">拒绝原因</el-button>
         <div class="tip-text mt8 mb16">重新准入周期：拒绝后此天数内拒绝再次准入</div>
         <el-table :data="tableData">
-          <el-table-column label="拒绝原因" prop="name" min-width="100"></el-table-column>
-          <el-table-column label="重新准入周期" prop="day" min-width="100"></el-table-column>
-          <el-table-column label="操作" width="110">
+          <el-table-column label="拒绝原因" prop="name" min-width="100" align="center"></el-table-column>
+          <el-table-column label="重新准入周期" prop="day" min-width="100" align="center"></el-table-column>
+          <el-table-column label="操作" width="110" align="center">
             <template #default="scope">
               <el-button type="primary" link @click="addReason(scope.row)">编辑</el-button>
               <el-button type="danger" link @click="deleteReason(scope.row.id)">删除</el-button>
