@@ -95,7 +95,7 @@ const rules = reactive({
   positionId: [{ required: true, message: '请选择任职职位', trigger: 'change' }]
 })
 const loading = ref(false)
-const link = ref('http://www.baidu.com')
+const link = ref('')
 
 const fetchOptions = () => {
   commonStore.fetchDeptTree()
