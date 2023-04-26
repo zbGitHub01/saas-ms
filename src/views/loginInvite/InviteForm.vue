@@ -133,6 +133,7 @@ const onSubmit = async () => {
   }
   const result = await globalStore.login(postData)
   if (result) {
+    await globalStore.fetchUserInfo()
     await acceptInvite()
   }
 }

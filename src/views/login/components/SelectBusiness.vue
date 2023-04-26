@@ -10,6 +10,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import { useGlobalStore } from '@/store'
 
 const emit = defineEmits(['setPassword'])
@@ -21,6 +22,10 @@ const fetchTenantList = async () => {
   const data = await globalStore.fetchTenantList()
   if (data.length) {
     tenantId.value = data[0].tenantId
+  } else {
+    await globalStore.logout()
+    emit('setPassword', 0)
+    ElMessage.error('该账号没有租户，请重新登录')
   }
 }
 fetchTenantList()

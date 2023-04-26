@@ -11,6 +11,7 @@ const apiConfig = {
   findDeptTree: `GET /upms/client/employee/dept/tree`,
   addDept: `POST /upms/client/employee/dept/add`,
   editDept: `POST /upms/client/employee/dept/edit`,
+  delDept: `GET /upms/client/employee/dept/delete`,
   findDeptEmployeeList: `GET /upms/client/employee/dept/employee/list`,
   updateDeptEmployee: `GET /upms/client/employee/dept/employee/updateDept`,
   // 机构职位

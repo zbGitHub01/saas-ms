@@ -95,7 +95,7 @@ const rules = reactive({
   positionId: [{ required: true, message: '请选择任职职位', trigger: 'change' }]
 })
 const loading = ref(false)
-const link = ref('')
+const link = ref('http://www.baidu.com')
 
 const fetchOptions = () => {
   commonStore.fetchDeptTree()
@@ -105,7 +105,7 @@ const handleOpen = () => {
   fetchOptions()
 }
 const beforeClose = () => {
-  formRef.value.resetFields()
+  formRef.value?.resetFields()
   emit('update:dialogVisible', false)
 }
 const successMounted = code => {
