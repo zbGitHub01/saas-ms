@@ -146,7 +146,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      console.log(form)
       // 发送请求
       await Apis.updateRegister(form)
       emits('getTableData')
@@ -157,8 +156,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
 }
 // 取消
 const cancelSubmit = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
+  formEl?.resetFields()
   dialogVisible.value = false
 }
 </script>

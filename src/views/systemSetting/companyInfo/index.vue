@@ -27,9 +27,6 @@
       </div>
     </div>
     <el-descriptions title="" :column="3" border>
-      <!-- <template #extra>
-      <el-button type="primary">Operation</el-button>
-    </template> -->
       <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">公司名</div>
@@ -130,9 +127,9 @@
             placeholder="请选择区域"
             clearable
             :props="state.optionsProps"
-            style="width: 400px;"
+            style="width: 400px"
           ></el-cascader>
-          <el-input v-model="state.tenantInfo.address" clearable placeholder="请输入详细地址" style="width: 400px;"></el-input>
+          <el-input v-model="state.tenantInfo.address" clearable placeholder="请输入详细地址" style="width: 400px"></el-input>
         </div>
       </el-descriptions-item>
       <el-descriptions-item label-align="center">
@@ -148,7 +145,7 @@
         <div v-if="!isEditing">
           <el-image
             class="image"
-            :src="state.tenantInfo.businessLicense"
+            :src="state.tenantInfo.businessLicense || ''"
             :zoom-rate="1.2"
             :preview-src-list="[state.tenantInfo.businessLicense]"
             :initial-index="1"
@@ -175,7 +172,7 @@
         <div v-if="!isEditing" class="flx-justify-between">
           <el-image
             class="image"
-            :src="state.tenantInfo.legalPersonFrontUrl"
+            :src="state.tenantInfo.legalPersonFrontUrl || ''"
             :zoom-rate="1.2"
             :preview-src-list="[state.tenantInfo.legalPersonFrontUrl]"
             :initial-index="1"
@@ -189,7 +186,7 @@
           </el-image>
           <el-image
             class="image"
-            :src="state.tenantInfo.legalPersonBackUrl"
+            :src="state.tenantInfo.legalPersonBackUrl || ''"
             :zoom-rate="1.2"
             :preview-src-list="[state.tenantInfo.legalPersonBackUrl]"
             :initial-index="1"
@@ -222,7 +219,7 @@
         <div v-if="!isEditing">
           <el-image
             class="image"
-            :src="state.tenantInfo.logo"
+            :src="state.tenantInfo.logo || ''"
             :zoom-rate="1.2"
             :preview-src-list="[state.tenantInfo.logo]"
             :initial-index="1"
@@ -270,10 +267,6 @@ const selectData = reactive({
   peopleList: [] as any[], //员工列表
   roleList: [] as any[], //角色列表
   areaList: [] as any[] //省市区
-})
-const selectDataSub = reactive({
-  peopleList: [] as any[], //员工列表
-  roleList: [] as any[] //角色列表
 })
 onMounted(async () => {
   await getTableData()
@@ -343,9 +336,6 @@ const canceEdit = () => {
 }
 // 确认编辑
 const submit = async () => {
-  // if(!changeRegisterPhone(state.tenantInfo.registerPhone)){
-  //   return
-  // }
   if (!changeIdNo(state.tenantInfo.legalPersonIdNo)) {
     return
   }
@@ -365,7 +355,7 @@ const submit = async () => {
     registrantPosition: state.tenantInfo.registrantPosition,
     registerPhone: state.tenantInfo.registerPhone,
     mail: state.tenantInfo.mail,
-    businessLicense: state.tenantInfo.businessLicense, //营业执照
+    businessLicense: state.tenantInfo.businessLicense,
     logo: state.tenantInfo.logo,
     legalPersonFrontUrl: state.tenantInfo.legalPersonFrontUrl,
     legalPersonBackUrl: state.tenantInfo.legalPersonBackUrl,
@@ -387,7 +377,6 @@ const submit = async () => {
   params.cityName = state.tenantInfo.addressSub1[1]?.split(',')[1] || undefined
   params.areaId = Number((state.tenantInfo.addressSub1[2] || '').split(',')[0]) || null
   params.areaName = state.tenantInfo.addressSub1[2]?.split(',')[1] || undefined
-  console.log(params)
   await Apis1.tenantEdit(params)
   ElMessage.success('修改成功！')
   isEditing.value = false
@@ -396,7 +385,6 @@ const submit = async () => {
 // 编辑 1修改主管理员 2修改注册手机号
 const edit = (type: number) => {
   type === 1 ? changeAdministratorsDialog.value.open(state.tenantInfo) : changeRegisterDialog.value.open(state.tenantInfo)
-  console.log('编辑')
 }
 // 校验身份证
 const changeIdNo = (event: any) => {
