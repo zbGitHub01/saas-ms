@@ -6,7 +6,6 @@
           <el-icon class="input-icon"><Lock /></el-icon>
         </template>
       </el-input>
-      <p class="tips">密码最少8位，必须含有大小写字母和数字</p>
     </el-form-item>
     <el-form-item prop="confirmPassword">
       <el-input v-model="form.confirmPassword" type="password" placeholder="请输入确认密码">
@@ -74,9 +73,5 @@ const onSubmit = async () => {
   width: 100%;
   height: 46px;
   box-shadow: 0 10px 20px 0 rgba(49, 120, 255, 0.35);
-}
-.tips {
-  color: var(--el-color-warning);
-  font-size: 12px;
 }
 </style>
