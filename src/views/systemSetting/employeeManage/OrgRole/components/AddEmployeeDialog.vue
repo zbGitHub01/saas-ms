@@ -33,6 +33,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/systemSetting'
 
 const props = defineProps({
@@ -68,10 +69,6 @@ const findNonRoleList = async () => {
   const { code, data } = await Apis.findNonRoleList({ deptId: props.deptItem.id, roleId: props.roleItem.id })
   if (code === 200) {
     employeeList.value = data
-    // employeeList.value = [
-    //   { id: 1, name: '张兮兮' },
-    //   { id: 2, name: '张三' }
-    // ]
   }
 }
 
@@ -83,7 +80,6 @@ const beforeClose = () => {
   emit('update:dialogVisible', false)
 }
 const onSubmit = async () => {
-  console.log(form)
   const isValid = await formRef.value.validate().catch(() => {})
   if (!isValid) return
   const postData = {
@@ -94,6 +90,8 @@ const onSubmit = async () => {
   const { code } = await Apis.addRoleEmployee(postData)
   loading.value = false
   if (code === 200) {
+    ElMessage.success('添加成功')
+    beforeClose()
     emit('change')
   }
 }
