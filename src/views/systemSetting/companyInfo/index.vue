@@ -26,7 +26,7 @@
         <el-button plain type="primary" @click="submit" v-if="isEditing">确定</el-button>
       </div>
     </div>
-    <el-descriptions title="" :column="3" size="large" border>
+    <el-descriptions title="" :column="3" border>
       <!-- <template #extra>
       <el-button type="primary">Operation</el-button>
     </template> -->
@@ -50,14 +50,14 @@
         </template>
         {{ state.tenantInfo.code }}
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center">
+      <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">法人姓名</div>
         </template>
         <div v-if="!isEditing">{{ state.tenantInfo.legalPerson }}</div>
         <el-input v-else v-model="state.tenantInfo.legalPerson" clearable placeholder="请输入法人姓名"></el-input>
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center">
+      <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">注册手机号</div>
         </template>
@@ -66,13 +66,13 @@
           <el-button type="primary" link @click="edit(2)" :disabled="isEditing">编辑</el-button>
         </div>
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center">
+      <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">租户账号数</div>
         </template>
         {{ state.tenantInfo.accountNum }}
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center">
+      <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">法人身份证号</div>
         </template>
@@ -83,41 +83,42 @@
           clearable
           @change="changeIdNo($event)"
           placeholder="请输入法人身份证"
+          maxlength="18"
         ></el-input>
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center">
+      <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">注册来源</div>
         </template>
         {{ state.tenantInfo.registerSource === 1 ? '自主注册' : state.tenantInfo.registerSource === 2 ? '平台添加' : null }}
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center">
+      <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">注册邮箱</div>
         </template>
         <div v-if="!isEditing">{{ state.tenantInfo.mail }}</div>
         <el-input v-else v-model="state.tenantInfo.mail" clearable placeholder="请输入注册邮箱"></el-input>
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center">
+      <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">统一社会信用代码</div>
         </template>
         <div v-if="!isEditing">{{ state.tenantInfo.socialCreditCode }}</div>
         <el-input v-else v-model="state.tenantInfo.socialCreditCode" clearable placeholder="请输入统一社会信用代码"></el-input>
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center">
+      <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">注册时间</div>
         </template>
         {{ state.tenantInfo.registerTime }}
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center">
+      <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">主管理员账号</div>
         </template>
         {{ state.tenantInfo.adminPhone }}
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center" :span="3">
+      <el-descriptions-item label-align="center" :span="3">
         <template #label>
           <div class="cell-item">办公地点</div>
         </template>
@@ -129,12 +130,12 @@
             placeholder="请选择区域"
             clearable
             :props="state.optionsProps"
-            style="width: 100%"
+            style="width: 400px;"
           ></el-cascader>
-          <el-input v-model="state.tenantInfo.address" clearable placeholder="请输入详细地址"></el-input>
+          <el-input v-model="state.tenantInfo.address" clearable placeholder="请输入详细地址" style="width: 400px;"></el-input>
         </div>
       </el-descriptions-item>
-      <el-descriptions-item width="130" label-align="center">
+      <el-descriptions-item label-align="center">
         <template #label>
           <div class="cell-item">认证通过时间</div>
         </template>
@@ -151,7 +152,7 @@
             :zoom-rate="1.2"
             :preview-src-list="[state.tenantInfo.businessLicense]"
             :initial-index="1"
-            fit="fill"
+            fit="contain"
           >
             <template #error>
               <div class="doudi">
@@ -178,7 +179,7 @@
             :zoom-rate="1.2"
             :preview-src-list="[state.tenantInfo.legalPersonFrontUrl]"
             :initial-index="1"
-            fit="fill"
+            fit="contain"
           >
             <template #error>
               <div class="doudi">
@@ -192,7 +193,7 @@
             :zoom-rate="1.2"
             :preview-src-list="[state.tenantInfo.legalPersonBackUrl]"
             :initial-index="1"
-            fit="fill"
+            fit="contain"
           >
             <template #error>
               <div class="doudi">
@@ -225,7 +226,7 @@
             :zoom-rate="1.2"
             :preview-src-list="[state.tenantInfo.logo]"
             :initial-index="1"
-            fit="fill"
+            fit="contain"
           >
             <template #error>
               <div class="doudi">
@@ -412,6 +413,16 @@ const changeIdNo = (event: any) => {
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-descriptions__cell) {
+  &.el-descriptions__label {
+    width: 160px !important;
+    min-width: 160px !important;
+  }
+  &.el-descriptions__content > div {
+    min-height: 33px;
+    line-height: 33px;
+  }
+}
 .title {
   font-weight: 500;
   justify-content: flex-start;
@@ -442,6 +453,7 @@ const changeIdNo = (event: any) => {
     width: 240px;
     height: 140px;
     border-radius: 2px;
+    border: 1px dashed var(--el-border-color);
   }
   .doudi {
     width: 240px;
@@ -460,6 +472,7 @@ const changeIdNo = (event: any) => {
     width: 240px;
     height: 140px;
     border-radius: 2px;
+    border: 1px dashed var(--el-border-color);
   }
   .doudi {
     width: 240px;
@@ -479,6 +492,7 @@ const changeIdNo = (event: any) => {
     width: 108px;
     height: 108px;
     border-radius: 2px;
+    border: 1px dashed var(--el-border-color);
   }
   .doudi {
     width: 108px;

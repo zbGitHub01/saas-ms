@@ -11,15 +11,15 @@
       <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="top" label-width="100px">
         <el-form-item v-if="title === '变更注册手机号'">原注册手机号: {{ form.oldPhone }}</el-form-item>
         <el-form-item label="验证码：" prop="oldPhoneSmsCode">
-          <el-input v-model="form.oldPhoneSmsCode" placeholder="请输入验证码" clearable></el-input>
+          <el-input v-model="form.oldPhoneSmsCode" placeholder="请输入验证码" clearable maxlength="6"></el-input>
           <el-button type="primary" class="ml10" @click="getSmsCode(1)" :disabled="disabled">{{ smsTxt }}</el-button>
           <div style="color: #e6a23c; font-size: 12px">验证码将送法到手机号{{ form.oldPhone }}，点击获取验证码后请注意查收</div>
         </el-form-item>
         <el-form-item label="新注册手机号：" prop="newPhone">
-          <el-input v-model="form.newPhone" placeholder="请输入新注册手机号" clearable></el-input>
+          <el-input v-model="form.newPhone" placeholder="请输入新注册手机号" clearable maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="验证码：" prop="newPhoneSmsCode">
-          <el-input v-model="form.newPhoneSmsCode" placeholder="请输入验证码" clearable></el-input>
+          <el-input v-model="form.newPhoneSmsCode" placeholder="请输入验证码" clearable maxlength="6"></el-input>
           <el-button type="primary" class="ml10" @click="getSmsCode(2)" :disabled="disabledSub">{{ smsTxtSub }}</el-button>
           <div style="color: #e6a23c; font-size: 12px">验证码将送法到手机号{{ form.newPhone }}，点击获取验证码后请注意查收</div>
         </el-form-item>
