@@ -10,13 +10,7 @@
     <span>
       <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="top" label-width="100px">
         <el-form-item label="新主管理员：" prop="adminId">
-          <el-select
-            v-model="form.adminId"
-            placeholder="请选择新主管理员"
-            clearable
-            filterable
-            @change="selectAdmin($event)"
-          >
+          <el-select v-model="form.adminId" placeholder="请选择新主管理员" clearable filterable @change="selectAdmin($event)">
             <el-option
               v-for="(item, index) in selectData.peopleList"
               :key="index"
@@ -119,7 +113,6 @@ const getSmsCode = async () => {
     phone: form.adminPhone,
     tenantId: form.tenantId
   }
-  console.log(params)
   // 发送请求
   await Apis.sendSms(params)
   ElMessage.success('验证码已发送，请留意接收验证码的手机号【' + form.adminPhone + '】')
@@ -140,7 +133,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      console.log(form)
       // 发送请求
       await Apis.updateAdmin(form)
       emits('getTableData')
@@ -151,8 +143,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
 }
 // 取消
 const cancelSubmit = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
+  formEl?.resetFields()
   dialogVisible.value = false
 }
 // 选择新的主管理员
@@ -163,7 +154,6 @@ const selectAdmin = val => {
       form.adminPhone = item.phone
     }
   })
-  console.log(val)
 }
 </script>
       
