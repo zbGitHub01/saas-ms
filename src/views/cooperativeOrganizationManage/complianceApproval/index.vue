@@ -60,8 +60,8 @@
       </template>
     </FormWrap>
     <el-table :data="state.tableData">
-      <el-table-column label="机构注册ID" prop="logId" min-width="150"></el-table-column>
-      <el-table-column label="机构名称" prop="companyName" width="210">
+      <el-table-column label="机构注册ID" prop="logId" min-width="150" align="center"></el-table-column>
+      <el-table-column label="机构名称" prop="companyName" width="210" align="center">
         <template #default="scope">
           <div style="display:flex;align-items:center">
             <el-tooltip
@@ -82,27 +82,28 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="注册人姓名" prop="username" min-width="150"></el-table-column>
-      <el-table-column label="对接邮箱" prop="mail" min-width="180"></el-table-column>
-      <el-table-column label="注册手机号" prop="phone" min-width="150"></el-table-column>
-      <el-table-column label="注册时间" prop="registerTime" min-width="180"></el-table-column>
-      <el-table-column label="审批截止日" prop="lastApplyTime" min-width="180"></el-table-column>
+      <el-table-column label="注册人姓名" prop="username" min-width="150" align="center"></el-table-column>
+      <el-table-column label="对接邮箱" prop="mail" min-width="180" align="center"></el-table-column>
+      <el-table-column label="注册手机号" prop="phone" min-width="150" align="center"></el-table-column>
+      <el-table-column label="注册时间" prop="registerTime" min-width="180" align="center"></el-table-column>
+      <el-table-column label="审批截止日" prop="lastApplyTime" min-width="180" align="center"></el-table-column>
       <!-- TODO -->
-      <el-table-column label="邮箱" prop="name" min-width="150"></el-table-column>
-      <el-table-column label="邀请人" prop="inviteName" min-width="150"></el-table-column>
-      <el-table-column label="委外经理" prop="entrustStaffName" min-width="150"></el-table-column>
+      <el-table-column label="邮箱" prop="name" min-width="150" align="center"></el-table-column>
+      <el-table-column label="邀请人" prop="inviteName" min-width="150" align="center"></el-table-column>
+      <el-table-column label="委外经理" prop="entrustStaffName" min-width="150" align="center"></el-table-column>
       <el-table-column
         label="合规审批提交时间"
         prop="submitTime"
         min-width="180"
         v-if="approveType !== '0'"
+        align="center"
       ></el-table-column>
-      <el-table-column label="审批进度" prop="name" width="110" fixed="right">
+      <el-table-column label="审批进度" prop="name" width="110" fixed="right" align="center">
         <template #default="scope">
           <el-button type="primary" link @click="onProgress(scope.row.applyId, 'compliance')">查看进度</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="操作" prop="name" width="150" fixed="right">
+      <el-table-column label="操作" prop="name" width="150" fixed="right" align="center">
         <template #default="scope">
           <el-button
             type="primary"

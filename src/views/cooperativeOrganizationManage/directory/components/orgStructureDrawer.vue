@@ -5,8 +5,8 @@
     </template>
     <template #default>
       <el-table :data="state.tableData" row-key="id" border>
-        <el-table-column label="组织架构" prop="date" min-width="150"></el-table-column>
-        <el-table-column label="员工数量" prop="name" min-width="150"></el-table-column>
+        <el-table-column label="组织架构" prop="date" min-width="150" align="center"></el-table-column>
+        <el-table-column label="员工数量" prop="name" min-width="150" align="center"></el-table-column>
       </el-table>
     </template>
   </el-drawer>

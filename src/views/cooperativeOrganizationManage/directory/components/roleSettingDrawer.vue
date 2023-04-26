@@ -5,10 +5,10 @@
     </template>
     <template #default>
       <el-table :data="state.tableData">
-        <el-table-column label="角色名称" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="角色描述" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="使用人数" prop="name" min-width="150"></el-table-column>
-        <el-table-column label="创建时间" prop="name" min-width="150"></el-table-column>
+        <el-table-column label="角色名称" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="角色描述" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="使用人数" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="创建时间" prop="name" min-width="150" align="center"></el-table-column>
       </el-table>
     </template>
   </el-drawer>
