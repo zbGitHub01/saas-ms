@@ -20,7 +20,7 @@
               <span>{{ data.name }}</span>
               <span class="operation">
                 <el-icon @click.stop="editDept(data)"><Edit /></el-icon>
-                <el-icon><Delete /></el-icon>
+                <el-icon @click.stop="delDept(data)"><Delete /></el-icon>
               </span>
             </div>
           </template>
@@ -53,6 +53,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 import Apis from '@/api/modules/systemSetting'
 import EditDeptDialog from './components/EditDeptDialog.vue'
@@ -75,18 +76,26 @@ let deptItem = null
 let employeeItem = null
 let currDeptNode = null
 
-const editDept = item => {
-  deptItem = item
-  deptVisible.value = true
-}
-
 const fetchDeptTree = async () => {
   const { code, data } = await Apis.findDeptTree()
   if (code === 200) {
     deptTree.value[0].children = data
   }
 }
-fetchDeptTree()
+const editDept = node => {
+  deptItem = node
+  deptVisible.value = true
+}
+const delDept = async node => {
+  const isConfirm = await ElMessageBox.confirm(`确定删除该部门吗？`, '提示', { type: 'warning' }).catch(() => {})
+  if (!isConfirm) return
+  console.log(node)
+  const { code } = await Apis.delDept({ id: node.id })
+  if (code === 200) {
+    ElMessage.success('删除成功')
+    await fetchDeptTree()
+  }
+}
 
 const fetchEmployeeList = async () => {
   const { code, data } = await Apis.findDeptEmployeeList({ deptId: currDeptNode.id })
@@ -99,10 +108,10 @@ const nodeClick = node => {
   fetchEmployeeList()
 }
 const editEmployee = item => {
-  console.log(item, '---item', currDeptNode)
   employeeItem = item
   employeeVisible.value = true
 }
+fetchDeptTree()
 </script>
 
 <style lang="scss" scoped>

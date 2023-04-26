@@ -170,6 +170,7 @@ const delEmployee = async item => {
   if (!isConfirm) return
   const { code } = await Apis.removeRoleEmployee({ employeeId: item.id, roleId: currRoleNode.id })
   if (code === 200) {
+    ElMessage.success('删除成功')
     await fetchEmployeeList()
   }
 }

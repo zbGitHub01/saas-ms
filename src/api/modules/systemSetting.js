@@ -11,6 +11,7 @@ const apiConfig = {
   findDeptTree: `GET /upms/client/employee/dept/tree`,
   addDept: `POST /upms/client/employee/dept/add`,
   editDept: `POST /upms/client/employee/dept/edit`,
+  delDept: `GET /upms/client/employee/dept/delete`,
   findDeptEmployeeList: `GET /upms/client/employee/dept/employee/list`,
   updateDeptEmployee: `GET /upms/client/employee/dept/employee/updateDept`,
   // 机构职位
@@ -28,7 +29,7 @@ const apiConfig = {
   removeDept: `GET /upms/client/employee/role`,
   findRoleEmployeeList: `GET /upms/client/employee/role/employee/list`,
   findNonRoleList: `GET /upms/client/employee/role/employee/nonRoleList`,
-  addRoleEmployee: `GET /upms/client/employee/role/employee/add`,
+  addRoleEmployee: `POST /upms/client/employee/role/employee/add`,
   removeRoleEmployee: `GET /upms/client/employee/role/employee/remove`,
 
   // 部门权限

@@ -48,8 +48,9 @@ export const useGlobalStore = defineStore('globalStore', {
       if (code === 200 && data.length) {
         this.tenantList = data
         return data
+      } else {
+        return []
       }
-      return []
     },
     async chooseTenant(tenantId) {
       const { code, data } = await chooseTenant(tenantId)
