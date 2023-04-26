@@ -63,3 +63,20 @@
     }
   }
 }
+// dialog-header添加竖线
+.el-dialog__header {
+  position: relative;
+  padding-left: 30px;
+  &:before {
+    position: absolute;
+    left: 16px;
+    top: 23px;
+    content: '';
+    display: block;
+    width: 6px;
+    height: 20px;
+    background-color: var(--el-color-primary);
+    margin-right: 6px;
+    border-radius: 3px;
+  }
+}
