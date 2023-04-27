@@ -88,8 +88,8 @@ const newDate = ref(new Date())
 const notIfMessage = ref(0)
 const todoActive = ref(0)
 const notIfMessageTabs = ref([
-  { label: '全部', count: 2 },
-  { label: '已读', count: 2 },
+  { label: '全部', count: 0 },
+  { label: '已读', count: 0 },
   { label: '未读', count: 0 }
 ])
 const todoList = ref([
