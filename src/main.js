@@ -11,12 +11,14 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'virtual:svg-icons-register'
 import Components from '@/components'
+import directives from '@/directives/index'
 
 const app = createApp(App)
-app.use(pinia)
 app.use(router)
+app.use(pinia)
 app.use(ElementPlus, { locale: zhCn })
 app.use(Components)
+app.use(directives)
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)

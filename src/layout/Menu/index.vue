@@ -36,7 +36,6 @@ import SubItem from './components/SubItem.vue'
 const route = useRoute()
 const authStore = useAuthStore()
 const menuList = computed(() => authStore.menuList)
-console.log(menuList.value, '---xoxo')
 const isCollapse = computed(() => authStore.isCollapse)
 const activeMenu = computed(() => {
   if (route.meta.activeMenu) {
@@ -93,7 +92,6 @@ listeningWindow()
   :deep(.el-menu-item:hover) {
     //background-color: var(--el-color-primary);
     background-color: rgba(255, 255, 255, 0.08);
-    color: #ffffff !important;
     border-radius: 4px;
   }
   //:deep(.el-popper.is-light) {
@@ -116,6 +114,8 @@ listeningWindow()
 </style>
 <style lang="scss">
 body .el-popper.is-light {
-  background: #488dee;
+  .el-menu--popup-container {
+    background: #488dee;
+  }
 }
 </style>

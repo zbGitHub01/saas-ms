@@ -36,14 +36,47 @@
   }
 }
 
-//.el-tabs__nav-wrap {
-//  &::after {
-//    content: none;
-//  }
-//}
-.el-table th.el-table__cell {
-  background-color: #F8F8F8;
+.el-table {
+  --el-table-header-bg-color: #F8F8F8;
+}
+.el-dialog__body {
+  .el-input {
+    width: 220px;
+  }
 }
 .el-input__wrapper {
   width: 210px;
+}
+.el-tabs__content {
+  overflow: visible;
+}
+
+// sensitivity-tooltip样式
+.sensitivity-tooltip {
+  color: #f56c6c;
+  border-color: #fde2e2 !important;
+  background-color: #fef0f0 !important;
+  .popper__arrow {
+    border-right-color: #fde2e2 !important;
+    &::after {
+      border-right-color: #fef0f0 !important;
+    }
+  }
+}
+// dialog-header添加竖线
+.el-dialog__header {
+  position: relative;
+  padding-left: 30px;
+  &:before {
+    position: absolute;
+    left: 16px;
+    top: 23px;
+    content: '';
+    display: block;
+    width: 6px;
+    height: 20px;
+    background-color: var(--el-color-primary);
+    margin-right: 6px;
+    border-radius: 3px;
+  }
 }

@@ -1,19 +1,17 @@
 import axios from 'axios'
 import { showFullScreenLoading, tryHideFullScreenLoading } from './serviceLoading'
-import { AxiosCanceler } from './helper/axiosCancel'
-import { ResultEnum } from './httpEnum'
+import { AxiosCanceler, axiosCancelWhiteList } from './helper/axiosCancel'
+import { ResultEnum, checkStatus } from './httpEnum'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
-import { checkStatus } from './helper/checkStatus'
-import { TOKEN } from '@/utils/constant'
+import { useGlobalStore } from '@/store'
 
 const axiosCancel = new AxiosCanceler()
 const config = {
-  baseURL: process.env.VUE_APP_BASE_API,
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: ResultEnum.TIMEOUT,
   withCredentials: true
 }
-console.log(config, process.env, '---xixi')
 class RequestHttp {
   service
 
@@ -22,12 +20,17 @@ class RequestHttp {
 
     this.service.interceptors.request.use(
       config => {
-        axiosCancel.addPending(config)
+        const globalState = useGlobalStore()
+        if (!axiosCancelWhiteList.includes(config.url)) {
+          axiosCancel.addPending(config)
+        }
         if (!config.headers.noLoading) {
           showFullScreenLoading()
         }
-        const token = localStorage[TOKEN] || null
-        const headers = token ? { ...config.headers, token } : { ...config.headers }
+        const headers = { ...config.headers }
+        if (globalState.token && !headers.Authorization) {
+          headers.Authorization = globalState.token
+        }
         return { ...config, headers }
       },
       error => {
@@ -43,15 +46,8 @@ class RequestHttp {
         if (config.headers.noMessage) {
           return data
         }
-        if (data.code === ResultEnum.OVERDUE) {
-          ElMessage.error(data.msg)
-          // store.dispatch('user/logout')
-          router.replace({ name: 'Login' })
-          return data
-        }
         if (data.code && data.code !== ResultEnum.SUCCESS) {
           ElMessage.error(data.msg)
-          return data
         }
         return data
       },
@@ -59,12 +55,20 @@ class RequestHttp {
         const { response } = error
         tryHideFullScreenLoading()
         if (response) {
-          return checkStatus(response.status)
+          if (response.status === 500) {
+            ElMessage.error(response.data.msg)
+          } else {
+            checkStatus(response.status)
+          }
+          if (response.status === ResultEnum.OVERDUE) {
+            const globalStore = useGlobalStore()
+            globalStore.logout()
+          }
         }
         if (!window.navigator.onLine) {
           return router.replace('500')
         }
-        return Promise.reject(error)
+        return response || error
       }
     )
   }

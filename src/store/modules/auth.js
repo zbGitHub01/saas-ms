@@ -1,40 +1,41 @@
 import { defineStore } from 'pinia'
 import piniaPersistConfig from '@/utils/piniaPersist'
+import router from '@/router'
+import { filterMenu, filterAuth } from '@/utils/tree'
 import menuData from '../menu.json'
+import permissionData from '../permissionData.json'
 
-export const filterMenu = (routes, isAll = false) => {
-  if (routes.length === 0) return []
-  let menuList = []
-  const deepCloneRoutes = JSON.parse(JSON.stringify(routes))
-  deepCloneRoutes.map((el, index) => {
-    if (isAll) {
-      el.permissionType.type == 1 && (menuList[index] = el)
-      el.permissionType.type == 1 &&
-        el.children &&
-        el.children.length &&
-        (menuList[index].children = filterMenu(el.children, isAll).filter(item => item))
-    } else {
-      el.permissionType.type == 1 && !el.hide && menuList.push(el)
-      el.permissionType.type == 1 &&
-        !el.hide &&
-        el.children &&
-        el.children.length &&
-        (menuList[menuList.length - 1].children = filterMenu(el.children, isAll))
-    }
-  })
-  return menuList
-}
 export const useAuthStore = defineStore('authStore', {
   state: () => ({
     isCollapse: false,
-    menuList: filterMenu(menuData)
+    menuList: [],
+    authRouter: [],
+    authButtons: [],
+    tabPageMap: {}
   }),
+  getters: {
+    menuListGet: state => state.menuList,
+    tabPage: state => {
+      return state.tabPageMap[router.currentRoute.value.path] || {}
+    }
+  },
   actions: {
     async setCollapse() {
       this.isCollapse = !this.isCollapse
     },
     async findMenu() {
-      this.menuList = filterMenu(menuData)
+      const { authRouter, buttonList, tabPageMap } = filterAuth(permissionData)
+      this.menuList = filterMenu(permissionData)
+      this.authRouter = authRouter
+      this.authButtons = buttonList
+      this.tabPageMap = tabPageMap
+    },
+    tabVisible(code) {
+      if (this.tabPage.tabs) {
+        return this.tabPage.tabs.includes(code)
+      } else {
+        return true
+      }
     }
   },
   persist: piniaPersistConfig('authStore')

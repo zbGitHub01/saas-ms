@@ -8,24 +8,23 @@ const systemRouter = [
     },
     children: [
       {
-        path: '/systemSetting/employee',
-        name: 'employee',
+        path: '/systemSetting/employeeManage',
+        name: 'employeeManage',
         meta: { title: '员工管理', icon: 'UserFilled' },
-        children: [
-          {
-            path: '/systemSetting/employee/info',
-            name: 'employeeInfo',
-            component: () => import('@/views/systemSetting/business/businessInfo/index.vue'),
-            meta: { title: '员工信息', icon: 'Menu' }
-          },
-          {
-            path: '/systemSetting/employee/department',
-            name: 'department',
-            component: () => import('@/views/systemSetting/business/departmentSetting/index.vue'),
-            meta: { title: '部门设置', keepAlive: true, icon: 'Menu' }
-          }
-        ]
-      }
+        component: () => import('@/views/systemSetting/employeeManage/index.vue')
+      },
+      {
+        path: '/systemSetting/authManage',
+        name: 'authManage',
+        meta: { title: '权限管理', icon: 'UserFilled' },
+        component: () => import('@/views/systemSetting/authManage/index.vue')
+      },
+      {
+        path: '/systemSetting/companyInfo',
+        name: 'companyInfo',
+        meta: { title: '公司信息管理', icon: 'OfficeBuilding' },
+        component: () => import('@/views/systemSetting/companyInfo/index.vue')
+      },
     ]
   }
 ]

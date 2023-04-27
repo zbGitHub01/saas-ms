@@ -57,7 +57,7 @@ const onSwitch = () => {
 <style lang="scss" scoped>
 .form-wrapper {
   background-color: white;
-  //margin-bottom: 20px;
+  margin-bottom: 20px;
   border-radius: 4px;
   .pd20 {
     padding: 0 20px;

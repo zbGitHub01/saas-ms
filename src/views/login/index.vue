@@ -7,45 +7,35 @@
       </div>
     </div>
     <div class="login-right">
-      <h1 class="title">Hi，您好，请登录！</h1>
-      <el-form :model="form" size="large">
-        <el-form-item>
-          <el-input v-model="form.phone" placeholder="请输入手机号码">
-            <template #prefix>
-              <el-icon class="input-icon"><Iphone /></el-icon>
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <div class="input-box">
-            <el-input class="append-btn" v-model="form.code" placeholder="请输入验证码">
-              <template #prefix>
-                <el-icon class="input-icon"><Lock /></el-icon>
-              </template>
-            </el-input>
-            <el-button class="mr10" type="primary" link>获取验证码</el-button>
-          </div>
-        </el-form-item>
-        <el-form-item>
-          <el-button class="btn" type="primary">登录</el-button>
-        </el-form-item>
-        <div class="foot-btn">
-          <el-button type="primary" link>密码登录</el-button>
-        </div>
-      </el-form>
+      <h1 class="title">{{ loginTitle[loginType] }}</h1>
+      <LoginForm v-if="loginType === 0" @success="setLoginType" />
+      <SelectBusiness v-if="loginType === 1" @set-password="setLoginType" />
+      <SetPassword v-if="loginType === 2" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { ref, nextTick } from 'vue'
 import logoUrl from '@/assets/images/logo-black.png'
 import loginBg from '@/assets/images/login-bg1.png'
+import LoginForm from './components/LoginForm.vue'
+import SelectBusiness from './components/SelectBusiness.vue'
+import SetPassword from './components/SetPassword.vue'
+import { useGlobalStore } from '@/store'
 
-const form = reactive({
-  phone: '',
-  code: ''
-})
+const globalStore = useGlobalStore()
+const loginType = ref(0)
+const loginTitle = ref(['Hi，您好，请登录！', '请选择您的企业！', '请设置密码！'])
+
+const setLoginType = type => {
+  nextTick(() => {
+    loginType.value = type
+  })
+}
+if (globalStore.token) {
+  setLoginType(1)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -115,13 +105,6 @@ const form = reactive({
     height: 46px;
     box-shadow: 0px 10px 20px 0px rgba(49, 120, 255, 0.35);
   }
-}
-.mr10 {
-  margin-right: 10px;
-}
-.foot-btn {
-  text-align: center;
-  margin-top: 10px;
 }
 @media screen and (max-width: 1100px) {
   .login-left {
