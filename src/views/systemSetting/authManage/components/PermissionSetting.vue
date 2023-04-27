@@ -23,7 +23,12 @@
         <el-table ref="tableRef" class="table" :data="dataPermission.data" height="100%" default-expand-all border row-key="id">
           <el-table-column type="index" width="55" align="center">
             <template #header>
-              <el-checkbox v-model="allCheck" :indeterminate="isIndeterminate" :disabled="!dataPermission.data?.length" @change="allCheckboxChange"></el-checkbox>
+              <el-checkbox
+                v-model="allCheck"
+                :indeterminate="isIndeterminate"
+                :disabled="!dataPermission.data?.length"
+                @change="allCheckboxChange"
+              ></el-checkbox>
             </template>
             <template #default="scope">
               <el-checkbox v-model="scope.row.isChecked" @change="checkboxChange($event, scope.row)" />
