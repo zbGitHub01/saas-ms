@@ -38,7 +38,32 @@
             "id": 211,
             "parentId": 2,
             "order": null,
-            "children": null,
+            "children": [
+              {
+                "id": 2111,
+                "parentId": 211,
+                "order": null,
+                "children": null,
+                "name": "邀请员工",
+                "code": "",
+                "path": "",
+                "icon": null,
+                "type": 3,
+                "clientId": "client",
+                "tag": null,
+                "state": 1,
+                "sort": 1,
+                "permissionBenefitType": 2,
+                "dataScope": {
+                  "field": null,
+                  "compare": null,
+                  "value": null,
+                  "valueType": null
+                },
+                "isChecked": false,
+                "source": null
+              }
+            ],
             "name": "所有员工",
             "code": "",
             "path": "",
