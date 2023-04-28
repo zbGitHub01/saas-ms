@@ -87,8 +87,6 @@
       <el-table-column label="注册手机号" prop="phone" min-width="150" align="center"></el-table-column>
       <el-table-column label="注册时间" prop="registerTime" min-width="180" align="center"></el-table-column>
       <el-table-column label="审批截止日" prop="lastApplyTime" min-width="180" align="center"></el-table-column>
-      <!-- TODO -->
-      <el-table-column label="邮箱" prop="name" min-width="150" align="center"></el-table-column>
       <el-table-column label="邀请人" prop="inviteName" min-width="150" align="center"></el-table-column>
       <el-table-column label="委外经理" prop="entrustStaffName" min-width="150" align="center"></el-table-column>
       <el-table-column

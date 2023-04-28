@@ -7,45 +7,34 @@
           <el-form-item label="机构名称">
             <el-input v-model="form.orgTitle" placeholder="请输入机构名称"></el-input>
           </el-form-item>
-          <!-- TODO：参数名 -->
           <el-form-item label="委外经理">
             <el-input v-model="form.entrustStaffName" placeholder="请输入委外经理"></el-input>
           </el-form-item>
-          <!-- TODO：下拉数据 -->
           <el-form-item label="合作状态">
             <el-select v-model="form.accessStatus" placeholder="请选择合作状态">
               <el-option
                 v-for="item in optionData.accessOptions"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
+                :key="item.itemValue"
+                :label="item.itemText"
+                :value="item.itemValue"
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="评定标签">
-            <el-select v-model="form.orgLevelId" placeholder="请选择评定标签">
+          <el-form-item label="机构类型">
+            <el-select v-model="form.orgCategoryId" placeholder="请选择机构类型">
               <el-option
-                v-for="item in optionData.orgLevelList"
+                v-for="item in optionData.orgTypeList"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
-          <!-- TODO：参数名、下拉数据 -->
-          <el-form-item label="负责人姓名">
-            <el-select v-model="form.username" placeholder="请选择负责人姓名">
-              <el-option
-                v-for="item in optionData.usernameList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
+          <el-form-item label="业务负责人">
+            <el-input v-model="form.bussinessOperator" placeholder="请输入业务负责人"></el-input>
           </el-form-item>
-          <!-- TODO：参数名 -->
           <el-form-item label="负责人手机号">
-            <el-input v-model="form.userPhone" placeholder="请输入负责人手机号"></el-input>
+            <el-input v-model="form.bussinessOperatorPhone" placeholder="请输入负责人手机号"></el-input>
           </el-form-item>
           <el-form-item label="首次准入时间">
             <el-date-picker
@@ -66,16 +55,6 @@
               start-placeholder="开始时间"
               end-placeholder="结束时间"
             />
-          </el-form-item>
-          <el-form-item label="机构类型">
-            <el-select v-model="form.orgType" placeholder="请选择机构类型">
-              <el-option
-                v-for="item in optionData.orgTypeList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
           </el-form-item>
           <el-form-item label="作业模式">
             <el-select v-model="form.orgModelId" placeholder="请选择作业模式">
@@ -122,80 +101,81 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="合作状态" prop="accessStatusName" min-width="150" align="center"></el-table-column>
+      <el-table-column label="合作状态" prop="accessStatus" min-width="150" align="center">
+        <template #default="scope">
+          <div>{{ accessStatusText(scope.row.accessStatus) }}</div>
+        </template>
+      </el-table-column>
       <el-table-column label="委外经理" prop="entrustStaffName" min-width="150" align="center"></el-table-column>
-      <!-- TODO:字段名 -->
-      <el-table-column label="邀请人" prop="name" min-width="150" align="center"></el-table-column>
-      <el-table-column label="员工数" prop="staffCount" min-width="150" align="center">
-        <template #default="scope">
-          <span style="vertical-align: middle">{{ scope.row.staffCount }}</span>
-          <el-button type="primary" link @click="onUserNumDrawer(scope.row)">查看</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="业务运营负责人" prop="username" min-width="150" align="center"></el-table-column>
-      <el-table-column label="负责人手机号" prop="userPhone" min-width="150" align="center"></el-table-column>
-      <!-- TODO:字段名 -->
-      <el-table-column label="最近准入时间" prop="name" min-width="180" align="center"></el-table-column>
+      <el-table-column label="邀请人" prop="inviteName" min-width="150" align="center"></el-table-column>
+      <el-table-column label="员工数" prop="employeeNum" min-width="150" align="center"></el-table-column>
+      <el-table-column label="业务运营负责人" prop="bussinessOperator" min-width="150" align="center"></el-table-column>
+      <el-table-column
+        label="运营负责人手机号"
+        prop="bussinessOperatorPhone"
+        min-width="150"
+        align="center"
+      ></el-table-column>
+      <el-table-column label="最近准入时间" prop="accessTime" min-width="180" align="center"></el-table-column>
       <el-table-column label="对接邮箱" prop="mail" min-width="150" align="center"></el-table-column>
-      <el-table-column label="机构类型" prop="orgCategoryText" min-width="150" align="center"></el-table-column>
-      <el-table-column label="风险等级" prop="orgLevelText" min-width="150" align="center"></el-table-column>
-      <el-table-column label="机构注册人" prop="registerUsername" min-width="150" align="center"></el-table-column>
-      <el-table-column label="注册手机号" prop="registerPhone" min-width="150" align="center"></el-table-column>
+      <el-table-column label="机构类型" prop="orgCategoryName" min-width="150" align="center"></el-table-column>
+      <!-- TODO：后期加入 -->
+      <!-- <el-table-column label="风险等级" prop="level" min-width="150" align="center"></el-table-column> -->
+      <el-table-column label="机构注册人" prop="username" min-width="150" align="center"></el-table-column>
+      <el-table-column label="注册手机号" prop="phone" min-width="150" align="center"></el-table-column>
       <el-table-column label="注册时间" prop="registerTime" min-width="180" align="center"></el-table-column>
-      <el-table-column label="接案状态" prop="isConnection" min-width="150" align="center">
-        <template #default="scope">
-          <el-switch
-            v-model="scope.row.isConnection"
-            :active-value="0"
-            :inactive-value="1"
-            @change="changeIsConnection(scope.row)"
-          ></el-switch>
-        </template>
-      </el-table-column>
       <el-table-column label="组织架构" prop="name" min-width="150" align="center">
         <template #default="scope">
-          <el-button type="primary" link @click="onOrgStructureDrawer(scope.row)">查看</el-button>
+          <el-button
+            type="primary"
+            link
+            @click="onOrgStructureDrawer(scope.row.relationTenantId)"
+          >查看</el-button>
         </template>
       </el-table-column>
       <el-table-column label="角色设置" prop="name" min-width="150" align="center">
         <template #default="scope">
-          <el-button type="primary" link @click="onRoleSettingDrawer(scope.row)">查看</el-button>
+          <el-button type="primary" link @click="onRoleSettingDrawer(scope.row.relationTenantId)">查看</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="操作" prop="name" width="320" fixed="right" align="center">
+      <el-table-column label="操作" prop="name" width="400" fixed="right" align="center">
         <template #default="scope">
-          <el-button type="primary" link @click="onOrgDetail(scope.row)">查看/编辑</el-button>
-          <el-button
+          <!-- <el-button type="primary" link @click="onOrgDetail(scope.row.relationTenantId)">查看/编辑</el-button> -->
+          <!-- TODO -->
+          <!-- <el-button
             type="danger"
             v-if="scope.row.accessStatus !== 4"
             link
             @click="onStopComDialog(scope.row)"
-          >终止合作</el-button>
+          >终止合作</el-button>-->
+          <!-- TODO：缺少reasonContent、remark字段，后期加入 -->
           <el-button
             type="success"
             v-if="scope.row.accessStatus === 4"
             link
             @click="onOpenComDialog(scope.row)"
           >开启合作</el-button>
-          <el-button
+          <!-- <el-button
             type="warning"
             link
             @click="onReadmissionDialog(scope.row)"
             :disabled="scope.row.accessStatus === 3"
-          >重新准入</el-button>
+          >重新准入</el-button>-->
           <el-button
             type="danger"
             v-if="scope.row.isStopJob === 0"
-            :disabled="scope.row.accessStatus === 3 || scope.row.accessStatus === 4"
+            :disabled="scope.row.accessStatus === 4"
             link
-            @click="onSuspendOperationDialog(scope.row.orgId, 'suspend')"
+            @click="onSuspendOperationDialog(scope.row.relationTenantId, 'suspend')"
           >暂停作业</el-button>
           <el-button
             type="warning"
             v-if="scope.row.isStopJob === 1"
             link
-            @click="onSuspendOperationDialog(scope.row.orgId, 'restore')"
+            @click="onSuspendOperationDialog(scope.row.relationTenantId, 'restore')"
           >恢复作业</el-button>
+          <!-- TODO -->
+          <!-- <el-button type="primary" link @click="onUserNumDrawer(scope.row.relationTenantId)">员工明细</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -233,10 +213,9 @@ import suspendOperationDialog from './components/suspendOperationDialog.vue'
 import openComDialog from './components/openComDialog.vue'
 import stopComDialog from './components/stopComDialog.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
+import ApisCommon from '@/api/modules/common'
 const optionData = reactive({
   accessOptions: [],
-  orgLevelList: [],
-  usernameList: [],
   orgTypeList: [],
   orgModelList: []
 })
@@ -255,10 +234,9 @@ const form = reactive({
   orgTitle: '',
   entrustStaffName: '',
   accessStatus: '',
-  orgLevelId: '',
-  username: '',
-  userPhone: '',
-  orgType: '',
+  orgCategoryId: '',
+  bussinessOperator: '',
+  bussinessOperatorPhone: '',
   orgModelId: ''
 })
 const defaultForm = JSON.parse(JSON.stringify(form))
@@ -282,8 +260,8 @@ const handleForm = () => {
   })
   return form
 }
-const changeIsConnection = () => {
-  // getTableData()
+const accessStatusText = val => {
+  return optionData.accessOptions.find(item => item.itemValue === val)?.itemText
 }
 const onSearch = () => {
   getTableData()
@@ -297,24 +275,24 @@ const onReset = () => {
 }
 
 const orgDetailDrawerRef = ref()
-const onOrgDetail = (row: any) => {
-  orgDetailDrawerRef.value.open(row)
+const onOrgDetail = (relationTenantId: number) => {
+  orgDetailDrawerRef.value.open(relationTenantId)
 }
 const inviteLinkDialogRef = ref()
 const onInviteLink = () => {
   inviteLinkDialogRef.value.open()
 }
 const userNumDrawerRef = ref()
-const onUserNumDrawer = (row: any) => {
-  userNumDrawerRef.value.open(row)
+const onUserNumDrawer = (relationTenantId: number) => {
+  userNumDrawerRef.value.open(relationTenantId)
 }
 const orgStructureDrawerRef = ref()
-const onOrgStructureDrawer = (row: any) => {
-  orgStructureDrawerRef.value.open(row)
+const onOrgStructureDrawer = (relationTenantId: number) => {
+  orgStructureDrawerRef.value.open(relationTenantId)
 }
 const roleSettingDrawerRef = ref()
-const onRoleSettingDrawer = (row: any) => {
-  roleSettingDrawerRef.value.open(row)
+const onRoleSettingDrawer = (relationTenantId: number) => {
+  roleSettingDrawerRef.value.open(relationTenantId)
 }
 const readmissionDialogRef = ref()
 const onReadmissionDialog = (row: any) => {
@@ -329,8 +307,8 @@ const onReadmissionDialog = (row: any) => {
   }
 }
 const suspendOperationDialogRef = ref()
-const onSuspendOperationDialog = (orgId: number, type: string) => {
-  suspendOperationDialogRef.value.open(orgId, type)
+const onSuspendOperationDialog = (relationTenantId: number, type: string) => {
+  suspendOperationDialogRef.value.open(relationTenantId, type)
 }
 const openComDialogRef = ref()
 const onOpenComDialog = (row: any) => {
@@ -339,12 +317,17 @@ const onOpenComDialog = (row: any) => {
 const stopComDialogRef = ref()
 const onStopComDialog = async (row: any) => {
   const params = {
-    orgId: row.orgId
+    relationTenantId: row.relationTenantId
   }
-  // TODO:caseNum接口
+  // TODO:后续接入caseNum接口
   // const { code, data } = await Apis.caseNum(params)
   // if (code !== 200) return
-  // stopComDialogRef.value.open(data, row.orgId)
+  const temRow = {
+    ...row,
+    // orgNum: data || 0
+    orgNum: 0
+  }
+  stopComDialogRef.value.open(temRow)
 }
 //获取下拉数据
 const getSelectList = async () => {
@@ -352,13 +335,9 @@ const getSelectList = async () => {
   if (option1.code !== 200) return
   optionData.orgTypeList = option1.data?.ORG_CATEGORY ?? []
   optionData.orgModelList = option1.data?.ORG_TASK_MODEL ?? []
-  // TODO:optionId的值
-  const option2 = await Apis.configList({
-    optionId: 1,
-    type: 6
-  })
+  const option2 = await ApisCommon.findItemList({ codes: 'COOPERATION_STATUS' })
   if (option2.code !== 200) return
-  optionData.orgLevelList = option2.data
+  optionData.accessOptions = option2.data?.COOPERATION_STATUS ?? []
 }
 const riskDialogRef = ref()
 const onRisk = id => {

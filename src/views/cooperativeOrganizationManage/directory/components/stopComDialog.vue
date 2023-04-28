@@ -2,7 +2,10 @@
   <el-dialog v-model="dialogVisible" title="终止合作" width="700px" :before-close="handleClose">
     <div style="margin: 0 40px">
       <div class="ft-align text-weight mb12">确认与该处置机构终止合作吗？</div>
-      <div class="ft-align mb30">终止合作后该公司账号下的个{{ orgNum }}案件将被收回至平台委外处置库。</div>
+      <div
+        class="ft-align mb30"
+        v-if="orgDetail.orgNum >0"
+      >终止合作后该公司账号下的个{{ orgDetail.orgNum }}案件将被收回至平台委外处置库。</div>
       <el-form
         ref="ruleFormRef"
         :model="form"
@@ -52,22 +55,21 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="submitForm">确认</el-button>
+        <el-button type="primary" @click="submitForm(ruleFormRef)">确认</el-button>
       </span>
     </template>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const dialogVisible = ref(false)
-const orgNum = ref<number>()
-const stopOrgId = ref<number>()
+const orgDetail = ref({})
 const reasonList = ref<any[]>([])
 const sensitiveOptions = ref<any[]>([
   {
@@ -121,15 +123,16 @@ const rules = reactive<FormRules>({
   riskTypes: [{ required: true, message: '请选择敏感信息', trigger: 'change' }]
 })
 const emits = defineEmits(['getTableData'])
-const open = (num: number, orgId: number) => {
-  getSelectList()
-  orgNum.value = num
-  stopOrgId.value = orgId
+const open = (row: any) => {
+  orgDetail.value = row
   dialogVisible.value = true
+  nextTick(() => {
+    getSelectList()
+  })
 }
 const doSave = async () => {
   const params = {
-    orgId: stopOrgId,
+    relationTenantId: orgDetail.value.relationTenantId,
     ...form
   }
   params.reasonContent = reasonList.value.filter((item: any) => item.id === params.reasonId)[0].name
@@ -157,9 +160,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 //获取下拉数据
 const getSelectList = async () => {
-  // TODO:optionId的值
   const option2 = await Apis.configList({
-    optionId: 1,
+    optionId: orgDetail.value.orgCategoryId,
     type: 2
   })
   if (option2.code !== 200) return

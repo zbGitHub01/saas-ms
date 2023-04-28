@@ -194,7 +194,7 @@
       <el-table-column label="注册人姓名" prop="username" min-width="150" align="center"></el-table-column>
       <el-table-column label="注册邮箱" prop="mail" min-width="150" align="center"></el-table-column>
       <el-table-column label="注册时间" prop="registerTime" min-width="180" align="center"></el-table-column>
-      <el-table-column label="机构类型" prop="orgTypeName" min-width="150" align="center"></el-table-column>
+      <el-table-column label="机构类型" prop="orgCategoryName" min-width="150" align="center"></el-table-column>
       <el-table-column label="邀请人" prop="inviteName" min-width="150" align="center"></el-table-column>
       <el-table-column label="委外经理" prop="entrustStaffName" min-width="150" align="center"></el-table-column>
       <el-table-column label="审批进度" prop="name" width="110" fixed="right" align="center">
