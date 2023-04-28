@@ -11,19 +11,24 @@
       <div class="flx-align-center pb10">
         <div class="pr40">
           <span class="color-999">机构名：</span>
-          {{ orgData.orgName }}
+          {{ detailData.companyName }}
         </div>
         <div class="pr40">
           <span class="color-999">注册人姓名：</span>
-          {{ orgData.userName }}
+          {{ detailData.username }}
         </div>
         <div class="pr40">
           <span class="color-999">对接邮箱：</span>
-          {{ orgData.phone }}
+          {{ detailData.mail }}
         </div>
       </div>
       <div style="height: calc(100% - 20px)">
-        <access-data :scrollTop="220" accessId="history-personal-info"></access-data>
+        <access-data
+          :scrollTop="220"
+          accessId="history-personal-info"
+          :accessDetail="detailData"
+          ref="accessDataRef"
+        ></access-data>
       </div>
     </div>
   </el-dialog>
@@ -32,21 +37,21 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import accessData from './../../components/accessData/index.vue'
-// import { otherRegisterLog } from '@/api/orgmanage'
+import Apis from '@/api/modules/cooperativeOrganization'
 const dialogVisible = ref(false)
-const orgData = ref<any>()
+const detailData = ref({})
+const accessDataRef = ref()
+const hitList = ref([])
 
-const getTableData = async () => {
-  const params = {}
-  // const { code, data } = await otherRegisterLog(params)
-  // if (code !== 200) return
-  // state.tableData = data
-  // state.total = data.total
-}
 const open = (data: any) => {
-  orgData.value = data
-  getTableData()
+  getOrgHistoryDetail(data)
   dialogVisible.value = true
+}
+const getOrgHistoryDetail = async params => {
+  const { code, data } = await Apis.clientOrgHistoryDetail(params)
+  if (code !== 200) return
+  detailData.value = data
+  accessDataRef.value.handleData(detailData.value, hitList.value)
 }
 const handleClose = () => {
   dialogVisible.value = false
