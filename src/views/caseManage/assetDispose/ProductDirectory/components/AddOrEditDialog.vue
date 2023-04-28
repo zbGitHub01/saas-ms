@@ -10,7 +10,7 @@
     <span>
       <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="right" label-width="120px">
         <el-form-item label="产品：" prop="productId">
-          <el-select v-model="form.productId" placeholder="请选择产品" clearable filterable style="width: 300px">
+          <el-select v-model="form.productId" placeholder="请选择产品" clearable filterable>
             <el-option
               v-for="(item, index) in selectData.productList"
               :key="index"
@@ -20,18 +20,18 @@
           </el-select>
         </el-form-item>
         <el-form-item label="债权方：" prop="zhaiquanfangId">
-          <el-select v-model="form.zhaiquanfangId" placeholder="请选择债权方" clearable filterable style="width: 300px">
+          <el-select v-model="form.zhaiquanfangId" placeholder="请选择债权方" clearable filterable>
             <el-option v-for="(item, index) in selectData.orgList" :key="index" :label="item.text" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="SPV公司：" prop="SPV">
-          <el-input v-model="form.SPV" placeholder="请输入SPV公司" clearable style="width: 300px"></el-input>
+          <el-input v-model="form.SPV" placeholder="请输入SPV公司" clearable></el-input>
         </el-form-item>
         <el-form-item label="官方咨询电话：" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入官方咨询电话" clearable style="width: 300px"></el-input>
+          <el-input v-model="form.phone" placeholder="请输入官方咨询电话" clearable></el-input>
         </el-form-item>
         <el-form-item label="产品资料：" prop="ziliao">
-          <el-input v-model="form.ziliao" placeholder="请填写产品说明资料的链接" clearable style="width: 300px"></el-input>
+          <el-input v-model="form.ziliao" placeholder="请填写产品说明资料的链接" clearable></el-input>
         </el-form-item>
         <el-form-item label="是否启用：" prop="isUse">
           <el-radio-group v-model="form.isUse">
@@ -104,11 +104,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       console.log(form)
       // 请求得到数据
-      // const { code, data, msg } = await xx(form)
-      // if(code !== 200){
-      //   return ElMessage.error(msg)
-      // }
-      ElMessage.success('操作成功！')
+      // await xx(form)
+      ElMessage.success('保存成功！')
       emits('getTableData')
       formEl.resetFields()
       dialogVisible.value = false

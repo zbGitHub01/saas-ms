@@ -8,6 +8,80 @@
     "children": null
   },
   {
+    "name": "案件管理",
+    "code": "CASE_MANAGE",
+    "icon": "Management",
+    "path": "/caseManage",
+    "type": 1,
+    "children": [
+      {
+        "name": "数据导入",
+        "code": "CASE_IMPORT",
+        "icon": "",
+        "path": "/caseManage/caseImport",
+        "type": 1
+      },
+      {
+        "name": "全部案件",
+        "code": "CASE_ALL",
+        "icon": "",
+        "path": "/caseManage/allCases",
+        "type": 1
+      },
+      {
+        "name": "资产委托",
+        "code": "ASSET_ENTRUST",
+        "icon": "",
+        "path": "/caseManage/assetEntrust",
+        "type": 1
+      },
+      {
+        "name": "资产基础配置",
+        "code": "ASSET_DISPOSE",
+        "icon": "",
+        "path": "/caseManage/assetDispose",
+        "type": 1
+      }
+    ]
+  },
+  {
+    "name": "案件流转",
+    "code": "CASE_CIRCULATION",
+    "icon": "Guide",
+    "path": "/caseCirculation",
+    "type": 1,
+    "children": [
+      {
+        "name": "案件分库",
+        "code": "CASE_BANK",
+        "icon": "",
+        "path": "/caseCirculation/caseBank",
+        "type": 1
+      },
+      {
+        "name": "案件委派",
+        "code": "CASE_ASSIGNMENT",
+        "icon": "",
+        "path": "/caseCirculation/caseAssignment",
+        "type": 1
+      },
+      {
+        "name": "案件收回",
+        "code": "CASE_RECOVERY",
+        "icon": "",
+        "path": "/caseCirculation/caseRecovery",
+        "type": 1
+      },
+      {
+        "name": "案件流转配置",
+        "code": "CASE_CONFIGURATION",
+        "icon": "",
+        "path": "/caseCirculation/caseConfiguration",
+        "type": 1
+      }
+    ]
+  },
+  {
     "name": "合作机构管理",
     "code": "COOPER_ORGAN_MANAGE",
     "icon": "copper-organ",

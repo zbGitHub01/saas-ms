@@ -134,10 +134,7 @@ onMounted(() => {
 const getTableData = async () => {
   console.log('可管理案件搜索', form)
   // 请求得到数据
-  // const { code, data, msg } = await xx(form)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(form)
   const tableDataSub = [
     {
       caseId: 'WTD-SJD-0000002',

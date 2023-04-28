@@ -5,7 +5,7 @@
   </div>
 </template>
   
-  <script setup lang="ts">
+<script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import attention from './components/attention.vue'
 import outcase from './components/outcase.vue'
@@ -29,24 +29,28 @@ onMounted(() => {
 // }
 // 获取下载模版
 const importExcelPath = async () => {
-  // 请求得到数据
-  // const { code, data, msg } = await xx(params)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // 请求得到下载模版地址
+  // const { data } = await xx(params)
   const downDataSub = {
     caseTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/案件导入模板.xlsx', //导入案件，更新覆盖案件
-    tagTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/临时标签导入模板.xlsx' //导入临时标签
+    addressTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/地址导入模板.xlsx',
+    contactTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/联系人导入模板.xlsx',
+    tagTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/临时标签导入模板.xlsx', //导入临时标签
+    wordTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/评语导入模板.xlsx',
+    refund4JXTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/捷信还款账户导入模板.xlsx',
+    customEntrustTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/指定委案导入模板.xlsx',
+    customAllotTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/指定分案导入模板.xlsx',
+    caseNoticeTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/债转通知模板.xlsx',
+    customFieldTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/案件自定义字段导入模板.xlsx',
+    specialRelationTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/特殊关联人模板.xlsx',
+    caseLawsuitStatusTagUrl: 'https://asfile.donganzichan.cn/assets/tmpl/案件法诉状态标签模板.xlsx'
   }
   selectData.downData = downDataSub
 }
 // 获取下拉
 const getSelecData = async () => {
   // 请求得到数据
-  // const { code, data, msg } = await xx(form)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(form)
   selectData.batchList = [
     {
       itemId: 2,
@@ -80,6 +84,6 @@ const getSelecData = async () => {
 }
 </script>
   
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
 </style>
   

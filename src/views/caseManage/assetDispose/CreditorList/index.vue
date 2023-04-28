@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-button type="primary" icon="CirclePlus" @click="addOrEdit(undefined, 1)">新增</el-button>
+    <OperationBar>
+      <template #default>
+        <el-button type="primary" icon="Plus" @click="addOrEdit(undefined, 1)">新增</el-button>
+      </template>
+    </OperationBar>
     <div class="mt20">
       <el-table :data="state.tableData" border>
         <el-table-column label="序" type="index" align="center" width="50" />
@@ -21,12 +25,12 @@
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
-    <AddOrEditDialog ref="addOrEditDialog" @getTableData="getTableData"/>
+    <AddOrEditDialog ref="addOrEditDialog" @getTableData="getTableData" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { CirclePlus } from '@element-plus/icons-vue'
+import { Plus } from '@element-plus/icons-vue'
 import AddOrEditDialog from './components/AddOrEditDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
@@ -47,20 +51,17 @@ onMounted(() => {
 const getTableData = async () => {
   console.log('债权方')
   // 请求得到数据
-  // const { code, data, msg } = await xx(form)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(form)
   const tableDataSub = [
     {
       zhaiquanfang: '“360”借条',
       zhaiquanfangId: 1,
-      isUse: true,
+      isUse: true
     },
     {
       zhaiquanfang: '我来带',
       zhaiquanfangId: 2,
-      isUse: false,
+      isUse: false
     }
   ]
   state.tableData = tableDataSub
@@ -82,10 +83,7 @@ const toDelete = (row: any) => {
   }).then(
     () => {
       // 请求
-      // const { code, msg } = await xx(params)
-      // if(code !== 200){
-      //   return ElMessage.error(msg)
-      // }
+      // await xx(params)
       ElMessage.success('删除成功！')
       getTableData()
     },
@@ -99,10 +97,7 @@ const toDelete = (row: any) => {
 const changeCheckbox = (row: any) => {
   console.log(row.isUse)
   // 请求
-  // const { code, msg } = await xx(form)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // await xx(form)
 }
 </script>
 

@@ -94,10 +94,7 @@ onMounted(() => {
 const getTableData = async () => {
   console.log('已委托案件搜索', form)
   // 请求得到数据
-  // const { code, data, msg } = await xx(form)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(form)
   const tableDataSub = [
     {
       caseId: 'WTD-SJD-0000002',
@@ -137,10 +134,7 @@ const getTableData = async () => {
 }
 const getSelecData = async () => {
   // 请求得到数据
-  // const { code, data, msg } = await xx(params)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data} = await xx(params)
   selectData.productList = [
     {
       id: 1,

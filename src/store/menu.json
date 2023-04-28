@@ -1,84 +1,248 @@
 [
   {
-    "hide":false,
-    "icon":"HomeFilled",
-    "parentMenuCode":"non",
-    "path":"/home/index",
-    "permissionId":2377,
-    "isChecked":true,
-    "menuCode":"SHOUYE",
-    "menuName":"首页",
-    "permissionType":{
-      "type":1,
-      "desc":"权限菜单"
+    "hide": false,
+    "icon": "HomeFilled",
+    "parentMenuCode": "non",
+    "path": "/home/index",
+    "permissionId": 2377,
+    "isChecked": true,
+    "menuCode": "SHOUYE",
+    "menuName": "首页",
+    "permissionType": {
+      "type": 1,
+      "desc": "权限菜单"
     },
-    "rolePermissionOperation":[],
-    "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-    "children":[]
+    "rolePermissionOperation": [],
+    "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7",
+    "children": []
   },
   {
-    "hide":false,
-    "icon":"Setting",
-    "parentMenuCode":"non",
-    "path":"/systemSetting",
-    "permissionId":2462,
+    "hide": false,
+    "icon": "Management",
+    "parentMenuCode": "non",
+    "path": "/caseManage",
+    "permissionId": 2462,
     "isChecked": true,
-    "menuCode":"XITONGSHEZHI",
-    "menuName":"系统设置",
-    "permissionType":{
-      "type":1,
-      "desc":"权限菜单"
+    "menuCode": "ANJIANGUANLI",
+    "menuName": "案件管理",
+    "permissionType": {
+      "type": 1,
+      "desc": "权限菜单"
     },
-    "rolePermissionOperation":[],
-    "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7",
-    "children":[
+    "rolePermissionOperation": [],
+    "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7",
+    "children": [
       {
-        "hide":false,
-        "icon":"UserFilled",
-        "parentMenuCode":"XITONGSHEZHI",
-        "path":"/systemSetting/employeeManage",
-        "permissionId":2280,
+        "hide": false,
+        "icon": "UploadFilled",
+        "parentMenuCode": "ANJIANGUANLI",
+        "path": "/caseManage/caseImport",
+        "permissionId": 2280,
         "isChecked": true,
-        "menuCode":"YUANGONGGUANLI",
-        "menuName":"员工管理",
-        "permissionType":{
-          "type":1,
-          "desc":"权限菜单"
+        "menuCode": "SHUJUDAORU",
+        "menuName": "数据导入",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
         },
-        "rolePermissionOperation":[],
-        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
       },
       {
-        "hide":false,
-        "icon":"UserFilled",
-        "parentMenuCode":"XITONGSHEZHI",
-        "path":"/systemSetting/authManage",
-        "permissionId":2281,
+        "hide": false,
+        "icon": "List",
+        "parentMenuCode": "ANJIANGUANLI",
+        "path": "/caseManage/allCases",
+        "permissionId": 2280,
         "isChecked": true,
-        "menuCode":"YUANGONGGUANLI",
-        "menuName":"权限管理",
-        "permissionType":{
-          "type":1,
-          "desc":"权限管理"
+        "menuCode": "QUANBUANJIAN",
+        "menuName": "全部案件",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
         },
-        "rolePermissionOperation":[],
-        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
       },
       {
-        "hide":false,
-        "icon":"OfficeBuilding",
-        "parentMenuCode":"XITONGSHEZHI",
-        "path":"/systemSetting/companyInfo",
-        "permissionId":2282,
+        "hide": false,
+        "icon": "Promotion",
+        "parentMenuCode": "ANJIANGUANLI",
+        "path": "/caseManage/assetEntrust",
+        "permissionId": 2280,
         "isChecked": true,
-        "menuCode":"GONGSIXINXIGUANLI",
-        "menuName":"公司信息管理",
-        "permissionType":{
-          "type":1,
-          "desc":"权限管理"
+        "menuCode": "ZICHANWEITUO",
+        "menuName": "资产委托",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
         },
-        "rolePermissionOperation":[],
-        "sysProductUuid":"a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "Management",
+        "parentMenuCode": "ANJIANGUANLI",
+        "path": "/caseManage/assetDispose",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "ZICHANJICHUPEIZHI",
+        "menuName": "资产基础配置",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      }
+    ]
+  },
+  {
+    "hide": false,
+    "icon": "Guide",
+    "parentMenuCode": "non",
+    "path": "/caseCirculation",
+    "permissionId": 2462,
+    "isChecked": true,
+    "menuCode": "ANJIANLIUZHUAN",
+    "menuName": "案件流转",
+    "permissionType": {
+      "type": 1,
+      "desc": "权限菜单"
+    },
+    "rolePermissionOperation": [],
+    "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7",
+    "children": [
+      {
+        "hide": false,
+        "icon": "Guide",
+        "parentMenuCode": "ANJIANLIUZHUAN",
+        "path": "/caseCirculation/caseBank",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "ANJIANFENKU",
+        "menuName": "案件分库",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "Guide",
+        "parentMenuCode": "ANJIANLIUZHUAN",
+        "path": "/caseCirculation/caseAssignment",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "ANJIANWEIPAI",
+        "menuName": "案件委派",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "Guide",
+        "parentMenuCode": "ANJIANLIUZHUAN",
+        "path": "/caseCirculation/caseRecovery",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "ANJIANHUISHOU",
+        "menuName": "案件收回",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "Guide",
+        "parentMenuCode": "ANJIANLIUZHUAN",
+        "path": "/caseCirculation/caseConfiguration",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "ANJIANLIUZHUANPEIZHI",
+        "menuName": "案件流转配置",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      }
+    ]
+  },
+  {
+    "hide": false,
+    "icon": "Setting",
+    "parentMenuCode": "non",
+    "path": "/systemSetting",
+    "permissionId": 2462,
+    "isChecked": true,
+    "menuCode": "XITONGSHEZHI",
+    "menuName": "系统设置",
+    "permissionType": {
+      "type": 1,
+      "desc": "权限菜单"
+    },
+    "rolePermissionOperation": [],
+    "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7",
+    "children": [
+      {
+        "hide": false,
+        "icon": "UserFilled",
+        "parentMenuCode": "XITONGSHEZHI",
+        "path": "/systemSetting/employeeManage",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "YUANGONGGUANLI",
+        "menuName": "员工管理",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "UserFilled",
+        "parentMenuCode": "XITONGSHEZHI",
+        "path": "/systemSetting/authManage",
+        "permissionId": 2281,
+        "isChecked": true,
+        "menuCode": "YUANGONGGUANLI",
+        "menuName": "权限管理",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限管理"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "OfficeBuilding",
+        "parentMenuCode": "XITONGSHEZHI",
+        "path": "/systemSetting/companyInfo",
+        "permissionId": 2282,
+        "isChecked": true,
+        "menuCode": "GONGSIXINXIGUANLI",
+        "menuName": "公司信息管理",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限管理"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
       }
     ]
   }

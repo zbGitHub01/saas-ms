@@ -10,10 +10,10 @@
     <span>
       <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="right" label-width="120px">
         <el-form-item label="批次号：" prop="picihao">
-          <el-input v-model="form.picihao" placeholder="请输入批次号" clearable style="width: 300px"></el-input>
+          <el-input v-model="form.picihao" placeholder="请输入批次号" clearable></el-input>
         </el-form-item>
         <el-form-item label="关联产品：" prop="productId">
-          <el-select v-model="form.productId" placeholder="请选择关联产品" clearable filterable style="width: 300px">
+          <el-select v-model="form.productId" placeholder="请选择关联产品" clearable filterable>
             <el-option
               v-for="(item, index) in selectData.productList"
               :key="index"
@@ -22,11 +22,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="购入日期：" prop="date">
-          <el-date-picker v-model="form.date" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD" style="width: 300px"/>
-        </el-form-item>
         <el-form-item label="资产包类型：" prop="packageId">
-          <el-select v-model="form.packageId" placeholder="请选择资产包类型" clearable filterable style="width: 300px">
+          <el-select v-model="form.packageId" placeholder="请选择资产包类型" clearable filterable>
             <el-option
               v-for="(item, index) in selectData.packageList"
               :key="index"
@@ -34,6 +31,12 @@
               :value="item.id"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="购入日期：" prop="date">
+          <el-date-picker v-model="form.date" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD"/>
+        </el-form-item>
+        <el-form-item label="交割日期：" prop="date2">
+          <el-date-picker v-model="form.date2" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD"/>
         </el-form-item>
         <el-form-item label="备注：" prop="note">
           <el-input
@@ -65,6 +68,7 @@ const form: any = reactive({
   productId: null,
   picihao: '',
   date: '',
+  date2: '',
   packageId: null,
   note: ''
 })
@@ -82,6 +86,7 @@ const rules = reactive<FormRules>({
   picihao: [{ required: true, trigger: 'blur', message: '批次号不能为空' }],
   productId: [{ required: true, trigger: 'change', message: '关联产品不能为空' }],
   date: [{ required: true, trigger: 'change', message: '购入日期不能为空' }],
+  date2: [{ required: true, trigger: 'change', message: '交割日期不能为空' }],
   packageId: [{ required: true, trigger: 'change', message: '资产包类型不能为空' }],
 })
 const emits = defineEmits(['getTableData'])
@@ -110,10 +115,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       console.log(form)
       // 请求得到数据
-      // const { code, data, msg } = await xx(form)
-      // if(code !== 200){
-      //   return ElMessage.error(msg)
-      // }
+      // const { data } = await xx(form)
       ElMessage.success('操作成功！')
       emits('getTableData')
       formEl.resetFields()

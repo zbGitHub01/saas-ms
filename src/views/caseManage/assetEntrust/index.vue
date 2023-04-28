@@ -4,27 +4,31 @@
       <el-tab-pane label="当前委托" name="1"></el-tab-pane>
       <el-tab-pane label="委托历史" name="2"></el-tab-pane>
     </el-tabs>
-    <el-button type="primary" icon="CirclePlus" @click="addEntrust" v-if="tabActive === '1'">新增委托</el-button>
+    <OperationBar>
+      <template #default>
+        <el-button type="primary" icon="Plus" @click="addEntrust" v-if="tabActive === '1'">新增委托</el-button>
+      </template>
+    </OperationBar>
     <div class="mt20">
       <el-table :data="state.tableData" border>
         <el-table-column label="序" type="index" align="center" width="50" />
         <el-table-column label="产品" prop="productName" align="center" min-width="150"></el-table-column>
-        <el-table-column label="债权方" prop="zhaiquanfang" align="center" min-width="150"></el-table-column>
-        <el-table-column label="委托方" prop="zhaiquanfang" align="center" min-width="150"></el-table-column>
-        <el-table-column label="受托方" prop="shoutuofang" align="center" min-width="150"></el-table-column>
-        <el-table-column label="委托起始时间" prop="startTime" align="center" min-width="150"></el-table-column>
+        <el-table-column label="债权方" prop="zhaiquanfang" align="center" min-width="200"></el-table-column>
+        <el-table-column label="委托方" prop="zhaiquanfang" align="center" min-width="200"></el-table-column>
+        <el-table-column label="受托方" prop="shoutuofang" align="center" min-width="200"></el-table-column>
+        <el-table-column label="委托起始时间" prop="startTime" align="center" min-width="200"></el-table-column>
         <el-table-column
           label="协议终止时间"
           prop="xieyiEndTime"
           align="center"
-          min-width="150"
+          min-width="200"
           v-if="tabActive === '2'"
         ></el-table-column>
         <el-table-column
           label="委托截止时间"
           prop="endTime"
           align="center"
-          min-width="150"
+          min-width="200"
           v-if="tabActive === '1'"
         ></el-table-column>
         <el-table-column label="委托协议" prop="xieyi" align="center" min-width="150">
@@ -33,12 +37,12 @@
           </template>
         </el-table-column>
         <el-table-column label="委托创建人" prop="people" align="center" min-width="150"></el-table-column>
-        <el-table-column label="委托创建时间" prop="createTime" align="center" min-width="150"></el-table-column>
+        <el-table-column label="委托创建时间" prop="createTime" align="center" min-width="200"></el-table-column>
         <el-table-column
           label="实际终止时间"
           prop="realEndTime"
           align="center"
-          min-width="150"
+          min-width="200"
           v-if="tabActive === '2'"
         ></el-table-column>
         <el-table-column
@@ -61,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import { CirclePlus } from '@element-plus/icons-vue'
+import { Plus } from '@element-plus/icons-vue'
 import AddEntrustDialog from './components/AddEntrustDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
@@ -90,10 +94,7 @@ onMounted(() => {
 const getTableData = async () => {
   console.log('查询', form)
   // 请求得到数据
-  // const { code, data, msg } = await xx(form)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(form)
   const tableDataSub = [
     {
       productName: '“360”借条',
@@ -130,10 +131,7 @@ const getTableData = async () => {
 }
 const getSelecData = async () => {
   // 请求得到数据
-  // const { code, data, msg } = await xx(form)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(form)
   selectData.productList = [
     {
       id: 1,
@@ -185,10 +183,7 @@ const toStop = (row: any) => {
   }).then(
     () => {
       // 请求
-      // const { code, msg } = await xx(form)
-      // if(code !== 200){
-      //   return ElMessage.error(msg)
-      // }
+      // await xx(form)
       ElMessage.success('终止合作成功！')
       getTableData()
     },
@@ -205,4 +200,7 @@ const lookAgreement = (row: any) => {
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-dialog__body .el-input) {
+  width: 300px !important;
+}
 </style>

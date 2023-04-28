@@ -30,10 +30,7 @@ onMounted(() => {
 })
 const getSelecData = async () => {
   // 请求得到数据
-  // const { code, data, msg } = await xx(params)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(params)
   selectData.productList = [
     {
       id: 1,

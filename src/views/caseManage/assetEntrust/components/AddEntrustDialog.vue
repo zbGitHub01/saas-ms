@@ -43,7 +43,6 @@
             placeholder="请选择截止时间"
             @change="changeDate"
             value-format="YYYY-MM-DD"
-            class="ml10"
           />
         </el-form-item>
         <el-form-item label="委托协议：" prop="xieyi">
@@ -139,10 +138,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       console.log(form)
       // 请求得到数据
-      // const { code, data, msg } = await xx(form)
-      // if(code !== 200){
-      //   return ElMessage.error(msg)
-      // }
+      // const { data } = await xx(form)
       ElMessage.success('操作成功！')
       emits('getTableData')
       formEl.resetFields()
