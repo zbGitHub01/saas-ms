@@ -42,9 +42,15 @@ const apiConfig = {
   registerTenantGetRecommendOrg: `POST /upms/client/register/tenant/getRecommendOrg`, // 获取推荐机构列表
   clientOrgList: `POST /upms/client/org/list`, // 机构名录列表
   clientOrgDetail: `GET /upms/client/org/detail`, // 机构详情
-  clientOrgOpenCooperation: `POST /upms/client/org/openCooperation`, // 开启合作
+  clientOrgOpenCooperation: `GET /upms/client/org/openCooperation`, // 开启合作
   clientOrgTerminateCooperation: `POST /upms/client/org/terminateCooperation`, // 终止合作
-  clientOrgSetStopJob: `POST /upms/client/org/setStopJob`, // 设置是否暂停作业
+  clientOrgSetStopJob: `GET /upms/client/org/setStopJob`, // 设置是否暂停作业
+  clientOrgRoleDetail: `GET /upms/client/org/roleDetail`, // 角色详情
+  clientOrgDeptDetail: `GET /upms/client/org/deptDetail`, // 部门详情
+  clientOrgHistoryList: `GET /upms/client/org/history/list`, // 历史准入版本
+  clientOrgHistoryDetail: `GET /upms/client/org/history/detail`, // 历史准入版本详情
+  clientOrgDetailUpdate: `POST /upms/client/org/detail/update`, // 详情编辑
+  clientOrgEmployeePage: `POST /upms/client/org/employee/page`, // 员工列表
 
   // 上游合作邀请管理
   registerInviteList: `GET /upms/client/register/inviteList` // 上游邀请合作记录

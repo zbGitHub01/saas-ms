@@ -28,18 +28,18 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 const dialogVisible = ref(false)
-const stopOrgId = ref<number>()
+const stopRelationTenantId = ref<number>()
 const jobType = ref<string>()
 
 const emits = defineEmits(['getTableData'])
-const open = (orgId: number, type: string) => {
-  stopOrgId.value = orgId
+const open = (relationTenantId: number, type: string) => {
+  stopRelationTenantId.value = relationTenantId
   jobType.value = type
   dialogVisible.value = true
 }
 const doSave = async () => {
   const params = {
-    jobParamList: [stopOrgId],
+    relationTenantId: stopRelationTenantId.value,
     isStopJob: jobType.value === 'suspend' ? 1 : 0 //0:作业中 1:暂停作业
   }
   const { code } = await Apis.clientOrgSetStopJob(params)
