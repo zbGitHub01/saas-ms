@@ -140,14 +140,13 @@
       </el-table-column>
       <el-table-column label="操作" prop="name" width="400" fixed="right" align="center">
         <template #default="scope">
-          <!-- <el-button type="primary" link @click="onOrgDetail(scope.row.relationTenantId)">查看/编辑</el-button> -->
-          <!-- TODO -->
-          <!-- <el-button
+          <el-button type="primary" link @click="onOrgDetail(scope.row.relationTenantId)">查看/编辑</el-button>
+          <el-button
             type="danger"
             v-if="scope.row.accessStatus !== 4"
             link
             @click="onStopComDialog(scope.row)"
-          >终止合作</el-button>-->
+          >终止合作</el-button>
           <!-- TODO：缺少reasonContent、remark字段，后期加入 -->
           <el-button
             type="success"
@@ -155,12 +154,12 @@
             link
             @click="onOpenComDialog(scope.row)"
           >开启合作</el-button>
-          <!-- <el-button
+          <el-button
             type="warning"
             link
             @click="onReadmissionDialog(scope.row)"
             :disabled="scope.row.accessStatus === 3"
-          >重新准入</el-button>-->
+          >重新准入</el-button>
           <el-button
             type="danger"
             v-if="scope.row.isStopJob === 0"
@@ -174,8 +173,7 @@
             link
             @click="onSuspendOperationDialog(scope.row.relationTenantId, 'restore')"
           >恢复作业</el-button>
-          <!-- TODO -->
-          <!-- <el-button type="primary" link @click="onUserNumDrawer(scope.row.relationTenantId)">员工明细</el-button> -->
+          <el-button type="primary" link @click="onUserNumDrawer(scope.row.relationTenantId)">员工明细</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -296,15 +294,16 @@ const onRoleSettingDrawer = (relationTenantId: number) => {
 }
 const readmissionDialogRef = ref()
 const onReadmissionDialog = (row: any) => {
-  if (row.username) {
-    readmissionDialogRef.value.open(row)
-  } else {
-    ElMessageBox.confirm('当前机构不存在机构负责人，请先为机构设置负责人', '无法重新准入！', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {})
-  }
+  // if (row.username) {
+  //   readmissionDialogRef.value.open(row)
+  // } else {
+  //   ElMessageBox.confirm('当前机构不存在机构负责人，请先为机构设置负责人', '无法重新准入！', {
+  //     confirmButtonText: '确定',
+  //     cancelButtonText: '取消',
+  //     type: 'warning'
+  //   }).then(() => {})
+  // }
+  readmissionDialogRef.value.open(row)
 }
 const suspendOperationDialogRef = ref()
 const onSuspendOperationDialog = (relationTenantId: number, type: string) => {

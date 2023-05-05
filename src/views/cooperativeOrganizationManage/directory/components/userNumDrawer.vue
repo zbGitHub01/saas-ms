@@ -22,7 +22,7 @@
             </el-form-item>
             <el-form-item label="入职日期">
               <el-date-picker
-                v-model="state.value4"
+                v-model="state.entryDate"
                 type="daterange"
                 value-format="YYYY-MM-DD"
                 range-separator="至"
@@ -36,20 +36,20 @@
             <el-form-item label="职位">
               <el-select v-model="form.positionId" placeholder="请选择职位">
                 <el-option
-                  v-for="item in optionData.value6List"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in optionData.positionList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="角色权限">
               <el-select v-model="form.roleId" placeholder="请选择角色权限">
                 <el-option
-                  v-for="item in optionData.value7List"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
+                  v-for="item in optionData.roleList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -65,22 +65,31 @@
       <el-table :data="state.tableData">
         <el-table-column label="系统工号" prop="sysAccount" min-width="150" align="center"></el-table-column>
         <el-table-column label="姓名" prop="name" min-width="150" align="center"></el-table-column>
-        <!-- TODO -->
-        <el-table-column label="职位" prop="positionId" min-width="150" align="center"></el-table-column>
+        <el-table-column label="职位" prop="positionId" min-width="150" align="center">
+          <template #default="scope">
+            <div>{{ positionText(scope.row.positionId) }}</div>
+          </template>
+        </el-table-column>
         <el-table-column label="手机号" prop="phone" min-width="150" align="center"></el-table-column>
-        <el-table-column label="证件号" prop="idNo" min-width="150" align="center"></el-table-column>
-        <el-table-column label="角色权限" prop="roleNames" min-width="150" align="center"></el-table-column>
-        <!-- TODO -->
-        <el-table-column label="是否接案" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="证件号" prop="idNo" min-width="200" align="center"></el-table-column>
+        <el-table-column label="角色权限" prop="roleNames" min-width="150" align="center">
+          <template #default="scope">
+            <div>{{ scope.row.roleNames && scope.row.roleNames.length>0?scope.row.roleNames.join(','):scope.row.roleNames }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否接案" prop="isAcceptCase" min-width="150" align="center">
+          <template #default="scope">
+            <div>{{ scope.row.isAcceptCase ===0 ? '否':'是' }}</div>
+          </template>
+        </el-table-column>
         <el-table-column label="性别" prop="sex" min-width="150" align="center"></el-table-column>
         <el-table-column label="入职日期" prop="entryDate" min-width="150" align="center"></el-table-column>
         <el-table-column label="账号状态" prop="isDisable" min-width="150" align="center">
           <template #default="scope">
-            <div>{{ scope.row.isDisable ===0?'启用':'禁用' }}</div>>
+            <div>{{ scope.row.isDisable ===0?'启用':'禁用' }}</div>
           </template>
         </el-table-column>
-        <!-- TODO -->
-        <el-table-column label="钉钉" prop="name" min-width="150" align="center"></el-table-column>
+        <el-table-column label="钉钉" prop="dingDingName" min-width="150" align="center"></el-table-column>
         <el-table-column label="录入人" prop="inviter" min-width="150" align="center"></el-table-column>
         <el-table-column label="录入时间" prop="inviteTime" min-width="180" align="center"></el-table-column>
         <el-table-column label="修改人" prop="updater" min-width="150" align="center"></el-table-column>
@@ -93,17 +102,18 @@
 <script setup lang="ts">
 import { ref, reactive, nextTick } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
+import ApisCommon from '@/api/modules/common'
 const tabActive = ref('0')
 const drawer = ref(false)
 const direction = ref('rtl')
 const orgTenantId = ref()
 const state = reactive({
   tableData: [],
-  value4: []
+  entryDate: []
 })
 const optionData = reactive({
-  value6List: [],
-  value7List: []
+  positionList: [],
+  roleList: []
 })
 const form = reactive({
   name: '',
@@ -120,8 +130,9 @@ const handleClose = () => {
 }
 
 const open = (relationTenantId: number) => {
-  getTableData()
   orgTenantId.value = relationTenantId
+  getOptionList()
+  getTableData()
   drawer.value = true
 }
 const onSearch = () => {
@@ -130,18 +141,29 @@ const onSearch = () => {
   })
 }
 const onReset = () => {
-  state.value4 = []
+  state.entryDate = []
   Object.assign(form, defaultForm)
   getTableData()
 }
+const positionText = val => {
+  return optionData.positionList.find(item => item.id === val)?.name
+}
+const getOptionList = async () => {
+  const roleData = await ApisCommon.findRoleList()
+  if (roleData.code !== 200) return
+  optionData.roleList = roleData.data
+  const positionData = await ApisCommon.findPositionList()
+  if (positionData.code !== 200) return
+  optionData.positionList = positionData.data
+}
 
 const getTableData = async () => {
-  if (state.value4.length === 0) {
-    form.value4Start = ''
-    form.value4End = ''
+  if (state.entryDate.length === 0) {
+    form.entryDateStart = ''
+    form.entryDateEnd = ''
   } else {
-    form.value4Start = state.value4[0]
-    form.value4End = state.value4[1]
+    form.entryDateStart = state.entryDate[0]
+    form.entryDateEnd = state.entryDate[1]
   }
   const params = {
     ...form,

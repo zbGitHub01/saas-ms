@@ -1,33 +1,35 @@
 <template>
   <el-dialog v-model="dialogVisible" title="重新准入" width="450px" :before-close="handleClose">
     <div style="margin: 0 40px">
-      <div v-if="link.type === 1">
-        <div class="text-wrap">确定重新准入吗？</div>
-      </div>
-      <div v-if="link.type === 2">
-        <div class="text-wrap">
-          该合作机构
-          <span class="color-f00">{{ link.date }}</span>
-          前处在合作准入冷却期，确定强制重新准入吗？
+      <div v-if="dialogType === 1">
+        <div v-if="orgDetail.registerTime">
+          <div class="text-wrap">
+            该合作机构
+            <span class="color-f00">{{ orgDetail.registerTime }}</span>
+            前处在合作准入冷却期，确定强制重新准入吗？
+          </div>
+        </div>
+        <div v-else>
+          <div class="text-wrap">确定重新准入吗？</div>
         </div>
       </div>
-      <div v-if="link.type === 3">
+      <div v-if="dialogType === 2">
         <div>
           请告知对方,
-          <span class="color-f00">{{ link.user }}</span>
+          <span class="color-f00">{{ tenantInfo.tenantName }}</span>
           的准入邀请已准备完成，对方可通过以下方式完成准入：
         </div>
-        <div class="mt20">1、打开以下链接，以注册手机号此处替换为注册手机号登 录后即可进入准入流程</div>
-        <div class="mt8 mb10" style="color: #3178ff">{{ link.url }}</div>
-        <el-button type="primary" plain v-copy="link.url">复制准入链接地址</el-button>
-        <div class="mt20">2、登录作业系统后进入“合作机构管理”-“上游合作邀请管理” 页面，完成准入(如该机构所有原因已离职则无法使用该方式)</div>
+        <div class="mt20">1、打开以下链接，以注册手机号{{ orgDetail.phone }}登录后即可进入准入流程</div>
+        <div class="mt8 mb10" style="color: #3178ff; word-break: break-all">{{ linkUrl }}</div>
+        <el-button v-copy="linkUrl" type="primary" plain>复制准入链接地址</el-button>
+        <div class="mt20">2、登录作业系统后进入“合作机构管理”-“上游合作邀请管理” 页面，完成准入</div>
       </div>
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <template v-if="link.type !== 3">
+        <template v-if="dialogType === 1">
           <el-button @click="handleClose">取消</el-button>
-          <el-button type="primary" @click="doSave()">确认</el-button>
+          <el-button type="primary" @click="doSave">确认</el-button>
         </template>
       </span>
     </template>
@@ -35,50 +37,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-// import { otherRegisterUrlCreate, otherRegisterRestart } from '@/api/orgmanage'
+import { ref, reactive, computed } from 'vue'
+import Apis from '@/api/modules/cooperativeOrganization'
 import { ElMessage } from 'element-plus'
+import { useGlobalStore } from '@/store/index'
+const GlobalStore = useGlobalStore()
 const dialogVisible = ref(false)
-interface linkData {
-  type: number
-  url: string
-  user: string
-  date: string
-}
-const link = reactive<linkData>({
-  type: 1,
-  url: 'https://www.dongancloud.com/#/about',
-  user: '张三',
-  date: '2020-01-01'
+const dialogType = ref(1)
+const linkUrl = ref('')
+const orgDetail = reactive({
+  registerTime: '',
+  registerId: '',
+  phone: ''
 })
 const emits = defineEmits(['getTableData'])
-const open = () => {
-  // getParentDeptment()
-  link.type = 2
+const open = row => {
+  Object.assign(orgDetail, row)
+  dialogType.value = 1
   dialogVisible.value = true
 }
-const getParentDeptment = async (id: number) => {
-  // const { code, data } = await parentDept({ id })
-  // if (code !== 200) return
-  // form.parentId = data?.depId
-}
 const doSave = async () => {
-  if (link.type === 1) {
-    // const { code, data } = await addDeptment({ id })
-    // // if (code !== 200) return
-    // ElMessage.success('邀请链接成功')
-    // link.type = 2
+  const params = {
+    registerId: orgDetail.registerId,
+    url: import.meta.env.VITE_APP_BASE_institutionsH5Url
   }
-  // const { code, data } = await addDeptment({ id })
-  // if (code !== 200) return
-  ElMessage.success('邀请链接成功')
-  link.type = 2
-  // emits('getTableData')
-  // handleClose()
+  const { code, data } = await Apis.clientRegisterRestart(params)
+  if (code !== 200) return
+  ElMessage.success('重新准入成功')
+  linkUrl.value = data
+  linkUrl.value =
+    'https://console-test.dongancloud.com/ins/#/register?uuid=c4d8362562094a558c06e94c42221170&employeeId=5&phone=15068752222&isNeedAccessApprove=true&tenantId=1&orgId=21&time=1683256180919'
+  dialogType.value = 2
 }
 const handleClose = () => {
+  emits('getTableData')
   dialogVisible.value = false
 }
+const tenantInfo = computed(() => GlobalStore.tenantInfo)
 defineExpose({
   open
 })

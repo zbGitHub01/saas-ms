@@ -51,6 +51,7 @@ const apiConfig = {
   clientOrgHistoryDetail: `GET /upms/client/org/history/detail`, // 历史准入版本详情
   clientOrgDetailUpdate: `POST /upms/client/org/detail/update`, // 详情编辑
   clientOrgEmployeePage: `POST /upms/client/org/employee/page`, // 员工列表
+  clientRegisterRestart: `POST /upms/client/register/restart`, // 重新准入
 
   // 上游合作邀请管理
   registerInviteList: `GET /upms/client/register/inviteList` // 上游邀请合作记录
