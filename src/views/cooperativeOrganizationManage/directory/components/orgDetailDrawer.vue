@@ -129,7 +129,7 @@ const getOrgDetail = async () => {
 }
 const basicInfoDialogRef = ref()
 const onBasicInfo = () => {
-  const { entrustStaffId, isWhiteIp, orgCategoryId, orgModelId, companyName, remark, whiteIp } = detailData.value
+  const { entrustStaffId, isWhiteIp, orgCategoryId, orgModelId, companyName, remark, whiteIp, mail } = detailData.value
   const params = {
     entrustStaffId,
     isWhiteIp,
@@ -138,13 +138,14 @@ const onBasicInfo = () => {
     orgTitle: companyName,
     relationTenantId: orgTenantId,
     remark,
-    whiteIp
+    whiteIp,
+    mail
   }
   basicInfoDialogRef.value.open(params)
 }
 const historyEditionRef = ref()
 const onHistoryEdition = () => {
-  historyEditionRef.value.open(orgTenantId)
+  historyEditionRef.value.open(orgTenantId.value)
 }
 defineExpose({
   open

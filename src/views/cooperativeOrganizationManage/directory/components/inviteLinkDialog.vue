@@ -109,8 +109,7 @@ const ruleFormRef = ref<FormInstance>()
 const dialogVisible = ref(false)
 const link = reactive({
   type: 1,
-  url: 'https://www.dongancloud.com/#/about',
-  user: '张三'
+  url: ''
 })
 const optionData = reactive({
   orgList: [],

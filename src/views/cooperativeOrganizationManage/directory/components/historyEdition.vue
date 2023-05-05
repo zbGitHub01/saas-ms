@@ -49,8 +49,8 @@ const getTableData = async relationTenantId => {
   state.total = data.total
 }
 const open = (relationTenantId: any) => {
-  getTableData(relationTenantId)
   tenantId.value = relationTenantId
+  getTableData(relationTenantId)
   dialogVisible.value = true
 }
 const historyOrgDetailRef = ref()

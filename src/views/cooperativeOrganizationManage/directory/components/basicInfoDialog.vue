@@ -87,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
@@ -116,7 +116,9 @@ const rules = reactive<FormRules>({
 const emits = defineEmits(['getOrgDetail'])
 const open = data => {
   getSelectList()
-  Object.assign(form, data)
+  nextTick(() => {
+    Object.assign(form, data)
+  })
   dialogVisible.value = true
 }
 const doSave = async () => {
