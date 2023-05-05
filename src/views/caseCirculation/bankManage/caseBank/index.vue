@@ -16,8 +16,8 @@
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
-          <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow" type="primary" :icon="item.icon" @click="handleClick(item.title)">
+          <div v-for="(item, index) in operationList" :key="index">
+            <el-button v-if="item.isShow && item.isShowSub" type="primary" :icon="item.icon" @click="handleClick(item.title)" plain class="mr10">
               {{ item.title }}
             </el-button>
           </div>
@@ -169,13 +169,21 @@
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
     <AddOrRemoveTagDialog ref="addOrRemoveTagDialog" :selectData="selectData" @submitForm="submitForm" />
-    <CaseBankDialog ref="caseBankDialog" :distList="state.distList" :sourceStoreId="tabActive" @get-table-data="getTableData" @exportChange="exportChange" @toggleSelection="toggleSelection" :resouerdist-list="state.tabListSub"/>
+    <CaseBankDialog
+      ref="caseBankDialog"
+      :distList="state.distList"
+      :sourceStoreId="tabActive"
+      @get-table-data="getTableData"
+      @exportChange="exportChange"
+      @toggleSelection="toggleSelection"
+      :resouerdist-list="state.tabListSub"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ElMessage } from 'element-plus'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, watch } from 'vue'
 import AddOrRemoveTagDialog from './components/AddOrRemoveTagDialog.vue'
 import CaseBankDialog from './components/CaseBankDialog.vue'
 import { CirclePlus, Delete, Folder } from '@element-plus/icons-vue'
@@ -184,6 +192,7 @@ const selectData = reactive({
 })
 const multipleTable = ref(null)
 const tabActive = ref('1')
+const itemId = ref('')
 const form: any = reactive({
   caseId: ''
 })
@@ -202,28 +211,38 @@ const state = reactive({
   selectData: [] as any[], //选中项
   handleparams: {} as any, //操作的参数
   tabList: [] as any[], //分库列表
-  tabListSub: []as any[], //剔除目标分库的分库列表
-  distList: {} as any, //委案数据
+  tabListSub: [] as any[], //剔除目标分库的分库列表
+  distList: {} as any //委案数据
 })
 const operation = ref(1)
 const operationList = reactive([
   {
     title: '添加临时标签',
     icon: 'CirclePlus',
-    isShow: true
+    isShow: true, //权限
     // isShow: this.hasPerm("disposal_case_addlabel"),
+    isShowSub: true //根据当前库决定是否展示
   },
   {
     title: '删除临时标签',
     icon: 'Delete',
-    isShow: true
+    isShow: true,
     // isShow: this.hasPerm("disposal_case_dellabel"),
+    isShowSub: true
   },
   {
     title: '案件分库',
     icon: 'Folder',
-    isShow: true
+    isShow: true,
     // isShow: this.hasPerm("disposal_case_qing"),
+    isShowSub: true
+  },
+  {
+    title: '案件收回',
+    icon: 'Folder',
+    isShow: true,
+    // isShow: this.hasPerm("disposal_case_qing"),
+    isShowSub: true
   }
 ])
 onMounted(() => {
@@ -231,14 +250,36 @@ onMounted(() => {
   getTabList()
   getSelecData()
 })
+watch(
+  tabActive,
+  (newValue, oldValue) => {
+    if (newValue === itemId.value) {
+      operationList.forEach(item => {
+        if (item.title === '案件分库') {
+          item.isShowSub = true
+        } else if (item.title === '案件收回') {
+          item.isShowSub = false
+        }
+      })
+    }else{
+      operationList.forEach(item => {
+        if (item.title === '案件分库') {
+          item.isShowSub = false
+        } else if (item.title === '案件收回') {
+          item.isShowSub = true
+        }
+      })
+    }
+  },
+  {
+    immediate: true
+  }
+)
 // 获取表格数据
 const getTableData = async () => {
   console.log('案件分库-', tabActive.value, form)
   // 请求得到数据
-  // const { code, data, msg } = await xx(form)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(form)
   const tableDataSub = [
     {
       caseId: 'WTD-SJD-0000002',
@@ -279,10 +320,7 @@ const getTableData = async () => {
 // 获取分库数据
 const getTabList = () => {
   // 请求得到数据
-  // const { code, data, msg } = await xx(form)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(form)
   state.tabList = [
     {
       itemText: '待分库案件',
@@ -301,13 +339,16 @@ const getTabList = () => {
       itemId: '4'
     }
   ]
+  state.tabList.forEach(item => {
+    if (item.itemText === '待分库案件') {
+      itemId.value = item.itemId
+    }
+  })
+  console.log(itemId.value)
 }
 const getSelecData = async () => {
   // 请求得到数据
-  // const { code, data, msg } = await xx(params)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(params)
   selectData.tagList = ['111', '116', 'test1', 'test', '99', 'jjj', '测试']
 }
 // 重置
@@ -351,6 +392,9 @@ const handleClick = item => {
       case '案件分库':
         caseBank()
         break
+      case '案件收回':
+        caseRecover()
+        break
       default:
         break
     }
@@ -370,10 +414,7 @@ const submitForm = (tempTagName, isDeleteAllRelationTag) => {
   }
   console.log(params)
   // 请求得到数据
-  // const { code, data, msg } = await xx(form)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // await xx(form)
   ElMessage.success('操作成功！')
 }
 // 案件分库
@@ -381,7 +422,7 @@ const caseBank = () => {
   // 获取委案数据
   fetchCaseDistSelect()
   // 剔除当前库的分库列表
-  state.tabListSub = state.tabList.filter(item=>item.itemId!=tabActive.value)
+  state.tabListSub = state.tabList.filter(item => item.itemId != tabActive.value)
   console.log(state.tabListSub, tabActive.value)
   caseBankDialog.value.open()
 }
@@ -389,22 +430,19 @@ const caseBank = () => {
 const fetchCaseDistSelect = (isWithProductPublicDebt = true) => {
   // 处理入参
   let params = operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, ...form }
-  params["storeId"] = Number(tabActive.value) //当前tab分库的id
+  params['storeId'] = Number(tabActive.value) //当前tab分库的id
   params.isWithProductPublicDebt = isWithProductPublicDebt
   console.log('委案数据参数：', params)
   // 请求得到数据
-  // const { code, data, msg } = await caseDistSelect(params)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await caseDistSelect(params)
   state.distList = {
-		"caseNum":1,
-		"personNum":1,
-		"taskId":2313,
-		"totalAmount":7266.75
+    caseNum: 1,
+    personNum: 1,
+    taskId: 2313,
+    totalAmount: 7266.75
   }
 }
-const exportChange = (val) => {
+const exportChange = val => {
   fetchCaseDistSelect(!!val)
 }
 // 切换分库
@@ -414,6 +452,8 @@ const changTab = val => {
   //注意查询的数据独立
   getTableData()
 }
+// 案件收回
+const caseRecover = () => {}
 </script>
 
 <style lang="scss" scoped>

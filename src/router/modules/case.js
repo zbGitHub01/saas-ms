@@ -38,28 +38,62 @@ const caseRouter = [
     meta: { title: '案件流转' },
     children: [
       {
-        path: '/caseCirculation/caseBank',
-        name: 'caseBank',
-        component: () => import('@/views/caseCirculation/caseBank/index.vue'),
-        meta: { title: '案件分库', icon: 'UserFilled' }
+        path: '/caseCirculation/bankManage',
+        name: 'bankManage',
+        component: () => import('@/views/caseCirculation/bankManage/index.vue'),
+        meta: { title: '分库管理', icon: '' },
+        children: [
+          {
+            path: '/caseCirculation/bankManage/caseBank',
+            name: 'caseBank',
+            component: () => import('@/views/caseCirculation/bankManage/caseBank/index.vue'),
+            meta: { title: '案件分库', icon: '' }
+          },
+          {
+            path: '/caseCirculation/bankManage/bankRecord',
+            name: 'bankRecord',
+            component: () => import('@/views/caseCirculation/bankManage/bankRecord/index.vue'),
+            meta: { title: '分库记录', icon: '' }
+          },
+          {
+            path: '/caseCirculation/bankManage/bankRecoverRecord',
+            name: 'bankRecoverRecord',
+            component: () => import('@/views/caseCirculation/bankManage/bankRecoverRecord/index.vue'),
+            meta: { title: '分库收回记录', icon: '' }
+          },
+          {
+            path: '/caseCirculation/bankManage/bankSetName',
+            name: 'bankSetName',
+            component: () => import('@/views/caseCirculation/bankManage/bankSetName/index.vue'),
+            meta: { title: '分库名称设置', icon: '' }
+          }
+        ]
       },
       {
-        path: '/caseCirculation/caseAssignment',
-        name: 'caseAssignment',
-        component: () => import('@/views/caseCirculation/caseAssignment/index.vue'),
-        meta: { title: '案件委派', icon: 'UserFilled' }
-      },
-      {
-        path: '/caseCirculation/caseRecovery',
-        name: 'caseRecovery',
-        component: () => import('@/views/caseCirculation/caseRecovery/index.vue'),
-        meta: { title: '案件收回', icon: 'UserFilled' }
-      },
-      {
-        path: '/caseCirculation/caseConfiguration',
-        name: 'caseConfiguration',
-        component: () => import('@/views/caseCirculation/caseConfiguration/index.vue'),
-        meta: { title: '案件流转配置', icon: 'UserFilled' }
+        path: '/caseCirculation/delegatedCaseManage',
+        name: 'delegatedCaseManage',
+        component: () => import('@/views/caseCirculation/delegatedCaseManage/index.vue'),
+        meta: { title: '委案管理', icon: '' },
+        children: [
+          {
+            path: '/caseCirculation/delegatedCaseManage/caseAssignment',
+            name: 'caseAssignment',
+            component: () => import('@/views/caseCirculation/delegatedCaseManage/caseAssignment/index.vue'),
+            meta: { title: '实时委案', icon: '' }
+          },
+          {
+            path: '/caseCirculation/delegatedCaseManage/caseRecovery',
+            name: 'caseRecovery',
+            component: () => import('@/views/caseCirculation/delegatedCaseManage/caseRecovery/index.vue'),
+            meta: { title: '实时委案收回', icon: '' }
+          },
+          {
+            path: '/caseCirculation/delegatedCaseManage/caseConfiguration',
+            name: 'caseConfiguration',
+            component: () => import('@/views/caseCirculation/delegatedCaseManage/caseConfiguration/index.vue'),
+            meta: { title: '委案类型配置', icon: '' }
+          }
+        ]
       }
     ]
   }

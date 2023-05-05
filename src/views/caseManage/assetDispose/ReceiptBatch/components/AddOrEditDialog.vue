@@ -5,7 +5,7 @@
     width="500px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    :show-close="false"
+    :before-close="cancelSubmit"
   >
     <span>
       <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="right" label-width="120px">
@@ -52,7 +52,7 @@
     </span>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="cancelSubmit(ruleFormRef)">取消</el-button>
+        <el-button @click="cancelSubmit">取消</el-button>
         <el-button type="primary" @click="submitForm(ruleFormRef)">确定</el-button>
       </span>
     </template>
@@ -124,9 +124,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
   })
 }
 // 取消
-const cancelSubmit = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
+const cancelSubmit = () => {
+  ruleFormRef.value?.resetFields()
   dialogVisible.value = false
 }
 </script>

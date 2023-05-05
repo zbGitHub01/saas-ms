@@ -56,7 +56,18 @@ const getTableData = async () => {
     {
       zhaiquanfang: '“360”借条',
       zhaiquanfangId: 1,
-      isUse: true
+      isUse: true,
+      code: 'code',
+      picture1: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
+      picture2: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
+      picture3: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
+      picture4: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
+      picture5: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
+      address: '齐贤镇曙光村',
+      addressSub: [ 636, 1188, 1218 ],
+      people: '李思',
+      caseId: '330621111111111111',
+      phone: '11111111111',
     },
     {
       zhaiquanfang: '我来带',
@@ -102,4 +113,7 @@ const changeCheckbox = (row: any) => {
 </script>
 
 <style lang="scss" scoped>
+:deep(.el-dialog__body .el-input){
+  width: 300px !important;
+}
 </style>

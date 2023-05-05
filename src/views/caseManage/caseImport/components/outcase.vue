@@ -325,7 +325,7 @@ const successUpload = res => {
 // 取消
 const cancal = () => {
   inputShow.value = false
-  ruleFormRef.value ? ruleFormRef.value.resetFields() : null
+  ruleFormRef.value?.resetFields()
   Object.assign(form, originFormData)
 }
 </script>

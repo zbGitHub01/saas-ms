@@ -52,32 +52,71 @@
     "type": 1,
     "children": [
       {
-        "name": "案件分库",
-        "code": "CASE_BANK",
+        "name": "分库管理",
+        "code": "BANK_MANAGE",
         "icon": "",
-        "path": "/caseCirculation/caseBank",
-        "type": 1
+        "path": "/caseCirculation/bankManage",
+        "type": 1,
+        "children": [
+          {
+            "name": "案件分库",
+            "code": "CASE_BANK",
+            "icon": "",
+            "path": "/caseCirculation/bankManage/caseBank",
+            "type": 1
+          },
+          {
+            "name": "分库记录",
+            "code": "BANK_RECORD",
+            "icon": "",
+            "path": "/caseCirculation/bankManage/bankRecord",
+            "type": 1
+          },
+          {
+            "name": "分库收回记录",
+            "code": "BANK_RECOVER_RECORD",
+            "icon": "",
+            "path": "/caseCirculation/bankManage/bankRecoverRecord",
+            "type": 1
+          },
+          {
+            "name": "分库名称设置",
+            "code": "BANK_SET_NAME",
+            "icon": "",
+            "path": "/caseCirculation/bankManage/bankSetName",
+            "type": 1
+          }
+        ]
       },
       {
-        "name": "案件委派",
-        "code": "CASE_ASSIGNMENT",
+        "name": "委案管理",
+        "code": "DELEGATED_CASE_MANAGE",
         "icon": "",
-        "path": "/caseCirculation/caseAssignment",
-        "type": 1
-      },
-      {
-        "name": "案件收回",
-        "code": "CASE_RECOVERY",
-        "icon": "",
-        "path": "/caseCirculation/caseRecovery",
-        "type": 1
-      },
-      {
-        "name": "案件流转配置",
-        "code": "CASE_CONFIGURATION",
-        "icon": "",
-        "path": "/caseCirculation/caseConfiguration",
-        "type": 1
+        "path": "/caseCirculation/delegatedCaseManage",
+        "type": 1,
+        "children": [
+          {
+            "name": "实时委案",
+            "code": "CASE_ASSIGNMENT",
+            "icon": "",
+            "path": "/caseCirculation/delegatedCaseManage/caseAssignment",
+            "type": 1
+          },
+          {
+            "name": "实时委案收回",
+            "code": "CASE_ASSIGNMENT_RECOVER",
+            "icon": "",
+            "path": "/caseCirculation/delegatedCaseManage/caseRecovery",
+            "type": 1
+          },
+          {
+            "name": "委案类型配置",
+            "code": "CASE_TYPE_CONFIGURATION",
+            "icon": "",
+            "path": "/caseCirculation/delegatedCaseManage/caseConfiguration",
+            "type": 1
+          }
+        ]
       }
     ]
   },
