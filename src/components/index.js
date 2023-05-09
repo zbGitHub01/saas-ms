@@ -4,6 +4,9 @@ import Pagination from './Pagination/index.vue'
 import OperationBar from './OperationBar/index.vue'
 import LabelData from './LabelData/index.vue'
 import TableWrap from './TableWrap/index.vue'
+import FormClass from '@/components/FormClass/index.vue'
+import TableClass from '@/components/TableClass/index.vue'
+import LabelClass from '@/components/LabelClass/index.vue'
 
 export default {
   install: Vue => {
@@ -13,5 +16,8 @@ export default {
     Vue.component('OperationBar', OperationBar)
     Vue.component('LabelData', LabelData)
     Vue.component('TableWrap', TableWrap)
+    Vue.component('FormClass', FormClass)
+    Vue.component('TableClass', TableClass)
+    Vue.component('LabelClass', LabelClass)
   }
 }

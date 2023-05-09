@@ -66,6 +66,12 @@ const caseRouter = [
             name: 'bankSetName',
             component: () => import('@/views/caseCirculation/bankManage/bankSetName/index.vue'),
             meta: { title: '分库名称设置', icon: '' }
+          },
+          {
+            path: '/caseCirculation/bankManage/preCase',
+            name: 'preCase',
+            component: () => import('@/views/caseCirculation/bankManage/preCase/index.vue'),
+            meta: { title: '预委案', icon: '' }
           }
         ]
       },
