@@ -5,7 +5,7 @@
     width="50%"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    :show-close="false"
+    :before-close="cancelSubmit"
   >
     <span>
       <div class="flx-justify-between allTab">
@@ -33,6 +33,12 @@
       </div>
       <el-divider></el-divider>
       <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="130px" :rules="rules" v-if="!last">
+        <el-form-item label="案件分库：" prop="bank">
+          <el-select clearable v-model="form.bank" placeholder="请选择案件分库" style="width: 250px">
+            <el-option v-for="item in " :label="不限" :value="0"></el-option>
+          </el-select>
+          <div style="color: rgb(170, 170, 170)">指案件被重新分派给历史同一家处置机构的间隔期</div>
+        </el-form-item>
         <el-form-item label="操作维度：" prop="entrustStrategy">
           <el-radio-group v-model="form.entrustStrategy" @change="radioChange">
             <el-radio :label="1">案人</el-radio>
@@ -134,7 +140,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="last = false" v-if="last" style="float: left">上一步</el-button>
-        <el-button @click="cancelSubmit(ruleFormRef)">取消</el-button>
+        <el-button @click="cancelSubmit">取消</el-button>
         <el-button type="primary" @click="nextStep(ruleFormRef)" v-if="!last">下一步</el-button>
         <el-button type="primary" @click="submitForm" v-if="last">确认委派</el-button>
       </span>
@@ -272,10 +278,9 @@ const submitForm = () => {
   dialogVisible.value = false
 }
 // 取消
-const cancelSubmit = (formEl: FormInstance | undefined) => {
+const cancelSubmit = () => {
+  ruleFormRef.value?.resetFields()
   dialogVisible.value = false
-  if (!formEl) return
-  formEl.resetFields()
 }
 const radioChange = val => {
   emits('fetchTimingSearch', val)
@@ -295,7 +300,6 @@ const radioChange = val => {
     .icon {
       font-size: 35px;
       margin-right: 4px;
-      // color: blue;
     }
     .title {
       color: #cccccc;

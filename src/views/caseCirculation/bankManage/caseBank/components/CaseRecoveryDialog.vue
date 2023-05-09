@@ -32,11 +32,6 @@
         </div>
       </div>
       <el-form ref="ruleFormRef" class="backform" label-position="top" label-width="90px">
-        <el-form-item label="案件分库">
-          <el-checkbox-group v-model="state.bankList">
-            <el-checkbox v-for="item in state.bankSelectList" :key="item.id" :label="item.id">{{  item.label }}</el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
         <el-form-item label="操作维度">
           <el-radio-group v-model="isWithProductPublicDebt" @change="radioChange">
             <el-radio :label="1">案人</el-radio>
@@ -96,40 +91,21 @@
   
 <script lang="ts" setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 const isWithProductPublicDebt = ref(1)
 const isRecoverRetain = ref(0)
 const stagingPlan = ref(0)
 const retainStagingPlan = ref(0)
 const radio = ref(0)
-const state = reactive({
-  bankSelectList: [] as any, //分库列表
-  bankList: [] as any //选择的分库集合
-})
 // 接收props数据
 const props = defineProps<{
   caseInfo: any
   taskId: any
 }>()
-const emits = defineEmits(['getTableData', 'fetchRecoverNowSelect', 'toggleSelection'])
+const emits = defineEmits(['getTableData', 'fetchCaseDistSelect', 'toggleSelection'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = async() => {
-  // await xx(params)
-  state.bankSelectList = [
-    {
-      id:1,
-      label: '委外处置库'
-    },
-    {
-      id:2,
-      label: '法诉处置库'
-    },
-    {
-      id:3,
-      label: '大额处置库'
-    },
-  ]
+const open = () => {
   dialogVisible.value = true
 }
 defineExpose({
@@ -149,8 +125,7 @@ const submitForm = () => {
         stagingPlan: stagingPlan.value,
         retainStagingPlan:
           retainStagingPlan.value === 0 ? retainStagingPlan.value : parseInt(retainStagingPlan.value) + parseInt(radio.value),
-        recoverType: 2,
-        bankList: state.bankList,
+        recoverType: 2
       }
       // 请求
       // await xx(params)
@@ -173,11 +148,10 @@ const cancelSubmit = () => {
   stagingPlan.value = 0
   retainStagingPlan.value = 0
   radio.value = 0
-  state.bankList = []
   dialogVisible.value = false
 }
 const radioChange = val => {
-  emits('fetchRecoverNowSelect', !!val)
+  emits('fetchCaseDistSelect', 2, !!val)
 }
 </script>
   

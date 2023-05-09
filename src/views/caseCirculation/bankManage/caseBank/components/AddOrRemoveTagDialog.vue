@@ -5,7 +5,7 @@
     width="25%"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    :show-close="false"
+    :before-close="cancelSubmit"
   >
     <span>
       <el-form :model="form" ref="ruleFormRef" :rules="rules">
@@ -24,7 +24,7 @@
     </span>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="cancelSubmit(ruleFormRef)">取消</el-button>
+        <el-button @click="cancelSubmit">取消</el-button>
         <el-button type="primary" @click="submitForm(ruleFormRef)">确定</el-button>
       </span>
     </template>
@@ -41,12 +41,9 @@ const form: any = reactive({
 const originFormData = JSON.parse(JSON.stringify(form))
 const typeSub = ref(1)
 const title = ref('')
-// 接收props数据
-const props = defineProps<{
-  selectData: {
-    tagList: any[]
-  }
-}>()
+const selectData = reactive({
+  tagList: [] as any[] //临时标签列表
+})
 const emits = defineEmits(['submitForm'])
 // 校验规则
 const ruleFormRef = ref<FormInstance>()
@@ -60,7 +57,8 @@ const open = (type) => {
   if (type === 1) {
     title.value = '添加临时标签'
   } else if (type === 2) {
-    title.value = '删除临时标签'
+    title.value = '删除临时标签',
+    getSelecData()
   }
   typeSub.value = type
   Object.assign(form, originFormData)
@@ -75,20 +73,24 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate(async valid => {
     if (valid) {
       if(typeSub.value === 1){
-        emits('submitForm', form.tempTagName)
+        emits('submitForm', form.tempTagName, 1)
       }
       else if(typeSub.value === 2){
-        emits('submitForm', form.tempTagName, form.isDeleteAllRelationTag)
+        emits('submitForm', form.tempTagName, 2, form.isDeleteAllRelationTag)
       }
       dialogVisible.value = false
     }
   })
 }
 // 取消
-const cancelSubmit = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
+const cancelSubmit = () => {
+  ruleFormRef.value?.resetFields()
   dialogVisible.value = false
+}
+const getSelecData = async () => {
+  // 请求得到数据
+  // const { data } = await xx(params)
+  selectData.tagList = ['111', '116', 'test1', 'test', '99', 'jjj', '测试']
 }
 </script>
   
