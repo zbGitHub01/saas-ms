@@ -55,11 +55,7 @@ class RequestHttp {
         const { response } = error
         tryHideFullScreenLoading()
         if (response) {
-          if (response.status === 500) {
-            ElMessage.error(response.data.msg)
-          } else {
-            checkStatus(response.status)
-          }
+          checkStatus(response.status)
           if (response.status === ResultEnum.OVERDUE) {
             const globalStore = useGlobalStore()
             globalStore.logout()

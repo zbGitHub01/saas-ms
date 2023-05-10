@@ -60,7 +60,6 @@ const currDeptNode = ref({})
 const currEmployeeNode = ref({})
 const fetchDeptTree = async () => {
   const { code, data } = await Apis.findPermissionEmployeeDeptTree()
-  console.log(data, '---data')
   if (code === 200) {
     deptTree.value = data
   }

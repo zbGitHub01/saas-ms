@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import {computed, inject, nextTick} from 'vue'
 import CollapseIcon from './components/CollapseIcon.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
 import Fullscreen from './components/Fullscreen.vue'
@@ -38,9 +38,19 @@ const userInfo = computed(() => globalStore.userInfo)
 const tenantInfo = computed(() => globalStore.tenantInfo)
 const tenantList = computed(() => globalStore.tenantList)
 
+const refreshCurrentPage = inject('refresh')
+const refresh = () => {
+  setTimeout(() => {
+    refreshCurrentPage(false)
+    nextTick(() => {
+      refreshCurrentPage(true)
+    })
+  }, 0)
+}
 const chooseTenant = async item => {
   // if (item.tenantId === tenantInfo.value.tenantId) return
   await globalStore.chooseTenant(item.tenantId)
+  refresh()
 }
 </script>
 

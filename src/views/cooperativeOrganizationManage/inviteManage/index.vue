@@ -76,7 +76,8 @@ const statusData = computed(() => {
       [4, { text: '审核中-待最终审核', color: '#FFBE29', tip: '准入资料提交成功，请等待审核结果' }],
       [5, { text: '审核通过', color: '#247FFF' }],
       [6, { text: '审核未通过', color: '#F03B3B' }],
-      [7, { text: '已失效', color: '#666666' }]
+      [7, { text: '已失效', color: '#666666' }],
+      [8, { text: '待提交更新资料', color: '#1FD881', tip: '合作中' }]
     ])
     const temObj = statusMap.get(val)
     return temObj[type]

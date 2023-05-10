@@ -15,6 +15,7 @@ export const downloadFile = url => {
   const eLink = document.createElement('a')
   eLink.style.display = 'none'
   eLink.href = url
+  eLink.target = '_blank'
   document.body.appendChild(eLink)
   eLink.click()
   document.body.removeChild(eLink)

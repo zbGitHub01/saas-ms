@@ -16,10 +16,10 @@
             <el-form-item label="机构分类：" prop="orgCategoryId">
               <el-select v-model="form.orgCategoryId" placeholder="请选择机构分类" class="w280">
                 <el-option
-                  v-for="item2 in orgCategoryList"
-                  :key="item2.id"
-                  :label="item2.name"
-                  :value="item2.id"
+                  v-for="item in orgCategoryList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -27,9 +27,9 @@
               <el-select v-model="form.entrustStaffId" placeholder="请选择委外经理" class="w280">
                 <el-option
                   v-for="item in entrustStaffList"
-                  :key="item.userId"
-                  :label="item.username"
-                  :value="item.userId"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -47,13 +47,13 @@
             </el-form-item>
           </div>
           <div style="padding-left: 60px">
-            <el-form-item label="作业模式：" prop="orgModelId">
-              <el-select v-model="form.orgModelId" placeholder="请选择作业模式" class="w280">
+            <el-form-item label="机构作业模式：" prop="orgModelId">
+              <el-select v-model="form.orgModelId" placeholder="请选择机构作业模式" class="w280">
                 <el-option
-                  v-for="item2 in taskModelList"
-                  :key="item2.id"
-                  :label="item2.name"
-                  :value="item2.id"
+                  v-for="item in taskModelList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -80,22 +80,20 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="submitForm">确认</el-button>
+        <el-button type="primary" @click="submitForm(ruleFormRef)">确认</el-button>
       </span>
     </template>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const dialogVisible = ref(false)
-const orgNum = ref<number>()
-const stopOrgId = ref<number>()
 const orgCategoryList = ref<any[]>([])
 const taskModelList = ref<any[]>([])
 const entrustStaffList = ref<any[]>([])
@@ -112,26 +110,26 @@ const rules = reactive<FormRules>({
   orgCategoryId: [{ required: true, message: '请选择机构分类', trigger: 'change' }],
   entrustStaffId: [{ required: true, message: '请选择委外经理', trigger: 'change' }],
   mail: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
-  orgModelId: [{ required: true, message: '请选择作业模式', trigger: 'change' }],
+  orgModelId: [{ required: true, message: '请选择机构作业模式', trigger: 'change' }],
   isWhiteIp: [{ required: true, message: '请选择是否限制IP地址', trigger: 'change' }]
 })
-const emits = defineEmits(['getTableData'])
-const open = (num: number, orgId: number) => {
+const emits = defineEmits(['getOrgDetail'])
+const open = data => {
   getSelectList()
-  orgNum.value = num
-  stopOrgId.value = orgId
+  nextTick(() => {
+    Object.assign(form, data)
+  })
   dialogVisible.value = true
 }
 const doSave = async () => {
   const params = {
-    orgId: stopOrgId,
     ...form
   }
-  // const { code, data } = await Apis.otherOrgSetStopJob(params)
-  // if (code !== 200) return
-  // ElMessage.success('操作成功')
-  // emits('getTableData')
-  // handleClose()
+  const { code } = await Apis.clientOrgDetailUpdate(params)
+  if (code !== 200) return
+  ElMessage.success('操作成功')
+  emits('getOrgDetail')
+  handleClose()
 }
 const handleClose = () => {
   ruleFormRef.value?.resetFields()
@@ -154,7 +152,9 @@ const getSelectList = async () => {
   if (code !== 200) return
   orgCategoryList.value = data?.ORG_CATEGORY ?? []
   taskModelList.value = data?.ORG_TASK_MODEL ?? []
-  entrustStaffList.value = orgCategoryList.value
+  const userData = await Apis.clientEmployeeList()
+  if (userData.code !== 200) return
+  entrustStaffList.value = userData.data
 }
 defineExpose({
   open

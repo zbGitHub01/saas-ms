@@ -22,17 +22,16 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 const dialogVisible = ref(false)
-const orgData = ref<any>()
+const orgData = ref({})
 
 const emits = defineEmits(['getTableData'])
 const open = (row: any) => {
   orgData.value = row
   dialogVisible.value = true
 }
-// TODO:参数
 const doSave = async () => {
   const params = {
-    orgId: orgData.value.orgId
+    relationTenantId: orgData.value.relationTenantId
   }
   const { code } = await Apis.clientOrgOpenCooperation(params)
   if (code !== 200) return

@@ -20,16 +20,16 @@
     <div class="flex-container">
       <div class="title">操作/数据权限</div>
       <div class="table-wrap">
-        <el-table
-          class="table"
-          :data="dataPermission.data"
-          height="100%"
-          default-expand-all
-          border
-          row-key="id"
-          @selection-change="selectionChange"
-        >
-          <el-table-column type="selection" width="55" reserve-selection align="center">
+        <el-table ref="tableRef" class="table" :data="dataPermission.data" height="100%" default-expand-all border row-key="id">
+          <el-table-column type="index" width="55" align="center">
+            <template #header>
+              <el-checkbox
+                v-model="allCheck"
+                :indeterminate="isIndeterminate"
+                :disabled="!dataPermission.data?.length"
+                @change="allCheckboxChange"
+              ></el-checkbox>
+            </template>
             <template #default="scope">
               <el-checkbox v-model="scope.row.isChecked" @change="checkboxChange($event, scope.row)" />
             </template>
@@ -77,7 +77,10 @@ const treeProps = {
   value: 'id  '
 }
 const treeRef = ref()
+const tableRef = ref()
 const menuTree = ref([])
+const allCheck = ref(false)
+const isIndeterminate = ref(false)
 // 权限配置数据
 const dataPermission = ref({
   data: []
@@ -112,7 +115,6 @@ const fetchPermission = async (isRefresh = false) => {
   const { code, data } = await permissionConfig.value.permissionListApiFn(permissionConfig.value.params)
   if (code === 200) {
     menuTree.value = formatMenuData(cloneDeep(data))
-    console.log(menuTree.value)
     // 选择部门|角色|员工,清空操作数据权限数据
     if (isRefresh) {
       dataPermission.value = { data: [] }
@@ -154,8 +156,8 @@ const removePermission = async permissionIds => {
 }
 // 菜单权限操作
 const nodeClick = data => {
-  console.log(data, '---data')
   dataPermission.value = data
+  setAllCheckbox()
 }
 
 const onMenuCheck = (data, node) => {
@@ -170,7 +172,6 @@ const onMenuCheck = (data, node) => {
     removePermission(permissionIds)
   }
   prevCheckedKeys = allChecked
-  console.log(permissionIds, '----permissionIds')
 }
 // 获取菜单权限选中id
 const getCheckedKeys = tree => {
@@ -215,14 +216,51 @@ function formatMenuData(data) {
   return data
 }
 const onSetDataRange = data => {
+  console.log(data)
   drawerVisible.value = true
-  console.log(data, '--data')
 }
-
+const allCheckboxChange = value => {
+  const allChildrenIds = setDownTree(dataPermission.value.data, node => {
+    node.isChecked = value
+  }).map(item => item.id)
+  if (value) {
+    addPermission(allChildrenIds)
+  } else {
+    removePermission(allChildrenIds)
+  }
+}
+const setAllCheckbox = () => {
+  if (!dataPermission.value.data) {
+    allCheck.value = false
+    isIndeterminate.value = false
+    return
+  }
+  let check = true
+  let indeterminate = false
+  function traverse(data) {
+    data.forEach(item => {
+      if (!item.isChecked) {
+        check = false
+      } else {
+        indeterminate = true
+      }
+      if (item.children && item.children.children) {
+        traverse(item.children)
+      }
+    })
+  }
+  traverse(dataPermission.value.data)
+  if (check) {
+    indeterminate = false
+  }
+  allCheck.value = check
+  isIndeterminate.value = indeterminate
+}
 // 页面按钮权限操作
 const checkboxChange = (value, row) => {
+  allCheck.value = value
   const permissionIds = [row.id]
-  if (value && row.parentId !== dataPermission.value.id) {
+  if (value && row.parentId && row.parentId !== dataPermission.value.id) {
     const parentIds = setUpTree(dataPermission.value.data, row.parentId, node => {
       node.isChecked = value
     }).map(item => item.id)
@@ -234,18 +272,8 @@ const checkboxChange = (value, row) => {
     }).map(item => item.id)
     permissionIds.push(...allChildrenIds)
   }
+  setAllCheckbox()
   if (value) {
-    addPermission(permissionIds)
-  } else {
-    removePermission(permissionIds)
-  }
-}
-const selectionChange = rows => {
-  const isChecked = !!rows.length
-  const permissionIds = setDownTree(dataPermission.value.data, node => {
-    node.isChecked = isChecked
-  }).map(item => item.id)
-  if (isChecked) {
     addPermission(permissionIds)
   } else {
     removePermission(permissionIds)

@@ -17,10 +17,9 @@
           <el-form-item label="注册人姓名">
             <el-input v-model="form.username" placeholder="请输入注册人姓名"></el-input>
           </el-form-item>
-          <!-- TODO -->
-          <!-- <el-form-item label="业务运营负责人" v-if="approveType === '3'">
-            <el-input v-model="form.value6" placeholder="请输入业务运营负责人"></el-input>
-          </el-form-item>-->
+          <el-form-item label="业务运营负责人" v-if="approveType === '3'">
+            <el-input v-model="form.bussinessOperator" placeholder="请输入业务运营负责人"></el-input>
+          </el-form-item>
           <el-form-item label="注册手机号">
             <el-input v-model="form.phone" placeholder="请输入注册手机号"></el-input>
           </el-form-item>
@@ -87,17 +86,16 @@
               end-placeholder="结束时间"
             />
           </el-form-item>
-          <!-- TODO -->
-          <!-- <el-form-item label="拒绝人" v-if="approveType === '2'">
-            <el-select v-model="form.value5" placeholder="请选择拒绝人">
+          <el-form-item label="拒绝人" v-if="approveType === '2'">
+            <el-select v-model="form.employeeId" placeholder="请选择拒绝人">
               <el-option
                 v-for="item in optionData.userList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
               ></el-option>
             </el-select>
-          </el-form-item>-->
+          </el-form-item>
         </el-form>
       </template>
     </FormWrap>
@@ -147,7 +145,7 @@
       <el-table-column label="注册人姓名" prop="username" min-width="150" align="center"></el-table-column>
       <el-table-column label="注册邮箱" prop="mail" min-width="150" align="center"></el-table-column>
       <el-table-column label="注册时间" prop="registerTime" min-width="180" align="center"></el-table-column>
-      <el-table-column label="机构类型" prop="orgTypeName" min-width="150" align="center"></el-table-column>
+      <el-table-column label="机构类型" prop="orgCategoryName" min-width="150" align="center"></el-table-column>
       <el-table-column label="邀请人" prop="inviteName" min-width="150" align="center"></el-table-column>
       <el-table-column
         label="失效时间"
@@ -240,11 +238,11 @@ const state = reactive({
 const form = reactive({
   companyName: '',
   username: '',
-  // value6: '',
+  bussinessOperator: '',
   phone: '',
   inviteName: '',
-  inviteStatus: ''
-  // value5: ''
+  inviteStatus: '',
+  employeeId: ''
 })
 const defaultForm = JSON.parse(JSON.stringify(form))
 const getTableData = async () => {
@@ -276,6 +274,11 @@ const onSearch = () => {
     getTableData()
   })
 }
+const employeeList = async () => {
+  const { code, data } = await Apis.clientEmployeeList()
+  if (code !== 200) return
+  optionData.userList = data
+}
 const onReset = () => {
   state.registerTime = []
   state.inviteTime = []
@@ -296,6 +299,7 @@ const onRisk = id => {
   riskDialogRef.value.open(id)
 }
 onMounted(async () => {
+  employeeList()
   getTableData()
 })
 </script>
