@@ -1,11 +1,11 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    title="实时委案"
-    width="50%"
+    title="案件分库"
+    width="500px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    :show-close="false"
+    :before-close="cancelSubmit"
   >
     <span>
       <div class="flx-justify-between allTab">
@@ -13,27 +13,27 @@
           <el-icon class="icon"><Memo /></el-icon>
           <div>
             <div class="title">选中案件数</div>
-            <div class="money">{{ props.distList.caseNum }}</div>
+            <div class="money">{{ props.distInfo.caseNum }}</div>
           </div>
         </div>
         <div class="flx-justify-between tab">
           <el-icon class="icon"><UserFilled /></el-icon>
           <div>
-            <div class="title">选中案人数</div>
-            <div class="money">{{ props.distList.personNum }}</div>
+            <div class="title">选中案件人数</div>
+            <div class="money">{{ props.distInfo.personNum }}</div>
           </div>
         </div>
         <div class="flx-justify-between tab">
           <el-icon class="icon"><Money /></el-icon>
           <div>
             <div class="title">预计分库金额</div>
-            <div class="money">{{ props.distList.totalAmount }}</div>
+            <div class="money">{{ props.distInfo.totalAmount }}</div>
           </div>
         </div>
       </div>
       <el-divider></el-divider>
-      <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="130px">
-        <el-form-item label="操作维度：" prop="isWithProductPublicDebt">
+      <el-form :model="form" ref="ruleFormRef">
+        <el-form-item label="操作维度" prop="isWithProductPublicDebt">
           <el-radio-group v-model="form.isWithProductPublicDebt" @change="radioChange">
             <el-radio :label="1">案人</el-radio>
             <el-radio :label="0">案件</el-radio>
@@ -49,7 +49,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="cancelSubmit">取消</el-button>
-        <el-button type="primary" @click="submitForm">确认委派</el-button>
+        <el-button type="primary" @click="submitForm">确认</el-button>
       </span>
     </template>
   </el-dialog>
@@ -65,11 +65,11 @@ const form: any = reactive({
 const originFormData = JSON.parse(JSON.stringify(form))
 // 接收props数据
 const props = defineProps<{
-  distList: any //委案数据
+  distInfo: any //委案数据
   resouerdistList: any[] //目标案件库
   sourceStoreId: any
 }>()
-const emits = defineEmits(['getTableData', 'exportChange', 'toggleSelection'])
+const emits = defineEmits(['getTableData', 'fetchCaseDistSelect', 'toggleSelection'])
 // 打开弹窗
 const dialogVisible = ref(false)
 const open = () => {
@@ -82,16 +82,13 @@ defineExpose({
 // 确认委派
 const submitForm = () => {
   let params = {
-    taskId: props.distList.taskId,
+    taskId: props.distInfo.taskId,
     sourceStoreId: props.sourceStoreId, //当前所在库的id
     targetStoreId: form.bank
   }
   console.log(params)
   // 请求
-  // const { code, msg } = await caseEntrustSave(params)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // await caseEntrustSave(params)
   ElMessage.success('分库成功！')
   emits('toggleSelection')
   emits('getTableData')
@@ -102,7 +99,7 @@ const cancelSubmit = () => {
   dialogVisible.value = false
 }
 const radioChange = val => {
-  emits('exportChange', val)
+  emits('fetchCaseDistSelect', 1, !!val)
 }
 </script>
   
