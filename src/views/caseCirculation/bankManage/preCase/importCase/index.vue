@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, computed } from 'vue'
-// import queryList from './config/queryList.js'
+import queryList from './config/queryList.js'
 import tableColumnList from './config/tableColumnList.js'
 
 const state = reactive({
@@ -42,50 +42,50 @@ state.tableData = [
 ]
 
 //api获取
-const queryList = computed(() => {
-  const apiList = [
-    {
-      code: 'PRODUCT_LIST',
-      data: [],
-      isShow: 0,
-      key: 'caseId',
-      title: '案件ID',
-      type: 'input'
-    },
-    {
-      code: 'PRODUCT_LIST',
-      data: [],
-      isShow: 1,
-      key: 'product',
-      title: '产品',
-      type: 'select'
-    },
-    {
-      code: 'PRODUCT_LIST',
-      data: [],
-      isShow: 1,
-      key: 'date',
-      title: '日期',
-      type: 'daterange'
-    },
-    {
-      code: 'PRODUCT_LIST',
-      data: [],
-      isShow: 1,
-      key: 'area',
-      title: '区域',
-      type: 'area-select'
-    }
-  ]
-  apiList.forEach(item => {
-    item['property'] = item.key
-    item['name'] = item.title
-    delete item['key']
-    delete item['title']
-  })
-  return apiList
-})
-console.log(queryList)
+// const queryList = computed(() => {
+//   const apiList = [
+//     {
+//       code: 'PRODUCT_LIST',
+//       data: [],
+//       isShow: 0,
+//       key: 'caseId',
+//       title: '案件ID',
+//       type: 'input'
+//     },
+//     {
+//       code: 'PRODUCT_LIST',
+//       data: [],
+//       isShow: 1,
+//       key: 'product',
+//       title: '产品',
+//       type: 'select'
+//     },
+//     {
+//       code: 'PRODUCT_LIST',
+//       data: [],
+//       isShow: 1,
+//       key: 'date',
+//       title: '日期',
+//       type: 'daterange'
+//     },
+//     {
+//       code: 'PRODUCT_LIST',
+//       data: [],
+//       isShow: 1,
+//       key: 'area',
+//       title: '区域',
+//       type: 'area-select'
+//     }
+//   ]
+//   apiList.forEach(item => {
+//     item['property'] = item.key
+//     item['name'] = item.title
+//     delete item['key']
+//     delete item['title']
+//   })
+//   return apiList
+// })
+// console.log(queryList)
 
 const handleChange = row => {
   console.log(row)
@@ -96,7 +96,7 @@ const handleChange = row => {
   <div class="card-wrap">
     <FormWrap style="margin-top: 20px" @search="handleSearch" @reset="handleReset">
       <template #default>
-        <FormClass ref="formClass" :async-fields="queryList" label-width="102px" />
+        <FormClass ref="formClass" :fields="queryList" label-width="102px" />
       </template>
     </FormWrap>
     <div>
