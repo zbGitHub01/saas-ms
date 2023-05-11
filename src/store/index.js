@@ -80,7 +80,7 @@ export const useGlobalStore = defineStore('globalStore', {
       this.refreshToken = ''
       this.tenantId = ''
       const path = isLogout ? '/login' : `/login?redirect=${router.currentRoute.value.fullPath}`
-      router.push({ path })
+      await router.push({ path })
       return true
     }
   },

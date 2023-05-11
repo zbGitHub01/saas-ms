@@ -8,12 +8,17 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="beforeClose"
-    @open="handleOpen"
   >
     <template #default>
       <el-form class="form">
         <el-form-item label="员工名录">
-          <UploadFile />
+          <UploadFile
+            ref="uploadFileRef"
+            v-model:file-list="fileList"
+            accept-type="excel"
+            :auto-upload="false"
+            @check-validate="onSubmit"
+          />
         </el-form-item>
       </el-form>
     </template>
@@ -21,7 +26,7 @@
       <div class="btn-box">
         <el-button class="down-template" type="primary" plain @click="downTemplate">导入模板下载</el-button>
         <el-button @click="beforeClose">取 消</el-button>
-        <el-button type="primary" :loading="loading" @click="onSubmit">确 定</el-button>
+        <el-button type="primary" :loading="loading" @click="onUpload">确 定</el-button>
       </div>
     </template>
   </el-dialog>
@@ -39,14 +44,20 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:dialogVisible'])
 
+const uploadFileRef = ref()
+const fileList = ref([])
 const loading = ref(false)
 const downTemplate = () => {}
-const handleOpen = () => {
-}
+
 const beforeClose = () => {
   emit('update:dialogVisible', false)
 }
-const onSubmit = () => {}
+const onUpload = () => {
+  uploadFileRef.value.uploadSubmit()
+}
+const onSubmit = () => {
+  console.log('ssss')
+}
 </script>
 
 <style lang="scss" scoped>

@@ -58,12 +58,13 @@
       <el-table-column label="部门角色" prop="roleName" min-width="150"></el-table-column>
       <el-table-column label="邀请人" prop="inviter" min-width="150"></el-table-column>
       <el-table-column label="邀请时间" prop="inviteTime" min-width="200"></el-table-column>
-      <el-table-column label="操作" prop="name" width="150" align="center" fixed="right">
+      <el-table-column label="操作" prop="name" width="200" align="center" fixed="right">
         <template #default="scope">
           <el-button :type="scope.row.isDisable ? 'success' : 'danger'" link @click="setStatus(scope.row)">
             {{ scope.row.isDisable ? '启用' : '禁用' }}
           </el-button>
           <el-button type="primary" link @click="setDimission(scope.row)">离职</el-button>
+          <el-button type="primary" link @click="editEmployee(scope.row)">查看/编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -71,6 +72,7 @@
   </div>
   <InviteEmployeesDialog v-model:dialog-visible="inviteEmployeesShow" />
   <BatchImportDialog v-model:dialog-visible="batchImportVisible" />
+  <EditEmployeeDialog v-model:drawer-visible="editEmployeeVisible" />
 </template>
 
 <script setup>
@@ -79,6 +81,7 @@ import { Plus, Upload } from '@element-plus/icons-vue'
 import Apis from '@/api/modules/systemSetting'
 import InviteEmployeesDialog from './components/InviteEmployeesDialog.vue'
 import BatchImportDialog from './components/BatchImportDialog.vue'
+import EditEmployeeDialog from './components/EditEmployeeDrawer/index.vue'
 import { ElMessageBox } from 'element-plus'
 import { useCommonStore } from '@/store/modules/common'
 
@@ -101,6 +104,7 @@ const roleList = computed(() => commonStore.roleList)
 const deptTree = computed(() => commonStore.deptTree)
 const inviteEmployeesShow = ref(false)
 const batchImportVisible = ref(false)
+const editEmployeeVisible = ref(false)
 const fetchAllEmployees = async () => {
   const deptId = searchForm.deptId
   const params = {
@@ -135,6 +139,10 @@ const setDimission = async row => {
   if (code === 200) {
     await fetchAllEmployees()
   }
+}
+const editEmployee = row => {
+  console.log(row)
+  editEmployeeVisible.value = true
 }
 fetchAllEmployees()
 </script>

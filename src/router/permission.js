@@ -10,7 +10,6 @@ const axiosCanceler = new AxiosCanceler()
 export const onBeforeEach = router => {
   router.beforeEach(async (to, from, next) => {
     NProgress.start()
-    NProgress.done()
     const globalStore = useGlobalStore()
     // * 在跳转路由之前，清除所有的请求
     axiosCanceler.removeAllPending()
