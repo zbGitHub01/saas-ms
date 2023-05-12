@@ -156,6 +156,17 @@ export default {
       state.currEditObj['prop'] = prop
     }
 
+    //table单元格数组转字符串
+    const getCellString = (arr, key) => {
+      if (arr.length < 0) return
+      let str = ''
+      arr.map((item, index) => {
+        if (!item[key]) return
+        str += index + 1 === arr.length ? item[key] : item[key] + ','
+      })
+      return str
+    }
+
     const { proxy } = getCurrentInstance()
     const multipleSelection = ref([])
     const toggleSelection = rows => {
@@ -176,6 +187,7 @@ export default {
       objectSpanMethod,
       operaClick,
       changeStatus,
+      getCellString,
       handleSizeChange,
       handleCurrentChange,
       toggleSelection,
@@ -192,6 +204,7 @@ export default {
     <!-- 是否开启多选 -->
     <div v-if="isSelection" class="select-style">
       <span>选中项：{{ state.currSelectedList.length }}</span>
+      &nbsp;
       <el-button class="cancel" type="primary" link @click="toggleSelection()">取消</el-button>
     </div>
     <el-table
@@ -234,6 +247,30 @@ export default {
             align="center"
           >
             <template #default="{ row }">
+              <!--Popover弹出框-->
+              <template v-if="childItem.isPopover">
+                <el-popover :visible="false">
+                  <template #reference>
+                    <el-tag>{{ row[childItem.prop][0][childItem.popoverProp] }}</el-tag>
+                  </template>
+                </el-popover>
+                &nbsp;
+                <el-popover
+                  v-if="row[childItem.prop].length > 1"
+                  :effect="childItem.popoverLight || light"
+                  trigger="hover"
+                  placement="top"
+                  width="auto"
+                >
+                  <template #default>
+                    <!--popoverProp为显示字段的key-->
+                    <div>{{ getCellString(row[childItem.prop], childItem.popoverProp) }}</div>
+                  </template>
+                  <template #reference>
+                    <el-tag>+{{ row[childItem.prop].length - 1 }}</el-tag>
+                  </template>
+                </el-popover>
+              </template>
               <!-- 是否需要switch操作按钮 -->
               <el-switch v-if="childItem.isSwitch" v-model="row[childItem.prop]" @change="changeStatus(row)" />
               <!-- 是否需要button按钮 -->
@@ -254,8 +291,33 @@ export default {
             </template>
           </el-table-column>
         </template>
+
         <!--如果不是多级表头-->
         <template v-if="!item.childColumn" #default="{ row }">
+          <!--Popover弹出框-->
+          <template v-if="item.isPopover">
+            <el-popover :visible="false">
+              <template #reference>
+                <el-tag>{{ row[item.prop][0][item.popoverProp] }}</el-tag>
+              </template>
+            </el-popover>
+            &nbsp;
+            <el-popover
+              v-if="row[item.prop].length > 1"
+              :effect="item.popoverLight || light"
+              trigger="hover"
+              placement="top"
+              width="auto"
+            >
+              <template #default>
+                <!--popoverProp为显示字段的key-->
+                <div>{{ getCellString(row[item.prop], item.popoverProp) }}</div>
+              </template>
+              <template #reference>
+                <el-tag>+{{ row[item.prop].length - 1 }}</el-tag>
+              </template>
+            </el-popover>
+          </template>
           <!-- 是否需要switch操作按钮 -->
           <el-switch v-if="item.isSwitch" v-model="row[item.prop]" @change="changeStatus(row)" />
           <!-- 是否需要button按钮 -->
@@ -300,6 +362,8 @@ export default {
   padding: 32px 16px;
 }
 .select-style {
+  display: flex;
+  display: -webkit-flex;
   margin-bottom: 6px;
 }
 :deep(.cell) {

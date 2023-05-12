@@ -63,10 +63,6 @@ export default {
       return fieldsData
     })
 
-    // const searchList = computed(() => {
-    //   if (!state.searchValue) return formFields.value
-    //   return formFields.value.filter(item => item.name.includes(state.searchValue))
-    // })
     const getEntity = () => {
       return unflatten(state.flatEntity)
     }
@@ -77,11 +73,9 @@ export default {
       state.flatEntity = {}
       // emit('reset', {})
     }
-    let searchList = reactive([])
+    const searchList = ref([])
     const beforePopoverEnter = () => {
-      // state.searchList = formFields
-      searchList.value = formFields
-      console.log(searchList.value)
+      searchList.value = formFields.value
     }
 
     watch(
@@ -96,9 +90,7 @@ export default {
     const checkChange = (value, index, currObj) => {
       let newObj = { ...currObj }
       newObj.isShow = Number(value)
-      console.log(searchList.value.value)
-      searchList.value.value.splice(index, 1, newObj)
-      console.log(searchList.value)
+      searchList.value.splice(index, 1, newObj)
       // emit('reset', {})
     }
     return {
@@ -107,6 +99,7 @@ export default {
       getEntity,
       checkChange,
       searchList,
+      props,
       // handleSubmit,
       handleReset,
       beforePopoverEnter
@@ -169,7 +162,7 @@ export default {
         :placeholder="item.placeholder"
       />
     </el-form-item>
-    <el-form-item>
+    <el-form-item v-if="props.asyncFields.length > 0">
       <el-popover placement="bottom" width="250" trigger="click" @before-enter="beforePopoverEnter">
         <template #reference>
           <el-button icon="Operation" circle></el-button>
@@ -179,7 +172,7 @@ export default {
           <el-scrollbar class="scroll">
             <div class="check-list">
               <el-checkbox
-                v-for="(item, index) in searchList.value"
+                v-for="(item, index) in searchList"
                 :key="item.property"
                 :label="item.name"
                 :model-value="!!Number(item.isShow)"
