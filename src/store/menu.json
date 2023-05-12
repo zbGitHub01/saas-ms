@@ -18,7 +18,7 @@
   },
   {
     "hide": false,
-    "icon": "Management",
+    "icon": "Coin",
     "parentMenuCode": "non",
     "path": "/caseManage",
     "permissionId": 2462,
@@ -34,7 +34,7 @@
     "children": [
       {
         "hide": false,
-        "icon": "UploadFilled",
+        "icon": "",
         "parentMenuCode": "ANJIANGUANLI",
         "path": "/caseManage/caseImport",
         "permissionId": 2280,
@@ -50,7 +50,7 @@
       },
       {
         "hide": false,
-        "icon": "List",
+        "icon": "",
         "parentMenuCode": "ANJIANGUANLI",
         "path": "/caseManage/allCases",
         "permissionId": 2280,
@@ -66,7 +66,7 @@
       },
       {
         "hide": false,
-        "icon": "Promotion",
+        "icon": "",
         "parentMenuCode": "ANJIANGUANLI",
         "path": "/caseManage/assetEntrust",
         "permissionId": 2280,
@@ -82,13 +82,95 @@
       },
       {
         "hide": false,
-        "icon": "Management",
+        "icon": "",
         "parentMenuCode": "ANJIANGUANLI",
         "path": "/caseManage/assetDispose",
         "permissionId": 2280,
         "isChecked": true,
         "menuCode": "ZICHANJICHUPEIZHI",
         "menuName": "资产基础配置",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      }
+    ]
+  },
+  {
+    "hide": false,
+    "icon": "TakeawayBox",
+    "parentMenuCode": "non",
+    "path": "/externalCaseManage",
+    "permissionId": 2462,
+    "isChecked": true,
+    "menuCode": "WAIBUANJIANGUANLI",
+    "menuName": "外部案件管理",
+    "permissionType": {
+      "type": 1,
+      "desc": "权限菜单"
+    },
+    "rolePermissionOperation": [],
+    "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7",
+    "children": [
+      {
+        "hide": false,
+        "icon": "",
+        "parentMenuCode": "WAIBUANJIANGUANLI",
+        "path": "/externalCaseManage/externalCaseImport",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "WAIBUANJIANDAORU",
+        "menuName": "外部案件导入",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "",
+        "parentMenuCode": "WAIBUANJIANGUANLI",
+        "path": "/externalCaseManage/externalCaseAssignment",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "WAIBUANJIANWEIPAI",
+        "menuName": "外部案件委派",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "",
+        "parentMenuCode": "WAIBUANJIANGUANLI",
+        "path": "/externalCaseManage/externalCaseRecovery",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "WAIBUANJIANSHOUHUI",
+        "menuName": "外部案件收回",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "",
+        "parentMenuCode": "WAIBUANJIANGUANLI",
+        "path": "/externalCaseManage/externalAssetDispose",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "WAIBUZICHANJICHUPEIZHI",
+        "menuName": "外部资产基础配置",
         "permissionType": {
           "type": 1,
           "desc": "权限菜单"

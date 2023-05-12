@@ -9,26 +9,58 @@ const caseRouter = [
         path: '/caseManage/caseImport',
         name: 'caseImport',
         component: () => import('@/views/caseManage/caseImport/index.vue'),
-        meta: { title: '数据导入', icon: 'UserFilled' }
+        meta: { title: '数据导入', icon: '' }
       },
       {
         path: '/caseManage/allCases',
         name: 'allCases',
         component: () => import('@/views/caseManage/allCases/index.vue'),
-        meta: { title: '全部案件', icon: 'UserFilled' }
+        meta: { title: '全部案件', icon: '' }
       },
       {
         path: '/caseManage/assetEntrust',
         name: 'assetEntrust',
         component: () => import('@/views/caseManage/assetEntrust/index.vue'),
-        meta: { title: '资产委托', icon: 'UserFilled' }
+        meta: { title: '资产委托', icon: '' }
       },
       {
         path: '/caseManage/assetDispose',
         name: 'assetDispose',
         component: () => import('@/views/caseManage/assetDispose/index.vue'),
-        meta: { title: '资产基础配置', icon: 'UserFilled' }
+        meta: { title: '资产基础配置', icon: '' }
       }
+    ]
+  },
+  {
+    path: '/externalCaseManage',
+    name: 'externalCaseManage',
+    component: () => import('@/layout/index.vue'),
+    meta: { title: '外部案件管理' },
+    children: [
+      {
+        path: '/externalCaseManage/externalCaseImport',
+        name: 'externalCaseImport',
+        component: () => import('@/views/externalCaseManage/externalCaseImport/index.vue'),
+        meta: { title: '外部案件导入', icon: '' }
+      },
+      {
+        path: '/externalCaseManage/externalCaseAssignment',
+        name: 'externalCaseAssignment',
+        component: () => import('@/views/externalCaseManage/externalCaseAssignment/index.vue'),
+        meta: { title: '外部案件委派', icon: '' }
+      },
+      {
+        path: '/externalCaseManage/externalCaseRecovery',
+        name: 'externalCaseRecovery',
+        component: () => import('@/views/externalCaseManage/externalCaseRecovery/index.vue'),
+        meta: { title: '外部案件收回', icon: '' }
+      },
+      {
+        path: '/externalCaseManage/externalAssetDispose',
+        name: 'externalAssetDispose',
+        component: () => import('@/views/externalCaseManage/externalAssetDispose/index.vue'),
+        meta: { title: '外部资产基础配置', icon: '' }
+      },
     ]
   },
   {

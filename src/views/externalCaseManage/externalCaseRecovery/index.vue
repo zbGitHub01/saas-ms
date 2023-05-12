@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card-wrap">
     <FormWrap @search="getTableData" @reset="reset">
       <template #default>
         <el-form inline :model="form">
@@ -14,7 +14,7 @@
       <OperationBar v-model:active="operation">
         <template #default>
           <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow" plain type="primary" :icon="item.icon" @click="handleClick(item.title)">
+            <el-button v-if="item.isShow" type="primary" :icon="item.icon" @click="handleClick(item.title)" plain>
               {{ item.title }}
             </el-button>
           </div>
@@ -24,11 +24,17 @@
         <span>选中项：{{ state.selectData.length }}</span>
         <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
       </div>
-      <el-table :data="state.tableData" border @selection-change="handleSelectionChange" ref="multipleTable">
-        <el-table-column type="selection" fixed align="center" width="55"></el-table-column>
+      <el-table
+        :data="state.tableData"
+        border
+        @selection-change="handleSelectionChange"
+        ref="multipleTable"
+        :row-key="getRowKeys"
+      >
+        <el-table-column type="selection" fixed align="center" width="55" :reserve-selection="true"></el-table-column>
         <el-table-column
           label="案件ID"
-          prop="caseId"
+          prop="caseNo"
           align="center"
           min-width="150"
           fixed="left"
@@ -107,33 +113,13 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="IVR标签"
-          prop="ivrTag"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="机器人外呼标签"
-          prop="robotTag"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="入库批次号"
-          prop="batchNo"
-          align="center"
-          min-width="250"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
           label="债权方"
           prop="creditorName"
           align="center"
           min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
+        <!-- 无 -->
         <el-table-column
           label="所属分库"
           prop="storeName"
@@ -141,9 +127,10 @@
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
+        <!-- 无 -->
         <el-table-column
           label="分库时间"
-          prop="distTime"
+          prop="allotTime"
           align="center"
           min-width="180"
           :show-overflow-tooltip="true"
@@ -183,45 +170,31 @@
           min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
-        <el-table-column
-          label="特殊原因备注"
-          prop="caseStatusRemark"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="法诉状态标签"
-          prop="lawsuitStatus"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
         <el-table-column label="案件状态" prop="caseStatusText" align="center" min-width="150" fixed="right"></el-table-column>
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
-    <AddOrRemoveTagDialog ref="addOrRemoveTagDialog" @submitForm="submitTagForm" />
-    <HandleCaseDialog ref="handleCaseDialog" @submitForm="submitCaseForm" />
-    <ExportDialog ref="exportDialog" />
+    <CaseRecoveryDialog
+      ref="caseRecoveryDialog"
+      :taskId="state.taskId"
+      :caseInfo="state.caseInfo"
+      @get-table-data="getTableData"
+      @fetchRecoverNowSelect="fetchRecoverNowSelect"
+      @toggleSelection="toggleSelection"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-import { Close, VideoPause, VideoPlay, CirclePlus, Delete, Download, Document } from '@element-plus/icons-vue'
-import AddOrRemoveTagDialog from './components/AddOrRemoveTagDialog.vue'
-import HandleCaseDialog from './components/HandleCaseDialog.vue'
-import ExportDialog from './components/ExportDialog.vue'
-const multipleTable = ref(null)
+import { Folder } from '@element-plus/icons-vue'
+import CaseRecoveryDialog from './components/CaseRecoveryDialog.vue'
+const multipleTable = ref()
 const form: any = reactive({
   caseId: ''
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-const addOrRemoveTagDialog = ref()
-const handleCaseDialog = ref()
-const exportDialog = ref()
 // 页码
 const query = reactive({
   page: 1,
@@ -233,66 +206,33 @@ const state = reactive({
   labelData: {} as any, //标签数据
   selectData: [] as any[], //选中项
   handleparams: {} as any, //操作的参数
-  exportData: {} //导出项参数
+  taskId: null, //对选中数据操作的唯一标记id
+  caseInfo: {} as any //委案数据
 })
 const operation = ref(1)
+const caseRecoveryDialog = ref()
 const operationList = reactive([
   {
-    title: '关闭案件',
-    icon: 'Close',
+    title: '实时收回',
+    icon: 'Folder',
     isShow: true
     // isShow: this.hasPerm("disposal_case_close"),
   },
   {
-    title: '暂停案件',
-    icon: 'VideoPause',
+    title: '预收回并删除',
+    icon: 'Folder',
     isShow: true
-    // isShow: this.hasPerm("disposal_case_stop"),
-  },
-  {
-    title: '恢复案件',
-    icon: 'VideoPlay',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_ref"),
-  },
-  {
-    title: '添加临时标签',
-    icon: 'CirclePlus',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_addlabel"),
-  },
-  {
-    title: '删除临时标签',
-    icon: 'Delete',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_dellabel"),
-  },
-  {
-    title: '导出案件',
-    icon: 'Download',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_excase"),
-  },
-  {
-    title: '导出处置记录',
-    icon: 'Download',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_exrecord"),
-  },
-  {
-    title: '生成结清证明',
-    icon: 'Document',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_qing"),
+    // isShow: this.hasPerm("disposal_case_close"),
   }
 ])
 onMounted(() => {
   getTableData()
 })
 const getTableData = async () => {
-  console.log('可管理案件搜索', form)
   // 请求得到数据
-  // const { data } = await xx(form)
+  const params = { ...form, ...query, storeId: 2 }
+  // const { data } = await xx(params) //表格
+  // const { data } = await xx(params) //label
   state.tableData = [
     {
       allotLogId: 0,
@@ -308,7 +248,6 @@ const getTableData = async () => {
       caseStatusChild: 0,
       caseStatusRemark: '',
       caseStatusText: '正常',
-      orgTitle: '公司名称T79',
       caseUserId: 1001,
       color: 100,
       cpeId: 0,
@@ -350,7 +289,6 @@ const getTableData = async () => {
       stagingPlan: { stagingPlanUuid: 'e20a60db43fd43f190ea2e8c919d62c5', historyRetainCount: 0, debtSignStatus: 0 },
       storeId: 1,
       storeName: '待分配库',
-      lawsuitStatus: '内部已执行',
       tagAlterList: [
         //预警标签
         {
@@ -408,7 +346,6 @@ const getTableData = async () => {
       caseUserId: 1001,
       color: 100,
       cpeId: 0,
-      orgTitle: '公司名称T79',
       cpeName: '钱龙',
       creditorId: 8,
       creditorName: '测试债权方1',
@@ -435,7 +372,6 @@ const getTableData = async () => {
       orgId: 0,
       orgTagTempList: [],
       pauseCaseType: [],
-      lawsuitStatus: '内部已执行',
       productId: 20,
       productName: '邦恩佰仟',
       regAddrArea: '孝义市',
@@ -489,177 +425,54 @@ const toggleSelection = () => {
   multipleTable.value.clearSelection()
   console.log(state.selectData)
 }
+//跨页选择
+const getRowKeys = row => {
+  return row.caseNo
+}
 //通过此函数整体过滤事件
 const handleClick = item => {
   if (state.selectData.length === 0 && operation.value === 1) {
     ElMessage.warning('请先选择操作对象!')
   } else {
     switch (item) {
-      case '关闭案件':
-        handleCase(1)
+      case '实时收回':
+        caseRecovery()
         break
-      case '暂停案件':
-        // this.form.caseStatus = 25;
-        handleCase(2)
-        break
-      case '恢复案件':
-        handleCase(3)
-        break
-      case '添加临时标签':
-        open(1)
-        break
-      case '删除临时标签':
-        open(2)
-        break
-      case '导出案件':
-        exportModel('EXPORT_CASE_FIELD', 0)
-        break
-      case '导出处置记录':
-        exportModel('EXPORT_FOLLOW_FIELD', 1)
-        break
-      case '生成结清证明':
-        certificate()
+      case '预收回并删除':
+        caseRecoveryDel()
         break
       default:
         break
     }
   }
 }
-// 1添加临时标签/2删除临时标签
-const open = type => {
-  addOrRemoveTagDialog.value.open(type)
+// 实时收回
+const caseRecovery = () => {
+  fetchRecoverNowSelect()
+  caseRecoveryDialog.value.open()
 }
-// 确认添加/删除临时标签
-const submitTagForm = (tempTagName, type, isDeleteAllRelationTag) => {
+const caseRecoveryDel = () => {
+  console.log('预收回并删除')
+}
+// 获取委案数据
+const fetchRecoverNowSelect = async (isWithProductPublicDebt = true) => {
   // 处理入参
-  let params = getParams()
-  params.tempTagName = tempTagName
-  if (type === 2) {
-    params['isDeleteAllRelationTag'] = isDeleteAllRelationTag === true ? 1 : 0
-  }
-  console.log(params)
+  let params = operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
+  params['recoverType'] = 2
+  params.storeId = 2
+  params.isWithProductPublicDebt = isWithProductPublicDebt
+  console.log('委案数据参数：', params)
   // 请求得到数据
-  // await xx(form)
-  ElMessage.success('操作成功！')
-  toggleSelection()
-  getTableData()
-}
-// 1关闭案件/2暂停案件/3恢复案件
-const handleCase = type => {
-  if (type === 3) {
-    let paramsSub = {
-      caseStatus: 1
-    }
-    submitCaseForm(paramsSub)
-  } else {
-    handleCaseDialog.value.open(type)
-  }
-}
-// 确认关闭/暂停/恢复案件
-const submitCaseForm = async paramsSub => {
-  let params = getParams()
-  Object.assign(params, paramsSub)
-  // 发送处理案件接口
-  console.log('处理案件：', params)
-  // await xx(params)
-  ElMessage.success('操作成功！')
-  toggleSelection()
-  getTableData()
-}
-// 导出案件/导出处置记录
-const exportModel = async (code, type) => {
-  let params = {
-    codes: code
-  }
   // const { data } = await xx(params)
-  // state.exportData = data[code]
-  state.exportData = {
-    amountTime: {
-      loanPactAmount: '合同金额',
-      loanArrivalAmount: '到账金额',
-      loanBorrRate: '借款费率',
-      loanServeRate: '服务费率',
-      loanPeriod: '借款周期',
-      transBeforeRefundAmount: '转让前已还金额',
-      transAmount: '转让金额',
-      transPrincipal: '转让本金',
-      transFee: '转让利息',
-      loanTime: '借款时间',
-      loanStartTime: '借款起算时间',
-      loanEndTime: '借款到期时间',
-      loanExpireTime: '最后还款日',
-      transTime: '转让日期',
-      creditAmount: '征信金额'
-    },
-    baseInfo: {
-      caseNo: '案件ID',
-      productName: '产品',
-      batchNo: '入库批次号',
-      creditorName: '债权方',
-      loanPactNo: '订单合同号',
-      loanPlatformUserId: '平台用户ID',
-      originCreditor: '原债权公司',
-      userName: '姓名',
-      idno: '证件号',
-      userPhone: '手机号',
-      sosPhone: '紧急联系人',
-      sex: '性别',
-      marital: '婚姻状况',
-      qq: 'QQ',
-      mail: '邮箱',
-      regAddrRange: '户籍区域',
-      regAddr: '户籍地址',
-      homeAddr: '家庭地址',
-      homePhone: '家庭电话',
-      companyName: '单位名称',
-      companyAddr: '单位地址',
-      companyPhone: '单位电话',
-      investorName: '出资方',
-      receiptBank: '收款银行',
-      receiptBankCode: '收款银行卡号',
-      refundBank: '还款银行',
-      refundBankCode: '还款银行卡号',
-      caseStatusRemark: '特殊备注',
-      ethnicity: '民族'
-    },
-    handleRelevant: {
-      storeName: '所属分库',
-      orgTitle: '处置机构',
-      cpeName: 'CPE',
-      handleAmount: '处置金额',
-      totalRefundAmount: '还款入账金额',
-      totalReductionAmount: '减免金额',
-      residueAmount: '剩余待还金额',
-      intermediateCourtName: '中级法院',
-      grassRootCourtName: '基层法院',
-      caseStatusText: '案件状态',
-      entrustTypeText: '委案类型'
-    },
-    followFile: {
-      callRecording: '通话录音',
-      letter: '信函',
-      smsRecord: '短信联系记录',
-      wechatRecord: '微信联系记录',
-      qqRecord: 'QQ联系记录'
-    }
+  // state.taskId = data.taskId
+  // state.caseInfo = data
+  state.taskId = 1
+  state.caseInfo = {
+    caseNum: 730330,
+    personNum: 350085,
+    taskId: 2210,
+    totalAmount: 1815372575.82
   }
-  exportDialog.value.open(state.exportData, type)
-}
-// 恢复案件
-const warningModel = (item, type) => {}
-// 生成结清证明
-const certificate = async () => {
-  let params = getParams()
-  console.log('结清证明', params)
-  // await xx(params)
-  toggleSelection()
-  getTableData()
-}
-// 处理基础入参
-const getParams = () => {
-  let params =
-    operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
-  return params
 }
 </script>
 

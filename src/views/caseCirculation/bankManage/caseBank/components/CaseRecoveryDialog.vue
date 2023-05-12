@@ -194,10 +194,10 @@ const radioChange = val => {
   }
 }
 .backform {
-  ::v-deep .el-form-item__label {
+  :deep(.el-form-item__label) {
     padding: 0;
   }
-  ::v-deep .el-form-item__content {
+  :deep(.el-form-item__content) {
     margin-left: 30px;
   }
 }

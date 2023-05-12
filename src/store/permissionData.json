@@ -10,7 +10,7 @@
   {
     "name": "案件管理",
     "code": "CASE_MANAGE",
-    "icon": "Management",
+    "icon": "Coin",
     "path": "/caseManage",
     "type": 1,
     "children": [
@@ -40,6 +40,43 @@
         "code": "ASSET_DISPOSE",
         "icon": "",
         "path": "/caseManage/assetDispose",
+        "type": 1
+      }
+    ]
+  },
+  {
+    "name": "外部案件管理",
+    "code": "EXTERNAL_CASE_MANAGE",
+    "icon": "TakeawayBox",
+    "path": "/externalCaseManage",
+    "type": 1,
+    "children": [
+      {
+        "name": "外部案件导入",
+        "code": "EXTERNAL_CASE_IMPORT",
+        "icon": "",
+        "path": "/externalCaseManage/externalCaseImport",
+        "type": 1
+      },
+      {
+        "name": "外部案件委派",
+        "code": "EXTERNAL_CASE_ASSIGNMENT",
+        "icon": "",
+        "path": "/externalCaseManage/externalCaseAssignment",
+        "type": 1
+      },
+      {
+        "name": "外部案件收回",
+        "code": "EXTERNAL_CASE_RECOVERY",
+        "icon": "",
+        "path": "/externalCaseManage/externalCaseRecovery",
+        "type": 1
+      },
+      {
+        "name": "外部资产基础配置",
+        "code": "EXTERNAL_ASSET_DISPOSE",
+        "icon": "",
+        "path": "/externalCaseManage/externalAssetDispose",
         "type": 1
       }
     ]

@@ -462,7 +462,7 @@ const getTableData = async () => {
 const getTabList = () => {
   // 请求得到数据
   // const { data } = await xx(form)
-  ;(state.tabList = [
+  state.tabList = [
     {
       itemText: '待分库案件',
       itemId: 1
@@ -479,8 +479,8 @@ const getTabList = () => {
       itemText: '勾销处置库',
       itemId: 4
     }
-  ]),
-    (state.tabListSub = state.tabList.slice(1)) //去掉待分库配这个选项
+  ]
+  state.tabListSub = state.tabList.slice(1) //去掉待分库配这个选项
 }
 // 重置
 const reset = () => {

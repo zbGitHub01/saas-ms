@@ -205,7 +205,7 @@ const form: any = reactive({
 const selectData = reactive({
   caseTypeList: [] as any[], //委案类型列表
   orgList: [] as any[], //机构列表
-  defalutType: null, //?
+  defalutType: null, //批次为普通批次的id
   bankList: [] as any[] //案件分库列表
 })
 const originFormData = JSON.parse(JSON.stringify(form))
@@ -444,7 +444,24 @@ const getSelecData = async () => {
     }
   ]
   selectData.defalutType = 92
-  selectData
+  selectData.bankList = [
+    {
+      itemText: '待分库案件',
+      itemId: 1
+    },
+    {
+      itemText: '委外处置库',
+      itemId: 2
+    },
+    {
+      itemText: '智能处置库',
+      itemId: 3
+    },
+    {
+      itemText: '勾销处置库',
+      itemId: 4
+    }
+  ]
 }
 // 重置
 const reset = () => {
@@ -498,15 +515,12 @@ const caseAssignment = () => {
 // 获取委案数据
 const fetchTimingSearch = (entrustStrategy = 1) => {
   // 处理入参
-  let params = operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, ...form }
+  let params = operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
   params.storeId = 2
   params.entrustStrategy = entrustStrategy
   console.log('委案数据参数：', params)
   // 请求得到数据
-  // const { code, data, msg } = await xx(params)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
+  // const { data } = await xx(params)
   // state.taskId = data.taskId
   // state.timeData = data
   if (entrustStrategy === 1) {
