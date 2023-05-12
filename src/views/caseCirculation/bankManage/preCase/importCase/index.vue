@@ -1,14 +1,37 @@
 <script setup>
-import { reactive, computed } from 'vue'
-import queryList from './config/queryList.js'
+import { reactive, computed, getCurrentInstance } from 'vue'
 import tableColumnList from './config/tableColumnList.js'
+import dialogFormFieldsList from './config/dialogFormFieldsList.js'
 
 const state = reactive({
   tableData: [],
   pageTotal: 4,
   queryNewData: {},
   dialogVisible: false,
-  monthList: []
+  monthList: [],
+  dialogRuleForm: {
+    case: '',
+    opera: '',
+    categoryCompany: '',
+    aimCompany: '',
+    caseType: '',
+    history: '',
+    date: '',
+    isAuto: '',
+    notes: '',
+    datetime: '',
+    checkTest: [],
+    fileList: [
+      {
+        name: 'element-plus-logo.svg',
+        url: 'https://element-plus.org/images/element-plus-logo.svg'
+      },
+      {
+        name: 'element-plus-logo2.svg',
+        url: 'https://element-plus.org/images/element-plus-logo.svg'
+      }
+    ]
+  }
 })
 
 const getOrderListAgain = (pageSize, pageNum) => {
@@ -23,6 +46,70 @@ const getOrderListAgain = (pageSize, pageNum) => {
   //   state.pageTotal = res.data.total
   // })
 }
+
+const { proxy } = getCurrentInstance()
+const formFieldsList = computed(() => {
+  dialogFormFieldsList.forEach(item => {
+    if (item.prop === 'case')
+      item.options = proxy.$deepCopy(
+        [
+          {
+            label: 'red',
+            value: 1
+          },
+          {
+            label: 'blue',
+            value: 2
+          }
+        ],
+        true
+      )
+    if (item.type === 'pairSelect') {
+      item.childItem.filter(cItem => {
+        if (cItem.prop === 'aimCompany')
+          cItem.options = proxy.$deepCopy([
+            {
+              label: 'red',
+              value: 1
+            },
+            {
+              label: 'blue',
+              value: 2
+            }
+          ])
+      })
+    }
+    if (item.prop === 'opera')
+      item.radioList = proxy.$deepCopy(
+        [
+          {
+            label: '案人'
+          },
+          {
+            label: '案件'
+          },
+          {
+            label: '库内剩余共债'
+          }
+        ],
+        true
+      )
+  })
+  return dialogFormFieldsList
+})
+
+const rules = reactive({
+  case: [{ required: true, message: '请选择案件分库', trigger: 'blur' }],
+  categoryCompany: [{ required: true, message: '请选择机构分类', trigger: 'change' }],
+  aimCompany: [{ required: true, message: '请选择目标机构', trigger: 'change' }],
+  caseType: [{ required: true, message: '请选择委案类型', trigger: 'change' }],
+  history: [{ required: true, message: '请选择历史处置记录', trigger: 'change' }],
+  date: [{ required: true, message: '请选择委案到期日', trigger: 'change' }],
+  isAuto: [{ required: true, message: '请选择是否自动收回', trigger: 'change' }],
+  datetime: [{ required: true, message: '请选择执行时间', trigger: 'change' }],
+  checkTest: [{ required: true, message: '请选择执行时间', trigger: 'change' }],
+  fileList: [{ required: true, message: '请上传委案文件', trigger: 'change' }]
+})
 
 state.monthList = Array(20).fill({ label: '2021-01', name: Math.floor(Math.random(0, 1) * 10) })
 
@@ -90,15 +177,21 @@ state.tableData = [
 const handleChange = row => {
   console.log(row)
 }
+const handleEdit = () => {
+  state.dialogVisible = true
+}
+const handleSubmit = data => {
+  console.log('formData', data.case)
+}
 </script>
 
 <template>
   <div class="card-wrap">
-    <FormWrap style="margin-top: 20px" @search="handleSearch" @reset="handleReset">
+    <!-- <FormWrap style="margin-top: 20px" @search="handleSearch" @reset="handleReset">
       <template #default>
         <FormClass ref="formClass" :fields="queryList" label-width="102px" />
       </template>
-    </FormWrap>
+    </FormWrap> -->
     <div>
       <OperationBar>
         <template #default>
@@ -110,17 +203,33 @@ const handleChange = row => {
           <el-button type="primary" icon="UploadFilled" @click="handleClick">下载导入模板</el-button>
         </template>
       </OperationBar>
-      <TableClass :table-data="state.tableData" :column-list="tableColumnList" :is-selection="true" @change-status="handleChange">
+      <TableClass
+        :table-data="state.tableData"
+        :column-list="tableColumnList"
+        :stripe="true"
+        :is-selection="true"
+        :pagination="false"
+        @change-status="handleChange"
+      >
         <template #operation>
           <el-table-column align="center" fixed="right" label="操作" width="200">
             <template #default="scope">
-              <el-button type="primary" size="small" link @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-              <el-button type="primary" size="small" link @click="handleEdit(scope.$index, scope.row)">查看机构设置</el-button>
+              <el-button type="primary" size="small" link @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button type="primary" size="small" link @click="handleEdit(scope.$index, scope.row)">确认发布</el-button>
+              <el-button type="danger" size="small" link @click="handleEdit(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </template>
       </TableClass>
     </div>
+    <DialogForm
+      v-model:dialog-form-visible="state.dialogVisible"
+      :rule-form="state.dialogRuleForm"
+      title="导入委案"
+      :rules="rules"
+      :form-fields="formFieldsList"
+      @submit="handleSubmit"
+    />
   </div>
 </template>
 
