@@ -56,7 +56,6 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
-import { CircleCheckFilled } from '@element-plus/icons-vue'
 import { phoneReg } from '@/utils/validate'
 import { useCommonStore } from '@/store/modules/common'
 import Apis from '@/api/modules/systemSetting'

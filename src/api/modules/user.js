@@ -1,5 +1,5 @@
-import { generateApiFnc } from '@/api/helper/apiFncs'
 import http from '../index'
+import { generateApiFnc } from '@/api/helper/apiFncs'
 
 const apiConfig = {
   userLogin: `POST /auth/oauth/token`,

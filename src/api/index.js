@@ -62,7 +62,7 @@ class RequestHttp {
           }
         }
         if (!window.navigator.onLine) {
-          return router.replace('500')
+          return router.replace({ path: '/500' })
         }
         return response || error
       }
