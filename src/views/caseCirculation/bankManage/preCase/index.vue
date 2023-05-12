@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import ImportCase from './importCase/index.vue'
+import ModelCase from './modelCase/index.vue'
 
 const tabClick = () => {
   console.log(1)
@@ -15,7 +16,7 @@ const tabActive = ref('1')
         <ImportCase />
       </el-tab-pane>
       <el-tab-pane label="模型委案" name="2">
-        <ImportCase />
+        <ModelCase />
       </el-tab-pane>
       <el-tab-pane label="产品委案" name="3">
         <ImportCase />

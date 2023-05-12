@@ -9,7 +9,6 @@ const state = reactive({
   pageTotal: 4,
   queryNewData: {},
   dialogVisible: false,
-  monthList: [],
   dialogRuleForm: {
     case: '',
     opera: '',
@@ -112,70 +111,68 @@ const rules = reactive({
   fileList: [{ required: true, message: '请上传委案文件', trigger: 'change' }]
 })
 
-state.monthList = Array(20).fill({ label: '2021-01', name: Math.floor(Math.random(0, 1) * 10) })
-
 getOrderListAgain()
-
-//formClass实例
 
 // const total = ref(0)
 // const page = ref(1)
 // const pageSize = ref(10)
 // state.tableData = Array(10).fill({ orderNo: 'test' })
 state.tableData = [
-  { orderNo: 'test', isEnable: false, isOpen: true },
-  { orderNo: '111', isEnable: true, isOpen: false },
-  { orderNo: 'te222st', isEnable: true, isOpen: true },
-  { orderNo: 't3333est', isEnable: false, isOpen: true }
+  {
+    caseCategory: '大额处置库',
+    caseModel: [
+      { modelString: '温泽4月新案+激励', id: 1 },
+      { modelString: '嘎嘎撒大噶', id: 2 }
+    ],
+    caseProduct: [
+      { productString: '古今我来贷', id: 1 },
+      { productString: '打发发发', id: 2 }
+    ],
+    orderNo: 'test',
+    isOpen: true
+  },
+  {
+    caseCategory: '委外处置库',
+    caseModel: [
+      { modelString: '温泽4月新案+激励', id: 1 },
+      { modelString: '嘎嘎撒大噶', id: 2 }
+    ],
+    caseProduct: [
+      { productString: '古今我来贷', id: 1 },
+      { productString: '打发发发', id: 2 }
+    ],
+    orderNo: '111',
+    isOpen: false
+  },
+  {
+    caseCategory: '法诉处置库',
+    caseModel: [
+      { modelString: '温泽4月新案+激励', id: 1 },
+      { modelString: '嘎嘎撒大噶', id: 2 }
+    ],
+    caseProduct: [
+      { productString: '古今我来贷', id: 1 },
+      { productString: '打发发发', id: 2 }
+    ],
+    orderNo: 'te222st',
+    isOpen: true
+  },
+  {
+    caseCategory: '大额处置库',
+    caseModel: [
+      { modelString: '温泽4月新案+激励', id: 1 },
+      { modelString: '嘎嘎撒大噶', id: 2 }
+    ],
+    caseProduct: [
+      { productString: '古今我来贷', id: 1 },
+      { productString: '打发发发', id: 2 }
+    ],
+    orderNo: 't3333est',
+    isOpen: true
+  }
 ]
 
 const tipDialogVisible = ref(false)
-
-//api获取
-// const queryList = computed(() => {
-//   const apiList = [
-//     {
-//       code: 'PRODUCT_LIST',
-//       data: [],
-//       isShow: 0,
-//       key: 'caseId',
-//       title: '案件ID',
-//       type: 'input'
-//     },
-//     {
-//       code: 'PRODUCT_LIST',
-//       data: [],
-//       isShow: 1,
-//       key: 'product',
-//       title: '产品',
-//       type: 'select'
-//     },
-//     {
-//       code: 'PRODUCT_LIST',
-//       data: [],
-//       isShow: 1,
-//       key: 'date',
-//       title: '日期',
-//       type: 'daterange'
-//     },
-//     {
-//       code: 'PRODUCT_LIST',
-//       data: [],
-//       isShow: 1,
-//       key: 'area',
-//       title: '区域',
-//       type: 'area-select'
-//     }
-//   ]
-//   apiList.forEach(item => {
-//     item['property'] = item.key
-//     item['name'] = item.title
-//     delete item['key']
-//     delete item['title']
-//   })
-//   return apiList
-// })
-// console.log(queryList)
 
 const handlePub = (index, row) => {
   tipDialogVisible.value = true
@@ -225,10 +222,10 @@ const handleSubmit = data => {
           <el-button type="primary" icon="CircleCloseFilled" @click="handleClick">删除委案方案</el-button>
         </template>
         <template #tool>
-          <el-button type="primary" icon="CirclePlusFilled" @click="handleUpload">上传委案文件</el-button>
-          <el-button type="primary" icon="UploadFilled" @click="handleClick">下载导入模板</el-button>
+          <el-button type="primary" icon="CirclePlusFilled" @click="handleUpload">添加委案方案</el-button>
         </template>
       </OperationBar>
+      <!--table-->
       <TableClass
         :table-data="state.tableData"
         :column-list="tableColumnList"
@@ -248,6 +245,7 @@ const handleSubmit = data => {
         </template>
       </TableClass>
     </div>
+    <!--编辑新增form弹框-->
     <DialogForm
       v-model:dialog-form-visible="state.dialogVisible"
       :rule-form="state.dialogRuleForm"

@@ -15,7 +15,7 @@ onMounted(() => {})
 </script>
 
 <template>
-  <div class="style-lable">
+  <div class="style-label">
     <div class="item-style">
       <div v-for="(item, index) in props.labelData" :key="index" class="item_warp">
         <div class="img_warp">
@@ -42,7 +42,7 @@ onMounted(() => {})
   margin: 0 -20px;
   background-color: var(--color-main-bg);
 }
-.style-lable {
+.style-label {
   border-radius: 5px;
   .item_warp {
     width: 19%;
