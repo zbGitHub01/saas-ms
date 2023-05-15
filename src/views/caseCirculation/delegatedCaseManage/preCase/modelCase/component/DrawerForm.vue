@@ -67,7 +67,7 @@ const sizeForm = reactive({
   history: '隐藏',
   caseDate: '2021-12-31',
   isAuto: '不自动收回',
-  notes: '打发发发发发发',
+  notes: '打发发发大啊达大ddddddddddddddddddddddddd大啊啊啊啊啊啊发发发',
   resource: ''
 })
 
@@ -105,19 +105,19 @@ const handleClose = () => {
         </div>
       </el-form-item>
       <div class="specialItem">
-        <el-form-item label="委案类型">
+        <el-form-item width="20%" label="委案类型">
           <div>{{ sizeForm.caseType }}</div>
         </el-form-item>
-        <el-form-item label="历史处置记录">
+        <el-form-item width="20%" label="历史处置记录">
           <div>{{ sizeForm.history }}</div>
         </el-form-item>
-        <el-form-item label="委案到期日">
+        <el-form-item width="20%" label="委案到期日">
           <div>{{ sizeForm.caseDate }}</div>
         </el-form-item>
-        <el-form-item label="是否自动收回">
+        <el-form-item width="20%" label="是否自动收回">
           <div>{{ sizeForm.isAuto }}</div>
         </el-form-item>
-        <el-form-item label="备注">
+        <el-form-item width="20%" label="备注">
           <div>{{ sizeForm.notes }}</div>
         </el-form-item>
       </div>
@@ -154,9 +154,16 @@ const handleClose = () => {
   }
 }
 .specialItem {
+  width: 100%;
   display: flex;
   display: -webkit-flex;
-  justify-content: space-between;
+  :deep(.el-form-item) {
+    width: 20%;
+    .el-form-item__content {
+      align-items: normal;
+      word-break: break-all;
+    }
+  }
 }
 :deep(.el-form-item__label) {
   color: #aaaaaa;

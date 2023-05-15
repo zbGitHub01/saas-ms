@@ -10,36 +10,22 @@ export default [
   {
     customizeIcon: 'caselist',
     eplusIcon: '',
-    labelTitle: '还款清算记录数',
+    labelTitle: '案人数',
     isHaveRmbSign: false,
     value: null
   },
   {
     customizeIcon: 'peoplenum',
     eplusIcon: '',
-    labelTitle: '挂单记录数',
+    labelTitle: '案件数',
     isHaveRmbSign: false,
     value: null
   },
   {
     customizeIcon: 'moneynum',
     eplusIcon: '',
-    labelTitle: '其他损益记录数',
+    labelTitle: '待还金额',
     isHaveRmbSign: false,
     value: null
-  },
-  {
-    customizeIcon: 'backmoney',
-    eplusIcon: '',
-    labelTitle: '收入金额',
-    isHaveRmbSign: true,
-    value: null
   }
-  // {
-  //   customizeIcon: 'moneing',
-  //   eplusIcon: '',
-  //   labelTitle: '支出金额',
-  //   isHaveRmbSign: true,
-  //   value: null
-  // }
 ]

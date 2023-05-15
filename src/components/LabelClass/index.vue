@@ -51,7 +51,6 @@ onMounted(() => {})
         </div>
       </div>
     </div>
-    <div class="spacing"></div>
   </div>
 </template>
 <style scoped lang="scss">
@@ -113,10 +112,5 @@ onMounted(() => {})
       }
     }
   }
-}
-.spacing {
-  height: 10px;
-  margin: 0 -20px 0;
-  background-color: var(--color-main-bg);
 }
 </style>

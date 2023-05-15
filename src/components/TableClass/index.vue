@@ -152,7 +152,6 @@ export default {
 
     //获取当前修改编辑的单元格
     const handleEditUpdate = (row, prop) => {
-      console.log(row, prop)
       state.currEditObj['id'] = row.id
       state.currEditObj['prop'] = prop
     }
