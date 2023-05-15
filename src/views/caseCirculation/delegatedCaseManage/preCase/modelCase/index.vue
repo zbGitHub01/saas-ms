@@ -1,14 +1,16 @@
 <script setup>
 import { reactive, ref, computed, getCurrentInstance } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import DrawerForm from './component/DrawerForm.vue'
 import tableColumnList from './config/tableColumnList.js'
 import dialogFormFieldsList from './config/dialogFormFieldsList.js'
-import { ElMessage, ElMessageBox } from 'element-plus'
 
 const state = reactive({
   tableData: [],
   pageTotal: 4,
   queryNewData: {},
   dialogVisible: false,
+  drawerVisible: false,
   dialogRuleForm: {
     case: '',
     opera: '',
@@ -129,6 +131,8 @@ state.tableData = [
       { productString: '打发发发', id: 2 }
     ],
     orderNo: 'test',
+    operaNum: 100,
+    id: 1,
     isOpen: true
   },
   {
@@ -142,6 +146,8 @@ state.tableData = [
       { productString: '打发发发', id: 2 }
     ],
     orderNo: '111',
+    operaNum: 100,
+    id: 2,
     isOpen: false
   },
   {
@@ -155,6 +161,8 @@ state.tableData = [
       { productString: '打发发发', id: 2 }
     ],
     orderNo: 'te222st',
+    operaNum: 100,
+    id: 3,
     isOpen: true
   },
   {
@@ -168,6 +176,8 @@ state.tableData = [
       { productString: '打发发发', id: 2 }
     ],
     orderNo: 't3333est',
+    operaNum: 100,
+    id: 4,
     isOpen: true
   }
 ]
@@ -211,6 +221,10 @@ const handleEdit = () => {
 const handleSubmit = data => {
   console.log('formData', data.case)
 }
+const operaClick = data => {
+  state.drawerVisible = true
+  console.log('operaClick', data)
+}
 </script>
 
 <template>
@@ -233,6 +247,7 @@ const handleSubmit = data => {
         :is-selection="true"
         :pagination="false"
         @change-status="handleChange"
+        @opera-click="operaClick"
       >
         <template #operation>
           <el-table-column align="center" fixed="right" label="操作" width="200">
@@ -267,6 +282,8 @@ const handleSubmit = data => {
         </span>
       </template>
     </el-dialog>
+    <!--配置drawerForm-->
+    <DrawerForm v-model:drawer-form-visible="state.drawerVisible" />
   </div>
 </template>
 
