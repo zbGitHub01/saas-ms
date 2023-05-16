@@ -139,7 +139,7 @@ const onRemoveInvite = async (item: any) => {
     applyType: 3, //审批业务类型 1-减免审批 2-认领审批 3-机构准入审批
     ...item,
     optionId: props.categoryId,
-    handlerId: null,
+    handlerId: 0,
     handlerName: ''
   }
   const { code, msg } = await Apis.configTmplSave(params)
