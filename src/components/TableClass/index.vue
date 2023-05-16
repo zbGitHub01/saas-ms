@@ -257,7 +257,7 @@ export default {
                 &nbsp;
                 <el-popover
                   v-if="row[childItem.prop].length > 1"
-                  :effect="childItem.popoverLight || light"
+                  :effect="childItem.popoverLight || 'light'"
                   trigger="hover"
                   placement="top"
                   width="auto"
@@ -277,6 +277,7 @@ export default {
               <el-button v-if="childItem.operaBtn" link type="primary" @click="operaClick(row)">
                 {{ childItem.operaBtnName }}
               </el-button>
+              <!-- 是否需要input-number编辑器，注：需要table数据中有id字段 -->
               <template v-if="childItem.enableEdit">
                 <template v-if="state.currEditObj.id === row.id && state.currEditObj.prop === childItem.prop">
                   <el-input-number v-model="row[childItem.prop]" size="small" controls-position="right"></el-input-number>
@@ -304,7 +305,7 @@ export default {
             &nbsp;
             <el-popover
               v-if="row[item.prop].length > 1"
-              :effect="item.popoverLight || light"
+              :effect="item.popoverLight || 'light'"
               trigger="hover"
               placement="top"
               width="auto"
@@ -324,6 +325,7 @@ export default {
           <el-button v-if="item.operaBtn" link type="primary" @click="operaClick(row)">
             {{ item.operaBtnName }}
           </el-button>
+          <!-- 是否需要input-number编辑器，注：需要table数据中有id字段 -->
           <template v-if="item.enableEdit">
             <template v-if="state.currEditObj.id === row.id && state.currEditObj.prop === item.prop">
               <el-input-number v-model="row[item.prop]" size="small" controls-position="right"></el-input-number>

@@ -21,11 +21,14 @@ export default [
   },
   {
     label: '操作维度',
-    prop: 'orderNo'
+    prop: 'operaNum',
+    enableEdit: true
   },
   {
     label: '委案类型',
-    prop: 'orderNo'
+    prop: 'orderNo',
+    operaBtn: true,
+    operaBtnName: '配置'
   },
   {
     label: '委案备注',

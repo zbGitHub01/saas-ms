@@ -66,7 +66,7 @@ const caseRouter = [
         name: 'externalAssetDispose',
         component: () => import('@/views/externalCase/externalAssetDispose/index.vue'),
         meta: { title: '外部资产基础配置', icon: '' }
-      },
+      }
     ]
   },
   {
@@ -104,12 +104,6 @@ const caseRouter = [
             name: 'bankSetName',
             component: () => import('@/views/caseCirculation/bankManage/bankSetName/index.vue'),
             meta: { title: '分库名称设置', icon: '' }
-          },
-          {
-            path: '/caseCirculation/bankManage/preCase',
-            name: 'preCase',
-            component: () => import('@/views/caseCirculation/bankManage/preCase/index.vue'),
-            meta: { title: '预委案', icon: '' }
           }
         ]
       },
@@ -124,6 +118,12 @@ const caseRouter = [
             name: 'caseAssignment',
             component: () => import('@/views/caseCirculation/delegatedCaseManage/caseAssignment/index.vue'),
             meta: { title: '实时委案', icon: '' }
+          },
+          {
+            path: '/caseCirculation/delegatedCaseManage/preCase',
+            name: 'preCase',
+            component: () => import('@/views/caseCirculation/delegatedCaseManage/preCase/index.vue'),
+            meta: { title: '预委案', icon: '' }
           },
           {
             path: '/caseCirculation/delegatedCaseManage/caseRecovery',

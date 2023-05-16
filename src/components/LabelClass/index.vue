@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onMounted } from 'vue'
+import { onBeforeMount, onMounted, computed, toRefs } from 'vue'
 
 const props = defineProps({
   labelData: {
@@ -7,7 +7,28 @@ const props = defineProps({
     default: () => {
       return {}
     }
+  },
+  //是否需要flex居中，默认不居中
+  isSpaceAround: {
+    type: Boolean,
+    default: false
+  },
+  //是否需要背景色，默认开启
+  isBkgColor: {
+    type: Boolean,
+    default: true
   }
+})
+
+const { isSpaceAround, isBkgColor } = toRefs(props)
+
+const itemStyle = computed(() => {
+  let styleStr = ''
+  if (isSpaceAround.value && isBkgColor.value) styleStr = 'item-style isSpaceAround isBkgColor'
+  if (isSpaceAround.value && !isBkgColor.value) styleStr = 'item-style isSpaceAround'
+  if (!isSpaceAround.value && isBkgColor.value) styleStr = 'item-style isBkgColor'
+  if (!isSpaceAround.value && !isBkgColor.value) styleStr = 'item-style'
+  return styleStr
 })
 
 onBeforeMount(() => {})
@@ -16,7 +37,7 @@ onMounted(() => {})
 
 <template>
   <div class="style-label">
-    <div class="item-style">
+    <div :class="itemStyle">
       <div v-for="(item, index) in props.labelData" :key="index" class="item_warp">
         <div class="img_warp">
           <el-icon v-if="!!item.eplusIcon">
@@ -30,18 +51,24 @@ onMounted(() => {})
         </div>
       </div>
     </div>
-    <div class="spacing"></div>
   </div>
 </template>
 <style scoped lang="scss">
 .item-style {
   display: flex;
-  // justify-content: space-between;
   align-items: center;
   flex-direction: inherit;
   margin: 0 -20px;
+  // background-color: var(--color-main-bg);
+  // justify-content: space-around;
+}
+.isSpaceAround {
+  justify-content: space-around;
+}
+.isBkgColor {
   background-color: var(--color-main-bg);
 }
+
 .style-label {
   border-radius: 5px;
   .item_warp {
@@ -85,10 +112,5 @@ onMounted(() => {})
       }
     }
   }
-}
-.spacing {
-  height: 10px;
-  margin: 0 -20px 0;
-  background-color: var(--color-main-bg);
 }
 </style>
