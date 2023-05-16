@@ -7,7 +7,7 @@
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
   >
-    <!-- <div style="font-size: 15px" class="mb10">请选择导出内容</div> -->
+    <!-- <div style="font-size: 15px" class="mb10">请选择导出内容</div> -->{{ state.exportField }}
     <div v-if="typeSub === 0">
       <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange(0)">全选</el-checkbox>
       <el-checkbox-group v-model="state.exportField" @change="checked(0)">
@@ -15,14 +15,14 @@
         <el-checkbox v-for="(item, index) in state.exportData.baseInfo" :label="index" :key="index" style="width: 12%">
           {{ item }}
         </el-checkbox>
-        <el-divider content-position="left">金额/时间</el-divider>
+        <!-- <el-divider content-position="left">金额/时间</el-divider>
         <el-checkbox v-for="(item, index) in state.exportData.amountTime" :label="index" :key="index" style="width: 12%">
           {{ item }}
         </el-checkbox>
         <el-divider content-position="left">处置相关</el-divider>
         <el-checkbox v-for="(item, index) in state.exportData.handleRelevant" :label="index" :key="index" style="width: 12%">
           {{ item }}
-        </el-checkbox>
+        </el-checkbox> -->
       </el-checkbox-group>
     </div>
     <template v-if="typeSub === 1">
@@ -106,12 +106,12 @@ const handleCheckAllChange = type => {
     Object.keys(state.exportData.baseInfo).forEach(key => {
       state.exportField.push(key)
     })
-    Object.keys(state.exportData.amountTime).forEach(key => {
-      state.exportField.push(key)
-    })
-    Object.keys(state.exportData.handleRelevant).forEach(key => {
-      state.exportField.push(key)
-    })
+    // Object.keys(state.exportData.amountTime).forEach(key => {
+    //   state.exportField.push(key)
+    // })
+    // Object.keys(state.exportData.handleRelevant).forEach(key => {
+    //   state.exportField.push(key)
+    // })
   } else if (type === 1 && checkAll.value) {
     Object.keys(state.exportData.followFile).forEach(key => {
       state.exportField.push(key)
@@ -122,9 +122,9 @@ const handleCheckAllChange = type => {
 const checked = type => {
   if (type === 0) {
     var length =
-      Object.keys(state.exportData.baseInfo).length +
-      Object.keys(state.exportData.amountTime).length +
-      Object.keys(state.exportData.handleRelevant).length
+      Object.keys(state.exportData.baseInfo).length
+      // Object.keys(state.exportData.amountTime).length +
+      // Object.keys(state.exportData.handleRelevant).length
   } else if (type === 1) {
     var length = Object.keys(state.exportData.followFile).length
   }

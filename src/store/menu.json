@@ -102,10 +102,10 @@
     "hide": false,
     "icon": "TakeawayBox",
     "parentMenuCode": "non",
-    "path": "/externalCaseManage",
+    "path": "/externalCase",
     "permissionId": 2462,
     "isChecked": true,
-    "menuCode": "WAIBUANJIANGUANLI",
+    "menuCode": "WAIBUANJIAN",
     "menuName": "外部案件管理",
     "permissionType": {
       "type": 1,
@@ -117,8 +117,8 @@
       {
         "hide": false,
         "icon": "",
-        "parentMenuCode": "WAIBUANJIANGUANLI",
-        "path": "/externalCaseManage/externalCaseImport",
+        "parentMenuCode": "WAIBUANJIAN",
+        "path": "/externalCase/externalCaseImport",
         "permissionId": 2280,
         "isChecked": true,
         "menuCode": "WAIBUANJIANDAORU",
@@ -133,8 +133,24 @@
       {
         "hide": false,
         "icon": "",
-        "parentMenuCode": "WAIBUANJIANGUANLI",
-        "path": "/externalCaseManage/externalCaseAssignment",
+        "parentMenuCode": "WAIBUANJIAN",
+        "path": "/externalCase/externalCaseManage",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "WAIBUANJIANGUANLI",
+        "menuName": "外部案件管理",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "",
+        "parentMenuCode": "WAIBUANJIAN",
+        "path": "/externalCase/externalCaseAssignment",
         "permissionId": 2280,
         "isChecked": true,
         "menuCode": "WAIBUANJIANWEIPAI",
@@ -149,8 +165,8 @@
       {
         "hide": false,
         "icon": "",
-        "parentMenuCode": "WAIBUANJIANGUANLI",
-        "path": "/externalCaseManage/externalCaseRecovery",
+        "parentMenuCode": "WAIBUANJIAN",
+        "path": "/externalCase/externalCaseRecovery",
         "permissionId": 2280,
         "isChecked": true,
         "menuCode": "WAIBUANJIANSHOUHUI",
@@ -165,8 +181,8 @@
       {
         "hide": false,
         "icon": "",
-        "parentMenuCode": "WAIBUANJIANGUANLI",
-        "path": "/externalCaseManage/externalAssetDispose",
+        "parentMenuCode": "WAIBUANJIAN",
+        "path": "/externalCase/externalAssetDispose",
         "permissionId": 2280,
         "isChecked": true,
         "menuCode": "WAIBUZICHANJICHUPEIZHI",
