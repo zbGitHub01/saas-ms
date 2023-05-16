@@ -8,14 +8,14 @@
 
 export default [
   {
-    customizeIcon: 'caselist',
+    customizeIcon: 'moneynum',
     eplusIcon: '',
     labelTitle: '案人数',
     isHaveRmbSign: false,
     value: null
   },
   {
-    customizeIcon: 'peoplenum',
+    customizeIcon: 'caselist',
     eplusIcon: '',
     labelTitle: '案件数',
     isHaveRmbSign: false,
