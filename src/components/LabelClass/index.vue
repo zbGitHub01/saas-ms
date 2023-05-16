@@ -31,6 +31,12 @@ const itemStyle = computed(() => {
   return styleStr
 })
 
+//金额千分位格式化
+const amountFormat = value => {
+  console.log(value.toLocaleString())
+  return value ? Number(value).toLocaleString() : value
+}
+
 onBeforeMount(() => {})
 onMounted(() => {})
 </script>
@@ -47,7 +53,9 @@ onMounted(() => {})
         </div>
         <div class="title_warp">
           <div class="items">{{ item.labelTitle }}</div>
-          <div class="item items1">{{ item.isHaveRmbSign ? '￥' : '' }}{{ item.value || 0 }}</div>
+          <div class="item items1">
+            {{ item.isHaveRmbSign ? '￥' : '' }}{{ item.isAmountFormat ? amountFormat(item.value) : item.value || 0 }}
+          </div>
         </div>
       </div>
     </div>

@@ -129,7 +129,7 @@ const handleClose = () => {
         </el-radio-group>
       </el-form-item>
       <div class="spacing"></div>
-      <LabelClass :label-data="labelList" :is-bkg-color="false" is-space-around="true" />
+      <LabelClass :label-data="labelList" :is-bkg-color="false" :is-space-around="true" />
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Create</el-button>
         <el-button>Cancel</el-button>

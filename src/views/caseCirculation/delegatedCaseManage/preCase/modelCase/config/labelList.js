@@ -25,7 +25,8 @@ export default [
     customizeIcon: 'moneynum',
     eplusIcon: '',
     labelTitle: '待还金额',
-    isHaveRmbSign: false,
-    value: null
+    isHaveRmbSign: true,
+    isAmountFormat: true,
+    value: '222222222222.32'
   }
 ]
