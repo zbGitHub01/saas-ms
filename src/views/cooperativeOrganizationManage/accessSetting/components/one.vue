@@ -11,6 +11,15 @@
         <div class="content-wrap" v-if="index < 2">
           <span>{{ item.nodeName }}</span>
           <span style="color: #7f7f7f">{{ item.handlerName }}</span>
+          <template v-if="index === 1">
+            <div class="select_warp" v-if="item.handlerName">
+              <span class="btn" @click="onSelect('edit', item)">重选</span>
+              <span class="btn btn1" @click="onRemoveInvite(item)">移除</span>
+            </div>
+            <div @click="onSelect('edit', item)" v-else>
+              <span class="item-add">追加审批人</span>
+            </div>
+          </template>
           <div class="content-input">
             <span>{{ item.step === 1 ? '准入邀请工单发出后' : '准入工单生成后' }}</span>
             <el-input-number
@@ -123,6 +132,20 @@ const updateItem = (item: any) => {
 // 改变天数
 const changeDay = async (item: any) => {
   await otherConfigTmplSave({ ...item })
+}
+// 移除邀请人审批
+const onRemoveInvite = async (item: any) => {
+  const params = {
+    applyType: 3, //审批业务类型 1-减免审批 2-认领审批 3-机构准入审批
+    ...item,
+    optionId: props.categoryId,
+    handlerId: null,
+    handlerName: ''
+  }
+  const { code, msg } = await Apis.configTmplSave(params)
+  if (code !== 200) return
+  getConfigList()
+  ElMessage.success(msg)
 }
 // 保存
 const otherConfigTmplSave = async (item: any) => {
