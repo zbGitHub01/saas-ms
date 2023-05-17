@@ -1,5 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
+import { ElMessageBox } from 'element-plus'
+import AddCorporation from './AddCorporation.vue'
 import labelList from '../config/labelList.js'
 
 const props = defineProps({
@@ -68,41 +70,82 @@ const sizeForm = reactive({
   caseDate: '2021-12-31',
   isAuto: '不自动收回',
   notes: '打发发发大啊达大ddddddddddddddddddddddddd大啊啊啊啊啊啊发发发',
-  resource: ''
+  resource: '',
+  productList: ['"360"借条', '还呗', '佰仟'],
+  currProduct: ''
 })
 
-const tableData = [
-  {
-    date: '杭州温泽企业管理有限公司贵阳分公司',
-    name: 'Tom',
-    caseMoney: 8000,
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '前海中英投（深圳）投资有限公司',
-    name: 'Tom',
-    caseMoney: 8000,
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '苏州微合力网络科技有限公司',
-    name: 'Tom',
-    caseMoney: 8000,
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '湖南荣辉法律咨询服务有限公司',
-    name: 'Tom',
-    caseMoney: 8000,
-    address: 'No. 189, Grove St, Los Angeles'
-  }
-]
+const state = reactive({
+  tableData: [
+    {
+      date: '杭州温泽企业管理有限公司贵阳分公司',
+      name: 'Tom',
+      caseMoney: 8000,
+      address: 'No. 189, Grove St, Los Angeles'
+    },
+    {
+      date: '前海中英投（深圳）投资有限公司',
+      name: 'Tom',
+      caseMoney: 8000,
+      address: 'No. 189, Grove St, Los Angeles'
+    },
+    {
+      date: '前海中英投（深圳）投资有限公司',
+      name: 'Tom',
+      caseMoney: 8000,
+      address: 'No. 189, Grove St, Los Angeles'
+    },
+    {
+      date: '前海中英投（深圳）投资有限公司',
+      name: 'Tom',
+      caseMoney: 8000,
+      address: 'No. 189, Grove St, Los Angeles'
+    },
+    {
+      date: '苏州微合力网络科技有限公司',
+      name: 'Tom',
+      caseMoney: 8000,
+      address: 'No. 189, Grove St, Los Angeles'
+    },
+    {
+      date: '湖南荣辉法律咨询服务有限公司',
+      name: 'Tom',
+      caseMoney: 8000,
+      address: 'No. 189, Grove St, Los Angeles'
+    }
+  ]
+})
 
 const handleClose = () => {
   emit('update:drawerFormVisible', false)
 }
-const showDropList = ref => {
-  console.log(ref)
+const lastDropVisible = ref(false)
+const thirdDropVisible = ref(false)
+const visibleChangeLast = value => {
+  lastDropVisible.value = value
+  console.log(sizeForm.resource)
+}
+const visibleChangeThird = value => {
+  thirdDropVisible.value = value
+}
+
+const handleDel = row => {
+  console.log(row)
+  ElMessageBox.confirm('确定删除？').then(
+    () => true,
+    () => false
+  )
+}
+
+const dialogVisible = ref(false)
+
+const handleAddCorporation = () => {
+  dialogVisible.value = true
+}
+
+const handleSubmit = arr => {
+  dialogVisible.value = false
+  arr.map(item => state.tableData.push(item))
 }
 </script>
 
@@ -152,16 +195,21 @@ const showDropList = ref => {
         </el-form-item>
       </div>
       <div class="spacing"></div>
-      <el-form-item label="Resources" prop="resource" style="padding-top: 20px">
+      <el-form-item prop="resource" style="padding-top: 20px">
         <el-radio-group v-model="sizeForm.resource">
-          <el-radio label="Sponsorship" />
-          <el-radio label="Venue" />
+          <el-radio label="综合委案" />
+          <el-radio label="分产品委案" />
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item v-if="sizeForm.resource === '分产品委案'" prop="currProduct">
+        <el-radio-group v-model="sizeForm.currProduct" size="large">
+          <el-radio-button v-for="(item, index) in sizeForm.productList" :key="index" class="radio-style" :label="item" />
         </el-radio-group>
       </el-form-item>
       <div class="spacing"></div>
       <LabelClass :label-data="labelList" :is-bkg-color="false" :is-space-around="true" />
       <div class="line"></div>
-      <el-table :data="tableData" style="width: 80%">
+      <el-table :data="state.tableData" style="width: 90%">
         <el-table-column type="index" label="委案顺序" align="center" width="120" />
         <el-table-column prop="date" label="机构" align="center">
           <template #default="scope">
@@ -171,59 +219,63 @@ const showDropList = ref => {
             </div>
           </template>
         </el-table-column>
-
-        <el-table-column prop="date" align="center" width="180">
-          <template #header>
-            <div>
-              <span>上月回款率</span>
-              <!--下拉-->
-              <el-dropdown trigger="click" style="margin-right: 30px; margin-top: 5px" @command="handleCommand">
-                <span @click="showDropList(dropdown1)">
-                  <el-icon v-if="true"><ArrowDownBold /></el-icon>
-                  <el-icon v-else><ArrowUpBold /></el-icon>
-                </span>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>金额回款率降序</el-dropdown-item>
-                    <el-dropdown-item>户数回款率降序</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </div>
-          </template>
-          <template #default="scope">
-            <div class="col-style" style="flex-direction: column">
-              <span>金额：0.916%</span>
-              <span>户数：0.916%</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="name" align="center" width="180">
-          <template #header>
-            <div>
-              <span>近3月回款率</span>
-              <el-dropdown trigger="click" style="margin-right: 30px; margin-top: 5px" @command="handleCommand">
-                <span @click="showDropList(dropdown2)">
-                  <el-icon v-if="true"><ArrowDownBold /></el-icon>
-                  <el-icon v-else><ArrowUpBold /></el-icon>
-                </span>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item>金额回款率降序</el-dropdown-item>
-                    <el-dropdown-item>户数回款率降序</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </div>
-          </template>
-          <template #default="scope">
-            <div class="col-style" style="flex-direction: column">
-              <span>金额：0.916%</span>
-              <span>户数：0.916%</span>
-            </div>
-          </template>
-        </el-table-column>
-
+        <template v-if="sizeForm.resource === '分产品委案'">
+          <el-table-column prop="date" align="center" width="180">
+            <template #header>
+              <div>
+                <span>上月回款率</span>
+                <el-dropdown trigger="click" style="margin-top: 5px" @visible-change="visibleChangeLast" @command="handleCommand">
+                  <span>
+                    <el-icon v-if="!lastDropVisible"><ArrowDownBold /></el-icon>
+                    <el-icon v-else><ArrowUpBold /></el-icon>
+                  </span>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item>金额回款率降序</el-dropdown-item>
+                      <el-dropdown-item>户数回款率降序</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </div>
+            </template>
+            <template #default="scope">
+              <div class="col-style" style="flex-direction: column">
+                <span>金额：0.916%</span>
+                <span>户数：0.916%</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" align="center" width="180">
+            <template #header>
+              <div>
+                <span>近3月回款率</span>
+                <el-dropdown
+                  trigger="click"
+                  style="margin-top: 5px"
+                  @command="handleCommand"
+                  @visible-change="visibleChangeThird"
+                >
+                  <span>
+                    <el-icon v-if="!thirdDropVisible"><ArrowDownBold /></el-icon>
+                    <el-icon v-else><ArrowUpBold /></el-icon>
+                  </span>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item>金额回款率降序</el-dropdown-item>
+                      <el-dropdown-item>户数回款率降序</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </div>
+            </template>
+            <template #default="scope">
+              <div class="col-style" style="flex-direction: column">
+                <span>金额：0.916%</span>
+                <span>户数：0.916%</span>
+              </div>
+            </template>
+          </el-table-column>
+        </template>
         <el-table-column prop="name" align="center" label="委案金额" width="180">
           <template #default="scope">
             <div class="col-style">
@@ -232,10 +284,10 @@ const showDropList = ref => {
           </template>
         </el-table-column>
         <el-table-column align="center" label="操作" width="100">
-          <template #default="scope">
+          <template #default="{ row }">
             <div class="col-style">
               <span>
-                <el-button link circle type="danger">
+                <el-button link circle type="danger" @click="handleDel(row)">
                   <el-icon style="font-size: 30px"><CircleClose /></el-icon>
                 </el-button>
               </span>
@@ -243,12 +295,19 @@ const showDropList = ref => {
           </template>
         </el-table-column>
       </el-table>
+      <el-form-item style="margin-top: 20px">
+        <el-button type="primary" icon="Plus" plain @click="handleAddCorporation">添加机构</el-button>
+        <el-button type="primary" plain>导入委案计划</el-button>
+        <el-button type="primary" link>下载导入模板</el-button>
+      </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button>Cancel</el-button>
+        <el-button>取消</el-button>
+        <el-button type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>
+  <!--添加机构弹窗-->
+  <AddCorporation v-model:dialog-visible="dialogVisible" @submit="handleSubmit" />
 </template>
 
 <style lang="scss" scoped>
@@ -324,9 +383,6 @@ const showDropList = ref => {
         justify-content: center;
         height: 50px;
       }
-      & .col-style:nth-child(n + 2) {
-        justify-content: center;
-      }
     }
     &:first-child + .el-table__cell > .cell {
       border-left: 2px solid #e0dddd;
@@ -342,6 +398,24 @@ const showDropList = ref => {
     &:last-child > .cell {
       border-right: 2px solid #e0dddd;
     }
+  }
+}
+.el-form > .el-form-item:last-child {
+  :deep(.el-form-item__content) {
+    justify-content: flex-end;
+  }
+}
+.radio-style {
+  margin-right: 10px;
+  border-radius: 5px;
+  :deep(.el-radio-button__inner) {
+    color: #02a7f0;
+    border-radius: 5px;
+    border: 1px solid #02a7f0;
+  }
+  .el-radio-button__original-radio:checked + .el-radio-button__inner {
+    background: #02a7f0 !important;
+    color: white !important;
   }
 }
 </style>
