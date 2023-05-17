@@ -25,11 +25,17 @@
         <span>选中项：{{ state.selectData.length }}</span>
         <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
       </div>
-      <el-table :data="state.tableData" border @selection-change="handleSelectionChange" ref="multipleTable">
+      <el-table
+        :data="state.tableData"
+        border
+        @selection-change="handleSelectionChange"
+        @sort-change="handlesort"
+        ref="multipleTable"
+      >
         <el-table-column type="selection" fixed align="center" width="55"></el-table-column>
         <el-table-column
           label="案件ID"
-          prop="caseId"
+          prop="caseNo"
           align="center"
           min-width="150"
           fixed="left"
@@ -64,33 +70,36 @@
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
-          label="处置金额"
-          prop="handleAmount"
+          label="委案金额"
+          prop="entrustAmount"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
+          sortable
         ></el-table-column>
         <el-table-column
           label="还款入账金额"
-          prop="totalRefundAmount"
+          prop="entrustRefundAmount"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="减免金额"
-          prop="totalReductionAmount"
+          prop="entrustReductionAmount"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="剩余待还金额"
-          prop="residueAmount"
+          prop="entrustResidueAmount"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
+          sortable
         ></el-table-column>
+        <!-- 再处理，看看需不需要处理，还是直接拿 -->
         <el-table-column label="临时标签" prop="tagTempName" align="left" min-width="180" :show-overflow-tooltip="true">
           <template #default="scope">
             <span v-for="(item, index) in scope.row.tagTempList" :key="index">
@@ -115,61 +124,19 @@
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
+          label="委案方"
+          prop="weianfang"
+          align="center"
+          min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <!-- <el-table-column
           label="机器人外呼标签"
           prop="robotTag"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="入库批次号"
-          prop="batchNo"
-          align="center"
-          min-width="250"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="债权方"
-          prop="creditorName"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="所属分库"
-          prop="storeName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="分库时间"
-          prop="distTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="处置机构"
-          prop="orgTitle"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="委案时间"
-          prop="entrustTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="委案金额"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        ></el-table-column> -->
         <el-table-column
           label="CPE"
           prop="cpeName"
@@ -185,17 +152,31 @@
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
-          label="特殊原因备注"
-          prop="caseStatusRemark"
+          label="跟进结果"
+          prop="entrustContactResultText"
+          align="center"
+          min-width="250"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="处置状态"
+          prop="followStatusText"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
-          label="法诉状态标签"
-          prop="lawsuitStatus"
+          label="跟进次数"
+          prop="entrustFollowTimes"
           align="center"
           min-width="150"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+        <el-table-column
+          label="最近更进时间"
+          prop="entrustLastFollowTime"
+          align="center"
+          min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column label="案件状态" prop="caseStatusText" align="center" min-width="150" fixed="right"></el-table-column>
@@ -217,7 +198,9 @@ import HandleCaseDialog from './components/HandleCaseDialog.vue'
 import ExportDialog from './components/ExportDialog.vue'
 const multipleTable = ref(null)
 const form: any = reactive({
-  caseId: ''
+  caseId: '',
+  entrustAmountSort: null, //委案金额排序
+  entrustResidueAmountSort: null //剩余待还金额排序
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const addOrRemoveTagDialog = ref()
@@ -239,28 +222,34 @@ const state = reactive({
 const operation = ref(1)
 const operationList = reactive([
   {
-    title: '关闭案件',
-    icon: 'Close',
+    title: '导出案件1',
+    icon: 'Download',
     isShow: true
     // isShow: this.hasPerm("disposal_case_close"),
   },
   {
-    title: '暂停案件',
-    icon: 'VideoPause',
+    title: '导出案件2',
+    icon: 'Download',
     isShow: true
     // isShow: this.hasPerm("disposal_case_stop"),
   },
   {
-    title: '恢复案件',
-    icon: 'VideoPlay',
+    title: '案件标色',
+    icon: 'BrushFilled',
     isShow: true
     // isShow: this.hasPerm("disposal_case_ref"),
+  },
+  {
+    title: '修改处置状态',
+    icon: 'EditPen',
+    isShow: true
+    // isShow: this.hasPerm("disposal_case_addlabel"),
   },
   {
     title: '添加临时标签',
     icon: 'CirclePlus',
     isShow: true
-    // isShow: this.hasPerm("disposal_case_addlabel"),
+    // isShow: this.hasPerm("disposal_case_dellabel"),
   },
   {
     title: '删除临时标签',
@@ -269,22 +258,16 @@ const operationList = reactive([
     // isShow: this.hasPerm("disposal_case_dellabel"),
   },
   {
-    title: '导出案件',
-    icon: 'Download',
+    title: '创建诉讼批次',
+    icon: '',
     isShow: true
     // isShow: this.hasPerm("disposal_case_excase"),
   },
   {
-    title: '导出处置记录',
+    title: '创建单保全批次',
     icon: 'Download',
     isShow: true
     // isShow: this.hasPerm("disposal_case_exrecord"),
-  },
-  {
-    title: '生成结清证明',
-    icon: 'Document',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_qing"),
   }
 ])
 onMounted(() => {
@@ -319,7 +302,7 @@ const getTableData = async () => {
       debtResidueAmount: 127493.92,
       distLogId: 0,
       distState: 0,
-      entrustAmount: 0,
+      entrustAmount: 1,
       entrustContactResultId: 187,
       entrustFollowTimes: 125,
       entrustLastFollowTime: '2023-02-27 10:27:30',
@@ -345,7 +328,7 @@ const getTableData = async () => {
       regAddrCity: '吕梁市',
       regAddrProvince: '山西省',
       repairStatus: 'RPS001',
-      residueAmount: 7266.75,
+      entrustResidueAmount: 7266.75,
       retainId: 0,
       robotTag: '机器人评语',
       stagingPlan: { stagingPlanUuid: 'e20a60db43fd43f190ea2e8c919d62c5', historyRetainCount: 0, debtSignStatus: 0 },
@@ -386,8 +369,8 @@ const getTableData = async () => {
       ],
       totalCouponAmount: 0,
       totalIntegralAmount: 0,
-      totalReductionAmount: 0,
-      totalRefundAmount: 0,
+      entrustReductionAmount: 0,
+      entrustRefundAmount: 0,
       transAmount: 4844.5,
       userName: '马海山',
       userPhone: '18435838528'
@@ -416,7 +399,7 @@ const getTableData = async () => {
       debtResidueAmount: 127493.92,
       distLogId: 0,
       distState: 0,
-      entrustAmount: 0,
+      entrustAmount: 2,
       entrustContactResultId: 187,
       entrustFollowTimes: 125,
       entrustLastFollowTime: '2023-02-27 10:27:30',
@@ -443,7 +426,7 @@ const getTableData = async () => {
       regAddrCity: '吕梁市',
       regAddrProvince: '山西省',
       repairStatus: 'RPS001',
-      residueAmount: 7266.75,
+      entrustResidueAmount: 7266.75,
       retainId: 0,
       robotTag: '机器人评语',
       stagingPlan: { stagingPlanUuid: 'e20a60db43fd43f190ea2e8c919d62c5', historyRetainCount: 0, debtSignStatus: 0 },
@@ -453,8 +436,8 @@ const getTableData = async () => {
       tagTempList: [{ caseId: 1, caseTagId: 3371889, tagName: '888' }],
       totalCouponAmount: 0,
       totalIntegralAmount: 0,
-      totalReductionAmount: 0,
-      totalRefundAmount: 0,
+      entrustReductionAmount: 0,
+      entrustRefundAmount: 0,
       transAmount: 4844.5,
       userName: '马海山',
       userPhone: '18435838528'
@@ -511,7 +494,7 @@ const getTableData = async () => {
     sumRefundAmount: 184079143.85,
     sumResidueAmount: 4711200212.03
   }
-  state.labelData.forEach(item=>{
+  state.labelData.forEach(item => {
     item.value = labelData2[item.key]
   })
 }
@@ -547,12 +530,16 @@ const handleClick = item => {
     ElMessage.warning('请先选择操作对象!')
   } else {
     switch (item) {
-      case '关闭案件':
-        handleCase(1)
+      case '导出案件1':
+      exportModel('EXPORT_CASE_FIELD', 0)
         break
-      case '暂停案件':
+      case '导出案件2':
         // this.form.caseStatus = 25;
-        handleCase(2)
+        exportModel('EXPORT_CASE_FIELD', 0)
+        break
+        case '导出处置记录':
+        // this.form.caseStatus = 25;
+        exportModel('EXPORT_FOLLOW_FIELD', 1)
         break
       case '恢复案件':
         handleCase(3)
@@ -562,12 +549,6 @@ const handleClick = item => {
         break
       case '删除临时标签':
         handleTag(2)
-        break
-      case '导出案件':
-        exportModel('EXPORT_CASE_FIELD', 0)
-        break
-      case '导出处置记录':
-        exportModel('EXPORT_FOLLOW_FIELD', 1)
         break
       case '生成结清证明':
         certificate()
@@ -595,6 +576,21 @@ const submitTagForm = (tempTagName, type, isDeleteAllRelationTag) => {
   ElMessage.success('操作成功！')
   toggleSelection()
   getTableData()
+}
+const handlesort = val => {
+  if (val.order) {
+    if (val.prop === 'entrustAmount') {
+      form.entrustResidueAmountSort = null
+      form.entrustAmountSort = val.order === 'ascending' ? 0 : 1
+    } else if (val.prop === 'entrustResidueAmount') {
+      form.entrustAmountSort = null
+      form.entrustResidueAmountSort = val.order === 'ascending' ? 0 : 1
+    }
+    getTableData()
+  } else {
+    form.entrustAmountSort = null
+    form.entrustResidueAmountSort = null
+  }
 }
 // 1关闭案件/2暂停案件/3恢复案件
 const handleCase = type => {
@@ -629,7 +625,7 @@ const submitCaseForm = async paramsSub => {
   toggleSelection()
   getTableData()
 }
-// 0导出案件/1导出处置记录
+// 0导出案件1和导出案件2， 1导出处置记录
 const exportModel = async (code, type) => {
   let params = {
     codes: code
@@ -708,7 +704,7 @@ const exportModel = async (code, type) => {
   }
   exportDialog.value.open(state.exportData, type)
 }
-// 确认导出案件/导出处置记录
+// 确认导出案件1和导出案件2/导出处置记录
 const submitExport = async (paramsSub, type) => {
   let params = getParams()
   Object.assign(params, paramsSub)
@@ -771,7 +767,6 @@ const getParams = () => {
 </script>
 
 <style lang="scss" scoped>
-
 .form-wrapper {
   margin-bottom: 0;
 }

@@ -32,33 +32,39 @@ const caseRouter = [
     ]
   },
   {
-    path: '/externalCaseManage',
-    name: 'externalCaseManage',
+    path: '/externalCase',
+    name: 'externalCase',
     component: () => import('@/layout/index.vue'),
     meta: { title: '外部案件管理' },
     children: [
       {
-        path: '/externalCaseManage/externalCaseImport',
+        path: '/externalCase/externalCaseImport',
         name: 'externalCaseImport',
-        component: () => import('@/views/externalCaseManage/externalCaseImport/index.vue'),
+        component: () => import('@/views/externalCase/externalCaseImport/index.vue'),
         meta: { title: '外部案件导入', icon: '' }
       },
       {
-        path: '/externalCaseManage/externalCaseAssignment',
+        path: '/externalCase/externalCaseManage',
+        name: 'externalCaseManage',
+        component: () => import('@/views/externalCase/externalCaseManage/index.vue'),
+        meta: { title: '外部案件管理', icon: '' }
+      },
+      {
+        path: '/externalCase/externalCaseAssignment',
         name: 'externalCaseAssignment',
-        component: () => import('@/views/externalCaseManage/externalCaseAssignment/index.vue'),
+        component: () => import('@/views/externalCase/externalCaseAssignment/index.vue'),
         meta: { title: '外部案件委派', icon: '' }
       },
       {
-        path: '/externalCaseManage/externalCaseRecovery',
+        path: '/externalCase/externalCaseRecovery',
         name: 'externalCaseRecovery',
-        component: () => import('@/views/externalCaseManage/externalCaseRecovery/index.vue'),
+        component: () => import('@/views/externalCase/externalCaseRecovery/index.vue'),
         meta: { title: '外部案件收回', icon: '' }
       },
       {
-        path: '/externalCaseManage/externalAssetDispose',
+        path: '/externalCase/externalAssetDispose',
         name: 'externalAssetDispose',
-        component: () => import('@/views/externalCaseManage/externalAssetDispose/index.vue'),
+        component: () => import('@/views/externalCase/externalAssetDispose/index.vue'),
         meta: { title: '外部资产基础配置', icon: '' }
       }
     ]

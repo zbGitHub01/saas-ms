@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="card-wrap">
     <FormWrap @search="getTableData" @reset="reset">
       <template #default>
         <el-form inline :model="form">
@@ -9,8 +9,7 @@
         </el-form>
       </template>
     </FormWrap>
-    <!-- <LabelData :labelData="state.labelData" /> -->
-    <LabelClass :labelData="state.labelData" />
+    <LabelData :labelData="state.labelData" />
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
@@ -231,31 +230,31 @@ const query = reactive({
 const state = reactive({
   tableData: [] as any[],
   total: 0,
-  labelData: [] as any, //标签数据
+  labelData: {} as any, //标签数据
   selectData: [] as any[], //选中项
   handleparams: {} as any, //操作的参数
   exportData: {} //导出项参数
 })
 const operation = ref(1)
 const operationList = reactive([
-  {
-    title: '关闭案件',
-    icon: 'Close',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_close"),
-  },
-  {
-    title: '暂停案件',
-    icon: 'VideoPause',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_stop"),
-  },
-  {
-    title: '恢复案件',
-    icon: 'VideoPlay',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_ref"),
-  },
+  // {
+  //   title: '关闭案件',
+  //   icon: 'Close',
+  //   isShow: true
+  //   // isShow: this.hasPerm("disposal_case_close"),
+  // },
+  // {
+  //   title: '暂停案件',
+  //   icon: 'VideoPause',
+  //   isShow: true
+  //   // isShow: this.hasPerm("disposal_case_stop"),
+  // },
+  // {
+  //   title: '恢复案件',
+  //   icon: 'VideoPlay',
+  //   isShow: true
+  //   // isShow: this.hasPerm("disposal_case_ref"),
+  // },
   {
     title: '添加临时标签',
     icon: 'CirclePlus',
@@ -280,11 +279,29 @@ const operationList = reactive([
     isShow: true
     // isShow: this.hasPerm("disposal_case_exrecord"),
   },
+  // {
+  //   title: '生成结清证明',
+  //   icon: 'Document',
+  //   isShow: true
+  //   // isShow: this.hasPerm("disposal_case_qing"),
+  // },
   {
-    title: '生成结清证明',
-    icon: 'Document',
+    title: '锁定案件',
+    icon: 'Lock',
     isShow: true
-    // isShow: this.hasPerm("disposal_case_qing"),
+    // show: this.hasPerm('out_case_lock')
+  },
+  {
+    title: '取消锁定',
+    icon: 'Unlock',
+    isShow: true
+    // show: this.hasPerm('out_case_unlock')
+  },
+  {
+    title: '删除案件',
+    icon: 'Delete',
+    isShow: true
+    // show: this.hasPerm('out_case_unlock')
   }
 ])
 onMounted(() => {
@@ -462,58 +479,7 @@ const getTableData = async () => {
   ]
   query.page = 1
   state.total = 12
-  // 得到label数据
-  state.labelData = [
-    {
-      customizeIcon: '',
-      eplusIcon: 'Memo',
-      labelTitle: '案件数量',
-      isHaveRmbSign: false,
-      value: null, //total
-      key: 'total'
-    },
-    {
-      customizeIcon: '',
-      eplusIcon: 'UserFilled',
-      labelTitle: '案人人数',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'caseUserCount'
-    },
-    {
-      customizeIcon: '',
-      eplusIcon: 'Money',
-      labelTitle: '处置金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumHandleAmount'
-    },
-    {
-      customizeIcon: '',
-      eplusIcon: 'Money',
-      labelTitle: '已还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumRefundAmount'
-    },
-    {
-      customizeIcon: '',
-      eplusIcon: 'Money',
-      labelTitle: '待还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumResidueAmount'
-    }
-  ]
-  const labelData2 = {
-    caseUserCount: 239278,
-    sumHandleAmount: 4889285788.62,
-    sumRefundAmount: 184079143.85,
-    sumResidueAmount: 4711200212.03
-  }
-  state.labelData.forEach(item=>{
-    item.value = labelData2[item.key]
-  })
+  state.labelData.money = 444
 }
 // 重置
 const reset = () => {
@@ -571,6 +537,15 @@ const handleClick = item => {
         break
       case '生成结清证明':
         certificate()
+        break
+      case '锁定案件':
+        luckCase(1)
+        break
+      case '取消锁定':
+        luckCase(0)
+        break
+      case '删除案件':
+        delCase()
         break
       default:
         break
@@ -736,7 +711,6 @@ const submitExport = async (paramsSub, type) => {
   }
   ElMessage.success('操作成功！')
   toggleSelection()
-  exportDialog.value.cancelSubmit()
 }
 //导出下载
 const exportDownload = item => {
@@ -762,6 +736,46 @@ const certificate = async () => {
     }
   )
 }
+//1锁定 0取消锁定
+const luckCase = async bool => {
+  ElMessageBox.confirm('是否确认本次操作?', '温馨提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(
+    () => {
+      let params = getParams()
+      params['entrustLock'] = bool
+      console.log('锁定', params)
+      // await xx(params)
+      ElMessage.success('操作成功')
+      toggleSelection()
+      getTableData()
+    },
+    res => {
+      ElMessage.info('已取消')
+    }
+  )
+}
+const delCase = async () => {
+  ElMessageBox.confirm('是否确认本次操作?', '温馨提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(
+    () => {
+      let params = getParams()
+      console.log('删除', params)
+      // await xx(params)
+      ElMessage.success('操作成功')
+      toggleSelection()
+      getTableData()
+    },
+    res => {
+      ElMessage.info('已取消')
+    }
+  )
+}
 // 处理基础入参
 const getParams = () => {
   let params =
@@ -771,8 +785,4 @@ const getParams = () => {
 </script>
 
 <style lang="scss" scoped>
-
-.form-wrapper {
-  margin-bottom: 0;
-}
 </style>

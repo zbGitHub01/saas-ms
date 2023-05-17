@@ -73,6 +73,9 @@ const open = (data, type) => {
   typeSub.value = type
   dialogVisible.value = true
 }
+defineExpose({
+  open
+})
 // 确认
 const submitForm = () => {
   const params = {}
@@ -94,10 +97,6 @@ const cancelSubmit = () => {
   state.date = []
   dialogVisible.value = false
 }
-defineExpose({
-  open,
-  cancelSubmit,
-})
 // 全选
 const handleCheckAllChange = type => {
   state.exportField = []

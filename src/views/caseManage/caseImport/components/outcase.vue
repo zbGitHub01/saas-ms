@@ -161,24 +161,24 @@ const inputdata = reactive([
     show: true
     // show: this.hasPerm('base_import_word'),
   },
-  {
-    title: '导入案件联系人',
-    btn: '导入联系人',
-    type: 104,
-    select: false,
-    downloadUrlKey: 'contactTemplateUrl',
-    show: true
-    // show: this.hasPerm('base_import_contact'),
-  },
-  {
-    title: '导入案件地址',
-    btn: '导入地址',
-    type: 105,
-    select: false,
-    downloadUrlKey: 'addressTemplateUrl',
-    show: true
-    // show: this.hasPerm('base_import_address'),
-  },
+  // {
+  //   title: '导入案件联系人',
+  //   btn: '导入联系人',
+  //   type: 104,
+  //   select: false,
+  //   downloadUrlKey: 'contactTemplateUrl',
+  //   show: true
+  //   // show: this.hasPerm('base_import_contact'),
+  // },
+  // {
+  //   title: '导入案件地址',
+  //   btn: '导入地址',
+  //   type: 105,
+  //   select: false,
+  //   downloadUrlKey: 'addressTemplateUrl',
+  //   show: true
+  //   // show: this.hasPerm('base_import_address'),
+  // },
   {
     title: '导入临时标签',
     btn: '导入临时标签', //再处理
@@ -217,15 +217,15 @@ const inputdata = reactive([
     show: true
     // show: this.hasPerm('mng_case_data_base_import_custom'),
   },
-  {
-    title: '导入车贷特殊关联人',
-    btn: '导入关联人',
-    type: 110,
-    select: false,
-    downloadUrlKey: 'specialRelationTemplateUrl',
-    show: true
-    // show: this.hasPerm('mng_case_data_base_import_rv'),
-  },
+  // {
+  //   title: '导入车贷特殊关联人',
+  //   btn: '导入关联人',
+  //   type: 110,
+  //   select: false,
+  //   downloadUrlKey: 'specialRelationTemplateUrl',
+  //   show: true
+  //   // show: this.hasPerm('mng_case_data_base_import_rv'),
+  // },
   {
     title: '导入法诉状态标签',
     btn: '导入标签',
