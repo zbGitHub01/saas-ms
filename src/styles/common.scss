@@ -131,3 +131,33 @@
   border-radius: 4px;
   box-shadow: 0 0 12px rgb(0 0 0 / 5%);
 }
+
+// 表格行颜色
+.el-table .info-row {
+  background: #f9d9dd;
+}
+.el-table .positive-row {
+  background: #fbd9ad;
+}
+
+.el-table .warm-row {
+  background: #8fd4f5;
+}
+.el-table .else-row {
+  background: #baf1d6;
+}
+.el-table .ref-row {
+  background: #fff;
+}
+.el-table .current-row {
+  background: #ebf5ff;
+}
+.el-table .green-row {
+  background: #d3e98d;
+}
+.el-table .grey-row {
+  background: #e9e6e6;
+}
+.el-table .purple-row {
+  background: #d4bcf7;
+}

@@ -40,7 +40,7 @@ onMounted(() => {})
     <div :class="itemStyle">
       <div v-for="(item, index) in props.labelData" :key="index" class="item_warp">
         <div class="img_warp">
-          <el-icon v-if="!!item.eplusIcon">
+          <el-icon v-if="!!item.eplusIcon" class="icon">
             <component :is="item.eplusIcon"></component>
           </el-icon>
           <svg-icon v-else style="width: 100%; height: 100%" :name="item.customizeIcon" />
@@ -90,6 +90,9 @@ onMounted(() => {})
       img {
         width: 35px;
         height: 35px;
+      }
+      .icon{
+        font-size: 50px;
       }
     }
     .title_warp {

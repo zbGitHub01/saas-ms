@@ -73,6 +73,9 @@ const open = (data, type) => {
   typeSub.value = type
   dialogVisible.value = true
 }
+defineExpose({
+  open
+})
 // 确认
 const submitForm = () => {
   const params = {}
@@ -84,6 +87,7 @@ const submitForm = () => {
     params['isExportExcel'] = disposalRecord.value
   }
   emits('submitExport', params, typeSub.value)
+  cancelSubmit()
 }
 // 取消
 const cancelSubmit = () => {
@@ -94,10 +98,6 @@ const cancelSubmit = () => {
   state.date = []
   dialogVisible.value = false
 }
-defineExpose({
-  open,
-  cancelSubmit,
-})
 // 全选
 const handleCheckAllChange = type => {
   state.exportField = []

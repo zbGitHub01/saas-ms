@@ -8,6 +8,7 @@ import FormClass from '@/components/FormClass/index.vue'
 import DialogForm from '@/components/DialogForm/index.vue'
 import TableClass from '@/components/TableClass/index.vue'
 import LabelClass from '@/components/LabelClass/index.vue'
+import ColorShow from '@/components/ColorShow/index.vue'
 
 export default {
   install: Vue => {
@@ -21,5 +22,6 @@ export default {
     Vue.component('DialogForm', DialogForm)
     Vue.component('TableClass', TableClass)
     Vue.component('LabelClass', LabelClass)
+    Vue.component('ColorShow', ColorShow)
   }
 }

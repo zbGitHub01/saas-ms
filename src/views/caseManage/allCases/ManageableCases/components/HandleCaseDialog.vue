@@ -176,7 +176,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         }
         emits('submitForm', paramsSub)
       }
-      dialogVisible.value = false
+      cancelSubmit()
     }
   })
 }
