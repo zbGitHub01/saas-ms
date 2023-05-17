@@ -8,14 +8,14 @@
 
 export default [
   {
-    customizeIcon: 'caselist',
+    customizeIcon: 'moneynum',
     eplusIcon: '',
     labelTitle: '案人数',
     isHaveRmbSign: false,
     value: null
   },
   {
-    customizeIcon: 'peoplenum',
+    customizeIcon: 'caselist',
     eplusIcon: '',
     labelTitle: '案件数',
     isHaveRmbSign: false,
@@ -25,7 +25,8 @@ export default [
     customizeIcon: 'moneynum',
     eplusIcon: '',
     labelTitle: '待还金额',
-    isHaveRmbSign: false,
-    value: null
+    isHaveRmbSign: true,
+    isAmountFormat: true,
+    value: '222222222222.32'
   }
 ]
