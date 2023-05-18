@@ -210,6 +210,7 @@ import readmissionDialog from './components/readmissionDialog.vue'
 import suspendOperationDialog from './components/suspendOperationDialog.vue'
 import openComDialog from './components/openComDialog.vue'
 import stopComDialog from './components/stopComDialog.vue'
+import riskDialog from '../components/riskDialog.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import ApisCommon from '@/api/modules/common'
 const optionData = reactive({
