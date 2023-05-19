@@ -48,14 +48,16 @@ class RequestHttp {
         }
         if (data.code && data.code !== ResultEnum.SUCCESS) {
           ElMessage.error(data.msg)
+          return Promise.reject(data)
         }
         return data
       },
       error => {
         const { response } = error
         tryHideFullScreenLoading()
+        console.log(error, '----apiError')
         if (response) {
-          checkStatus(response.status)
+          response.data.msg ? ElMessage.error(response.data.msg) : checkStatus(response.status)
           if (response.status === ResultEnum.OVERDUE) {
             const globalStore = useGlobalStore()
             globalStore.logout()
@@ -64,7 +66,8 @@ class RequestHttp {
         if (!window.navigator.onLine) {
           return router.replace({ path: '/500' })
         }
-        return response || error
+        return Promise.reject(error)
+        // return response || error
       }
     )
   }

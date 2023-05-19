@@ -168,7 +168,25 @@
               <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
             </el-form-item>
             <el-form-item class="label-block" label="面试评估表">
-              <UploadImgs v-model:image-list="form.imgList"></UploadImgs>
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="工资卡确认单">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="承诺书">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="保密协议">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="员工行为守则">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="近一年的社保缴纳记录/工资流水">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="离职证明">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -181,12 +199,33 @@
               </UploadImg>
             </el-form-item>
             <el-form-item class="label-block" label="应聘人员问卷调查表">
-              <UploadImgs v-model:image-list="form.imgList" width="100px" height="100px" border-radius="50%">
+              <UploadImgs v-model:image-list="form.imgList">
                 <template #empty>
                   <el-icon><Picture /></el-icon>
                   <span>请上传图片</span>
                 </template>
               </UploadImgs>
+            </el-form-item>
+            <el-form-item class="label-block" label="入职登记表">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="薪资确认单">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="劳动合同">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="签收单">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="质量管理责任制度">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="征信报告">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
+            </el-form-item>
+            <el-form-item class="label-block" label="体检报告">
+              <UploadFile v-model:file-list="form.fileList" :limit="0"></UploadFile>
             </el-form-item>
           </el-col>
         </el-row>

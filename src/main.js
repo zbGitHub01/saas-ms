@@ -12,6 +12,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'virtual:svg-icons-register'
 import Components from '@/components'
 import directives from '@/directives/index'
+import 'jsoneditor'
 
 const app = createApp(App)
 app.use(router)

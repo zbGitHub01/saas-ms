@@ -1,8 +1,7 @@
 import { createPinia, defineStore } from 'pinia'
 import piniaPersistConfig from '@/utils/piniaPersist'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-import { stringify } from 'qs'
-import Apis, { chooseTenant } from '@/api/modules/user'
+import Apis, { chooseTenant, mobileLogin, userLogin } from '@/api/modules/user'
 import router from '@/router'
 
 export const useGlobalStore = defineStore('globalStore', {
@@ -14,7 +13,8 @@ export const useGlobalStore = defineStore('globalStore', {
     refreshToken: '',
     tenantId: '',
     assemblySize: 'default', // element组件大小
-    maximize: false // 内容最大化
+    maximize: false, // 内容最大化
+    socketToken: null
   }),
   actions: {
     setAssemblySizeSize(assemblySize) {
@@ -23,12 +23,16 @@ export const useGlobalStore = defineStore('globalStore', {
     setMaximize(isMax) {
       this.maximize = isMax
     },
+    setSocketToken(token = null) {
+      this.socketToken = token
+    },
     async login(params) {
       const headers = {
         Authorization: `Basic ${btoa('dongan:dongan')}`
       }
-      const loginApiFn = params.grant_type === 'password' ? Apis.userLogin : Apis.mobileLogin
-      const data = await loginApiFn(stringify(params), { headers })
+      const loginApiFn = params.grant_type === 'password' ? userLogin : mobileLogin
+      const data = await loginApiFn(params, { headers }).catch(() => {})
+      console.log(data, '----data')
       if (data && data.access_token) {
         this.token = `Bearer ${data.access_token}`
         this.refreshToken = data.refresh_token
@@ -75,10 +79,13 @@ export const useGlobalStore = defineStore('globalStore', {
       if (isLogout) {
         await Apis.logout()
       }
+      console.log(this, '----this')
+      console.log(222)
       localStorage.clear()
       this.token = ''
       this.refreshToken = ''
       this.tenantId = ''
+      this.socketToken = null
       const path = isLogout ? '/login' : `/login?redirect=${router.currentRoute.value.fullPath}`
       await router.push({ path })
       return true
