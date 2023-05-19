@@ -39,7 +39,9 @@
         </el-form>
       </template>
     </FormWrap>
-    <LabelData :labelData="state.labelData" />
+    <!-- <LabelData :labelData="state.labelData" /> -->
+    <LabelClass :labelData="state.labelData" />
+    <div class="spacing"></div>
     <div class="mt20">
       <el-table :data="state.tableData" border>
         <el-table-column label="案件ID" prop="caseId" align="center" min-width="150"></el-table-column>
@@ -80,7 +82,7 @@ const query = reactive({
 const state = reactive({
   tableData: [] as any[],
   total: 0,
-  labelData: {} as any
+  labelData: [] as any,
 })
 const selectData = reactive({
   productList: [] as any[], //产品列表
@@ -130,7 +132,58 @@ const getTableData = async () => {
   state.tableData = tableDataSub
   query.page = 1
   state.total = 12
-  state.labelData.money = 444
+  // 得到label数据
+  state.labelData = [
+    {
+      customizeIcon: '',
+      eplusIcon: 'Memo',
+      labelTitle: '案件数量',
+      isHaveRmbSign: false,
+      value: null, //total
+      key: 'total'
+    },
+    {
+      customizeIcon: '',
+      eplusIcon: 'UserFilled',
+      labelTitle: '案人人数',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'caseUserCount'
+    },
+    {
+      customizeIcon: '',
+      eplusIcon: 'Money',
+      labelTitle: '处置金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumHandleAmount'
+    },
+    {
+      customizeIcon: '',
+      eplusIcon: 'Money',
+      labelTitle: '已还金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumRefundAmount'
+    },
+    {
+      customizeIcon: '',
+      eplusIcon: 'Money',
+      labelTitle: '待还金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumResidueAmount'
+    }
+  ]
+  const labelData2 = {
+    caseUserCount: 239278,
+    sumHandleAmount: 4889285788.62,
+    sumRefundAmount: 184079143.85,
+    sumResidueAmount: 4711200212.03
+  }
+  state.labelData.forEach(item => {
+    item.value = labelData2[item.key]
+  })
 }
 const getSelecData = async () => {
   // 请求得到数据
@@ -187,4 +240,12 @@ const reset = () => {
 </script>
 
 <style lang="scss" scoped>
+.form-wrapper {
+  margin-bottom: 0;
+}
+.spacing {
+  height: 10px;
+  margin: 0 -20px 0;
+  background-color: var(--color-main-bg);
+}
 </style>

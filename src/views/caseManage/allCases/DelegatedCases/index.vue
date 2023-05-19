@@ -6,18 +6,42 @@
           <el-form-item label="案件ID">
             <el-input v-model="form.caseId" placeholder="请输入案件ID" clearable></el-input>
           </el-form-item>
+          <el-form-item label="产品：" prop="productId">
+            <el-select clearable v-model="form.productId" filterable placeholder="请选择产品">
+              <el-option label="产品1" :value="1"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="出资方：" prop="investorName">
+            <el-select clearable v-model="form.investorName" filterable placeholder="请选择出资方">
+              <el-option label="出资方1" :value="1"></el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
       </template>
     </FormWrap>
     <!-- <LabelData :labelData="state.labelData" /> -->
     <LabelClass :labelData="state.labelData" />
+    <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
           <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow" plain type="primary" :icon="item.icon" @click="handleClick(item.title)">
+            <el-button v-if="item.isShow && !item.dropdown" plain type="primary" :icon="item.icon" @click="handleClick(item)">
               {{ item.title }}
             </el-button>
+            <el-dropdown v-if="item.isShow && item.dropdown">
+              <el-button type="primary" plain :icon="item.icon">
+                {{ item.title }}
+                <el-icon class="el-icon--right"><arrow-down /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item v-for="item2 in item.dropdown" :key="item2.title" @click="handleClick(item2)">
+                    {{ item2.title }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </div>
         </template>
       </OperationBar>
@@ -31,6 +55,7 @@
         @selection-change="handleSelectionChange"
         @sort-change="handlesort"
         ref="multipleTable"
+        :row-class-name="tableRowClassName"
       >
         <el-table-column type="selection" fixed align="center" width="55"></el-table-column>
         <el-table-column
@@ -130,13 +155,6 @@
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
-        <!-- <el-table-column
-          label="机器人外呼标签"
-          prop="robotTag"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column> -->
         <el-table-column
           label="CPE"
           prop="cpeName"
@@ -184,8 +202,10 @@
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
     <AddOrRemoveTagDialog ref="addOrRemoveTagDialog" @submitForm="submitTagForm" />
-    <HandleCaseDialog ref="handleCaseDialog" @submitForm="submitCaseForm" />
+    <EditStatusDialog ref="editStatusDialog" @submitForm="submitEditForm" />
     <ExportDialog ref="exportDialog" @submitExport="submitExport" />
+    <ColorShowDialog ref="colorShowDialog" @submitForm="submitColorForm" @getTableData="getTableData" />
+    <CreatBatchDialog ref="creatBatchDialog" @submitForm="submitBatchForm" />
   </div>
 </template>
 
@@ -194,18 +214,24 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Close, VideoPause, VideoPlay, CirclePlus, Delete, Download, Document } from '@element-plus/icons-vue'
 import AddOrRemoveTagDialog from './components/AddOrRemoveTagDialog.vue'
-import HandleCaseDialog from './components/HandleCaseDialog.vue'
+import EditStatusDialog from './components/EditStatusDialog.vue'
 import ExportDialog from './components/ExportDialog.vue'
+import ColorShowDialog from './components/ColorShowDialog.vue'
+import CreatBatchDialog from './components/CreatBatchDialog.vue'
 const multipleTable = ref(null)
 const form: any = reactive({
   caseId: '',
+  productId: null, //产品
+  investorName: null, //出资方
   entrustAmountSort: null, //委案金额排序
   entrustResidueAmountSort: null //剩余待还金额排序
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const addOrRemoveTagDialog = ref()
-const handleCaseDialog = ref()
+const editStatusDialog = ref()
 const exportDialog = ref()
+const colorShowDialog = ref()
+const creatBatchDialog = ref()
 // 页码
 const query = reactive({
   page: 1,
@@ -216,8 +242,11 @@ const state = reactive({
   total: 0,
   labelData: [] as any, //标签数据
   selectData: [] as any[], //选中项
-  handleparams: {} as any, //操作的参数
-  exportData: {} //导出项参数
+  handleparams: {
+    caseIdList: [],
+    operateType: 1
+  }, //操作的参数
+  exportData: {} //导出项列表
 })
 const operation = ref(1)
 const operationList = reactive([
@@ -248,8 +277,18 @@ const operationList = reactive([
   {
     title: '添加临时标签',
     icon: 'CirclePlus',
-    isShow: true
+    isShow: true,
     // isShow: this.hasPerm("disposal_case_dellabel"),
+    dropdown: [
+      //按钮下拉
+      {
+        title: '添加临时标签'
+      },
+      {
+        title: '导入批量添加标签',
+        notCheck: true //是否需要跳过校验选中项
+      }
+    ]
   },
   {
     title: '删除临时标签',
@@ -259,15 +298,35 @@ const operationList = reactive([
   },
   {
     title: '创建诉讼批次',
-    icon: '',
-    isShow: true
+    icon: 'CirclePlus',
+    isShow: true,
     // isShow: this.hasPerm("disposal_case_excase"),
+    dropdown: [
+      {
+        title: '以案件筛选结果创建诉讼批次',
+        notCheck: true
+      },
+      {
+        title: '表格上传案件创建诉讼批次',
+        notCheck: true
+      }
+    ]
   },
   {
     title: '创建单保全批次',
-    icon: 'Download',
-    isShow: true
+    icon: 'CirclePlus',
+    isShow: true,
     // isShow: this.hasPerm("disposal_case_exrecord"),
+    dropdown: [
+      {
+        title: '以案件筛选结果创建单保全批次',
+        notCheck: true
+      },
+      {
+        title: '表格上传案件创建单保全批次',
+        notCheck: true
+      }
+    ]
   }
 ])
 onMounted(() => {
@@ -294,7 +353,7 @@ const getTableData = async () => {
       caseStatusText: '正常',
       orgTitle: '公司名称T79',
       caseUserId: 1001,
-      color: 100,
+      color: 97,
       cpeId: 0,
       cpeName: '钱龙',
       creditorId: 8,
@@ -390,7 +449,7 @@ const getTableData = async () => {
       caseStatusRemark: '',
       caseStatusText: '正常',
       caseUserId: 1001,
-      color: 100,
+      color: 98,
       cpeId: 0,
       orgTitle: '公司名称T79',
       cpeName: '钱龙',
@@ -526,32 +585,47 @@ const toggleSelection = () => {
 }
 //通过此函数整体过滤事件
 const handleClick = item => {
-  if (state.selectData.length === 0 && operation.value === 1) {
+  if (state.selectData.length === 0 && operation.value === 1 && !item.notCheck) {
     ElMessage.warning('请先选择操作对象!')
   } else {
-    switch (item) {
+    switch (item.title) {
       case '导出案件1':
-      exportModel('EXPORT_CASE_FIELD', 0)
+        exportModel('EXPORT_CASE_FIELD', 0)
         break
       case '导出案件2':
         // this.form.caseStatus = 25;
         exportModel('EXPORT_CASE_FIELD', 0)
         break
-        case '导出处置记录':
+      case '导出处置记录':
         // this.form.caseStatus = 25;
         exportModel('EXPORT_FOLLOW_FIELD', 1)
         break
-      case '恢复案件':
-        handleCase(3)
+      case '案件标色':
+        colorShow()
+        break
+      case '修改处置状态':
+        editStatus()
         break
       case '添加临时标签':
         handleTag(1)
         break
+      case '导入批量添加标签':
+        handleTag(3)
+        break
       case '删除临时标签':
         handleTag(2)
         break
-      case '生成结清证明':
-        certificate()
+      case '以案件筛选结果创建诉讼批次':
+        createBatch(0, 1)
+        break
+      case '表格上传案件创建诉讼批次':
+        createBatch(0, 2)
+        break
+      case '以案件筛选结果创建单保全批次':
+        createBatch(1, 1)
+        break
+      case '表格上传案件创建单保全批次':
+        createBatch(1, 2)
         break
       default:
         break
@@ -566,7 +640,7 @@ const handleTag = type => {
 const submitTagForm = (tempTagName, type, isDeleteAllRelationTag) => {
   // 处理入参
   let params = getParams()
-  params.tempTagName = tempTagName
+  params['tempTagName'] = tempTagName
   if (type === 2) {
     params['isDeleteAllRelationTag'] = isDeleteAllRelationTag === true ? 1 : 0
   }
@@ -577,6 +651,7 @@ const submitTagForm = (tempTagName, type, isDeleteAllRelationTag) => {
   toggleSelection()
   getTableData()
 }
+//排序
 const handlesort = val => {
   if (val.order) {
     if (val.prop === 'entrustAmount') {
@@ -592,34 +667,16 @@ const handlesort = val => {
     form.entrustResidueAmountSort = null
   }
 }
-// 1关闭案件/2暂停案件/3恢复案件
-const handleCase = type => {
-  if (type === 3) {
-    ElMessageBox.confirm('是否确认本次操作?', '温馨提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(
-      () => {
-        let paramsSub = {
-          caseStatus: 1
-        }
-        submitCaseForm(paramsSub)
-      },
-      res => {
-        ElMessage.info('已取消')
-      }
-    )
-  } else {
-    handleCaseDialog.value.open(type)
-  }
+// 修改处置状态
+const editStatus = () => {
+  editStatusDialog.value.open()
 }
-// 确认关闭/暂停/恢复案件
-const submitCaseForm = async paramsSub => {
+// 确认修改处置状态
+const submitEditForm = async paramsSub => {
   let params = getParams()
   Object.assign(params, paramsSub)
-  // 发送处理案件接口
-  console.log('处理案件：', params)
+  // 发送确认修改处置状态接口
+  console.log('修改处置状态', params)
   // await xx(params)
   ElMessage.success('操作成功！')
   toggleSelection()
@@ -711,7 +768,7 @@ const submitExport = async (paramsSub, type) => {
   //此处做判断是为了判断是否是委外库
   // 再处理 原代码里的store没传，
   // if (this.store && params.operateType === 2) {
-  //   params.caseSearchParam['storeId'] = this.store
+  //   params.companyCaseSearchParam['storeId'] = this.store
   // }
   // 发送处理案件接口
   console.log('导出：', params)
@@ -732,12 +789,88 @@ const submitExport = async (paramsSub, type) => {
   }
   ElMessage.success('操作成功！')
   toggleSelection()
-  exportDialog.value.cancelSubmit()
 }
 //导出下载
 const exportDownload = item => {
   ElMessage.success('导出成功')
   // exportMethod(item)
+}
+// 案件标色
+const colorShow = () => {
+  colorShowDialog.value.open()
+}
+// 确认案件标色
+const submitColorForm = paramsSub => {
+  let params = getParams()
+  Object.assign(params, paramsSub)
+  console.log('案件标色：', params)
+  // 发送接口
+}
+// 设置表格行颜色
+const tableRowClassName = ({ row, rowIndex }) => {
+  if (row.color === 96) {
+    return 'info-row'
+  } else if (row.color === 97) {
+    return 'positive-row'
+  } else if (row.color === 98) {
+    return 'warm-row'
+  } else if (row.color === 99) {
+    return 'else-row'
+  } else if (row.color === 292) {
+    return 'green-row'
+  } else if (row.color === 293) {
+    return 'grey-row'
+  } else if (row.color === 294) {
+    return 'purple-row'
+  } else {
+    return 'ref-row'
+  }
+}
+// 创建批次 typType:0诉讼 1保全 OpeType:1筛选结果 2表格上传
+const createBatch = async (typType, opeType) => {
+  if (opeType === 1) {
+    if (!form.investorName) {
+      return ElMessage.warning('请先查询出资方!')
+    }
+    if (!form.productId) {
+      return ElMessage.warning('请先查询产品!')
+    }
+    if (state.selectData.length === 0 && operation.value === 1) {
+      return ElMessage.warning('请先选择操作对象!')
+    }
+    const params = {
+      operateType: operation.value,
+      companyCaseSearchParam: Object.assign({}, form),
+      caseIdList: state.selectData,
+      type: typType
+    }
+    // 获取批次数量信息
+    // const {data } = await xx(params)
+    // const numInfo = data
+    const numInfo = {
+      createCaseNum: 9,
+      createCaseUserNum: 7,
+      filterCaseUserNum: 7,
+      orgList: ['公司名称T79'],
+      filterCaseNum: 9,
+      productList: ['“360”借条']
+    }
+    console.log('操作类型1', numInfo)
+    creatBatchDialog.value.open(typType, opeType, numInfo)  
+  } else if (opeType === 2) {
+    creatBatchDialog.value.open(typType, opeType, {})
+  }
+}
+// 确认创建批次
+const submitBatchForm = paramsSub => {
+  const params = {
+    operateType: operation.value,
+    companyCaseSearchParam: Object.assign({}, form),
+    caseIdList: state.selectData
+  }
+  Object.assign(params, paramsSub)
+  console.log('创建批次：', params)
+  ElMessage.success('创建诉讼批次成功!')
 }
 // 生成结清证明
 const certificate = async () => {
@@ -761,7 +894,9 @@ const certificate = async () => {
 // 处理基础入参
 const getParams = () => {
   let params =
-    operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
+    operation.value === 1
+      ? Object.assign({}, state.handleparams)
+      : { operateType: 2, companyCaseSearchParam: Object.assign({}, form) }
   return params
 }
 </script>
@@ -769,5 +904,10 @@ const getParams = () => {
 <style lang="scss" scoped>
 .form-wrapper {
   margin-bottom: 0;
+}
+.spacing {
+  height: 10px;
+  margin: 0 -20px 0;
+  background-color: var(--color-main-bg);
 }
 </style>

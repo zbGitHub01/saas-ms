@@ -11,6 +11,7 @@
     </FormWrap>
     <!-- <LabelData :labelData="state.labelData" /> -->
     <LabelClass :labelData="state.labelData" />
+    <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
@@ -511,7 +512,7 @@ const getTableData = async () => {
     sumRefundAmount: 184079143.85,
     sumResidueAmount: 4711200212.03
   }
-  state.labelData.forEach(item=>{
+  state.labelData.forEach(item => {
     item.value = labelData2[item.key]
   })
 }
@@ -736,7 +737,6 @@ const submitExport = async (paramsSub, type) => {
   }
   ElMessage.success('操作成功！')
   toggleSelection()
-  exportDialog.value.cancelSubmit()
 }
 //导出下载
 const exportDownload = item => {
@@ -771,8 +771,12 @@ const getParams = () => {
 </script>
 
 <style lang="scss" scoped>
-
 .form-wrapper {
   margin-bottom: 0;
+}
+.spacing {
+  height: 10px;
+  margin: 0 -20px 0;
+  background-color: var(--color-main-bg);
 }
 </style>

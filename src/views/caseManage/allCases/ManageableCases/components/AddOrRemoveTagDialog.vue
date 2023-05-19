@@ -78,7 +78,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       else if(typeSub.value === 2){
         emits('submitForm', form.tempTagName, 2, form.isDeleteAllRelationTag)
       }
-      dialogVisible.value = false
+      cancelSubmit()
     }
   })
 }

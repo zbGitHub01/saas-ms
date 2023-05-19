@@ -58,4 +58,7 @@ const handleCommand = val => {
   font-size: 14px;
   margin-left: 20px;
 }
+:deep(.el-dropdown){
+  color: var(--el-color-primary);
+}
 </style>
