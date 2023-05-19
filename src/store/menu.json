@@ -193,6 +193,38 @@
         },
         "rolePermissionOperation": [],
         "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": false,
+        "icon": "",
+        "parentMenuCode": "WAIBUANJIAN",
+        "path": "/externalCase/collectionRegister",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "HUIKUANDENGJI",
+        "menuName": "回款登记",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
+      },
+      {
+        "hide": true,
+        "icon": "",
+        "parentMenuCode": "WAIBUANJIAN",
+        "path": "/externalCase/collectionRegisterDetail",
+        "permissionId": 2280,
+        "isChecked": true,
+        "menuCode": "HUIKUANDENGJIMINGXI",
+        "menuName": "回款登记明细",
+        "permissionType": {
+          "type": 1,
+          "desc": "权限菜单"
+        },
+        "rolePermissionOperation": [],
+        "sysProductUuid": "a77d00d55b644e5a9581e36f6e211d1ad39849f7"
       }
     ]
   },

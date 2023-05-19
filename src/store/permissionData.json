@@ -85,6 +85,20 @@
         "icon": "",
         "path": "/externalCase/externalAssetDispose",
         "type": 1
+      },
+      {
+        "name": "回款登记",
+        "code": "COLLECTION_REGISTER",
+        "icon": "",
+        "path": "/externalCase/collectionRegister",
+        "type": 1
+      },
+      {
+        "name": "回款登记明细",
+        "code": "COLLECTION_REGISTER_DETAIL",
+        "icon": "",
+        "path": "/externalCase/collectionRegisterDetail",
+        "type": 1
       }
     ]
   },

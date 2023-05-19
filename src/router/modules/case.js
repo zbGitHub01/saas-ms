@@ -66,6 +66,18 @@ const caseRouter = [
         name: 'externalAssetDispose',
         component: () => import('@/views/externalCase/externalAssetDispose/index.vue'),
         meta: { title: '外部资产基础配置', icon: '' }
+      },
+      {
+        path: '/externalCase/collectionRegister',
+        name: 'collectionRegister',
+        component: () => import('@/views/externalCase/collectionRegister/index.vue'),
+        meta: { title: '回款登记', icon: '' }
+      },
+      {
+        path: '/externalCase/collectionRegisterDetail',
+        name: 'collectionRegisterDetail',
+        component: () => import('@/views/externalCase/collectionRegisterDetail/index.vue'),
+        meta: { title: '回款登记明细', icon: '' }
       }
     ]
   },
