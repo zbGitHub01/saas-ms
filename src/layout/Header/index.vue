@@ -25,13 +25,14 @@
 </template>
 
 <script setup>
-import {computed, inject, nextTick} from 'vue'
+import { computed, inject, nextTick } from 'vue'
 import CollapseIcon from './components/CollapseIcon.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
 import Fullscreen from './components/Fullscreen.vue'
 import AssemblySize from './components/AssemblySize.vue'
 import Avatar from './components/Avatar.vue'
 import { useGlobalStore } from '@/store/index'
+// import socket from '@/utils/socket'
 
 const globalStore = useGlobalStore()
 const userInfo = computed(() => globalStore.userInfo)

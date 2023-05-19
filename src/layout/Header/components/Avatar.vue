@@ -41,7 +41,9 @@ const route = useRoute()
 const globalStore = useGlobalStore()
 
 // 预览图地址
-const avatar = computed(() => globalStore.userInfo?.avatar || '//asfile.donganzichan.cn/assets/image/20220623/b2a2ae4a3223435aa0cf67304658e188.gif')
+const avatar = computed(
+  () => globalStore.userInfo?.avatar || '//asfile.donganzichan.cn/assets/image/20220623/b2a2ae4a3223435aa0cf67304658e188.gif'
+)
 
 // 点击修改头像
 const dialogVisible = ref(false)

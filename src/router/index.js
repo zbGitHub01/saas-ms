@@ -42,6 +42,12 @@ const routes = [
   },
   ...routerArray,
   {
+    path: '/jsonEdit',
+    name: 'jsonEdit',
+    component: () => import('@/views/jsonEdit/index.vue'),
+    meta: { title: '403' }
+  },
+  {
     path: '/403',
     name: '403',
     component: () => import('@/views/errorPage/403.vue'),
