@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import ImportCase from './importCase/index.vue'
 import ModelCase from './modelCase/index.vue'
+import ProductCase from './productCase/index.vue'
 
 const tabClick = () => {
   console.log(1)
@@ -19,7 +20,7 @@ const tabActive = ref('1')
         <ModelCase />
       </el-tab-pane>
       <el-tab-pane label="产品委案" name="3">
-        <ImportCase />
+        <ProductCase />
       </el-tab-pane>
     </el-tabs>
   </div>
