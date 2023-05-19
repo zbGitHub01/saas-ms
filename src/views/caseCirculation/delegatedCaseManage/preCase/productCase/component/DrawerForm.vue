@@ -22,48 +22,42 @@ const state = reactive({
       orgName: '杭州温泽企业管理有限公司贵阳分公司',
       name: 'Tom',
       entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
+      regions: [],
       address: 'No. 189, Grove St, Los Angeles'
     },
     {
       orgName: '前海中英投（深圳）投资有限公司',
       name: 'Tom',
       entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
+      regions: [],
       address: 'No. 189, Grove St, Los Angeles'
     },
     {
       orgName: '前海中英投（深圳）投资有限公司',
       name: 'Tom',
       entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
+      regions: [],
       address: 'No. 189, Grove St, Los Angeles'
     },
     {
       orgName: '前海中英投（深圳）投资有限公司',
       name: 'Tom',
       entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
+      regions: [],
       address: 'No. 189, Grove St, Los Angeles'
     },
     {
       orgName: '苏州微合力网络科技有限公司',
       name: 'Tom',
       entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
+      regions: [],
       address: 'No. 189, Grove St, Los Angeles'
     },
     {
       orgName: '湖南荣辉法律咨询服务有限公司',
       name: 'Tom',
       entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
+      regions: [],
       address: 'No. 189, Grove St, Los Angeles'
     }
   ]
@@ -162,12 +156,7 @@ const handleSubmit = arr => {
       <el-form-item label="案件分库">
         <div>{{ sizeForm.name }}</div>
       </el-form-item>
-      <el-form-item label="案人模型">
-        <div v-for="(item, index) in sizeForm.region" :key="index" class="listStyle">
-          <span>{{ item }}</span>
-        </div>
-      </el-form-item>
-      <el-form-item label="包含产品">
+      <el-form-item label="委案产品">
         <div v-for="(item, index) in sizeForm.type" :key="index" class="listStyle">
           <span>{{ item }}</span>
         </div>
