@@ -96,12 +96,14 @@ const onSubmit = async () => {
     ...form
   }
   loading.value = true
-  const { code } = await Apis.editPositionEmployee(postData)
-  loading.value = false
-  if (code === 200) {
+  try {
+    await Apis.editPositionEmployee(postData)
+    loading.value = false
     emit('change')
     ElMessage.success(title.value + '成功')
     beforeClose()
+  } catch (err) {
+    loading.value = false
   }
 }
 </script>

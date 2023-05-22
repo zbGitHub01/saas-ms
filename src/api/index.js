@@ -55,7 +55,6 @@ class RequestHttp {
       error => {
         const { response } = error
         tryHideFullScreenLoading()
-        console.log(error, '----apiError')
         if (response) {
           response.data.msg ? ElMessage.error(response.data.msg) : checkStatus(response.status)
           if (response.status === ResultEnum.OVERDUE) {
@@ -67,7 +66,6 @@ class RequestHttp {
           return router.replace({ path: '/500' })
         }
         return Promise.reject(error)
-        // return response || error
       }
     )
   }

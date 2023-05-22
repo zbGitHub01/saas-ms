@@ -120,10 +120,12 @@ const onSubmit = async () => {
     deptId: form.deptId[form.deptId.length - 1]
   }
   loading.value = true
-  const { code, data } = await Apis.inviteEmployee(postData)
-  loading.value = false
-  if (code === 200) {
+  try {
+    const { data } = await Apis.inviteEmployee(postData)
+    loading.value = false
     successMounted(data)
+  } catch (err) {
+    loading.value = false
   }
 }
 </script>

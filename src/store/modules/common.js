@@ -9,22 +9,16 @@ export const useCommonStore = defineStore('commonStore', {
   }),
   actions: {
     async fetchDeptTree() {
-      const { code, data } = await Apis.findDeptTree({}, { headers: { noLoading: true } })
-      if (code === 200) {
-        this.deptTree = data
-      }
+      const { data } = await Apis.findDeptTree({}, { headers: { noLoading: true } })
+      this.deptTree = data
     },
     async fetchPositionList() {
-      const { code, data } = await Apis.findPositionList({}, { headers: { noLoading: true } })
-      if (code === 200) {
-        this.positionList = data
-      }
+      const { data } = await Apis.findPositionList({}, { headers: { noLoading: true } })
+      this.positionList = data
     },
     async fetchRoleList() {
-      const { code, data } = await Apis.findRoleList({}, { headers: { noLoading: true } })
-      if (code === 200) {
-        this.roleList = data
-      }
+      const { data } = await Apis.findRoleList({}, { headers: { noLoading: true } })
+      this.roleList = data
     }
   }
 })

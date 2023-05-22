@@ -25,6 +25,7 @@ const apiConfig = {
   // 机构角色
   findRoleList: `GET /upms/client/employee/role/list`,
   editRole: `POST /upms/client/employee/role/save`,
+  removeRole: `GET /upms/client/employee/role/delete`,
   findRoleDeptList: `GET /upms/client/employee/role/getDeptList`,
   removeDept: `GET /upms/client/employee/role`,
   findRoleEmployeeList: `GET /upms/client/employee/role/employee/list`,

@@ -115,11 +115,9 @@ const fetchAllEmployees = async () => {
     page: page.value,
     pageSize: pageSize.value
   }
-  const { code, data } = await Apis.findAllEmployeeList(params)
-  if (code === 200) {
-    employeeList.value = data.data
-    total.value = Number(data.total)
-  }
+  const { data } = await Apis.findAllEmployeeList(params)
+  employeeList.value = data.data
+  total.value = Number(data.total)
 }
 const setStatus = async row => {
   const isDisable = !row.isDisable
@@ -127,18 +125,14 @@ const setStatus = async row => {
     type: 'warning'
   }).catch(() => {})
   if (!isConfirm) return
-  const { code } = await Apis.updateEmployeeStatus({ employeeId: row.employeeId, isDisable: Number(isDisable) })
-  if (code === 200) {
-    await fetchAllEmployees()
-  }
+  await Apis.updateEmployeeStatus({ employeeId: row.employeeId, isDisable: Number(isDisable) })
+  await fetchAllEmployees()
 }
 const setDimission = async row => {
   const isConfirm = await ElMessageBox.confirm(`是否确认离职该员工吗？`, '提示', { type: 'warning' }).catch(() => {})
   if (!isConfirm) return
-  const { code } = await Apis.updateEmployeeDimission({ employeeId: row.employeeId, isDimission: 1 })
-  if (code === 200) {
-    await fetchAllEmployees()
-  }
+  await Apis.updateEmployeeDimission({ employeeId: row.employeeId, isDimission: 1 })
+  await fetchAllEmployees()
 }
 const editEmployee = row => {
   console.log(row)

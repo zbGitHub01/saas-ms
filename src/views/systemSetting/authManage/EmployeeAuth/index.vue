@@ -59,16 +59,12 @@ const treeRef = ref()
 const currDeptNode = ref({})
 const currEmployeeNode = ref({})
 const fetchDeptTree = async () => {
-  const { code, data } = await Apis.findPermissionEmployeeDeptTree()
-  if (code === 200) {
-    deptTree.value = data
-  }
+  const { data } = await Apis.findPermissionEmployeeDeptTree()
+  deptTree.value = data
 }
 const fetchEmployeeList = async () => {
-  const { code, data } = await Apis.findPermissionEmployeeList({ deptId: currDeptNode.value.id })
-  if (code === 200) {
-    employeeList.value = data
-  }
+  const { data } = await Apis.findPermissionEmployeeList({ deptId: currDeptNode.value.id })
+  employeeList.value = data
 }
 
 const checkDept = node => {

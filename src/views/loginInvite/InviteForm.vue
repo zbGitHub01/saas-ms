@@ -79,10 +79,8 @@ const fetchInviteUserInfo = async () => {
   if (!userCode) {
     return
   }
-  const { code, data } = await Apis.findInviteUserInfo({ code: userCode })
-  if (code === 200) {
-    inviteInfo.value = data
-  }
+  const { data } = await Apis.findInviteUserInfo({ code: userCode })
+  inviteInfo.value = data
 }
 const sendSMS = async () => {
   if (gapTime.value < 61 && gapTime.value > 0) {

@@ -45,10 +45,8 @@ const onSearch = () => {
 }
 
 const fetchDeptTree = async () => {
-  const { code, data } = await Apis.findPermissionRoleList({ name: '' })
-  if (code === 200) {
-    roleList.value = data
-  }
+  const { data } = await Apis.findPermissionRoleList({ name: '' })
+  roleList.value = data
 }
 fetchDeptTree()
 const currRoleNode = ref({})

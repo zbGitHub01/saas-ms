@@ -112,26 +112,24 @@ const permissionConfig = computed(() => {
 })
 let prevCheckedKeys = [] // 存储菜单权限选中ids
 const fetchPermission = async (isRefresh = false) => {
-  const { code, data } = await permissionConfig.value.permissionListApiFn(permissionConfig.value.params)
-  if (code === 200) {
-    menuTree.value = formatMenuData(cloneDeep(data))
-    // 选择部门|角色|员工,清空操作数据权限数据
-    if (isRefresh) {
-      dataPermission.value = { data: [] }
-      await nextTick(() => {
-        const checkedKeys = getCheckedKeys(menuTree.value)
-        prevCheckedKeys = checkedKeys
-        treeRef.value.setCheckedKeys(checkedKeys)
-      })
-    } else {
-      await nextTick(() => {
-        treeRef.value.setCurrentKey(dataPermission.value.id)
-        const currentNode = treeRef.value.getCurrentNode()
-        if (currentNode) {
-          dataPermission.value = currentNode
-        }
-      })
-    }
+  const { data } = await permissionConfig.value.permissionListApiFn(permissionConfig.value.params)
+  menuTree.value = formatMenuData(cloneDeep(data))
+  // 选择部门|角色|员工,清空操作数据权限数据
+  if (isRefresh) {
+    dataPermission.value = { data: [] }
+    await nextTick(() => {
+      const checkedKeys = getCheckedKeys(menuTree.value)
+      prevCheckedKeys = checkedKeys
+      treeRef.value.setCheckedKeys(checkedKeys)
+    })
+  } else {
+    await nextTick(() => {
+      treeRef.value.setCurrentKey(dataPermission.value.id)
+      const currentNode = treeRef.value.getCurrentNode()
+      if (currentNode) {
+        dataPermission.value = currentNode
+      }
+    })
   }
 }
 const addPermission = async permissionIds => {

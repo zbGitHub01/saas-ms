@@ -81,11 +81,15 @@ const onSubmit = async () => {
     employeeId: props.employeeItem.id,
     deptId: form.deptId[form.deptId.length - 1]
   }
-  const { code } = await Apis.updateDeptEmployee(postData)
-  if (code === 200) {
+  loading.value = true
+  try {
+    await Apis.updateDeptEmployee(postData)
+    loading.value = false
     emit('change')
     ElMessage.success('修改成功')
     beforeClose()
+  } catch (err) {
+    loading.value = false
   }
 }
 </script>

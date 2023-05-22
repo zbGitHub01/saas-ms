@@ -32,7 +32,6 @@ export const useGlobalStore = defineStore('globalStore', {
       }
       const loginApiFn = params.grant_type === 'password' ? userLogin : mobileLogin
       const data = await loginApiFn(params, { headers }).catch(() => {})
-      console.log(data, '----data')
       if (data && data.access_token) {
         this.token = `Bearer ${data.access_token}`
         this.refreshToken = data.refresh_token
@@ -42,14 +41,12 @@ export const useGlobalStore = defineStore('globalStore', {
       }
     },
     async fetchUserInfo() {
-      const { code, data } = await Apis.findUserInfo()
-      if (code === 200) {
-        this.userInfo = data
-      }
+      const { data } = await Apis.findUserInfo()
+      this.userInfo = data
     },
     async fetchTenantList() {
-      const { code, data } = await Apis.findTenantList()
-      if (code === 200 && data.length) {
+      const { data } = await Apis.findTenantList()
+      if (data.length) {
         this.tenantList = data
         return data
       } else {
@@ -57,21 +54,21 @@ export const useGlobalStore = defineStore('globalStore', {
       }
     },
     async chooseTenant(tenantId) {
-      const { code, data } = await chooseTenant(tenantId)
-      if (code === 200) {
+      try {
+        const { data } = await chooseTenant(tenantId)
         this.tenantId = data.tenantId
         this.tenantInfo = data
         return data
-      } else {
+      } catch (err) {
         return null
       }
     },
     async acceptInvite(userCode) {
-      const { code, data } = await Apis.acceptInvite({ code: userCode })
-      if (code === 200) {
+      try {
+        const { data } = await Apis.acceptInvite({ code: userCode })
         this.tenantId = data.tenantId
         return data
-      } else {
+      } catch (err) {
         return null
       }
     },
@@ -79,8 +76,6 @@ export const useGlobalStore = defineStore('globalStore', {
       if (isLogout) {
         await Apis.logout()
       }
-      console.log(this, '----this')
-      console.log(222)
       localStorage.clear()
       this.token = ''
       this.refreshToken = ''
