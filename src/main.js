@@ -14,6 +14,7 @@ import Components from '@/components'
 import directives from '@/directives/index'
 import 'jsoneditor'
 import deepCopy from '@/utils/deepCopy.js'
+import '../mock/index.js'
 
 const app = createApp(App)
 app.use(router)

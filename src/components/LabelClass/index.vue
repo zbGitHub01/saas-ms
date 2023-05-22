@@ -99,7 +99,7 @@ onMounted(() => {})
         width: 35px;
         height: 35px;
       }
-      .icon{
+      .icon {
         font-size: 50px;
       }
     }
