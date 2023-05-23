@@ -74,7 +74,7 @@ export const useGlobalStore = defineStore('globalStore', {
     },
     async logout(isLogout = false) {
       if (isLogout) {
-        await Apis.logout()
+        await Apis.logout().catch(() => {})
       }
       localStorage.clear()
       this.token = ''

@@ -84,10 +84,8 @@ const beforeClose = () => {
   emit('update:dialogVisible', false)
 }
 const fetchEmployeeList = async () => {
-  const { code, data } = await Apis.findNonPositionEmployee()
-  if (code === 200) {
-    employeeList.value = data
-  }
+  const { data } = await Apis.findNonPositionEmployee()
+  employeeList.value = data
 }
 const onSubmit = async () => {
   const isValid = await formRef.value.validate().catch(() => {})
