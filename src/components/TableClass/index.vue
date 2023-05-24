@@ -64,11 +64,10 @@ export default {
       default: 0
     }
   },
-  emits: ['handleOperation', 'query', 'changeStatus', 'operaClick', 'editSave'],
+  emits: ['handleOperation', 'query', 'changeStatus', 'operaClick', 'editSave', 'popoverTable', 'selectChange'],
   setup(props, { emit }) {
     const state = reactive({
       currentPage: 1,
-      currSelectedList: [],
       currEditObj: {},
       pageSize: 10,
       pageSizes: [10, 50, 100, 200]
@@ -93,16 +92,17 @@ export default {
     }
     const handleSizeChange = val => {
       state.pageSize = val
-      state.currentPage = 1
       emit('query', state.pageSize, state.currentPage)
     }
     const handleCurrentChange = val => {
       state.currentPage = val
       emit('query', state.pageSize, state.currentPage)
     }
+
+    const multipleSelection = ref([])
     const handleSelectionChange = val => {
-      state.currSelectedList = val
       multipleSelection.value = val
+      emit('selectChange', val)
     }
 
     //通过父组件传递的合并字段参数进行计算行合并规则
@@ -144,6 +144,11 @@ export default {
       }
     }
 
+    //PopoverTable弹出窗展示
+    const handleViewPopoverTable = row => {
+      emit('popoverTable', row)
+    }
+
     //通知父组件编辑修改的内容，清空当前修改编辑的单元格焦点对象
     const handleEditSave = row => {
       emit('editSave', row)
@@ -168,7 +173,7 @@ export default {
     }
 
     const { proxy } = getCurrentInstance()
-    const multipleSelection = ref([])
+
     const toggleSelection = rows => {
       const ultipleTabInstance = proxy.$refs.multipleTableRef
       if (rows) {
@@ -184,6 +189,7 @@ export default {
       state,
       spanRow,
       columnListData,
+      multipleSelection,
       objectSpanMethod,
       operaClick,
       changeStatus,
@@ -193,7 +199,8 @@ export default {
       toggleSelection,
       handleEditSave,
       handleEditUpdate,
-      handleSelectionChange
+      handleSelectionChange,
+      handleViewPopoverTable
     }
   }
 }
@@ -203,7 +210,7 @@ export default {
   <div>
     <!-- 是否开启多选 -->
     <div v-if="isSelection" class="select-style">
-      <span>选中项：{{ state.currSelectedList.length }}</span>
+      <span>选中项：{{ multipleSelection.length }}</span>
       &nbsp;
       <el-button class="cancel" type="primary" link @click="toggleSelection()">取消</el-button>
     </div>
@@ -247,7 +254,7 @@ export default {
             align="center"
           >
             <template #default="{ row }">
-              <!--Popover弹出框-->
+              <!--Popover提示弹出框-->
               <template v-if="childItem.isPopover">
                 <el-popover :visible="false">
                   <template #reference>
@@ -295,7 +302,7 @@ export default {
 
         <!--如果不是多级表头-->
         <template v-if="!item.childColumn" #default="{ row }">
-          <!--Popover弹出框-->
+          <!--Popover提示弹出框-->
           <template v-if="item.isPopover">
             <el-popover :visible="false">
               <template #reference>
@@ -316,6 +323,16 @@ export default {
               </template>
               <template #reference>
                 <el-tag>+{{ row[item.prop].length - 1 }}</el-tag>
+              </template>
+            </el-popover>
+          </template>
+          <!--Popover表格弹出框-->
+          <template v-if="item.isPopoverTable">
+            <div>{{ row[item.prop] }}</div>
+            &nbsp;
+            <el-popover :visible="false">
+              <template #reference>
+                <el-icon style="color: #3178ff; cursor: pointer"><Expand @click="handleViewPopoverTable(row)" /></el-icon>
               </template>
             </el-popover>
           </template>

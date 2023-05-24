@@ -80,6 +80,8 @@ onMounted(() => {})
 .style-label {
   border-radius: 5px;
   .item_warp {
+    display: flex;
+    display: -webkit-flex;
     width: 19%;
     height: 94px;
     background: #ffffff;
@@ -93,6 +95,7 @@ onMounted(() => {})
       display: inline-block;
       line-height: 35px;
       width: 15.6%;
+      min-width: 40px;
       height: 50px;
       margin-right: 20px;
       img {
@@ -116,6 +119,7 @@ onMounted(() => {})
         font-weight: 400;
         color: #333333;
         line-height: 25px;
+        word-break: keep-all;
       }
       .items1 {
         font-size: 18px;

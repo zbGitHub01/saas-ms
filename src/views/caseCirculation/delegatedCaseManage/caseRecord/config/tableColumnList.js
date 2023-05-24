@@ -1,67 +1,60 @@
 export default [
   {
-    label: '账单ID',
+    label: '委案批次',
+    prop: 'caseNum'
+  },
+  {
+    label: '委案分库',
+    prop: 'caseStore'
+  },
+  {
+    label: '处置机构',
+    prop: 'operaCompany'
+  },
+  {
+    label: '委案类型',
+    prop: 'caseType'
+  },
+  {
+    label: '委案到期日',
     prop: 'orderNo'
   },
   {
-    label: '产品',
+    label: '委案备注',
     prop: 'orderNo'
   },
   {
-    label: '姓名',
+    label: '实际委案量',
+    prop: 'caseNumber',
+    isPopoverTable: true,
+    width: 200
+  },
+  {
+    label: '委案户数（实际/目标）',
     prop: 'orderNo'
   },
   {
-    label: '证件号',
+    label: '委案金额（实际/目标）',
     prop: 'orderNo'
   },
   {
-    label: '手机号',
+    label: '开始时间',
     prop: 'orderNo'
   },
   {
-    label: '导入时间',
+    label: '完成时间',
     prop: 'orderNo'
   },
   {
-    label: '还款案件数',
+    label: '操作人',
     prop: 'orderNo'
   },
   {
-    label: '还款金额',
+    label: '操作时间',
     prop: 'orderNo'
   },
   {
-    label: '还款导入方式',
+    label: '委案状态',
     prop: 'orderNo'
-  },
-  {
-    label: '交易号/回单号',
-    prop: 'orderNo'
-  },
-  {
-    label: '结算分库',
-    prop: 'orderNo'
-  },
-  {
-    label: '结算机构',
-    prop: 'orderNo'
-  },
-  {
-    label: '结算CPE',
-    prop: 'orderNo'
-  },
-  {
-    label: '还款时间',
-    prop: 'orderNo'
-  },
-  {
-    label: '还款确认人',
-    prop: 'orderNo'
-  },
-  {
-    label: '结算日期',
-    prop: 'orderNo',
-    fixed: 'right'
   }
 ]
