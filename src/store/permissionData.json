@@ -8,6 +8,177 @@
     "children": null
   },
   {
+    "name": "案件管理",
+    "code": "CASE_MANAGE",
+    "icon": "Coin",
+    "path": "/caseManage",
+    "type": 1,
+    "children": [
+      {
+        "name": "数据导入",
+        "code": "CASE_IMPORT",
+        "icon": "",
+        "path": "/caseManage/caseImport",
+        "type": 1
+      },
+      {
+        "name": "全部案件",
+        "code": "CASE_ALL",
+        "icon": "",
+        "path": "/caseManage/allCases",
+        "type": 1
+      },
+      {
+        "name": "资产委托",
+        "code": "ASSET_ENTRUST",
+        "icon": "",
+        "path": "/caseManage/assetEntrust",
+        "type": 1
+      },
+      {
+        "name": "资产基础配置",
+        "code": "ASSET_DISPOSE",
+        "icon": "",
+        "path": "/caseManage/assetDispose",
+        "type": 1
+      }
+    ]
+  },
+  {
+    "name": "外部案件管理",
+    "code": "EXTERNAL_CASE",
+    "icon": "TakeawayBox",
+    "path": "/externalCase",
+    "type": 1,
+    "children": [
+      {
+        "name": "外部案件导入",
+        "code": "EXTERNAL_CASE_IMPORT",
+        "icon": "",
+        "path": "/externalCase/externalCaseImport",
+        "type": 1
+      },
+      {
+        "name": "外部案件管理",
+        "code": "EXTERNAL_CASE_MANAGE",
+        "icon": "",
+        "path": "/externalCase/externalCaseManage",
+        "type": 1
+      },
+      {
+        "name": "外部案件委派",
+        "code": "EXTERNAL_CASE_ASSIGNMENT",
+        "icon": "",
+        "path": "/externalCase/externalCaseAssignment",
+        "type": 1
+      },
+      {
+        "name": "外部案件收回",
+        "code": "EXTERNAL_CASE_RECOVERY",
+        "icon": "",
+        "path": "/externalCase/externalCaseRecovery",
+        "type": 1
+      },
+      {
+        "name": "外部资产基础配置",
+        "code": "EXTERNAL_ASSET_DISPOSE",
+        "icon": "",
+        "path": "/externalCase/externalAssetDispose",
+        "type": 1
+      },
+      {
+        "name": "回款登记",
+        "code": "COLLECTION_REGISTER",
+        "icon": "",
+        "path": "/externalCase/collectionRegister",
+        "type": 1
+      },
+      {
+        "name": "回款登记明细",
+        "code": "COLLECTION_REGISTER_DETAIL",
+        "icon": "",
+        "path": "/externalCase/collectionRegisterDetail",
+        "type": 1
+      }
+    ]
+  },
+  {
+    "name": "案件流转",
+    "code": "CASE_CIRCULATION",
+    "icon": "Guide",
+    "path": "/caseCirculation",
+    "type": 1,
+    "children": [
+      {
+        "name": "分库管理",
+        "code": "BANK_MANAGE",
+        "icon": "",
+        "path": "/caseCirculation/bankManage",
+        "type": 1,
+        "children": [
+          {
+            "name": "案件分库",
+            "code": "CASE_BANK",
+            "icon": "",
+            "path": "/caseCirculation/bankManage/caseBank",
+            "type": 1
+          },
+          {
+            "name": "分库记录",
+            "code": "BANK_RECORD",
+            "icon": "",
+            "path": "/caseCirculation/bankManage/bankRecord",
+            "type": 1
+          },
+          {
+            "name": "分库收回记录",
+            "code": "BANK_RECOVER_RECORD",
+            "icon": "",
+            "path": "/caseCirculation/bankManage/bankRecoverRecord",
+            "type": 1
+          },
+          {
+            "name": "分库名称设置",
+            "code": "BANK_SET_NAME",
+            "icon": "",
+            "path": "/caseCirculation/bankManage/bankSetName",
+            "type": 1
+          }
+        ]
+      },
+      {
+        "name": "委案管理",
+        "code": "DELEGATED_CASE_MANAGE",
+        "icon": "",
+        "path": "/caseCirculation/delegatedCaseManage",
+        "type": 1,
+        "children": [
+          {
+            "name": "实时委案",
+            "code": "CASE_ASSIGNMENT",
+            "icon": "",
+            "path": "/caseCirculation/delegatedCaseManage/caseAssignment",
+            "type": 1
+          },
+          {
+            "name": "实时委案收回",
+            "code": "CASE_ASSIGNMENT_RECOVER",
+            "icon": "",
+            "path": "/caseCirculation/delegatedCaseManage/caseRecovery",
+            "type": 1
+          },
+          {
+            "name": "委案类型配置",
+            "code": "CASE_TYPE_CONFIGURATION",
+            "icon": "",
+            "path": "/caseCirculation/delegatedCaseManage/caseConfiguration",
+            "type": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "合作机构管理",
     "code": "COOPER_ORGAN_MANAGE",
     "icon": "copper-organ",

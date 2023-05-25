@@ -13,6 +13,8 @@ import 'virtual:svg-icons-register'
 import Components from '@/components'
 import directives from '@/directives/index'
 import 'jsoneditor'
+import deepCopy from '@/utils/deepCopy.js'
+import '../mock/index.js'
 
 const app = createApp(App)
 app.use(router)
@@ -20,6 +22,7 @@ app.use(pinia)
 app.use(ElementPlus, { locale: zhCn })
 app.use(Components)
 app.use(directives)
+app.config.globalProperties.$deepCopy = deepCopy
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
