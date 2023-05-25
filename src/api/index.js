@@ -62,6 +62,7 @@ class RequestHttp {
             globalStore.logout()
           }
         }
+        console.log(error, '-----', window.navigator.onLine)
         if (!window.navigator.onLine) {
           return router.replace({ path: '/500' })
         }
