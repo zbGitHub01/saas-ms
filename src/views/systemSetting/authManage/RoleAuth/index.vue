@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import PermissionSetting from '../components/PermissionSetting.vue'
 import Apis from '@/api/modules/systemSetting'
@@ -52,7 +52,9 @@ fetchDeptTree()
 const currRoleNode = ref({})
 const nodeClick = node => {
   currRoleNode.value = node
-  permissionRef.value.fetchPermission(true)
+  nextTick(() => {
+    permissionRef.value.fetchPermission(true)
+  })
 }
 const filterNode = (value, data) => {
   return data.name.includes(value)
