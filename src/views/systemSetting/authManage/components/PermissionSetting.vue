@@ -124,6 +124,7 @@ const fetchPermission = async (isRefresh = false) => {
     })
   } else {
     await nextTick(() => {
+      console.log(dataPermission.value, '-----dataPermission.value.id')
       treeRef.value.setCurrentKey(dataPermission.value.id)
       const currentNode = treeRef.value.getCurrentNode()
       if (currentNode) {
