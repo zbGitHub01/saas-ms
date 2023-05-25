@@ -2,7 +2,7 @@
   <el-dialog
     v-model="dialogVisible"
     title="案件分库"
-    width="800px"
+    width="700px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
@@ -31,7 +31,7 @@
           </div>
         </div>
       </div> -->
-      <LabelClass :labelData="props.distInfo" :isSpaceAround="true" :isBkgColor="false" />
+      <LabelClass :labelData="props.distInfo" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
       <el-divider></el-divider>
       <el-form :model="form" ref="ruleFormRef">
         <el-form-item label="操作维度" prop="isWithProductPublicDebt">

@@ -150,6 +150,12 @@ const caseRouter = [
             meta: { title: '实时委案收回', icon: '' }
           },
           {
+            path: '/caseCirculation/delegatedCaseManage/caseAheadRecovery',
+            name: 'caseAheadRecovery',
+            component: () => import('@/views/caseCirculation/delegatedCaseManage/caseAheadRecovery/index.vue'),
+            meta: { title: '委案预收回', icon: '' }
+          },
+          {
             path: '/caseCirculation/delegatedCaseManage/caseConfiguration',
             name: 'caseConfiguration',
             component: () => import('@/views/caseCirculation/delegatedCaseManage/caseConfiguration/index.vue'),

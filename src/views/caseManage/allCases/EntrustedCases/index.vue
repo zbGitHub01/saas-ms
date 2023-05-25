@@ -44,7 +44,11 @@
     <div class="spacing"></div>
     <div class="mt20">
       <el-table :data="state.tableData" border>
-        <el-table-column label="案件ID" prop="caseId" align="center" min-width="150"></el-table-column>
+        <el-table-column label="案件ID" prop="caseId" align="center" min-width="150">
+          <template #default="scope">
+            <status :row="scope.row" pageType="disposalCasemessage" />
+          </template>
+        </el-table-column>
         <el-table-column label="产品" prop="productName" align="center" min-width="150"></el-table-column>
         <el-table-column label="姓名" prop="name" align="center" min-width="150"></el-table-column>
         <el-table-column label="证件号" prop="caseNo" align="center" min-width="150"></el-table-column>
@@ -82,7 +86,7 @@ const query = reactive({
 const state = reactive({
   tableData: [] as any[],
   total: 0,
-  labelData: [] as any,
+  labelData: [] as any
 })
 const selectData = reactive({
   productList: [] as any[], //产品列表
