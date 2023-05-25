@@ -7,7 +7,6 @@
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
   >
-    <!-- <div style="font-size: 15px" class="mb10">请选择导出内容</div> -->{{ state.exportField }}
     <div v-if="typeSub === 0">
       <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange(0)">全选</el-checkbox>
       <el-checkbox-group v-model="state.exportField" @change="checked(0)">

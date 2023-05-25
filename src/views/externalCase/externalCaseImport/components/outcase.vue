@@ -87,7 +87,15 @@
       </el-form>
       <div v-else>
         <div class="mr10 ml20" style="float: left">导入文件:</div>
-        <el-upload
+        <UploadFile
+          ref="uploadFileRef"
+          v-model:file-list="fileList"
+          accept-type="excel"
+          :auto-upload="false"
+          @check-validate="cancal"
+          :params="info.Ddata"
+        />
+        <!-- <el-upload
           v-model="form.file"
           ref="upload"
           action="/caseCenter/caseImport/import"
@@ -100,7 +108,7 @@
           :on-success="successUpload"
         >
           <el-button size="small" type="primary">选择文件</el-button>
-        </el-upload>
+        </el-upload> -->
       </div>
       <template #footer>
         <span class="dialog-footer">
@@ -117,6 +125,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useGlobalStore } from '@/store'
+import { UploadFile } from '@/components/Upload'
 const globalState = useGlobalStore()
 const tokens = reactive({
   Authorization: globalState.token
@@ -131,6 +140,7 @@ const props = defineProps<{
   }
 }>()
 const upload = ref()
+const uploadFileRef = ref()
 const inputdata = reactive([
   {
     title: '新案入库-特殊库',

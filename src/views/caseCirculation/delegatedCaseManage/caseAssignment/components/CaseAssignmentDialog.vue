@@ -2,13 +2,14 @@
   <el-dialog
     v-model="dialogVisible"
     title="实时委案"
-    width="50%"
+    width="800px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
   >
     <span>
-      <div class="flx-justify-between allTab">
+      <LabelClass :labelData="props.timeData" :isSpaceAround="true" :isBkgColor="false"/>
+      <!-- <div class="flx-justify-between allTab">
         <div class="flx-justify-between tab">
           <el-icon class="icon"><Memo /></el-icon>
           <div>
@@ -30,7 +31,7 @@
             <div class="money">{{ props.timeData.totalAmount }}</div>
           </div>
         </div>
-      </div>
+      </div> -->
       <el-divider></el-divider>
       <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="130px" :rules="rules" v-if="!last">
         <el-form-item label="案件分库：" prop="bank">
@@ -77,9 +78,9 @@
             <el-radio :label="0">不隐藏</el-radio>
           </el-radio-group>
         </el-form-item>
-        <!-- <el-form-item label="委案到期日：" prop="recoverDateStr">
-          <el-date-picker v-model="form.recoverDateStr"  value-format='yyyy-MM-dd' type="date" placeholder="选择日期"></el-date-picker>
-        </el-form-item> -->
+        <el-form-item label="委案到期日：" prop="recoverDateStr">
+          <el-date-picker v-model="form.recoverDateStr"  value-format='YYYY-MM-DD' type="date" placeholder="选择日期"></el-date-picker>
+        </el-form-item>
         <el-form-item label=" 是否自动收回：" prop="isAutoRecover">
           <el-radio-group v-model="form.isAutoRecover">
             <el-radio :label="0">不自动收回</el-radio>
@@ -157,13 +158,14 @@
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import moment from 'moment'
 const form: any = reactive({
   entrustStrategy: 1,
   batchId: null,
   entrustType: null,
   duringMonth: null,
   isAutoRecover: 0,
-  // recoverDateStr: Proxy.dayjs(date).endOf('month').format('YYYY-MM-DD'),
+  recoverDateStr: moment(moment().format('YYYY-MM-DD')).endOf('month').format('YYYY-MM-DD'), //当月最后一天
   isHideHisFollowRecord: 1,
   orgId: null,
   bank: [], //分库
@@ -201,7 +203,7 @@ const rules = reactive<FormRules>({
   orgId: [{ required: true, message: '请选择委案机构', trigger: 'change' }],
   entrustType: [{ required: true, message: '请选择委案类型', trigger: 'change' }],
   isHideHisFollowRecord: [{ required: true, message: '请选择历史处置记录', trigger: 'change' }],
-  // recoverDateStr: [{ required: true, message: '请选择委案到期日', trigger: 'change' }],
+  recoverDateStr: [{ required: true, message: '请选择委案到期日', trigger: 'change' }],
   duringMonth: [{ required: true, message: '请选择委派间隔期数', trigger: 'change' }],
   isAutoRecover: [{ required: true, message: '请选择是否自动收回', trigger: 'change' }]
 })
@@ -290,27 +292,27 @@ const radioChange = val => {
 </script>
   
 <style lang="scss" scoped>
-.allTab {
-  height: 40px;
-  margin-bottom: 40px;
-  .tab {
-    width: 33%;
-    height: 40px;
-    border-radius: 2px;
-    padding: 5px;
-    justify-content: flex-start;
-    .icon {
-      font-size: 35px;
-      margin-right: 4px;
-    }
-    .title {
-      color: #cccccc;
-    }
-    .money {
-      font-weight: 500;
-    }
-  }
-}
+// .allTab {
+//   height: 40px;
+//   margin-bottom: 40px;
+//   .tab {
+//     width: 33%;
+//     height: 40px;
+//     border-radius: 2px;
+//     padding: 5px;
+//     justify-content: flex-start;
+//     .icon {
+//       font-size: 35px;
+//       margin-right: 4px;
+//     }
+//     .title {
+//       color: #cccccc;
+//     }
+//     .money {
+//       font-weight: 500;
+//     }
+//   }
+// }
 .item-title {
   font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
   font-weight: 700;

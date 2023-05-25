@@ -46,7 +46,12 @@
           />
         </el-form-item>
         <el-form-item label="委托协议：" prop="xieyi">
-          <el-upload
+          <UploadFile
+            ref="uploadFileRef"
+            v-model:file-list="form.xieyi"
+            accept-type="excel"
+          />
+          <!-- <el-upload
             ref="upload"
             action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
             :limit="1"
@@ -57,7 +62,7 @@
             <template #trigger>
               <el-button type="primary">上传</el-button>
             </template>
-          </el-upload>
+          </el-upload> -->
         </el-form-item>
       </el-form>
     </span>
@@ -75,8 +80,10 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 import { reactive, ref } from 'vue'
+import { UploadFile } from '@/components/Upload'
 // 上传
 const upload = ref<UploadInstance>()
+const uploadFileRef = ref()
 // 上传超过一个，覆盖原文件
 const handleExceed: UploadProps['onExceed'] = files => {
   upload.value!.clearFiles()
@@ -101,7 +108,7 @@ const form: any = reactive({
   weituofangId: null,
   shoutuofangId: null,
   deadline: '',
-  xieyi: '' //协议
+  xieyi: [] //协议
 })
 const time = ref<String>('')
 // 接收props数据
@@ -155,7 +162,7 @@ const changeProduct = a => {
 }
 // 取消
 const cancelSubmit = () => {
-  upload.value!.clearFiles()
+  upload.value?.clearFiles()
   ruleFormRef.value?.resetFields()
   time.value = ''
   dialogVisible.value = false

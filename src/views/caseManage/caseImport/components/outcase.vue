@@ -87,7 +87,15 @@
       </el-form>
       <div v-else>
         <div class="mr10 ml20" style="float: left">导入文件:</div>
-        <el-upload
+        <UploadFile
+          ref="uploadFileRef"
+          v-model:file-list="fileList"
+          accept-type="excel"
+          :auto-upload="false"
+          @check-validate="cancal"
+          :params="info.Ddata"
+        />
+        <!-- <el-upload
           v-model="form.file"
           ref="upload"
           action="/caseCenter/caseImport/import"
@@ -100,7 +108,7 @@
           :on-success="successUpload"
         >
           <el-button size="small" type="primary">选择文件</el-button>
-        </el-upload>
+        </el-upload> -->
       </div>
       <template #footer>
         <span class="dialog-footer">
@@ -117,6 +125,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useGlobalStore } from '@/store'
+import { UploadFile } from '@/components/Upload'
 const globalState = useGlobalStore()
 const tokens = reactive({
   Authorization: globalState.token
@@ -131,6 +140,7 @@ const props = defineProps<{
   }
 }>()
 const upload = ref()
+const uploadFileRef = ref()
 const inputdata = reactive([
   {
     title: '新案入库',
@@ -247,6 +257,7 @@ const info = reactive({
     importFileType: null
   }
 })
+const fileList = ref([])
 const Fdata = reactive({
   productId: null,
   batchId: null,
@@ -299,12 +310,12 @@ const inputClicks = item => {
 
 // 保存提交数据
 const handlerOk = (formEl: FormInstance | undefined) => {
-  // 文件手动上传
-  // upload.value.submit()
   console.log(formEl)
   if (!formEl) {
     console.log(form, info.Ddata)
-    upload.value.submit()
+    // 文件手动上传
+    // upload.value.submit()
+    uploadFileRef.value.uploadSubmit()
   } else {
     formEl.validate(async valid => {
       if (valid) {
@@ -319,13 +330,15 @@ const handlerOk = (formEl: FormInstance | undefined) => {
 
 //文件成功
 const successUpload = res => {
-  ElMessage.success(res.msg)
+  // ElMessage.success(res.msg)
   cancal()
 }
 // 取消
 const cancal = () => {
+  console.log(fileList.value)
   inputShow.value = false
   ruleFormRef.value?.resetFields()
+  fileList.value = []
   Object.assign(form, originFormData)
 }
 </script>

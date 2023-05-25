@@ -2,13 +2,13 @@
   <el-dialog
     v-model="dialogVisible"
     title="实时收回"
-    width="550px"
+    width="800px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
   >
     <span>
-      <div class="flx-justify-between allTab">
+      <!-- <div class="flx-justify-between allTab">
         <div class="flx-justify-between tab">
           <el-icon class="icon"><Memo /></el-icon>
           <div>
@@ -30,7 +30,8 @@
             <div class="money">{{ props.caseInfo.totalAmount }}</div>
           </div>
         </div>
-      </div>
+      </div> -->
+      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false"/>
       <el-form ref="ruleFormRef" class="backform" label-position="top" label-width="90px">
         <el-form-item label="操作维度">
           <el-radio-group v-model="isWithProductPublicDebt" @change="radioChange">
@@ -156,27 +157,27 @@ const radioChange = val => {
 </script>
   
 <style lang="scss" scoped>
-.allTab {
-  height: 40px;
-  margin-bottom: 40px;
-  .tab {
-    width: 33%;
-    height: 40px;
-    border-radius: 2px;
-    padding: 5px;
-    justify-content: flex-start;
-    .icon {
-      font-size: 35px;
-      margin-right: 4px;
-    }
-    .title {
-      color: #cccccc;
-    }
-    .money {
-      font-weight: 500;
-    }
-  }
-}
+// .allTab {
+//   height: 40px;
+//   margin-bottom: 40px;
+//   .tab {
+//     width: 33%;
+//     height: 40px;
+//     border-radius: 2px;
+//     padding: 5px;
+//     justify-content: flex-start;
+//     .icon {
+//       font-size: 35px;
+//       margin-right: 4px;
+//     }
+//     .title {
+//       color: #cccccc;
+//     }
+//     .money {
+//       font-weight: 500;
+//     }
+//   }
+// }
 .warning_warp {
   margin: -12px 0 14px 0;
   padding: 10px;

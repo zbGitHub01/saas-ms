@@ -21,7 +21,12 @@
           <el-switch v-model="form.isDeleteAllRelationTag"></el-switch>
         </el-form-item>
         <el-form-item v-if="typeSub === 3">
-          <el-upload
+          <UploadFile
+            ref="uploadFileRef"
+            accept-type="excel"
+            :auto-upload="false"
+          />
+          <!-- <el-upload
           ref="upload"
           action="/caseCenter/case/orgTagTemp/import"
           :limit="1"
@@ -31,7 +36,7 @@
         >
           <span>上传文件：</span>
           <el-button type="primary" size="small">点击上传</el-button>
-        </el-upload>
+        </el-upload> -->
         </el-form-item>
       </el-form>
     </span>
@@ -48,6 +53,7 @@
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import { UploadFile } from '@/components/Upload'
 const form: any = reactive({
   tempTagName: null, //临时标签
   isDeleteAllRelationTag: false //是否操作所有案件中删除
@@ -56,6 +62,7 @@ const originFormData = JSON.parse(JSON.stringify(form))
 const typeSub = ref(1)
 const title = ref('')
 const upload = ref()
+const uploadFileRef = ref()
 const selectData = reactive({
   tagList: [] as any[] //临时标签列表
 })
@@ -95,7 +102,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
         emits('submitForm', form.tempTagName, 2, form.isDeleteAllRelationTag)
       }else if(typeSub.value === 3){
         // 只要上传文件即可
-        upload.value.submit()
+        // upload.value.submit()
+        uploadFileRef.value.uploadSubmit()
         emits('getTableData')
       }
       cancelSubmit()

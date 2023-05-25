@@ -2,13 +2,13 @@
   <el-dialog
     v-model="dialogVisible"
     title="案件分库"
-    width="500px"
+    width="800px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
   >
     <span>
-      <div class="flx-justify-between allTab">
+      <!-- <div class="flx-justify-between allTab">
         <div class="flx-justify-between tab">
           <el-icon class="icon"><Memo /></el-icon>
           <div>
@@ -30,7 +30,8 @@
             <div class="money">{{ props.distInfo.totalAmount }}</div>
           </div>
         </div>
-      </div>
+      </div> -->
+      <LabelClass :labelData="props.distInfo" :isSpaceAround="true" :isBkgColor="false" />
       <el-divider></el-divider>
       <el-form :model="form" ref="ruleFormRef">
         <el-form-item label="操作维度" prop="isWithProductPublicDebt">
@@ -104,27 +105,27 @@ const radioChange = val => {
 </script>
   
 <style lang="scss" scoped>
-.allTab {
-  height: 40px;
-  margin-bottom: 40px;
-  .tab {
-    width: 33%;
-    height: 40px;
-    border-radius: 2px;
-    padding: 5px;
-    justify-content: flex-start;
-    .icon {
-      font-size: 35px;
-      margin-right: 4px;
-      // color: blue;
-    }
-    .title {
-      color: #cccccc;
-    }
-    .money {
-      font-weight: 500;
-    }
-  }
-}
+// .allTab {
+//   height: 40px;
+//   margin-bottom: 40px;
+//   .tab {
+//     width: 33%;
+//     height: 40px;
+//     border-radius: 2px;
+//     padding: 5px;
+//     justify-content: flex-start;
+//     .icon {
+//       font-size: 35px;
+//       margin-right: 4px;
+//       // color: blue;
+//     }
+//     .title {
+//       color: #cccccc;
+//     }
+//     .money {
+//       font-weight: 500;
+//     }
+//   }
+// }
 </style>
   

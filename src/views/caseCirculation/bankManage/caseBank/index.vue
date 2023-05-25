@@ -12,7 +12,9 @@
         </el-form>
       </template>
     </FormWrap>
-    <LabelData :labelData="state.labelData" />
+    <!-- <LabelData :labelData="state.labelData" /> -->
+    <LabelClass :labelData="state.labelData" />
+    <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
@@ -456,7 +458,58 @@ const getTableData = async () => {
   ]
   query.page = 1
   state.total = 12
-  state.labelData.money = 444
+  // 得到label数据
+  state.labelData = [
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '案件数量',
+      isHaveRmbSign: false,
+      value: null, //total
+      key: 'total'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '案人人数',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'caseUserCount'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '处置金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumHandleAmount'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '已还金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumRefundAmount'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '待还金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumResidueAmount'
+    }
+  ]
+  const labelData2 = {
+    caseUserCount: 239278,
+    sumHandleAmount: 4889285788.62,
+    sumRefundAmount: 184079143.85,
+    sumResidueAmount: 4711200212.03
+  }
+  state.labelData.forEach(item => {
+    item.value = labelData2[item.key]
+  })
 }
 // 获取分库数据
 const getTabList = () => {
@@ -584,6 +637,36 @@ const fetchCaseDistSelect = (type, isWithProductPublicDebt = true) => {
     taskId: 2313,
     totalAmount: 7266.75
   }
+  const label = [
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '选中案件数',
+      isHaveRmbSign: false,
+      value: null, //total
+      key: 'caseNum'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '选中案件人数',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'personNum'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '预计分库金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'totalAmount'
+    }
+  ]  
+  label.forEach(item => {
+    item.value = state.distInfo[item.key]
+  })
+  state.distInfo = label
 }
 // 切换分库
 const changTab = val => {
@@ -593,4 +676,12 @@ const changTab = val => {
 </script>
 
 <style lang="scss" scoped>
+.form-wrapper {
+  margin-bottom: 0;
+}
+.spacing {
+  height: 10px;
+  margin: 0 -20px 0;
+  background-color: var(--color-main-bg);
+}
 </style>

@@ -9,7 +9,9 @@
         </el-form>
       </template>
     </FormWrap>
-    <LabelData :labelData="state.labelData" />
+    <!-- <LabelData :labelData="state.labelData" /> -->
+    <LabelClass :labelData="state.labelData" />
+    <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
@@ -407,7 +409,58 @@ const getTableData = async () => {
   ]
   query.page = 1
   state.total = 12
-  state.labelData.money = 444
+  // 得到label数据
+  state.labelData = [
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '案件数量',
+      isHaveRmbSign: false,
+      value: null, //total
+      key: 'total'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '案人人数',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'caseUserCount'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '处置金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumHandleAmount'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '已还金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumRefundAmount'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '待还金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumResidueAmount'
+    }
+  ]
+  const labelData2 = {
+    caseUserCount: 239278,
+    sumHandleAmount: 4889285788.62,
+    sumRefundAmount: 184079143.85,
+    sumResidueAmount: 4711200212.03
+  }
+  state.labelData.forEach(item => {
+    item.value = labelData2[item.key]
+  })
 }
 const getSelecData = async () => {
   // 请求得到数据
@@ -515,7 +568,8 @@ const caseAssignment = () => {
 // 获取委案数据
 const fetchTimingSearch = (entrustStrategy = 1) => {
   // 处理入参
-  let params = operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
+  let params =
+    operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
   params.storeId = 2
   params.entrustStrategy = entrustStrategy
   console.log('委案数据参数：', params)
@@ -523,6 +577,32 @@ const fetchTimingSearch = (entrustStrategy = 1) => {
   // const { data } = await xx(params)
   // state.taskId = data.taskId
   // state.timeData = data
+  const label = [
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '选中案件数',
+      isHaveRmbSign: false,
+      value: null, //total
+      key: 'caseNum'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '选中案人数',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'personNum'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '预计分库金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'totalAmount'
+    }
+  ]
   if (entrustStrategy === 1) {
     state.taskId = 1
     state.timeData = {
@@ -548,8 +628,20 @@ const fetchTimingSearch = (entrustStrategy = 1) => {
       totalAmount: 4
     }
   }
+  label.forEach(item => {
+    item.value = state.timeData[item.key]
+  })
+  state.timeData = label
 }
 </script>
 
 <style lang="scss" scoped>
+.form-wrapper {
+  margin-bottom: 0;
+}
+.spacing {
+  height: 10px;
+  margin: 0 -20px 0;
+  background-color: var(--color-main-bg);
+}
 </style>

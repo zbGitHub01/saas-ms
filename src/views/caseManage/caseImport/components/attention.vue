@@ -23,7 +23,7 @@
 </script>
 
 <style lang="scss" scoped>
-.statement{
+.statement {
   box-sizing: border-box;
   padding: 20px;
   overflow-x: hidden;

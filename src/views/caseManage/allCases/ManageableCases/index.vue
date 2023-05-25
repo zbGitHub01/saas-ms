@@ -466,40 +466,40 @@ const getTableData = async () => {
   // 得到label数据
   state.labelData = [
     {
-      customizeIcon: '',
-      eplusIcon: 'Memo',
+      customizeIcon: 'caselist',
+      eplusIcon: '',
       labelTitle: '案件数量',
       isHaveRmbSign: false,
       value: null, //total
       key: 'total'
     },
     {
-      customizeIcon: '',
-      eplusIcon: 'UserFilled',
+      customizeIcon: 'caselist',
+      eplusIcon: '',
       labelTitle: '案人人数',
       isHaveRmbSign: false,
       value: null,
       key: 'caseUserCount'
     },
     {
-      customizeIcon: '',
-      eplusIcon: 'Money',
+      customizeIcon: 'caselist',
+      eplusIcon: '',
       labelTitle: '处置金额',
       isHaveRmbSign: false,
       value: null,
       key: 'sumHandleAmount'
     },
     {
-      customizeIcon: '',
-      eplusIcon: 'Money',
+      customizeIcon: 'caselist',
+      eplusIcon: '',
       labelTitle: '已还金额',
       isHaveRmbSign: false,
       value: null,
       key: 'sumRefundAmount'
     },
     {
-      customizeIcon: '',
-      eplusIcon: 'Money',
+      customizeIcon: 'caselist',
+      eplusIcon: '',
       labelTitle: '待还金额',
       isHaveRmbSign: false,
       value: null,

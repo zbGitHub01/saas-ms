@@ -9,7 +9,7 @@
           <el-form-item label="导入时间" prop="date">
             <el-date-picker
               v-model="form.date"
-              value-format="yyyy-MM-dd"
+              value-format="YYYY-MM-DD"
               type="date"
               placeholder="请选择导入时间"
             ></el-date-picker>

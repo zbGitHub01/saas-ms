@@ -9,7 +9,9 @@
         </el-form>
       </template>
     </FormWrap>
-    <LabelData :labelData="state.labelData" />
+    <!-- <LabelData :labelData="state.labelData" /> -->
+    <LabelClass :labelData="state.labelData" />
+    <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
@@ -479,7 +481,58 @@ const getTableData = async () => {
   ]
   query.page = 1
   state.total = 12
-  state.labelData.money = 444
+  // 得到label数据
+  state.labelData = [
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '案件数量',
+      isHaveRmbSign: false,
+      value: null, //total
+      key: 'total'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '案人人数',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'caseUserCount'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '处置金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumHandleAmount'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '已还金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumRefundAmount'
+    },
+    {
+      customizeIcon: 'caselist',
+      eplusIcon: '',
+      labelTitle: '待还金额',
+      isHaveRmbSign: false,
+      value: null,
+      key: 'sumResidueAmount'
+    }
+  ]
+  const labelData2 = {
+    caseUserCount: 239278,
+    sumHandleAmount: 4889285788.62,
+    sumRefundAmount: 184079143.85,
+    sumResidueAmount: 4711200212.03
+  }
+  state.labelData.forEach(item => {
+    item.value = labelData2[item.key]
+  })
 }
 // 重置
 const reset = () => {
@@ -785,4 +838,12 @@ const getParams = () => {
 </script>
 
 <style lang="scss" scoped>
+.form-wrapper {
+  margin-bottom: 0;
+}
+.spacing {
+  height: 10px;
+  margin: 0 -20px 0;
+  background-color: var(--color-main-bg);
+}
 </style>

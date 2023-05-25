@@ -35,7 +35,12 @@
             <el-input clearable v-model="form.caseStatusRemark" type="textarea" placeholder="请输入备注" />
           </el-form-item>
           <el-form-item label="凭证附件" v-if="form.reasonId !== 25" :prop="StopFormData.isMust ? 'pauseUrl' : ''">
-            <el-upload
+            <UploadFile
+            ref="uploadFileRef"
+            v-model:file-list="form.pauseUrl"
+          />
+          <div>请上传相关凭证或附件文档</div>
+            <!-- <el-upload
               v-model:file-list="form.pauseUrl"
               action=""
               multiple
@@ -47,7 +52,7 @@
               <template #tip>
                 <div>请上传相关凭证或附件文档</div>
               </template>
-            </el-upload>
+            </el-upload> -->
           </el-form-item>
         </div>
       </el-form>
@@ -65,6 +70,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { UploadProps, UploadUserFile } from 'element-plus'
+import { UploadFile } from '@/components/Upload'
 const form: any = reactive({
   caseStatus: null, //关闭原因
   caseStatusRemark: '', //原因备注
@@ -75,6 +81,7 @@ const form: any = reactive({
 const originFormData = JSON.parse(JSON.stringify(form))
 const typeSub = ref(1)
 const title = ref('')
+const uploadFileRef = ref()
 const selectData = reactive({
   StopReasonList: [] as any[] //临时标签列表
 })
@@ -160,8 +167,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
         const temPauseUrl = JSON.parse(JSON.stringify(form.pauseUrl))
         temPauseUrl.forEach(item => {
           const temItem = {
-            fileName: item.fileName,
-            fileUrl: item.fileUrl
+            fileName: item.name,
+            fileUrl: item.url
           }
           pauseUrl.push(temItem)
         })
