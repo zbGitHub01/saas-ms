@@ -123,6 +123,7 @@ const getSelecData = async () => {
 const onChangeFiel = (files, fileList) => {}
 //上传成功
 const onSuccess = res => {
+  // 不要code
   if (res.code === 200) {
     dialogVisible.value = false
   } else if (res.code === 500) {

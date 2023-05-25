@@ -2,7 +2,7 @@
   <el-dialog
     v-model="dialogVisible"
     title="实时收回"
-    width="800px"
+    width="700px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
@@ -31,7 +31,7 @@
           </div>
         </div>
       </div> -->
-      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false"/>
+      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'"/>
       <el-form ref="ruleFormRef" class="backform" label-position="top" label-width="90px">
         <el-form-item label="案件分库">
           <el-checkbox-group v-model="state.bankList">

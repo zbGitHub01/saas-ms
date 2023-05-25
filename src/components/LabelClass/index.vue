@@ -17,6 +17,11 @@ const props = defineProps({
   isBkgColor: {
     type: Boolean,
     default: true
+  },
+  // items占比
+  itemsPer: {
+    type: String,
+    default: '19%'
   }
 })
 
@@ -44,7 +49,7 @@ onMounted(() => {})
 <template>
   <div class="style-label">
     <div :class="itemStyle">
-      <div v-for="(item, index) in props.labelData" :key="index" class="item_warp">
+      <div v-for="(item, index) in props.labelData" :key="index" class="item_warp" :style="{ width: itemsPer}">
         <div class="img_warp">
           <el-icon v-if="!!item.eplusIcon" class="icon">
             <component :is="item.eplusIcon"></component>
@@ -82,7 +87,7 @@ onMounted(() => {})
   .item_warp {
     display: flex;
     display: -webkit-flex;
-    width: 19%;
+    // width: 19%;
     height: 94px;
     background: #ffffff;
     border-radius: 4px;

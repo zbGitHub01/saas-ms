@@ -2,7 +2,7 @@
   <el-dialog
     v-model="dialogVisible"
     title="实时收回"
-    width="800px"
+    width="700px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
@@ -31,11 +31,11 @@
           </div>
         </div>
       </div> -->
-      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false"/>
+      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
       <el-form ref="ruleFormRef" class="backform" label-position="top" label-width="90px">
         <el-form-item label="案件分库">
           <el-checkbox-group v-model="state.bankList">
-            <el-checkbox v-for="item in state.bankSelectList" :key="item.id" :label="item.id">{{  item.label }}</el-checkbox>
+            <el-checkbox v-for="item in state.bankSelectList" :key="item.id" :label="item.id">{{ item.label }}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="操作维度">
@@ -115,21 +115,21 @@ const props = defineProps<{
 const emits = defineEmits(['getTableData', 'fetchRecoverNowSelect', 'toggleSelection'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = async() => {
+const open = async () => {
   // await xx(params)
   state.bankSelectList = [
     {
-      id:1,
+      id: 1,
       label: '委外处置库'
     },
     {
-      id:2,
+      id: 2,
       label: '法诉处置库'
     },
     {
-      id:3,
+      id: 3,
       label: '大额处置库'
-    },
+    }
   ]
   dialogVisible.value = true
 }
@@ -151,7 +151,7 @@ const submitForm = () => {
         retainStagingPlan:
           retainStagingPlan.value === 0 ? retainStagingPlan.value : parseInt(retainStagingPlan.value) + parseInt(radio.value),
         recoverType: 2,
-        bankList: state.bankList,
+        bankList: state.bankList
       }
       // 请求
       // await xx(params)

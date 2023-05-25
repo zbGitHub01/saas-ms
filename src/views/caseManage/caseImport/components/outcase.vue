@@ -21,7 +21,7 @@
           <div v-for="(text, index) in item.tipsList" :key="index">{{ text }}</div>
         </div>
       </div>
-      <div class="btn">
+      <div>
         <el-button style="background: #4d7cfe; font-size: 14px" v-if="item.show" type="primary" @click="inputClicks(item)">
           {{ item.btn }}
         </el-button>
@@ -367,7 +367,7 @@ const cancal = () => {
       height: 55%;
       margin: 0 auto;
       display: flex;
-      align-items: center;
+      align-items: self-start;
       justify-content: center;
       flex-direction: column;
       .message-title {
@@ -387,11 +387,11 @@ const cancal = () => {
       }
     }
   }
-  .btn {
-    text-align: center;
-  }
 }
 :deep(.el-dialog__body .el-input) {
   width: 300px !important;
+}
+:deep(.el-button){
+  width: 130px;
 }
 </style>
