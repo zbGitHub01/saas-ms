@@ -58,14 +58,11 @@
         :row-class-name="tableRowClassName"
       >
         <el-table-column type="selection" fixed align="center" width="55"></el-table-column>
-        <el-table-column
-          label="案件ID"
-          prop="caseNo"
-          align="center"
-          min-width="150"
-          fixed="left"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left" :show-overflow-tooltip="true">
+          <template #default="scope">
+            <status :row="scope.row" pageType="disposalCasemessage" />
+          </template>
+        </el-table-column>
         <el-table-column
           label="产品"
           prop="productName"
@@ -773,18 +770,12 @@ const submitExport = async (paramsSub, type) => {
   // 发送处理案件接口
   console.log('导出：', params)
   if (type === 0) {
-    // caseexport(params).then(res => {
-    //   if (res.code === 200) {
-    //     res.data.isAsync === 0 ? exportDownload(res.data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
-    //   }
-    // })
+    // const { data } = await caseexport(params)
+    // data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
     console.log(type)
   } else if (type === 1) {
-    // followexport(params).then(res => {
-    //   if (res.code === 200) {
-    //     res.data.isAsync === 0 ? exportDownload(res.data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
-    //   }
-    // })
+    // const { data } = await followexport(params)
+    // data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
     console.log(type)
   }
   ElMessage.success('操作成功！')
@@ -856,7 +847,7 @@ const createBatch = async (typType, opeType) => {
       productList: ['“360”借条']
     }
     console.log('操作类型1', numInfo)
-    creatBatchDialog.value.open(typType, opeType, numInfo)  
+    creatBatchDialog.value.open(typType, opeType, numInfo)
   } else if (opeType === 2) {
     creatBatchDialog.value.open(typType, opeType, {})
   }

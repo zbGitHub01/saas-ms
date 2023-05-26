@@ -2,7 +2,7 @@
   <el-dialog
     v-model="dialogVisible"
     title="实时委案"
-    width="800px"
+    width="700px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
@@ -31,7 +31,7 @@
           </div>
         </div>
       </div> -->
-      <LabelClass :labelData="props.timeData" :isSpaceAround="true" :isBkgColor="false"/>
+      <LabelClass :labelData="props.timeData" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
       <el-divider style="margin-top: 40px"></el-divider>
       <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="130px" :rules="rules" v-if="!last">
         <el-form-item label="案件分库：" prop="bank">
@@ -79,7 +79,12 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="委案到期日：" prop="recoverDateStr">
-          <el-date-picker v-model="form.recoverDateStr"  value-format='YYYY-MM-DD' type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker
+            v-model="form.recoverDateStr"
+            value-format="YYYY-MM-DD"
+            type="date"
+            placeholder="选择日期"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label=" 是否自动收回：" prop="isAutoRecover">
           <el-radio-group v-model="form.isAutoRecover">
@@ -168,7 +173,7 @@ const form: any = reactive({
   recoverDateStr: moment(moment().format('YYYY-MM-DD')).endOf('month').format('YYYY-MM-DD'), //当月最后一天
   isHideHisFollowRecord: 1,
   orgId: null,
-  bank: [], //分库
+  bank: [] //分库
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const state = reactive({

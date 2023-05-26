@@ -34,14 +34,11 @@
         :row-key="getRowKeys"
       >
         <el-table-column type="selection" fixed align="center" width="55" :reserve-selection="true"></el-table-column>
-        <el-table-column
-          label="案件ID"
-          prop="caseNo"
-          align="center"
-          min-width="150"
-          fixed="left"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left" :show-overflow-tooltip="true">
+          <template #default="scope">
+            <status :row="scope.row" pageType="disposalCasemessage" />
+          </template>
+        </el-table-column>
         <el-table-column
           label="产品"
           prop="productName"
@@ -568,7 +565,8 @@ const caseAssignment = () => {
 // 获取委案数据
 const fetchTimingSearch = (entrustStrategy = 1) => {
   // 处理入参
-  let params = operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
+  let params =
+    operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
   params.storeId = 2
   params.entrustStrategy = entrustStrategy
   console.log('委案数据参数：', params)
@@ -626,7 +624,7 @@ const fetchTimingSearch = (entrustStrategy = 1) => {
       value: null,
       key: 'totalAmount'
     }
-  ]   
+  ]
   label.forEach(item => {
     item.value = state.timeData[item.key]
   })
