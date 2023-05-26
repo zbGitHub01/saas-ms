@@ -172,14 +172,13 @@ const caseRouter = [
       {
         path: '/caseCirculation/divisionManage',
         name: 'divisionManage',
-        // component: () => import('@/views/caseCirculation/divisionManage/index.vue'),
         meta: { title: '分案管理', icon: '' },
         children: [
           {
             path: '/caseCirculation/divisionManage/realtimeDivision',
             name: 'realtimeDivision',
             component: () => import('@/views/caseCirculation/divisionManage/realtimeDivision/index.vue'),
-            meta: { title: '实时委案', icon: '' }
+            meta: { title: '实时分案', icon: '' }
           }
         ]
       }

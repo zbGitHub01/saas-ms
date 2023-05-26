@@ -121,7 +121,7 @@ const gridData = [
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
-          <el-button type="primary" @click="handleExport">
+          <el-button type="primary" plain @click="handleExport">
             <svg-icon name="cloud-upload-fill" />
             &nbsp;导出委案记录
           </el-button>

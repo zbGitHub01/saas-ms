@@ -8,21 +8,21 @@ const props = defineProps({
       return {}
     }
   },
-  //是否需要flex居中，默认不居中
+  //是否需要flex居中，默认居中
   isSpaceAround: {
     type: Boolean,
-    default: false
+    default: true
   },
   //是否需要背景色，默认开启
   isBkgColor: {
     type: Boolean,
     default: true
-  },
-  // items占比
-  itemsPer: {
-    type: String,
-    default: '19%'
   }
+  // // items占比
+  // itemsPer: {
+  //   type: String,
+  //   default: '19%'
+  // }
 })
 
 const { isSpaceAround, isBkgColor } = toRefs(props)
@@ -43,13 +43,20 @@ const amountFormat = value => {
 }
 
 onBeforeMount(() => {})
-onMounted(() => {})
+
+//动态计算labelItem的宽度
+onMounted(() => {
+  const labelItemArr = document.getElementsByClassName('item_warp')
+  for (let i = 0; i <= labelItemArr.length - 1; i++) {
+    labelItemArr[i].style.width = `${100 / labelItemArr.length}%`
+  }
+})
 </script>
 
 <template>
   <div class="style-label">
     <div :class="itemStyle">
-      <div v-for="(item, index) in props.labelData" :key="index" class="item_warp" :style="{ width: itemsPer}">
+      <div v-for="(item, index) in props.labelData" :key="index" class="item_warp">
         <div class="img_warp">
           <el-icon v-if="!!item.eplusIcon" class="icon">
             <component :is="item.eplusIcon"></component>
@@ -76,7 +83,7 @@ onMounted(() => {})
   // justify-content: space-around;
 }
 .isSpaceAround {
-  justify-content: space-around;
+  justify-content: space-between;
 }
 .isBkgColor {
   background-color: var(--color-main-bg);
@@ -92,9 +99,10 @@ onMounted(() => {})
     background: #ffffff;
     border-radius: 4px;
     padding: 20px;
+    margin-right: 20px;
     // box-shadow: 0px 0px 8px 2px lightgrey;
-    &:nth-child(2n) {
-      margin: 0 20px;
+    &:last-child {
+      margin-right: 0;
     }
     .img_warp {
       display: inline-block;
