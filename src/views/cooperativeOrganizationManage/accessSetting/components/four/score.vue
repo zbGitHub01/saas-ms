@@ -195,14 +195,24 @@ defineExpose({
     border-bottom: 1px dashed #eee;
   }
 }
-:deep(.score-criteria .el-input__inner) {
-  border-radius: 4px 0 0 4px !important;
-}
-:deep(.score-value .el-input__inner) {
-  border-radius: 0 4px 4px 0;
-  margin-left: -1px;
-}
-:deep(.el-input-number .el-input__inner) {
-  text-align: left;
+</style>
+<style lang="scss">
+.score-wrap {
+  .score-criteria .el-input__wrapper {
+    border-radius: 4px 0 0 4px !important;
+    line-height: 32px !important;
+    margin-top: -1px !important;
+  }
+  .el-input-number .el-input__inner {
+    line-height: 32px !important;
+  }
+  .score-value .el-input__wrapper {
+    border-radius: 0 4px 4px 0 !important;
+    margin-left: -1px !important;
+    line-height: 32px !important;
+  }
+  .el-input-number .el-input__inner {
+    text-align: left !important;
+  }
 }
 </style>
