@@ -104,7 +104,7 @@ onMounted(() => {})
       </TableClass>
     </div>
     <!--实际委案量查看-->
-    <el-dialog v-model="popoverTableVisible" title="实际委案量" width="45%">
+    <el-dialog v-model="popoverTableVisible" title="实际收回量" width="45%">
       <div class="dialogForm">
         <el-row>
           <el-col :span="24">

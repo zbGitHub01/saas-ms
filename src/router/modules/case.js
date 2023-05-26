@@ -168,6 +168,20 @@ const caseRouter = [
             meta: { title: '委案类型配置', icon: '' }
           }
         ]
+      },
+      {
+        path: '/caseCirculation/divisionManage',
+        name: 'divisionManage',
+        // component: () => import('@/views/caseCirculation/divisionManage/index.vue'),
+        meta: { title: '分案管理', icon: '' },
+        children: [
+          {
+            path: '/caseCirculation/divisionManage/realtimeDivision',
+            name: 'realtimeDivision',
+            component: () => import('@/views/caseCirculation/divisionManage/realtimeDivision/index.vue'),
+            meta: { title: '实时委案', icon: '' }
+          }
+        ]
       }
     ]
   }
