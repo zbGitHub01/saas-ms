@@ -471,7 +471,7 @@ const getTableData = async () => {
       key: 'total'
     },
     {
-      customizeIcon: 'caselist',
+      customizeIcon: 'peoplenum',
       eplusIcon: '',
       labelTitle: '案人人数',
       isHaveRmbSign: false,
@@ -479,7 +479,7 @@ const getTableData = async () => {
       key: 'caseUserCount'
     },
     {
-      customizeIcon: 'caselist',
+      customizeIcon: 'moneynum',
       eplusIcon: '',
       labelTitle: '处置金额',
       isHaveRmbSign: false,
@@ -487,7 +487,7 @@ const getTableData = async () => {
       key: 'sumHandleAmount'
     },
     {
-      customizeIcon: 'caselist',
+      customizeIcon: 'backmoney',
       eplusIcon: '',
       labelTitle: '已还金额',
       isHaveRmbSign: false,
@@ -495,7 +495,7 @@ const getTableData = async () => {
       key: 'sumRefundAmount'
     },
     {
-      customizeIcon: 'caselist',
+      customizeIcon: 'moneing',
       eplusIcon: '',
       labelTitle: '待还金额',
       isHaveRmbSign: false,
