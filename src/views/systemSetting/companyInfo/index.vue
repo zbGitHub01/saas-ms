@@ -1,6 +1,20 @@
 <template>
   <div class="card-wrap">
-    <div class="flx-align-center title mb20">
+    <div class="serviceTotal mb20">
+      <div class="mb10" style="font-weight: 600">增值服务统计</div>
+      <div class="flx-center">
+        <div style="margin-right: 240px">
+          消息通知类短信发送条数：
+          <span class="bold">{{ SMSNumber }}</span>
+        </div>
+        <div>
+          电子合同签署份数：
+          <span class="bold">{{ contractNumber }}</span>
+        </div>
+      </div>
+      <div class="notice">通知类短信服务和电子合同服务依据使用量计费，涉及费用收取、计费等相关事宜以商务协定为准</div>
+    </div>
+    <div class="flx-align-center title mb20 mt20">
       <div>主管理员变更</div>
       <div class="admin">
         {{ state.tenantInfo.admin }}
@@ -263,6 +277,8 @@ const globalStore = useGlobalStore()
 const isEditing = ref<boolean>(false)
 const changeAdministratorsDialog = ref()
 const changeRegisterDialog = ref()
+const SMSNumber = ref()
+const contractNumber = ref()
 const selectData = reactive({
   peopleList: [] as any[], //员工列表
   roleList: [] as any[], //角色列表
@@ -271,6 +287,7 @@ const selectData = reactive({
 onMounted(async () => {
   await getTableData()
   await getSelecData()
+  await getServiceDara()
 })
 // 公司信息
 const state: any = reactive({
@@ -398,6 +415,11 @@ const changeIdNo = (event: any) => {
   // }
   return true
 }
+const getServiceDara = async () => {
+  // const { data } = await xx(`${globalStore.tenantId}`)
+  // SMSNumber.value = data.SMSNumber
+  // contractNumber.value = data.contractNumber
+}
 </script>
 
 <style lang="scss" scoped>
@@ -508,5 +530,25 @@ const changeIdNo = (event: any) => {
   color: #333333;
   line-height: 22px;
   margin-bottom: 20px;
+}
+.serviceTotal {
+  background-color: var(--el-color-primary-light-9);
+  width: 100%;
+  height: 140px;
+  border-radius: 10px;
+  padding: 22px 20px;
+  font-size: 14px;
+  color: var(--el-color-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: self-start;
+  justify-content: space-between;
+  .bold {
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .notice {
+    color: var(--el-color-primary-light-5);
+  }
 }
 </style>
