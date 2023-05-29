@@ -60,6 +60,7 @@ class RequestHttp {
           if (response.status === ResultEnum.OVERDUE) {
             const globalStore = useGlobalStore()
             globalStore.logout()
+            return Promise.reject(error)
           }
         }
         console.log(error, '-----', window.navigator.onLine)
