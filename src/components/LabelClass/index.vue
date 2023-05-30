@@ -46,9 +46,13 @@ onBeforeMount(() => {})
 
 //动态计算labelItem的宽度
 onMounted(() => {
-  const labelItemArr = document.getElementsByClassName('item_warp')
-  for (let i = 0; i <= labelItemArr.length - 1; i++) {
-    labelItemArr[i].style.width = `${100 / labelItemArr.length}%`
+  const labelItemParArr = document.getElementsByClassName('item-style')
+  for (let i = 0; i <= labelItemParArr.length - 1; i++) {
+    for (let j = 0; j <= labelItemParArr[i].getElementsByClassName('item_warp').length - 1; j++) {
+      labelItemParArr[i].getElementsByClassName('item_warp')[j].style.width = `${
+        100 / labelItemParArr[i].getElementsByClassName('item_warp').length
+      }%`
+    }
   }
 })
 </script>

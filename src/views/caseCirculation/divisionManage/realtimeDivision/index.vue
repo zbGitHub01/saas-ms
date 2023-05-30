@@ -1,5 +1,8 @@
 <script setup>
 import { ref, reactive } from 'vue'
+import Dialog from './component/dialog.vue'
+import Apis from '@/api/modules/realtimeDivision'
+import { ElMessage } from 'element-plus'
 import tableColumnList from './config/tableColumnList.js'
 import queryList from './config/queryList.js'
 import labelList from './config/labelList.js'
@@ -9,7 +12,11 @@ import labelList from './config/labelList.js'
 const state = reactive({
   tableData: [],
   pageTotal: 4,
-  queryNewData: {}
+  depData: [],
+  cpeData: [],
+  labelData: {},
+  queryNewData: {},
+  currSelectArr: []
 })
 
 const getOrderListAgain = (pageSize, pageNum) => {
@@ -25,7 +32,20 @@ const getOrderListAgain = (pageSize, pageNum) => {
   // })
 }
 
+//获取CPE机构列表
+const getOrgData = async () => {
+  const data = await Apis.getOrgList()
+  state.depData = data.data
+}
+//获取员工不分页
+const getUserList = async () => {
+  const data = await Apis.getUserList()
+  console.log(1111)
+  state.cpeData = data.data
+}
+
 getOrderListAgain()
+getOrgData()
 
 //formClass实例
 const formClass = ref()
@@ -51,18 +71,41 @@ const handleReset = () => {
   getOrderListAgain()
 }
 
+const dialogVisible = ref(false)
+const dialogForm = ref(null)
+
 // const total = ref(0)
 // const page = ref(1)
 // const pageSize = ref(10)
-// state.tableData = Array(10).fill({ orderNo: 'test' })
 state.tableData = [{ orderNo: 'test' }, { orderNo: '111' }, { orderNo: 'te222st' }, { orderNo: 't3333est' }]
 
-const handleEdit = (va, val) => {
-  console.log(va, val)
+const selectChange = obj => {
+  state.currSelectArr = obj
 }
-const handleDel = (va, val) => {
-  console.log(va, val)
+
+//获取选取CPE相关信息
+const caseAllotNext = async value => {
+  const data = await Apis.caseAllotInfo()
+  state.labelData = Object.assign({}, data.data)
+  dialogForm.value.setLast(true)
+  console.log(value)
 }
+
+//实时分案保存
+const caseAllotSave = val => {
+  console.log(val)
+  dialogVisible.value = false
+}
+
+//实时分案
+const handleCase = () => {
+  if (state.currSelectArr.length < 1) {
+    ElMessage({ message: '请选择操作对象.', type: 'warning' })
+    return
+  }
+  dialogVisible.value = true
+}
+
 const operation = ref(1)
 </script>
 
@@ -80,11 +123,11 @@ const operation = ref(1)
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
-          <el-button type="primary" plain>
+          <el-button type="primary" plain @click="handleCase">
             <svg-icon name="cloud-upload-fill" />
-            &nbsp;导出账单
+            &nbsp;实时分案
           </el-button>
-          <el-button type="primary" icon="CircleCloseFilled" plain>撤销账单</el-button>
+          <el-button type="primary" icon="CircleCloseFilled" plain>导入分案</el-button>
         </template>
       </OperationBar>
       <TableClass
@@ -94,17 +137,19 @@ const operation = ref(1)
         :stripe="true"
         :is-selection="true"
         @query="getOrderListAgain"
-      >
-        <template #operation>
-          <el-table-column fixed="right" align="center" label="操作" width="200">
-            <template #default="scope">
-              <el-button type="danger" size="small" link @click="handleEdit(scope.$index, scope.row)">撤销账单</el-button>
-              <el-button type="primary" size="small" link @click="handleDel(scope.$index, scope.row)">更新账单</el-button>
-            </template>
-          </el-table-column>
-        </template>
-      </TableClass>
+        @select-change="selectChange"
+      />
     </div>
+    <Dialog
+      ref="dialogForm"
+      v-model:dialog-visible="dialogVisible"
+      :dep-data="state.depData"
+      :cpe-data="state.cpeData"
+      :label-data="state.labelData"
+      @get-user-list="getUserList"
+      @case-allot-save="caseAllotSave"
+      @case-allot-next="caseAllotNext"
+    />
   </div>
 </template>
 
