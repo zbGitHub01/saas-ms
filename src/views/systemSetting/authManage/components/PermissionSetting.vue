@@ -9,6 +9,7 @@
           show-checkbox
           :data="menuTree"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="treeProps"
@@ -37,23 +38,32 @@
           <el-table-column prop="name" label="操作" width="220" />
           <el-table-column label="数据范围">
             <template #default="scope">
-              <el-tag class="tag" @click="onSetDataRange(scope.row)">
-                <span>不限</span>
-                <el-icon class="filter-icon"><Filter /></el-icon>
-              </el-tag>
+              <template v-if="scope.row.allDataScope">
+                <el-tag v-if="!scope.row.dataScope.length" class="tag" @click="onSetDataRange(scope.row)">
+                  <span>不限</span>
+                  <el-icon class="filter-icon"><Filter /></el-icon>
+                </el-tag>
+                <span v-else class="scope-text" @click="onSetDataRange(scope.row)">{{ formatScopeText(scope.row) }}</span>
+              </template>
+              <span v-else>--</span>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
-    <DataRangeDrawer v-model:drawer-visible="drawerVisible" />
+    <DataRangeDrawer
+      v-model:drawer-visible="drawerVisible"
+      :api-config="permissionConfig"
+      :data="currDataPermission"
+      @change="fetchPermission"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, nextTick } from 'vue'
 import { Filter } from '@element-plus/icons-vue'
-import DataRangeDrawer from './DataRangeDrawer.vue'
+import DataRangeDrawer from './DataRangeDrawer/index.vue'
 import Apis from '@/api/modules/systemSetting'
 // import menuData from './permissionData.json'
 import cloneDeep from 'lodash/cloneDeep'
@@ -85,6 +95,7 @@ const isIndeterminate = ref(false)
 const dataPermission = ref({
   data: []
 })
+const currDataPermission = ref({})
 const drawerVisible = ref(false)
 // 查询、添加、删除接口权限参数配置
 const permissionConfig = computed(() => {
@@ -93,19 +104,22 @@ const permissionConfig = computed(() => {
       params: { deptId: props.currNode.id },
       permissionListApiFn: Apis.findPermissionDeptPermit,
       addPermission: Apis.addPermissionDeptPermit,
-      removePermission: Apis.removePermissionDeptPermit
+      removePermission: Apis.removePermissionDeptPermit,
+      updatePermissionScope: Apis.updatePermissionDeptScope
     },
     role: {
       params: { roleId: props.currNode.id },
       permissionListApiFn: Apis.findPermissionRolePermit,
       addPermission: Apis.addPermissionRolePermit,
-      removePermission: Apis.removePermissionRolePermit
+      removePermission: Apis.removePermissionRolePermit,
+      updatePermissionScope: Apis.updatePermissionRoleScope
     },
     employee: {
       params: { employeeId: props.currNode.id },
       permissionListApiFn: Apis.fetchPermissionEmployeePermit,
       addPermission: Apis.addPermissionEmployeePermit,
-      removePermission: Apis.removePermissionEmployeePermit
+      removePermission: Apis.removePermissionEmployeePermit,
+      updatePermissionScope: Apis.updatePermissionEmployeeScope
     }
   }
   return paramsConfig[props.permissionType]
@@ -124,7 +138,6 @@ const fetchPermission = async (isRefresh = false) => {
     })
   } else {
     await nextTick(() => {
-      console.log(dataPermission.value, '-----dataPermission.value.id')
       treeRef.value.setCurrentKey(dataPermission.value.id)
       const currentNode = treeRef.value.getCurrentNode()
       if (currentNode) {
@@ -132,6 +145,10 @@ const fetchPermission = async (isRefresh = false) => {
       }
     })
   }
+}
+const formatScopeText = row => {
+  console.log(row)
+  return '测试啊'
 }
 const addPermission = async permissionIds => {
   const postData = {
@@ -216,6 +233,7 @@ function formatMenuData(data) {
 }
 const onSetDataRange = data => {
   console.log(data)
+  currDataPermission.value = data
   drawerVisible.value = true
 }
 const allCheckboxChange = value => {
@@ -332,5 +350,8 @@ defineExpose({ fetchPermission })
   .filter-icon {
     margin-left: 4px;
   }
+}
+.scope-text {
+  cursor: pointer;
 }
 </style>

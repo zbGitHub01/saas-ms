@@ -10,6 +10,7 @@
           ref="treeRef"
           :data="deptTree"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="defaultProps"
@@ -29,9 +30,7 @@
     </div>
     <el-divider class="divider" direction="vertical" />
     <div class="employee-wrap">
-      <div class="title">
-        员工列表
-      </div>
+      <div class="title">员工列表</div>
       <el-scrollbar class="scrollbar">
         <div class="tag-list">
           <el-tag v-for="(item, index) in employeeList" :key="index" class="tag" size="large">

@@ -68,7 +68,7 @@ const title = computed(() => (props.employeeItem ? '编辑员工' : '添加员�
 const deptTree = computed(() => commonStore.dropdownList.DEPT)
 
 const handleOpen = () => {
-  form.deptId = getPathByKey(props.deptItem.id, deptTree.value).map(item => item.id)
+  form.deptId = getPathByKey(props.employeeItem.deptId, deptTree.value).map(item => item.id)
 }
 const beforeClose = () => {
   formRef.value.resetFields()
