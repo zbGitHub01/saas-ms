@@ -43,7 +43,10 @@
                   <span>不限</span>
                   <el-icon class="filter-icon"><Filter /></el-icon>
                 </el-tag>
-                <span v-else class="scope-text" @click="onSetDataRange(scope.row)">{{ formatScopeText(scope.row) }}</span>
+                <el-tag v-else class="tag" @click="onSetDataRange(scope.row)">
+                  <span @click="onSetDataRange(scope.row)">{{ formatScopeText(scope.row) }}</span>
+                  <el-icon class="filter-icon"><Filter /></el-icon>
+                </el-tag>
               </template>
               <span v-else>--</span>
             </template>
@@ -64,6 +67,7 @@
 import { ref, computed, nextTick } from 'vue'
 import { Filter } from '@element-plus/icons-vue'
 import DataRangeDrawer from './DataRangeDrawer/index.vue'
+import { useCommonStore } from '@/store/modules/common'
 import Apis from '@/api/modules/systemSetting'
 // import menuData from './permissionData.json'
 import cloneDeep from 'lodash/cloneDeep'
@@ -86,6 +90,7 @@ const treeProps = {
   label: 'name',
   value: 'id  '
 }
+const commonStore = useCommonStore()
 const treeRef = ref()
 const tableRef = ref()
 const menuTree = ref([])
@@ -146,9 +151,48 @@ const fetchPermission = async (isRefresh = false) => {
     })
   }
 }
+// 格式化深层数据范围文字
 const formatScopeText = row => {
-  console.log(row)
-  return '测试啊'
+  const valueTextList = row.dataScope.map(item => {
+    const filterCodeItem = row.allDataScope.find(field => field.filterCode === item.filterCode)
+    const compareList = filterCodeItem.fields.find(field => field.field === item.field)
+    const compareData = compareList.compareValues.find(field => field.compare === item.compare)
+    const value = findValueName(compareData, item.value)
+    return `${compareList.fieldName} ${compareData.compareName} ${value}`
+  })
+  return valueTextList.join(' 且 ')
+}
+// 通过id查找各个列表的name
+const findValueName = (compareData, value) => {
+  if (compareData.valueInputType === 'text') {
+    return value
+  }
+  if (compareData.valueInputType.includes('dropdown')) {
+    let items = compareData.valueDropdownList
+    if (compareData.valueDropdownCode) {
+      const listConfig = {
+        ROLE: () => {
+          return commonStore.dropdownList[compareData.valueDropdownCode].map(item => {
+            return {
+              name: item.name,
+              value: item.id
+            }
+          })
+        }
+      }
+      items = listConfig[compareData.valueDropdownCode]()
+    }
+    if (compareData.valueInputType === 'dropdown-single') {
+      return items.find(item => item.value === value).name
+    }
+    if (compareData.valueInputType === 'dropdown-multi') {
+      return JSON.parse(value)
+        .map(val => {
+          return items.find(item => item.value === val).name
+        })
+        .join(',')
+    }
+  }
 }
 const addPermission = async permissionIds => {
   const postData = {
@@ -232,7 +276,6 @@ function formatMenuData(data) {
   return data
 }
 const onSetDataRange = data => {
-  console.log(data)
   currDataPermission.value = data
   drawerVisible.value = true
 }
