@@ -71,12 +71,10 @@ const handleReset = () => {
   getOrderListAgain()
 }
 
+const caseUploadVisible = ref(false)
 const dialogVisible = ref(false)
 const dialogForm = ref(null)
 
-// const total = ref(0)
-// const page = ref(1)
-// const pageSize = ref(10)
 state.tableData = [{ orderNo: 'test' }, { orderNo: '111' }, { orderNo: 'te222st' }, { orderNo: 't3333est' }]
 
 const selectChange = obj => {
@@ -95,6 +93,11 @@ const caseAllotNext = async value => {
 const caseAllotSave = val => {
   console.log(val)
   dialogVisible.value = false
+}
+
+//导入分案
+const handleUpload = () => {
+  caseUploadVisible.value = true
 }
 
 //实时分案
@@ -127,7 +130,7 @@ const operation = ref(1)
             <svg-icon name="cloud-upload-fill" />
             &nbsp;实时分案
           </el-button>
-          <el-button type="primary" icon="CircleCloseFilled" plain>导入分案</el-button>
+          <el-button type="primary" icon="CircleCloseFilled" @click="handleUpload">导入分案</el-button>
         </template>
       </OperationBar>
       <TableClass
@@ -140,6 +143,35 @@ const operation = ref(1)
         @select-change="selectChange"
       />
     </div>
+    <!--导入分案-->
+    <el-dialog v-model="caseUploadVisible" title="导入分案" width="30%" :before-close="handleClose">
+      <div style="display: -webkit-flex">
+        <div style="padding-top: 5px">上传文件：</div>
+        <el-upload
+          v-model:file-list="fileList"
+          class="upload-demo"
+          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :on-exceed="handleExceed"
+          :limit="1"
+        >
+          <el-button type="primary">选择文件</el-button>
+          <template #tip>
+            <div class="el-upload__tip">jpg/png files with a size less than 500KB.</div>
+          </template>
+        </el-upload>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" style="float: left" link>下载导入分案模板</el-button>
+          <el-button @click="caseUploadVisible = false">取消</el-button>
+          <el-button type="primary" @click="caseUploadVisible = false">确认分案</el-button>
+        </span>
+      </template>
+    </el-dialog>
+    <!--案件分派-->
     <Dialog
       ref="dialogForm"
       v-model:dialog-visible="dialogVisible"

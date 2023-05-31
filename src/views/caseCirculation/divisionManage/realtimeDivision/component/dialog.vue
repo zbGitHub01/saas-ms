@@ -165,7 +165,7 @@ onMounted(() => {})
 </script>
 
 <template>
-  <el-dialog :model-value="props.dialogVisible" title="Tips" width="60%" :before-close="handleClose">
+  <el-dialog :model-value="props.dialogVisible" title="案件分派" width="60%" :before-close="handleClose">
     <div>
       <LabelClass :label-data="labelList" :is-bkg-color="false" />
     </div>
@@ -262,7 +262,7 @@ onMounted(() => {})
                     <el-input-number
                       v-else
                       v-model="row.caseNum"
-                      style="width: 150px"
+                      class="input_class"
                       @change="handleCaseNum(row)"
                       @blur="handleCaseNum(row)"
                     ></el-input-number>
@@ -276,7 +276,7 @@ onMounted(() => {})
                     <el-input-number
                       v-else
                       v-model="row.allotAmount"
-                      style="width: 150px"
+                      class="input_class"
                       @change="handleAllotAmount(row)"
                       @blur="handleAllotAmount(row)"
                     ></el-input-number>
