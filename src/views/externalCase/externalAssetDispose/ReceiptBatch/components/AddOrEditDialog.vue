@@ -62,12 +62,10 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
-// 表单验证规则的类型
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
-const form: any = reactive({
+const form = reactive({
   productId: null,
   batchNo: '',
   buyTime: '',
@@ -76,8 +74,7 @@ const form: any = reactive({
   is: null //是否为临时库
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-const title = ref<String>('')
-
+const title = ref('')
 // watch: {
 //     $route: {
 //       handler: function (route) {
@@ -88,15 +85,21 @@ const title = ref<String>('')
 //   },
 
 // 接收props数据
-const props = defineProps<{
+// const props = defineProps<{
+//   selectData: {
+//     productList: any[]
+//     packageList: any[]
+//   }
+// }>()
+const props = defineProps({
   selectData: {
-    productList: any[]
-    packageList: any[]
+    type: Object,
+    default: () => ({})
   }
-}>()
+})
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   batchNo: [{ required: true, trigger: 'blur', message: '批次号不能为空' }],
   productId: [{ required: true, trigger: 'change', message: '关联产品不能为空' }],
   buyTime: [{ required: true, trigger: 'change', message: '购入日期不能为空' }],
@@ -106,7 +109,7 @@ const rules = reactive<FormRules>({
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (row: any, type: number) => {
+const open = (row, type) => {
   Object.assign(form, originFormData)
   if (type === 1) {
     title.value = '添加'
@@ -126,7 +129,7 @@ defineExpose({
   open
 })
 // 添加/编辑
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {

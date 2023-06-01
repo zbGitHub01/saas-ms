@@ -66,10 +66,8 @@ const rules = reactive({
 })
 const employeeList = ref([])
 const findNonRoleList = async () => {
-  const { code, data } = await Apis.findNonRoleList({ deptId: props.deptItem.id, roleId: props.roleItem.id })
-  if (code === 200) {
-    employeeList.value = data
-  }
+  const { data } = await Apis.findNonRoleList({ deptId: props.deptItem.id, roleId: props.roleItem.id })
+  employeeList.value = data
 }
 
 const handleOpen = () => {
@@ -87,12 +85,14 @@ const onSubmit = async () => {
     roleId: props.roleItem.id
   }
   loading.value = true
-  const { code } = await Apis.addRoleEmployee(postData)
-  loading.value = false
-  if (code === 200) {
+  try {
+    await Apis.addRoleEmployee(postData)
+    loading.value = false
     ElMessage.success('添加成功')
     beforeClose()
     emit('change')
+  } catch (err) {
+    loading.value = false
   }
 }
 </script>

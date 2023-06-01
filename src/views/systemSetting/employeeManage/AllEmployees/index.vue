@@ -55,7 +55,7 @@
       </el-table-column>
       <el-table-column label="入职日期" prop="entryDate" width="160"></el-table-column>
       <el-table-column label="所属部门" prop="deptName" min-width="150"></el-table-column>
-      <el-table-column label="部门角色" prop="roleName" min-width="150"></el-table-column>
+      <el-table-column label="部门角色" prop="roleNames" min-width="150"></el-table-column>
       <el-table-column label="邀请人" prop="inviter" min-width="150"></el-table-column>
       <el-table-column label="邀请时间" prop="inviteTime" min-width="200"></el-table-column>
       <el-table-column label="操作" prop="name" width="200" align="center" fixed="right">
@@ -100,8 +100,8 @@ const pageSize = ref(10)
 
 const onReset = () => {}
 const employeeList = ref([])
-const roleList = computed(() => commonStore.roleList)
-const deptTree = computed(() => commonStore.deptTree)
+const roleList = computed(() => commonStore.dropdownList.ROLE)
+const deptTree = computed(() => commonStore.dropdownList.DEPT)
 const inviteEmployeesShow = ref(false)
 const batchImportVisible = ref(false)
 const editEmployeeVisible = ref(false)
@@ -115,11 +115,14 @@ const fetchAllEmployees = async () => {
     page: page.value,
     pageSize: pageSize.value
   }
-  const { code, data } = await Apis.findAllEmployeeList(params)
-  if (code === 200) {
-    employeeList.value = data.data
-    total.value = Number(data.total)
-  }
+  const { data } = await Apis.findAllEmployeeList(params)
+  employeeList.value = data.data.map(item => {
+    item.roleNames = item.roleNames && item.roleNames.length ? item.roleNames.join(',') : ''
+    return {
+      ...item
+    }
+  })
+  total.value = Number(data.total)
 }
 const setStatus = async row => {
   const isDisable = !row.isDisable
@@ -127,18 +130,14 @@ const setStatus = async row => {
     type: 'warning'
   }).catch(() => {})
   if (!isConfirm) return
-  const { code } = await Apis.updateEmployeeStatus({ employeeId: row.employeeId, isDisable: Number(isDisable) })
-  if (code === 200) {
-    await fetchAllEmployees()
-  }
+  await Apis.updateEmployeeStatus({ employeeId: row.employeeId, isDisable: Number(isDisable) })
+  await fetchAllEmployees()
 }
 const setDimission = async row => {
   const isConfirm = await ElMessageBox.confirm(`是否确认离职该员工吗？`, '提示', { type: 'warning' }).catch(() => {})
   if (!isConfirm) return
-  const { code } = await Apis.updateEmployeeDimission({ employeeId: row.employeeId, isDimission: 1 })
-  if (code === 200) {
-    await fetchAllEmployees()
-  }
+  await Apis.updateEmployeeDimission({ employeeId: row.employeeId, isDimission: 1 })
+  await fetchAllEmployees()
 }
 const editEmployee = row => {
   console.log(row)

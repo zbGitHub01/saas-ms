@@ -13,6 +13,7 @@
           class="tree"
           :data="roleList"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="defaultProps"
@@ -30,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import PermissionSetting from '../components/PermissionSetting.vue'
 import Apis from '@/api/modules/systemSetting'
@@ -45,16 +46,16 @@ const onSearch = () => {
 }
 
 const fetchDeptTree = async () => {
-  const { code, data } = await Apis.findPermissionRoleList({ name: '' })
-  if (code === 200) {
-    roleList.value = data
-  }
+  const { data } = await Apis.findPermissionRoleList({ name: '' })
+  roleList.value = data
 }
 fetchDeptTree()
 const currRoleNode = ref({})
 const nodeClick = node => {
   currRoleNode.value = node
-  permissionRef.value.fetchPermission(true)
+  nextTick(() => {
+    permissionRef.value.fetchPermission(true)
+  })
 }
 const filterNode = (value, data) => {
   return data.name.includes(value)

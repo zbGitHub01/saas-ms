@@ -66,7 +66,7 @@ const rules = reactive({
 })
 const title = computed(() => (props.positionItem ? '编辑' : '添加'))
 
-const deptTree = computed(() => commonStore.deptTree)
+const deptTree = computed(() => commonStore.dropdownList.DEPT)
 const handleOpen = () => {
   if (props.positionItem) {
     form.name = props.positionItem.name
@@ -79,10 +79,8 @@ const beforeClose = () => {
   emit('update:dialogVisible', false)
 }
 const fetchRoleDeptList = async () => {
-  const { code, data } = await Apis.findRoleDeptList({ roleId: props.positionItem.id })
-  if (code === 200) {
-    form.deptIds = data.map(item => item.id)
-  }
+  const { data } = await Apis.findRoleDeptList({ roleId: props.positionItem.id })
+  form.deptIds = data.map(item => item.id)
 }
 const onSubmit = async () => {
   const isValid = await formRef.value.validate().catch(() => {})
@@ -93,12 +91,16 @@ const onSubmit = async () => {
     postData.id = props.positionItem.id
   }
   loading.value = true
-  const { code } = await Apis.editRole(postData)
-  loading.value = false
-  if (code === 200) {
-    emit('change')
-    ElMessage.success(title.value + '成功')
-    beforeClose()
+  try {
+    const { code } = await Apis.editRole(postData)
+    loading.value = false
+    if (code === 200) {
+      emit('change')
+      ElMessage.success(title.value + '成功')
+      beforeClose()
+    }
+  } catch (err) {
+    loading.value = false
   }
 }
 </script>

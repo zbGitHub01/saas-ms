@@ -40,12 +40,12 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
+<script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { UploadFile } from '@/components/Upload'
 const ruleFormRef = ref()
-const form: any = reactive({
+const form = reactive({
   remark: '', //备注
   file: [] //文件地址
 })

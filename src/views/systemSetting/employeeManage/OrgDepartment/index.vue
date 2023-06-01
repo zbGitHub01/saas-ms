@@ -10,6 +10,7 @@
           ref="treeRef"
           :data="deptTree"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="defaultProps"
@@ -29,9 +30,7 @@
     </div>
     <el-divider class="divider" direction="vertical" />
     <div class="employee-wrap">
-      <div class="title">
-        员工列表
-      </div>
+      <div class="title">员工列表</div>
       <el-scrollbar class="scrollbar">
         <div class="tag-list">
           <el-tag v-for="(item, index) in employeeList" :key="index" class="tag" size="large">
@@ -77,10 +76,8 @@ let employeeItem = null
 let currDeptNode = null
 
 const fetchDeptTree = async () => {
-  const { code, data } = await Apis.findDeptTree()
-  if (code === 200) {
-    deptTree.value[0].children = data
-  }
+  const { data } = await Apis.findDeptTree()
+  deptTree.value[0].children = data
 }
 const editDept = node => {
   deptItem = node
@@ -89,19 +86,14 @@ const editDept = node => {
 const delDept = async node => {
   const isConfirm = await ElMessageBox.confirm(`确定删除该部门吗？`, '提示', { type: 'warning' }).catch(() => {})
   if (!isConfirm) return
-  console.log(node)
-  const { code } = await Apis.delDept({ id: node.id })
-  if (code === 200) {
-    ElMessage.success('删除成功')
-    await fetchDeptTree()
-  }
+  await Apis.delDept({ id: node.id })
+  ElMessage.success('删除成功')
+  await fetchDeptTree()
 }
 
 const fetchEmployeeList = async () => {
-  const { code, data } = await Apis.findDeptEmployeeList({ deptId: currDeptNode.id })
-  if (code === 200) {
-    employeeList.value = data
-  }
+  const { data } = await Apis.findDeptEmployeeList({ deptId: currDeptNode.id })
+  employeeList.value = data
 }
 const nodeClick = node => {
   currDeptNode = node

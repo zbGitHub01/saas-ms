@@ -111,10 +111,14 @@ const onSubmit = async () => {
     apiFn = Apis.editDept
     postData.id = props.deptItem.id
   }
-  const { code } = await apiFn(postData)
-  if (code === 200) {
+  loading.value = true
+  try {
+    await apiFn(postData)
+    loading.value = false
     emit('change')
     beforeClose()
+  } catch (err) {
+    loading.value = false
   }
 }
 </script>

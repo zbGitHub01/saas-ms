@@ -25,6 +25,7 @@ const apiConfig = {
   // 机构角色
   findRoleList: `GET /upms/client/employee/role/list`,
   editRole: `POST /upms/client/employee/role/save`,
+  removeRole: `GET /upms/client/employee/role/delete`,
   findRoleDeptList: `GET /upms/client/employee/role/getDeptList`,
   removeDept: `GET /upms/client/employee/role`,
   findRoleEmployeeList: `GET /upms/client/employee/role/employee/list`,
@@ -37,17 +38,20 @@ const apiConfig = {
   findPermissionDeptPermit: `GET /upms/client/permission/dept/permit/List`,
   addPermissionDeptPermit: `POST /upms/client/permission/dept/permit/add`,
   removePermissionDeptPermit: `POST /upms/client/permission/dept/permit/remove`,
+  updatePermissionDeptScope: `POST /upms/client/permission/dept/permit/scope/save`,
   // 角色权限
   findPermissionRoleList: `GET /upms/client/permission/role/list`,
   findPermissionRolePermit: `GET /upms/client/permission/role/permit/List`,
   addPermissionRolePermit: `POST /upms/client/permission/role/permit/add`,
   removePermissionRolePermit: `POST /upms/client/permission/role/permit/remove`,
+  updatePermissionRoleScope: `POST /upms/client/permission/role/permit/scope/save`,
   // 员工权限
   findPermissionEmployeeDeptTree: `GET /upms/client/permission/employee/dept/tree`,
   findPermissionEmployeeList: `GET /upms/client/permission/employee/list`,
   fetchPermissionEmployeePermit: `GET /upms/client/permission/employee/permit/list`,
   addPermissionEmployeePermit: `POST /upms/client/permission/employee/permit/add`,
   removePermissionEmployeePermit: `POST /upms/client/permission/employee/permit/remove`,
+  updatePermissionEmployeeScope: `POST /upms/client/permission/employee/permit/scope/save`
 }
 
 const apis = generateApiFnc(apiConfig)

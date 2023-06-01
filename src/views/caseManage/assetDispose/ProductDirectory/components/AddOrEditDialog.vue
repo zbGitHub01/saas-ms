@@ -50,12 +50,10 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
-// 表单验证规则的类型
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
-const form: any = reactive({
+const form = reactive({
   productId: null,
   zhaiquanfangId: null,
   SPV: '',
@@ -63,24 +61,30 @@ const form: any = reactive({
   ziliao: '',
   isUse: null
 })
-const title = ref<String>('')
+const title = ref('')
 // 接收props数据
-const props = defineProps<{
+// const props = defineProps<{
+//   selectData: {
+//     productList: any[]
+//     orgList: any[]
+//   }
+// }>()
+const props = defineProps({
   selectData: {
-    productList: any[]
-    orgList: any[]
+    type: Object,
+    default: () => ({})
   }
-}>()
+})
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   productId: [{ required: true, trigger: 'change', message: '委托产品不能为空' }],
   zhaiquanfangId: [{ required: true, trigger: 'change', message: '债权方不能为空' }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (row: any, type: number) => {
+const open = (row, type) => {
   if (type === 1) {
     title.value = '添加'
   } else if (type === 2) {
@@ -98,7 +102,7 @@ defineExpose({
   open
 })
 // 添加/编辑
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {

@@ -84,10 +84,8 @@ const beforeClose = () => {
   emit('update:dialogVisible', false)
 }
 const fetchEmployeeList = async () => {
-  const { code, data } = await Apis.findNonPositionEmployee()
-  if (code === 200) {
-    employeeList.value = data
-  }
+  const { data } = await Apis.findNonPositionEmployee()
+  employeeList.value = data
 }
 const onSubmit = async () => {
   const isValid = await formRef.value.validate().catch(() => {})
@@ -96,12 +94,14 @@ const onSubmit = async () => {
     ...form
   }
   loading.value = true
-  const { code } = await Apis.editPositionEmployee(postData)
-  loading.value = false
-  if (code === 200) {
+  try {
+    await Apis.editPositionEmployee(postData)
+    loading.value = false
     emit('change')
     ElMessage.success(title.value + '成功')
     beforeClose()
+  } catch (err) {
+    loading.value = false
   }
 }
 </script>

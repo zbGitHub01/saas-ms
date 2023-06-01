@@ -21,11 +21,7 @@
           <el-switch v-model="form.isDeleteAllRelationTag"></el-switch>
         </el-form-item>
         <el-form-item v-if="typeSub === 3">
-          <UploadFile
-            ref="uploadFileRef"
-            accept-type="excel"
-            :auto-upload="false"
-          />
+          <UploadFile ref="uploadFileRef" accept-type="excel" :auto-upload="false" />
           <!-- <el-upload
           ref="upload"
           action="/caseCenter/case/orgTagTemp/import"
@@ -49,12 +45,11 @@
     </template>
   </el-dialog>
 </template>
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
 import { UploadFile } from '@/components/Upload'
-const form: any = reactive({
+const form = reactive({
   tempTagName: null, //临时标签
   isDeleteAllRelationTag: false //是否操作所有案件中删除
 })
@@ -64,12 +59,12 @@ const title = ref('')
 const upload = ref()
 const uploadFileRef = ref()
 const selectData = reactive({
-  tagList: [] as any[] //临时标签列表
+  tagList: [] //临时标签列表
 })
 const emits = defineEmits(['submitForm', 'getTableData'])
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   tempTagName: [{ required: true, message: '请选择临时标签', trigger: 'blur' }],
   isDeleteAllRelationTag: [{ required: true, message: '请选择状态', trigger: 'change' }]
 })
@@ -81,7 +76,7 @@ const open = type => {
   } else if (type === 2) {
     title.value = '删除临时标签'
     getSelecData()
-  }else if(type == 3){
+  } else if (type == 3) {
     title.value = '导入批量添加标签'
   }
   typeSub.value = type
@@ -92,7 +87,7 @@ defineExpose({
   open
 })
 // 确认
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
@@ -100,7 +95,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         emits('submitForm', form.tempTagName, 1)
       } else if (typeSub.value === 2) {
         emits('submitForm', form.tempTagName, 2, form.isDeleteAllRelationTag)
-      }else if(typeSub.value === 3){
+      } else if (typeSub.value === 3) {
         // 只要上传文件即可
         // upload.value.submit()
         uploadFileRef.value.uploadSubmit()

@@ -27,17 +27,17 @@
     </template>
   </el-dialog>
 </template>
-<script lang="ts" setup>
+<script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref } from 'vue'
-const form: any = reactive({
+const form = reactive({
   followStatusId: null, //处置状态
   isSyncDebt: true //是否同步至同产品共债案件
 })
 const ruleFormRef = ref()
 const originFormData = JSON.parse(JSON.stringify(form))
 const selectData = reactive({
-  statusList: [] as any[] //处置状态列表
+  statusList: [] //处置状态列表
 })
 const emits = defineEmits(['submitForm'])
 // 打开弹窗

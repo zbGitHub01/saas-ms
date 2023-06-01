@@ -16,6 +16,7 @@
           ref="treeRef"
           :data="positionList"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="defaultProps"
@@ -84,11 +85,9 @@ const editPosition = item => {
 const delPosition = async item => {
   const isConfirm = await ElMessageBox.confirm(`确定删除该机构职位吗？`, '提示', { type: 'warning' }).catch(() => {})
   if (!isConfirm) return
-  const { code } = await Apis.delPosition({ id: item.id })
-  if (code === 200) {
-    ElMessage.success('删除成功')
-    await fetchPositionList()
-  }
+  await Apis.delPosition({ id: item.id })
+  ElMessage.success('删除成功')
+  await fetchPositionList()
 }
 
 const employeeList = ref([])
@@ -105,19 +104,15 @@ const filterNode = (value, data) => {
   return data.name.includes(value)
 }
 const fetchPositionList = async () => {
-  const { code, data } = await Apis.findPositionList({ name: '' })
-  if (code === 200) {
-    positionList.value = data
-  }
+  const { data } = await Apis.findPositionList({ name: '' })
+  positionList.value = data
 }
 fetchPositionList()
 
 let currPositionNode = ref({})
 const fetchEmployeeList = async () => {
-  const { code, data } = await Apis.findPositionEmployeeList({ positionId: currPositionNode.value.id })
-  if (code === 200) {
-    employeeList.value = data
-  }
+  const { data } = await Apis.findPositionEmployeeList({ positionId: currPositionNode.value.id })
+  employeeList.value = data
 }
 const nodeClick = node => {
   currPositionNode.value = node

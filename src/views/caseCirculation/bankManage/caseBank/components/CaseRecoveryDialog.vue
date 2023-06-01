@@ -90,7 +90,7 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
+<script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
 const isWithProductPublicDebt = ref(1)
@@ -99,10 +99,16 @@ const stagingPlan = ref(0)
 const retainStagingPlan = ref(0)
 const radio = ref(0)
 // 接收props数据
-const props = defineProps<{
-  caseInfo: any
-  taskId: any
-}>()
+const props = defineProps({
+  caseInfo: {
+    type: Object,
+    default: () => ({})
+  },
+  taskId: {
+    type: Number,
+    default: null
+  }
+})
 const emits = defineEmits(['getTableData', 'fetchCaseDistSelect', 'toggleSelection'])
 // 打开弹窗
 const dialogVisible = ref(false)

@@ -56,20 +56,29 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-const form: any = reactive({
+const form = reactive({
   isWithProductPublicDebt: 1,
   bank: null
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 // 接收props数据
-const props = defineProps<{
-  distInfo: any //委案数据
-  resouerdistList: any[] //目标案件库
-  sourceStoreId: any
-}>()
+const props = defineProps({
+  distInfo: {
+    type: Object,
+    default: () => ({})
+  },
+  resouerdistList: {
+    type: Array,
+    default: () => []
+  },
+  sourceStoreId: {
+    type: Number,
+    default: null
+  }
+})
 const emits = defineEmits(['getTableData', 'fetchCaseDistSelect', 'toggleSelection'])
 // 打开弹窗
 const dialogVisible = ref(false)

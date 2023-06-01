@@ -36,7 +36,7 @@
             <el-form-item label="职位">
               <el-select v-model="form.positionId" placeholder="请选择职位">
                 <el-option
-                  v-for="item in optionData.positionList"
+                  v-for="item in positionList"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
@@ -46,7 +46,7 @@
             <el-form-item label="角色权限">
               <el-select v-model="form.roleId" placeholder="请选择角色权限">
                 <el-option
-                  v-for="item in optionData.roleList"
+                  v-for="item in roleList"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
@@ -100,20 +100,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, nextTick } from 'vue'
+import { ref, reactive, nextTick, computed } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
-import ApisCommon from '@/api/modules/common'
+import { useCommonStore } from '@/store/modules/common'
+const commonStore = useCommonStore()
 const tabActive = ref('0')
 const drawer = ref(false)
 const direction = ref('rtl')
 const orgTenantId = ref()
+const roleList = computed(() => commonStore.dropdownList.ROLE)
+const positionList = computed(() => commonStore.dropdownList.POSITION)
 const state = reactive({
   tableData: [],
   entryDate: []
-})
-const optionData = reactive({
-  positionList: [],
-  roleList: []
 })
 const form = reactive({
   name: '',
@@ -131,7 +130,6 @@ const handleClose = () => {
 
 const open = (relationTenantId: number) => {
   orgTenantId.value = relationTenantId
-  getOptionList()
   getTableData()
   drawer.value = true
 }
@@ -146,15 +144,7 @@ const onReset = () => {
   getTableData()
 }
 const positionText = val => {
-  return optionData.positionList.find(item => item.id === val)?.name
-}
-const getOptionList = async () => {
-  const roleData = await ApisCommon.findRoleList()
-  if (roleData.code !== 200) return
-  optionData.roleList = roleData.data
-  const positionData = await ApisCommon.findPositionList()
-  if (positionData.code !== 200) return
-  optionData.positionList = positionData.data
+  return positionList.find(item => item.id === val)?.name
 }
 
 const getTableData = async () => {
