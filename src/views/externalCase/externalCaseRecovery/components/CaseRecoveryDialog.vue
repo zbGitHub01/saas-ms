@@ -95,7 +95,7 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
+<script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 const isWithProductPublicDebt = ref(1)
@@ -104,14 +104,20 @@ const stagingPlan = ref(0)
 const retainStagingPlan = ref(0)
 const radio = ref(0)
 const state = reactive({
-  bankSelectList: [] as any, //分库列表
-  bankList: [] as any //选择的分库集合
+  bankSelectList: [], //分库列表
+  bankList: [] //选择的分库集合
 })
 // 接收props数据
-const props = defineProps<{
-  caseInfo: any
-  taskId: any
-}>()
+const props = defineProps({
+  caseInfo: {
+    type: Object,
+    default: () => ({})
+  },
+  taskId: {
+    type: Number,
+    default: null
+  }
+})
 const emits = defineEmits(['getTableData', 'fetchRecoverNowSelect', 'toggleSelection'])
 // 打开弹窗
 const dialogVisible = ref(false)

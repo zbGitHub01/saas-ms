@@ -180,14 +180,14 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Folder } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
 const multipleTable = ref()
 const route = useRoute()
-const form: any = reactive({
+const form = reactive({
   name: '',
   date: null,
   productName: '',
@@ -196,7 +196,7 @@ const form: any = reactive({
   operUserId: null,
   creditId: null,
   orgId: null,
-  batchNo: '', //批次号id
+  batchNo: '' //批次号id
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 // 页码
@@ -205,13 +205,13 @@ const query = reactive({
   pageSize: 10
 })
 const state = reactive({
-  tableData: [] as any[],
+  tableData: [],
   total: 0,
-  selectedData: [] as any[], //选中项
-  handleparams: {} as any //操作的参数
+  selectedData: [], //选中项
+  handleparams: {} //操作的参数
 })
 const selectData = reactive({
-  peopleList: [] as any[] //人员列表
+  peopleList: [] //人员列表
 })
 const operation = ref(1)
 const operationList = reactive([
@@ -255,14 +255,14 @@ const getTableData = async () => {
       creditorName: '测试债权方2',
       entrustAmount: 0,
       userName: '马海山',
-      id: 1,
+      id: 1
     },
     {
       allotTime: '2022-12-02 09:50:43',
       creditorName: '测试债权方1',
       entrustAmount: 0,
       userName: '马海山',
-      id: 2,
+      id: 2
     }
   ]
   query.page = 1
@@ -289,7 +289,7 @@ const reset = () => {
   getTableData()
 }
 //表格选择
-const handleSelectionChange = (val: any) => {
+const handleSelectionChange = val => {
   let arr = []
   val.map(item => {
     arr.push(item.id)

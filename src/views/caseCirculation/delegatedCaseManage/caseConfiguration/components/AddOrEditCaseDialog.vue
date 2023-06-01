@@ -34,35 +34,33 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
-// 表单验证规则的类型
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-const form: any = reactive({
+const form = reactive({
   itemId: null,
   itemText: '',
   status: null,
   caseLevel: []
 })
 const state = reactive({
-  caseLevelList: [] as any[]
+  caseLevelList: []
 })
-const title = ref<String>('')
+const title = ref('')
 const operateStatus = ref(0)
 onMounted(() => {
   fetchCaseLevel()
 })
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   itemText: [{ required: true, trigger: 'blur', message: '委案类型不能为空' }],
   caseLevel: [{ required: true, trigger: 'change', message: '委案等级不能为空' }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (row: any, type: number) => {
+const open = (row, type) => {
   if (type === 1) {
     title.value = '添加委案类型'
     operateStatus.value = 0
@@ -85,7 +83,7 @@ const fetchCaseLevel = () => {
   state.caseLevelList = ['A', 'B', 'C', 'D', 'E', '其他']
 }
 // 添加/编辑
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {

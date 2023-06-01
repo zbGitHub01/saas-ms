@@ -29,15 +29,13 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
-// 表单验证规则的类型
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
-const form: any = reactive({
+const form = reactive({
   creditorName: '', //债权方
   creditorId: null,
-  creditorStatus: null, //是否启用
+  creditorStatus: null //是否启用
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 // watch: {
@@ -48,23 +46,23 @@ const originFormData = JSON.parse(JSON.stringify(form))
 //       immediate: true
 //     }
 //   },
-const title = ref<String>('')
+const title = ref('')
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   creditorName: [{ required: true, trigger: 'blur', message: '债权方不能为空' }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = async(row: any, type: number) => {
+const open = async (row, type) => {
   Object.assign(form, originFormData)
   if (type === 1) {
     title.value = '新增'
   } else if (type === 2) {
     title.value = '编辑'
-    form.creditorId = row.creditorId,
-    form.creditorName = row.creditorName,
+    form.creditorId = row.creditorId
+    form.creditorName = row.creditorName
     form.creditorStatus = Number(row.creditorStatus)
   }
   dialogVisible.value = true
@@ -73,7 +71,7 @@ defineExpose({
   open
 })
 // 添加/编辑
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {

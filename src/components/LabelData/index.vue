@@ -38,11 +38,14 @@
   </div>
 </template>
   
-<script lang="ts" setup>
+<script setup>
 // 接收props数据
-const props = defineProps<{
-  labelData: any
-}>()
+const props = defineProps({
+  labelData: {
+    type: Object,
+    default: {}
+  }
+})
 </script>
   
   <style lang="scss" scoped>

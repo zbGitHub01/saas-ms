@@ -30,34 +30,33 @@
     </template>
   </el-dialog>
 </template>
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
-const form: any = reactive({
+const form = reactive({
   tempTagName: null, //临时标签
-  isDeleteAllRelationTag: false, //是否操作所有案件中删除
+  isDeleteAllRelationTag: false //是否操作所有案件中删除
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const typeSub = ref(1)
 const title = ref('')
 const selectData = reactive({
-  tagList: [] as any[] //临时标签列表
+  tagList: [] //临时标签列表
 })
 const emits = defineEmits(['submitForm'])
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   tempTagName: [{ required: true, message: '请选择临时标签', trigger: 'blur' }],
-  isDeleteAllRelationTag: [{ required: true, message: '请选择状态', trigger: 'change' }],
+  isDeleteAllRelationTag: [{ required: true, message: '请选择状态', trigger: 'change' }]
 })
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (type) => {
+const open = type => {
   if (type === 1) {
     title.value = '添加临时标签'
   } else if (type === 2) {
-    title.value = '删除临时标签',
+    title.value = '删除临时标签'
     getSelecData()
   }
   typeSub.value = type
@@ -68,14 +67,13 @@ defineExpose({
   open
 })
 // 确认
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      if(typeSub.value === 1){
+      if (typeSub.value === 1) {
         emits('submitForm', form.tempTagName, 1)
-      }
-      else if(typeSub.value === 2){
+      } else if (typeSub.value === 2) {
         emits('submitForm', form.tempTagName, 2, form.isDeleteAllRelationTag)
       }
       dialogVisible.value = false

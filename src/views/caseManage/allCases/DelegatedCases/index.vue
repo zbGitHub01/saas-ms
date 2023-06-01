@@ -206,7 +206,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Close, VideoPause, VideoPlay, CirclePlus, Delete, Download, Document } from '@element-plus/icons-vue'
@@ -216,7 +216,7 @@ import ExportDialog from './components/ExportDialog.vue'
 import ColorShowDialog from './components/ColorShowDialog.vue'
 import CreatBatchDialog from './components/CreatBatchDialog.vue'
 const multipleTable = ref(null)
-const form: any = reactive({
+const form = reactive({
   caseId: '',
   productId: null, //产品
   investorName: null, //出资方
@@ -235,10 +235,10 @@ const query = reactive({
   pageSize: 10
 })
 const state = reactive({
-  tableData: [] as any[],
+  tableData: [],
   total: 0,
-  labelData: [] as any, //标签数据
-  selectData: [] as any[], //选中项
+  labelData: [], //标签数据
+  selectData: [], //选中项
   handleparams: {
     caseIdList: [],
     operateType: 1
@@ -561,7 +561,7 @@ const reset = () => {
   getTableData()
 }
 //表格选择
-const handleSelectionChange = (val: any) => {
+const handleSelectionChange = val => {
   let arr = []
   val.map(item => {
     arr.push(item.caseId)
