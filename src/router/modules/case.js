@@ -191,6 +191,12 @@ const caseRouter = [
             name: 'realtimeDivisionRecovery',
             component: () => import('@/views/caseCirculation/divisionManage/realtimeDivisionRecovery/index.vue'),
             meta: { title: '实时分案收回', icon: '' }
+          },
+          {
+            path: '/caseCirculation/divisionManage/divisionRecovered',
+            name: 'divisionRecovered',
+            component: () => import('@/views/caseCirculation/divisionManage/divisionRecovered/index.vue'),
+            meta: { title: '分案收回记录', icon: '' }
           }
         ]
       }
