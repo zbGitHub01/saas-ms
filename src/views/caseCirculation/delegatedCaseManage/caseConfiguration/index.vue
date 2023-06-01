@@ -29,14 +29,14 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import AddOrEditCaseDialog from './components/AddOrEditCaseDialog.vue'
 const addOrEditCaseDialog = ref()
 const state = reactive({
-  tableDataCase: [] as any[]
+  tableDataCase: []
 })
 onMounted(() => {
   getTableDataCase()
@@ -70,11 +70,11 @@ const getTableDataCase = async () => {
   console.log(state.tableDataCase)
 }
 // 新增/编辑委案类型
-const addOrEditCase = (row: any, type: Number) => {
+const addOrEditCase = (row, type) => {
   addOrEditCaseDialog.value.open(row, type)
 }
 // 编辑是否启用委案类型
-const changeStatusCase = (row: any) => {
+const changeStatusCase = row => {
   const params = row
   console.log(row)
   // 请求

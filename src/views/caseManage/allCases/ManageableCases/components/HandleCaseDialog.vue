@@ -29,17 +29,19 @@
             </div>
           </el-form-item>
           <el-form-item label="暂停至" v-if="form.reasonId !== 25" prop="pauseEndTime" class="date">
-            <el-date-picker v-model="form.pauseEndTime" type="datetime" placeholder="选择日期时间"  value-format="YYYY-MM-DD hh:mm:ss"></el-date-picker>
+            <el-date-picker
+              v-model="form.pauseEndTime"
+              type="datetime"
+              placeholder="选择日期时间"
+              value-format="YYYY-MM-DD hh:mm:ss"
+            ></el-date-picker>
           </el-form-item>
           <el-form-item label="暂停备注" prop="caseStatusRemark">
             <el-input clearable v-model="form.caseStatusRemark" type="textarea" placeholder="请输入备注" />
           </el-form-item>
           <el-form-item label="凭证附件" v-if="form.reasonId !== 25" :prop="StopFormData.isMust ? 'pauseUrl' : ''">
-            <UploadFile
-            ref="uploadFileRef"
-            v-model:file-list="form.pauseUrl"
-          />
-          <div>请上传相关凭证或附件文档</div>
+            <UploadFile ref="uploadFileRef" v-model:file-list="form.pauseUrl" />
+            <div>请上传相关凭证或附件文档</div>
             <!-- <el-upload
               v-model:file-list="form.pauseUrl"
               action=""
@@ -65,13 +67,11 @@
     </template>
   </el-dialog>
 </template>
-<script lang="ts" setup>
+<script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
-import type { UploadProps, UploadUserFile } from 'element-plus'
 import { UploadFile } from '@/components/Upload'
-const form: any = reactive({
+const form = reactive({
   caseStatus: null, //关闭原因
   caseStatusRemark: '', //原因备注
   reasonId: null, //暂停原因
@@ -83,7 +83,7 @@ const typeSub = ref(1)
 const title = ref('')
 const uploadFileRef = ref()
 const selectData = reactive({
-  StopReasonList: [] as any[] //临时标签列表
+  StopReasonList: [] //临时标签列表
 })
 const StopFormData = reactive({
   pauseDay: 0,
@@ -103,8 +103,8 @@ const validaterPauseEndTime = (rule, value, callback) => {
   }
   callback()
 }
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   caseStatus: [{ required: true, message: '请选择原因', trigger: 'change' }],
   caseStatusRemark: [{ required: true, message: '请输入备注', trigger: 'blur' }],
   reasonId: [{ required: true, message: '请选择暂停原因', trigger: 'change' }],
@@ -151,7 +151,7 @@ defineExpose({
 })
 
 // 确认
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
@@ -179,7 +179,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         }
         if (form.caseStatus !== 25) {
           paramsSub['pauseEndTime'] = form.pauseEndTime
-          paramsSub['pauseUrl'] = JSON.stringify(pauseUrl);
+          paramsSub['pauseUrl'] = JSON.stringify(pauseUrl)
         }
         emits('submitForm', paramsSub)
       }
@@ -280,14 +280,14 @@ const changeStopReasonId = () => {
     form.caseStatus = null
   }
 }
-const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
+const handleRemove = (file, uploadFiles) => {
   console.log(file, uploadFiles)
 }
 
-const handlePreview: UploadProps['onPreview'] = uploadFile => {
+const handlePreview = uploadFile => {
   console.log(uploadFile)
 }
-const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
+const beforeRemove = (uploadFile, uploadFiles) => {
   return ElMessageBox.confirm(`Cancel the transfer of ${uploadFile.name} ?`).then(
     () => true,
     () => false
@@ -302,4 +302,3 @@ const beforeRemove: UploadProps['beforeRemove'] = (uploadFile, uploadFiles) => {
   }
 }
 </style>
-  

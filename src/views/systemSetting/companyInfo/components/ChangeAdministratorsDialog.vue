@@ -22,7 +22,7 @@
         <el-form-item label="验证码：" prop="smsCode">
           <el-input v-model="form.smsCode" placeholder="请输入验证码" clearable maxlength="6"></el-input>
           <el-button type="primary" class="ml10" @click="getSmsCode" :disabled="disabled">{{ smsTxt }}</el-button>
-          <div style="color: #e6a23c; font-size: 12px">验证码将送法到手机号{{ form.adminPhone }}，点击获取验证码后请注意查收</div>
+          <div style="color: #e6a23c; font-size: 12px">验证码将发送到手机号{{ form.adminPhone }}，点击获取验证码后请注意查收</div>
         </el-form-item>
         <el-form-item :label="`请为原主管理员账号 ${admin} / ${adminPhone} 指定角色：`" prop="newRoleId">
           <el-select v-model="form.newRoleId" placeholder="请选择角色" clearable filterable>
@@ -45,20 +45,24 @@
   </el-dialog>
 </template>
       
-<script lang="ts" setup>
-// 表单验证规则的类型
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 import { ref, reactive } from 'vue'
 import Apis from '@/api/modules/company'
 import { ElMessage } from 'element-plus'
 // 接收props数据
-const props = defineProps<{
+// const props = defineProps<{
+//   selectData: {
+//     peopleList: any[]
+//     roleList: any[]
+//   }
+// }>()
+const props = defineProps({
   selectData: {
-    peopleList: any[]
-    roleList: any[]
+    type: Object,
+    default: () => ({})
   }
-}>()
-const form: any = reactive({
+})
+const form = reactive({
   admin: null, //新管理员
   adminId: null, //新管理员ID
   adminPhone: null, //新管理员手机号
@@ -68,11 +72,11 @@ const form: any = reactive({
   tenantId: null //租户主键ID
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-const title = ref<String>('')
-const admin = ref<String>('')
-const adminPhone = ref<String>('')
-const smsTxt = ref<String>('获取验证码')
-const disabled = ref<boolean>(false)
+const title = ref('')
+const admin = ref('')
+const adminPhone = ref('')
+const smsTxt = ref('获取验证码')
+const disabled = ref(false)
 
 //校验规则
 //验证码校验
@@ -83,15 +87,15 @@ const validateCode = (rule, value, callback) => {
     callback(new Error('请输入6位验证码'))
   }
 }
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   newRoleId: [{ required: true, trigger: 'change', message: '必须为原主管理员指定角色' }],
   smsCode: [{ required: true, trigger: 'blur', validator: validateCode }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (row: any) => {
+const open = row => {
   title.value = '变更主管理员'
   admin.value = row.admin
   adminPhone.value = row.adminPhone
@@ -129,7 +133,7 @@ const getSmsCode = async () => {
   }, 1000)
 }
 // 确定变更
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
@@ -142,7 +146,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   })
 }
 // 取消
-const cancelSubmit = (formEl: FormInstance | undefined) => {
+const cancelSubmit = formEl => {
   formEl?.resetFields()
   dialogVisible.value = false
 }

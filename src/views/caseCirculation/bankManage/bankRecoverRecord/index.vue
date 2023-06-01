@@ -122,15 +122,15 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { beformonth } from '@/utils/formatedate'
 const selectData = reactive({
-  peopleList: [] as any[], //人员列表
-  bankList: [] as any[] //分库列表
+  peopleList: [], //人员列表
+  bankList: [] //分库列表
 })
-const form: any = reactive({
+const form = reactive({
   operDateDuration: null, //时间，开始和结束用～拼接
   operUserId: null,
   sourceStoreId: null,
@@ -144,7 +144,7 @@ const query = reactive({
   pageSize: 10
 })
 const state = reactive({
-  tableData: [] as any[],
+  tableData: [],
   total: 0
 })
 onMounted(() => {
@@ -231,7 +231,7 @@ const reset = () => {
   Object.assign(form, originFormData)
   getTableData()
 }
-const changeDate = (val: any) => {
+const changeDate = val => {
   console.log(val)
   if (val) {
     form.operDateDuration = val[0] + '~' + val[1]

@@ -192,20 +192,20 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Folder } from '@element-plus/icons-vue'
 import CaseAssignmentDialog from './components/CaseAssignmentDialog.vue'
 const multipleTable = ref(null)
-const form: any = reactive({
+const form = reactive({
   caseId: ''
 })
 const selectData = reactive({
-  caseTypeList: [] as any[], //委案类型列表
-  orgList: [] as any[], //机构列表
+  caseTypeList: [], //委案类型列表
+  orgList: [], //机构列表
   defalutType: null, //批次为普通批次的id
-  bankList: [] as any[] //案件分库列表
+  bankList: [] //案件分库列表
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 // 页码
@@ -214,13 +214,13 @@ const query = reactive({
   pageSize: 10
 })
 const state = reactive({
-  tableData: [] as any[],
+  tableData: [],
   total: 0,
-  labelData: {} as any, //标签数据
-  selectData: [] as any[], //选中项
-  handleparams: {} as any, //操作的参数
+  labelData: {}, //标签数据
+  selectData: [], //选中项
+  handleparams: {}, //操作的参数
   taskId: null, //对选中数据操作的唯一标记id
-  timeData: {} as any //委案数据
+  timeData: {} //委案数据
 })
 const operation = ref(1)
 const caseAssignmentDialog = ref()
@@ -520,7 +520,7 @@ const reset = () => {
   getTableData()
 }
 //表格选择
-const handleSelectionChange = (val: any) => {
+const handleSelectionChange = val => {
   let arr = []
   val.map(item => {
     arr.push(item.caseId)

@@ -29,19 +29,19 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { Plus } from '@element-plus/icons-vue'
 import AddOrEditDialog from './components/AddOrEditDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-const form: any = reactive({})
+const form = reactive({})
 // 页码
 const query = reactive({
   page: 1,
   pageSize: 10
 })
 const state = reactive({
-  tableData: [] as any[],
+  tableData: [],
   total: 0
 })
 const addOrEditDialog = ref()
@@ -73,12 +73,12 @@ const getTableData = async () => {
 }
 
 // 新增/编辑
-const addOrEdit = (row: any, type: Number) => {
+const addOrEdit = (row, type) => {
   addOrEditDialog.value.open(row, type)
 }
 
 // 删除
-const toDelete = (row: any) => {
+const toDelete = row => {
   ElMessageBox.confirm('是否确认删除该债权方?', '温馨提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -97,7 +97,7 @@ const toDelete = (row: any) => {
   )
 }
 // 是否启用
-const changeCheckbox = (row: any) => {
+const changeCheckbox = row => {
   let params = {
     creditorName: row.creditorName,
     creditorId: row.creditorId,

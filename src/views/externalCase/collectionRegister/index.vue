@@ -135,14 +135,14 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Folder } from '@element-plus/icons-vue'
 import UploadCollectionDialog from './components/UploadCollectionDialog.vue'
 import { useRouter } from 'vue-router'
 const multipleTable = ref()
-const form: any = reactive({
+const form = reactive({
   batchId: '',
   startTime: null,
   endTime: null,
@@ -157,13 +157,13 @@ const query = reactive({
   pageSize: 10
 })
 const state = reactive({
-  tableData: [] as any[],
+  tableData: [],
   total: 0,
-  selectedData: [] as any[], //选中项
-  handleparams: {} as any //操作的参数
+  selectedData: [], //选中项
+  handleparams: {} //操作的参数
 })
 const selectData = reactive({
-  peopleList: [] as any[] //人员列表
+  peopleList: [] //人员列表
 })
 const operation = ref(1)
 const uploadCollectionDialog = ref()
@@ -240,7 +240,7 @@ const reset = () => {
   Object.assign(form, originFormData)
   getTableData()
 }
-const changeDate = (val: any) => {
+const changeDate = val => {
   console.log(val)
   if (val) {
     form.startTime = val[0]
@@ -251,7 +251,7 @@ const changeDate = (val: any) => {
   }
 }
 //表格选择
-const handleSelectionChange = (val: any) => {
+const handleSelectionChange = val => {
   let arr = []
   val.map(item => {
     arr.push(item.caseId)

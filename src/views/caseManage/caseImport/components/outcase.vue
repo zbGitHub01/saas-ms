@@ -120,8 +120,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { useGlobalStore } from '@/store'
@@ -131,14 +130,20 @@ const tokens = reactive({
   Authorization: globalState.token
 })
 // 接收props数据
-const props = defineProps<{
+// const props = defineProps<{
+//   selectData: {
+//     batchList: any[] //入库批次
+//     creditorList: any[] //债权方
+//     productList: any[] //产品
+//     downData: any //下载模版
+//   }
+// }>()
+const props = defineProps({
   selectData: {
-    batchList: any[] //入库批次
-    creditorList: any[] //债权方
-    productList: any[] //产品
-    downData: any //下载模版
+    type: Object,
+    default: () => ({})
   }
-}>()
+})
 const upload = ref()
 const uploadFileRef = ref()
 const inputdata = reactive([
@@ -252,7 +257,7 @@ const select = ref(false)
 const title = ref('')
 const width = ref('')
 const info = reactive({
-  fileList: [] as any,
+  fileList: [],
   Ddata: {
     importFileType: null
   }
@@ -270,8 +275,8 @@ const form = reactive({
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   productId: [{ required: true, trigger: 'change', message: '请选择产品' }],
   batchId: [{ required: true, trigger: 'change', message: '请选择入库批次' }],
   creditorId: [{ required: true, trigger: 'change', message: '请选择债权方' }]
@@ -309,7 +314,7 @@ const inputClicks = item => {
 }
 
 // 保存提交数据
-const handlerOk = (formEl: FormInstance | undefined) => {
+const handlerOk = formEl => {
   console.log(formEl)
   if (!formEl) {
     console.log(form, info.Ddata)
@@ -391,7 +396,7 @@ const cancal = () => {
 :deep(.el-dialog__body .el-input) {
   width: 300px !important;
 }
-:deep(.el-button){
+:deep(.el-button) {
   width: 130px;
 }
 </style>

@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref } from 'vue'
 import ManageableCases from './ManageableCases/index.vue'
 import EntrustedCases from './EntrustedCases/index.vue'

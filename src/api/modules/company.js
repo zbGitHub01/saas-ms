@@ -16,7 +16,7 @@ const apiConfig = {
 
 // 获取公司信息
 export const adminTenant = id => {
-  return http.get(`/upms/admin/tenant/${id}`)
+  return http.get(`/upms/client/tenant/${id}`)
 }
 
 const apis = generateApiFnc(apiConfig)

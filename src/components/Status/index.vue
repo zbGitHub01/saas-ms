@@ -62,7 +62,7 @@
   </span>
 </template>
     
-<script lang="ts" setup>
+<script setup>
 import { reactive, ref, onMounted, computed } from 'vue'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
@@ -77,11 +77,17 @@ const statusMap = Object.freeze(
 )
 const router = useRouter()
 // 接收props数据
-const props = defineProps<{
-  row: any
-  pageType: any
-}>()
-const map: any = reactive({
+const props = defineProps({
+  row: {
+    type: Object,
+    default: () => ({})
+  },
+  pageType: {
+    type: String,
+    default: ''
+  }
+})
+const map = reactive({
   iconType: 'effect',
   arbitrationClass: 'blue-bg',
   preservationClass: 'blue-bg',

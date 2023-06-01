@@ -28,14 +28,14 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import AddOrEditBankDialog from './components/AddOrEditBankDialog.vue'
 const addOrEditBankDialog = ref()
 const state = reactive({
-  tableDataBank: [] as any[]
+  tableDataBank: []
 })
 onMounted(() => {
   getTableDataBank()
@@ -61,11 +61,11 @@ const getTableDataBank = async () => {
 }
 
 // 新增/编辑分库
-const addOrEditBank = (row: any, type: Number) => {
+const addOrEditBank = (row, type) => {
   addOrEditBankDialog.value.open(row, type)
 }
 // 编辑是否启用分库
-const changeStatusBank = (row: any) => {
+const changeStatusBank = row => {
   const params = row
   console.log(row)
   // 请求

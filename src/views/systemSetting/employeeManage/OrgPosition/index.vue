@@ -16,6 +16,7 @@
           ref="treeRef"
           :data="positionList"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="defaultProps"

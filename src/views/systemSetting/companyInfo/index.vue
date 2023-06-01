@@ -5,11 +5,11 @@
       <div class="flx-center">
         <div style="margin-right: 240px">
           消息通知类短信发送条数：
-          <span class="bold">{{ SMSNumber }}</span>
+          <span class="bold">{{ state.tenantInfo.noticeSmsCount }}</span>
         </div>
         <div>
           电子合同签署份数：
-          <span class="bold">{{ contractNumber }}</span>
+          <span class="bold">{{ state.tenantInfo.eleContractCount }}</span>
         </div>
       </div>
       <div class="notice">通知类短信服务和电子合同服务依据使用量计费，涉及费用收取、计费等相关事宜以商务协定为准</div>
@@ -263,7 +263,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import ChangeRegisterDialog from './components/ChangeRegisterDialog.vue'
@@ -274,26 +274,23 @@ import Apis1, { adminTenant } from '@/api/modules/company'
 import Apis2 from '@/api/modules/common'
 import { traverseDown } from '@/utils/traverse'
 const globalStore = useGlobalStore()
-const isEditing = ref<boolean>(false)
+const isEditing = ref(false)
 const changeAdministratorsDialog = ref()
 const changeRegisterDialog = ref()
-const SMSNumber = ref()
-const contractNumber = ref()
 const selectData = reactive({
-  peopleList: [] as any[], //员工列表
-  roleList: [] as any[], //角色列表
-  areaList: [] as any[] //省市区
+  peopleList: [], //员工列表
+  roleList: [], //角色列表
+  areaList: [] //省市区
 })
 onMounted(async () => {
   await getTableData()
   await getSelecData()
-  await getServiceDara()
 })
 // 公司信息
-const state: any = reactive({
+const state = reactive({
   tenantId: null, //租户主键id
-  tenantInfo: {} as any, //详情
-  tenantInfoSub: {} as any, //租户详情数据备份
+  tenantInfo: {}, //详情
+  tenantInfoSub: {}, //租户详情数据备份
   optionsProps: {
     value: 'pin',
     label: 'name',
@@ -321,7 +318,7 @@ const getSelecData = async () => {
   // 获取员工账号
   const { data } = await Apis1.getEmployeeDrop({ tenantId: globalStore.tenantId })
   // 剔除原始账号
-  selectData.peopleList = data.filter((item: any) => {
+  selectData.peopleList = data.filter(item => {
     if (item.id !== state.tenantInfo.adminId) {
       return item
     }
@@ -400,11 +397,11 @@ const submit = async () => {
   getTableData()
 }
 // 编辑 1修改主管理员 2修改注册手机号
-const edit = (type: number) => {
+const edit = type => {
   type === 1 ? changeAdministratorsDialog.value.open(state.tenantInfo) : changeRegisterDialog.value.open(state.tenantInfo)
 }
 // 校验身份证
-const changeIdNo = (event: any) => {
+const changeIdNo = event => {
   // if (!event) {
   //   ElMessage.error('法定代表人身份证号不能为空！')
   //   return
@@ -414,11 +411,6 @@ const changeIdNo = (event: any) => {
   //   return
   // }
   return true
-}
-const getServiceDara = async () => {
-  // const { data } = await xx(`${globalStore.tenantId}`)
-  // SMSNumber.value = data.SMSNumber
-  // contractNumber.value = data.contractNumber
 }
 </script>
 

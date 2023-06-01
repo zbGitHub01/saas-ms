@@ -64,17 +64,17 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { Plus } from '@element-plus/icons-vue'
 import AddEntrustDialog from './components/AddEntrustDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-const form: any = reactive({
+const form = reactive({
   positionStatus: 1 //1当前委托 2历史委托
 })
 const selectData = reactive({
-  productList: [] as any[], //产品列表
-  orgList: [] as any[] //机构列表
+  productList: [], //产品列表
+  orgList: [] //机构列表
 })
 // 页码
 const query = reactive({
@@ -82,7 +82,7 @@ const query = reactive({
   pageSize: 10
 })
 const state = reactive({
-  tableData: [] as any[],
+  tableData: [],
   total: 0
 })
 const addEntrustDialog = ref()
@@ -163,7 +163,7 @@ const getSelecData = async () => {
 }
 
 // 切换tab
-const handleClick = (row: any) => {
+const handleClick = row => {
   // 整理form参数
   form.positionStatus = Number(row)
   getTableData()
@@ -175,7 +175,7 @@ const addEntrust = () => {
 }
 
 // 终止合作
-const toStop = (row: any) => {
+const toStop = row => {
   ElMessageBox.confirm('是否确认终止合作?', '温馨提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -194,7 +194,7 @@ const toStop = (row: any) => {
   )
 }
 // 查看协议
-const lookAgreement = (row: any) => {
+const lookAgreement = row => {
   window.open(row.url)
 }
 </script>

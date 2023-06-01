@@ -46,11 +46,7 @@
           />
         </el-form-item>
         <el-form-item label="委托协议：" prop="xieyi">
-          <UploadFile
-            ref="uploadFileRef"
-            v-model:file-list="form.xieyi"
-            accept-type="excel"
-          />
+          <UploadFile ref="uploadFileRef" v-model:file-list="form.xieyi" accept-type="excel" />
           <!-- <el-upload
             ref="upload"
             action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
@@ -75,34 +71,33 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
-// 表单验证规则的类型
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 import { ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { UploadFile } from '@/components/Upload'
 // 上传
-const upload = ref<UploadInstance>()
+const upload = ref()
 const uploadFileRef = ref()
 // 上传超过一个，覆盖原文件
-const handleExceed: UploadProps['onExceed'] = files => {
-  upload.value!.clearFiles()
-  const file = files[0] as UploadRawFile
+const handleExceed = files => {
+  if (!upload.value) return
+  upload.value.clearFiles()
+  const file = files[0]
   file.uid = genFileId()
-  upload.value!.handleStart(file)
+  upload.value.handleStart(file)
   // console.log(upload.value!, file, URL.createObjectURL(file))
   form.xieyi = URL.createObjectURL(file)
 }
 // 上传成功
-const handleSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+const handleSuccess = (response, uploadFile) => {
   // console.log(upload.value!, response, uploadFile)
-  form.xieyi = URL.createObjectURL(uploadFile.raw!)
+  form.xieyi = URL.createObjectURL(uploadFile.raw)
 }
 // 删除文件
-const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
+const handleRemove = (file, uploadFiles) => {
   form.xieyi = ''
 }
-const form: any = reactive({
+const form = reactive({
   productId: null,
   zhaiquanfangId: null,
   weituofangId: null,
@@ -110,17 +105,23 @@ const form: any = reactive({
   deadline: '',
   xieyi: [] //协议
 })
-const time = ref<String>('')
+const time = ref('')
 // 接收props数据
-const props = defineProps<{
+// const props = defineProps<{
+//   selectData: {
+//     productList: any[]
+//     orgList: any[]
+//   }
+// }>()
+const props = defineProps({
   selectData: {
-    productList: any[]
-    orgList: any[]
+    type: Object,
+    default: () => ({})
   }
-}>()
+})
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   productId: [{ required: true, trigger: 'change', message: '委托产品不能为空' }],
   zhaiquanfangId: [{ required: true, trigger: 'change', message: '债权方不能为空' }],
   shoutuofangId: [{ required: true, trigger: 'change', message: '受托方不能为空' }],
@@ -139,7 +140,7 @@ defineExpose({
   open
 })
 // 添加委托
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
@@ -153,7 +154,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     }
   })
 }
-const changeDate = (val: any) => {
+const changeDate = val => {
   form.deadline = val
 }
 // 根据选择的产品，自动生成对应的债权方id
