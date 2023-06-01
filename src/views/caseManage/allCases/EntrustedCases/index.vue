@@ -67,10 +67,10 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-const form: any = reactive({
+const form = reactive({
   caseId: '',
   productId: null,
   picihao: null,
@@ -84,14 +84,14 @@ const query = reactive({
   pageSize: 10
 })
 const state = reactive({
-  tableData: [] as any[],
+  tableData: [],
   total: 0,
-  labelData: [] as any
+  labelData: []
 })
 const selectData = reactive({
-  productList: [] as any[], //产品列表
-  orgList: [] as any[], //机构列表
-  picihaoList: [] as any[] //批次号类型
+  productList: [], //产品列表
+  orgList: [], //机构列表
+  picihaoList: [] //批次号类型
 })
 onMounted(() => {
   getTableData()

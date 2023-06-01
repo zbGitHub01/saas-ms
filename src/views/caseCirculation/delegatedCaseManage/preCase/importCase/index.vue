@@ -221,8 +221,8 @@ const handleSubmit = data => {
     <div>
       <OperationBar>
         <template #default>
-          <el-button type="primary" icon="CirclePlusFilled" @click="handleClick">批量发布方案</el-button>
-          <el-button type="primary" icon="CircleCloseFilled" @click="handleClick">删除委案方案</el-button>
+          <el-button type="primary" plain icon="CirclePlusFilled" @click="handleClick">批量发布方案</el-button>
+          <el-button type="primary" plain icon="CircleCloseFilled" @click="handleClick">删除委案方案</el-button>
         </template>
         <template #tool>
           <el-button type="primary" icon="CirclePlusFilled" @click="handleUpload">上传委案文件</el-button>

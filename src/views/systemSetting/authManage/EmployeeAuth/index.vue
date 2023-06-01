@@ -7,6 +7,7 @@
           ref="treeRef"
           :data="deptTree"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="defaultProps"
@@ -45,7 +46,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import PermissionSetting from '../components/PermissionSetting.vue'
 import Apis from '@/api/modules/systemSetting'
@@ -69,11 +70,15 @@ const fetchEmployeeList = async () => {
 
 const checkDept = node => {
   currDeptNode.value = node
-  fetchEmployeeList()
+  nextTick(() => {
+    fetchEmployeeList()
+  })
 }
 const checkEmployee = node => {
   currEmployeeNode.value = node
-  permissionRef.value.fetchPermission()
+  nextTick(() => {
+    permissionRef.value.fetchPermission(true)
+  })
 }
 const onSearch = () => {
   treeRef.value.filter(employeeName.value)

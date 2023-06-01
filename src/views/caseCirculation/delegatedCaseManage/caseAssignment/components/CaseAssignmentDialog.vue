@@ -159,12 +159,11 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
 import moment from 'moment'
-const form: any = reactive({
+const form = reactive({
   entrustStrategy: 1,
   batchId: null,
   entrustType: null,
@@ -177,23 +176,37 @@ const form: any = reactive({
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const state = reactive({
-  lastData: {} as any
+  lastData: {}
 })
 const adjustNum = ref(0)
 const adjustType = ref(1)
 const remark = ref('')
 const last = ref(false)
 // 接收props数据
-const props = defineProps<{
-  timeData: any
-  taskId: any
+// const props = defineProps<{
+//   timeData: any
+//   taskId: any
+//   selectData: {
+//     caseTypeList: any[]
+//     orgList: any[]
+//     defalutType: any
+//     bankList: any[]
+//   }
+// }>()
+const props = defineProps({
+  timeData: {
+    type: Object,
+    default: () => ({})
+  },
+  taskId: {
+    type: Number,
+    default: null
+  },
   selectData: {
-    caseTypeList: any[]
-    orgList: any[]
-    defalutType: any
-    bankList: any[]
+    type: Object,
+    default: () => ({})
   }
-}>()
+})
 const emits = defineEmits(['getTableData', 'fetchTimingSearch', 'toggleSelection'])
 onMounted(() => {
   // 委案类型默认为 默认
@@ -203,8 +216,8 @@ onMounted(() => {
   }
 })
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   orgId: [{ required: true, message: '请选择委案机构', trigger: 'change' }],
   entrustType: [{ required: true, message: '请选择委案类型', trigger: 'change' }],
   isHideHisFollowRecord: [{ required: true, message: '请选择历史处置记录', trigger: 'change' }],
@@ -223,7 +236,7 @@ defineExpose({
   open
 })
 // 下一步
-const nextStep = (formEl: FormInstance | undefined) => {
+const nextStep = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {

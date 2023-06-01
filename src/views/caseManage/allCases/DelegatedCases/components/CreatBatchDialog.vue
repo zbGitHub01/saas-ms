@@ -73,11 +73,11 @@
     </template>
   </el-dialog>
 </template>
-<script lang="ts" setup>
+<script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, watch } from 'vue'
 import { UploadFile } from '@/components/Upload'
-const form: any = reactive({
+const form = reactive({
   remark: '', //备注
   file: [] //文件地址
 })
@@ -88,7 +88,7 @@ const typType = ref(1)
 const opeType = ref(1)
 const title = ref('')
 const state = reactive({
-  numInfo: {} as any //批次数据信息
+  numInfo: {} //批次数据信息
 })
 const emits = defineEmits(['submitForm'])
 // 打开弹窗

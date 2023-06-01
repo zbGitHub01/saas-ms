@@ -235,13 +235,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { reactive, computed } from 'vue'
 import { Picture } from '@element-plus/icons-vue'
 import { useCommonStore } from '@/store/modules/common'
 import { UploadImg, UploadFile, UploadImgs } from '@/components/Upload'
 
 const commonStore = useCommonStore()
-const deptTree = computed(() => commonStore.deptTree)
+const deptTree = computed(() => commonStore.dropdownList.DEPT)
 
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])

@@ -11,6 +11,7 @@ const state = reactive({
   entrustRecordList: []
 })
 
+//获取列表数据
 const getOrderListAgain = async (pageSize, pageNum) => {
   const pageInfo = {
     ...state.queryNewData,
@@ -53,6 +54,7 @@ const checkAll = ref(false)
 const isIndeterminate = ref(true)
 const checkedEntrustRecord = ref([])
 
+//导出委案记录
 const handleExport = async () => {
   const { data } = await Apis.getExportList()
   state.entrustRecordList = data
@@ -119,7 +121,7 @@ const gridData = [
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
-          <el-button type="primary" @click="handleExport">
+          <el-button type="primary" plain @click="handleExport">
             <svg-icon name="cloud-upload-fill" />
             &nbsp;导出委案记录
           </el-button>

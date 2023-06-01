@@ -54,15 +54,16 @@ class RequestHttp {
       },
       error => {
         const { response } = error
+        console.log(error, '-----', window.navigator.onLine)
         tryHideFullScreenLoading()
         if (response) {
           response.data.msg ? ElMessage.error(response.data.msg) : checkStatus(response.status)
           if (response.status === ResultEnum.OVERDUE) {
             const globalStore = useGlobalStore()
             globalStore.logout()
+            return Promise.reject(error)
           }
         }
-        console.log(error, '-----', window.navigator.onLine)
         if (!window.navigator.onLine) {
           return router.replace({ path: '/500' })
         }

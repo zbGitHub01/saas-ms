@@ -18,7 +18,7 @@
     </template>
   </el-dialog>
 </template>
-  <script lang="ts" setup>
+  <script setup>
 import { reactive, ref } from 'vue'
 const colorShow = ref()
 const emits = defineEmits(['submitForm'])
@@ -45,5 +45,5 @@ const cancelSubmit = () => {
 }
 </script>
     
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
 </style>

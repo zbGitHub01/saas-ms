@@ -156,10 +156,29 @@ const caseRouter = [
             meta: { title: '委案预收回', icon: '' }
           },
           {
+            path: '/caseCirculation/delegatedCaseManage/caseRecovered',
+            name: 'caseRecovered',
+            component: () => import('@/views/caseCirculation/delegatedCaseManage/caseRecovered/index.vue'),
+            meta: { title: '委案收回记录', icon: '' }
+          },
+          {
             path: '/caseCirculation/delegatedCaseManage/caseConfiguration',
             name: 'caseConfiguration',
             component: () => import('@/views/caseCirculation/delegatedCaseManage/caseConfiguration/index.vue'),
             meta: { title: '委案类型配置', icon: '' }
+          }
+        ]
+      },
+      {
+        path: '/caseCirculation/divisionManage',
+        name: 'divisionManage',
+        meta: { title: '分案管理', icon: '' },
+        children: [
+          {
+            path: '/caseCirculation/divisionManage/realtimeDivision',
+            name: 'realtimeDivision',
+            component: () => import('@/views/caseCirculation/divisionManage/realtimeDivision/index.vue'),
+            meta: { title: '实时分案', icon: '' }
           }
         ]
       }

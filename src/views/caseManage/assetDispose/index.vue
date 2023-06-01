@@ -14,15 +14,15 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { reactive, ref, onMounted } from 'vue'
 import ProductDirectory from './ProductDirectory/index.vue'
 import ReceiptBatch from './ReceiptBatch/index.vue'
 import CreditorList from './CreditorList/index.vue'
 const selectData = reactive({
-  productList: [] as any[], //产品列表
-  orgList: [] as any[], //机构列表
-  packageList: [] as any[] //资产包类型
+  productList: [], //产品列表
+  orgList: [], //机构列表
+  packageList: [] //资产包类型
 })
 const tabActive = ref('1')
 onMounted(() => {

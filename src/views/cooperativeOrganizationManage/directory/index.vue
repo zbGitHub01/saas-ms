@@ -13,7 +13,7 @@
           <el-form-item label="合作状态">
             <el-select v-model="form.accessStatus" placeholder="请选择合作状态">
               <el-option
-                v-for="item in optionData.accessOptions"
+                v-for="item in accessOptions"
                 :key="item.itemValue"
                 :label="item.itemText"
                 :value="item.itemValue"
@@ -197,7 +197,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { useConfirm } from '@/hooks/useConfirm'
 import { ElMessageBox } from 'element-plus'
@@ -212,9 +212,10 @@ import openComDialog from './components/openComDialog.vue'
 import stopComDialog from './components/stopComDialog.vue'
 import riskDialog from '../components/riskDialog.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
-import ApisCommon from '@/api/modules/common'
+import { useCommonStore } from '@/store/modules/common'
+const commonStore = useCommonStore()
+const accessOptions = computed(() => commonStore.dropdownList.COOPERATION_STATUS)
 const optionData = reactive({
-  accessOptions: [],
   orgTypeList: [],
   orgModelList: []
 })
@@ -260,7 +261,7 @@ const handleForm = () => {
   return form
 }
 const accessStatusText = val => {
-  return optionData.accessOptions.find(item => item.itemValue === val)?.itemText
+  return accessOptions.find(item => item.itemValue === val)?.itemText
 }
 const onSearch = () => {
   getTableData()
@@ -335,9 +336,6 @@ const getSelectList = async () => {
   if (option1.code !== 200) return
   optionData.orgTypeList = option1.data?.ORG_CATEGORY ?? []
   optionData.orgModelList = option1.data?.ORG_TASK_MODEL ?? []
-  const option2 = await ApisCommon.findItemList({ codes: 'COOPERATION_STATUS' })
-  if (option2.code !== 200) return
-  optionData.accessOptions = option2.data?.COOPERATION_STATUS ?? []
 }
 const riskDialogRef = ref()
 const onRisk = id => {
