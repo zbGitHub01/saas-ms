@@ -7,6 +7,7 @@
           ref="treeRef"
           :data="deptTree"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="defaultProps"
