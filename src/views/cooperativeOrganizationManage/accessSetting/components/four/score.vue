@@ -1,7 +1,8 @@
 <template>
-  <div class="one-wrap">
-    <div class="title-wrap">评分项和评分标准</div>
-    <div class="score-wrap mt20">
+  <div class="one-wrap pt14">
+    <div class="title-wrap ft18 pb14 pl20 pr20" style="border-bottom: 1px solid #f0f2f5;">评分项和评分标准</div>
+    <div class="score-wrap pl20 pr20">
+      <el-button type="primary" style="margin: 14px 0 30px" @click="addScore">+评分项</el-button>
       <div style="display: flex">
         <div class="title-wrap" style="width: 240px">评分项</div>
         <div style="display: flex; flex-wrap: wrap; width: 60%">
@@ -44,25 +45,17 @@
             </span>
           </div>
         </div>
-        <div class="mt4">
+        <div>
+          <el-button type="primary" v-if="item.json.length < 6" plain @click="addStandard(item)">+标准</el-button>
+          <el-button type="primary" @click="onSave(item)">保存</el-button>
           <el-button
             type="primary"
-            v-if="item.json.length < 6"
-            size="small"
-            plain
-            @click="addStandard(item)"
-          >+标准</el-button>
-          <el-button type="primary" @click="onSave(item)" size="small">保存</el-button>
-          <el-button
-            type="primary"
-            size="small"
             v-if="scoreList.length > 1"
             plain
             @click="delScore(item, index)"
           >删除</el-button>
         </div>
       </div>
-      <el-button type="primary" style="margin: 20px 0 40px" @click="addScore" size="small">+评分项</el-button>
     </div>
   </div>
 </template>
@@ -181,10 +174,14 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
+.ft18 {
+  font-size: 18px !important;
+}
 .one-wrap {
   // width: 100%;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 12px solid #f0f2f5;
   .title-wrap {
+    font-size: 14px;
     font-weight: bold;
   }
 }

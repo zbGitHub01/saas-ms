@@ -94,10 +94,10 @@ defineExpose({
 
 <style scoped lang="scss">
 .two-page-wrap {
-  height: 100%;
+  height: calc(100% - 20px);
   overflow-y: auto;
 }
-::v-deep .two-custom-table.el-table {
+:deep(.two-custom-table.el-table) {
   .el-table__row--level-0 {
     .table-field {
       font-weight: bold;

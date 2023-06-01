@@ -1,38 +1,54 @@
 <template>
-  <div class="two-wrap">
+  <div class="two-wrap pt14">
     <!-- 机构类型标准 -->
-    <div>
-      <div class="title-wrap">机构类型标准</div>
-      <div v-for="(orgItem, index) in orgTypeList" :key="`org${index}`" class="list-item">
-        <div>{{ orgItem.state === 0 ? '有经验处置机构定义：' : '新成立处置机构定义：' }}</div>
-        <el-input v-model="orgTypeText" style="width: 170px" disabled></el-input>
-        <span style="margin: 0 10px">{{ orgItem.state === 0 ? '≥' : '<' }}</span>
-        <el-input-number
-          v-model="orgItem.day"
-          style="width: 80px"
-          :min="0"
-          :controls="false"
-          placeholder="请输入"
-        ></el-input-number>
-        <span style="margin: 0 40px 0 10px">个月</span>
-        <el-button type="primary" @click="onSave(orgItem)" size="small">保存</el-button>
+    <div style="border-bottom: 12px solid #f0f2f5;">
+      <div class="title-wrap pb14 pl20 pr20" style="border-bottom: 1px solid #f0f2f5;">处置经验判断标准</div>
+      <div class="flx-align-center pt20 pl20 pr20 pb30">
+        <div
+          v-for="(orgItem, index) in orgTypeList"
+          :key="`org${index}`"
+          style="margin-right:64px;font-size:14px"
+          class="list1-item"
+        >
+          <div>{{ orgItem.state === 0 ? '有经验处置机构定义：' : '新成立处置机构定义：' }}</div>
+          <div class="pt20 pb5">
+            <el-input v-model="orgTypeText" style="width: 170px" disabled></el-input>
+            <span style="margin: 0 10px">{{ orgItem.state === 0 ? '≥' : '<' }}</span>
+            <el-input-number
+              v-model="orgItem.day"
+              style="width: 80px"
+              :min="0"
+              :controls="false"
+              placeholder="请输入"
+            ></el-input-number>
+            <span style="margin: 0 40px 0 10px">个月</span>
+            <el-button type="primary" @click="onSave(orgItem)">保存</el-button>
+          </div>
+        </div>
       </div>
     </div>
     <!-- 准入标准 -->
     <div>
-      <div class="title-wrap">准入标准</div>
-      <div v-for="(accessItem, index) in orgTypeList" :key="`access${index}`" class="list-item">
-        <div style="width: 144px">{{ accessItem.state === 0 ? '有经验机构准入分：' : '新机构准入分：' }}</div>
-        <span style="margin: 0 10px">≥</span>
-        <el-input-number
-          v-model="accessItem.score"
-          style="width: 80px"
-          :min="0"
-          :controls="false"
-          placeholder="请输入"
-        ></el-input-number>
-        <span style="margin: 0 40px 0 10px">分</span>
-        <el-button type="primary" @click="onSave(accessItem)" size="small">保存</el-button>
+      <div class="title-wrap pt14 pb14 pl20 pr20" style="border-bottom: 1px solid #f0f2f5;">准入标准</div>
+      <div class="flx-align-center pt20 pl20 pr20 pb30">
+        <div
+          v-for="(accessItem, index) in orgTypeList"
+          :key="`access${index}`"
+          class="list-item pt5 pb5"
+          style="margin-right:104px;font-size:14px"
+        >
+          <div>{{ accessItem.state === 0 ? '有经验机构准入分：' : '新机构准入分：' }}</div>
+          <span style="margin: 0 10px">≥</span>
+          <el-input-number
+            v-model="accessItem.score"
+            style="width: 80px"
+            :min="0"
+            :controls="false"
+            placeholder="请输入"
+          ></el-input-number>
+          <span style="margin: 0 40px 0 10px">分</span>
+          <el-button type="primary" @click="onSave(accessItem)">保存</el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -110,16 +126,19 @@ defineExpose({
 <style scoped lang="scss">
 .two-wrap {
   width: 100%;
-  padding-bottom: 40px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 12px solid #f0f2f5;
   .title-wrap {
+    font-size: 18px !important;
     font-weight: bold;
-    margin-top: 40px;
   }
   .list-item {
     display: flex;
     align-items: center;
-    margin-top: 20px;
+  }
+  .list-item:last-child,
+  .list1-item:last-child {
+    padding-left: 64px;
+    border-left: 1px solid #f0f2f5;
   }
 }
 :deep(.el-input-number .el-input__inner) {
