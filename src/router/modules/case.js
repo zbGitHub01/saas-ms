@@ -179,6 +179,12 @@ const caseRouter = [
             name: 'realtimeDivision',
             component: () => import('@/views/caseCirculation/divisionManage/realtimeDivision/index.vue'),
             meta: { title: '实时分案', icon: '' }
+          },
+          {
+            path: '/caseCirculation/divisionManage/caseGather',
+            name: 'caseGather',
+            component: () => import('@/views/caseCirculation/divisionManage/caseGather/index.vue'),
+            meta: { title: '分案汇总', icon: '' }
           }
         ]
       }

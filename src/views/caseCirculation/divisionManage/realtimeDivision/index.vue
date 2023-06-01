@@ -114,13 +114,11 @@ const operation = ref(1)
 
 <template>
   <div class="card-wrap">
-    <div>
-      <FormWrap @search="handleSearch" @reset="handleReset">
-        <template #default>
-          <FormClass ref="formClass" label-width="102px" :fields="queryList" />
-        </template>
-      </FormWrap>
-    </div>
+    <FormWrap @search="handleSearch" @reset="handleReset">
+      <template #default>
+        <FormClass ref="formClass" label-width="102px" :fields="queryList" />
+      </template>
+    </FormWrap>
     <LabelClass style="margin-top: -20px" :label-data="labelList" />
     <div class="spacing"></div>
     <div class="mt20">
