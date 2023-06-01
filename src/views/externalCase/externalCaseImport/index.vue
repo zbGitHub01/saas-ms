@@ -5,15 +5,15 @@
   </div>
 </template>
   
-<script setup lang="ts">
+<script setup>
 import { ref, reactive, onMounted } from 'vue'
 import attention from './components/attention.vue'
 import outcase from './components/outcase.vue'
 const selectData = reactive({
-  batchList: [] as any[], //入库批次
-  creditorList: [] as any[], //债权方
-  productList: [] as any[], //产品
-  downData: {} as any //下载模版
+  batchList: [], //入库批次
+  creditorList: [], //债权方
+  productList: [], //产品
+  downData: {} //下载模版
 })
 onMounted(() => {
   importExcelPath()

@@ -35,26 +35,32 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { Plus } from '@element-plus/icons-vue'
 import AddOrEditDialog from './components/AddOrEditDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 // 接收props数据
-const props = defineProps<{
+// const props = defineProps<{
+//   selectData: {
+//     productList: any[]
+//     orgList: any[]
+//   }
+// }>()
+const props = defineProps({
   selectData: {
-    productList: any[]
-    orgList: any[]
+    type: Object,
+    default: () => ({})
   }
-}>()
-const form: any = reactive({})
+})
+const form = reactive({})
 // 页码
 const query = reactive({
   page: 1,
   pageSize: 10
 })
 const state = reactive({
-  tableData: [] as any[],
+  tableData: [],
   total: 0
 })
 const addOrEditDialog = ref()
@@ -93,12 +99,12 @@ const getTableData = async () => {
 }
 
 // 新增/编辑
-const addOrEdit = (row: any, type: Number) => {
+const addOrEdit = (row, type) => {
   addOrEditDialog.value.open(row, type)
 }
 
 // 删除
-const toDelete = (row: any) => {
+const toDelete = row => {
   ElMessageBox.confirm('是否确认删除该产品?', '温馨提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -117,11 +123,11 @@ const toDelete = (row: any) => {
   )
 }
 // 查看产品资料
-const lookAgreement = (row: any) => {
+const lookAgreement = row => {
   window.open(row.url)
 }
 // 是否启用
-const changSwitch = (row: any) => {
+const changSwitch = row => {
   console.log(row.isUse)
   // 请求
   // await xx(form)

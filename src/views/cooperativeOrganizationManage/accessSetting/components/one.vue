@@ -36,7 +36,11 @@
           <span>{{ item.nodeName }}</span>
           <span style="color: #7f7f7f">{{ item.handlerName }}</span>
           <div class="select_warp">
-            <span class="btn" @click="onSelect('edit', item)">重选</span>
+            <span
+              class="btn"
+              :class="!item.handlerName && 'w84'"
+              @click="onSelect('edit', item)"
+            >{{item.handlerName ? '重选':'添加审批人'}}</span>
             <span v-if="index !== 2" class="btn btn1" @click="onRemove(item.id)">移除</span>
           </div>
           <div class="content-input">
@@ -184,6 +188,9 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
+.w84 {
+  width: 84px !important;
+}
 .page-wrap {
   display: flex;
   flex-direction: column;

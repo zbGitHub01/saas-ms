@@ -49,9 +49,7 @@ watch(
 
 // 预加载字段数据
 const preloadingDict = () => {
-  commonStore.fetchRoleList()
-  commonStore.fetchDeptTree()
-  commonStore.fetchPositionList()
+  commonStore.fetchItemList()
 }
 preloadingDict()
 // 刷新当前页面

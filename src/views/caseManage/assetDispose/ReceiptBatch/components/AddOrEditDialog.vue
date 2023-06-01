@@ -33,10 +33,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="购入日期：" prop="date">
-          <el-date-picker v-model="form.date" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD"/>
+          <el-date-picker v-model="form.date" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD" />
         </el-form-item>
         <el-form-item label="交割日期：" prop="date2">
-          <el-date-picker v-model="form.date2" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD"/>
+          <el-date-picker v-model="form.date2" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD" />
         </el-form-item>
         <el-form-item label="备注：" prop="note">
           <el-input
@@ -59,12 +59,10 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
-// 表单验证规则的类型
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
-const form: any = reactive({
+const form = reactive({
   productId: null,
   picihao: '',
   date: '',
@@ -72,27 +70,33 @@ const form: any = reactive({
   packageId: null,
   note: ''
 })
-const title = ref<String>('')
+const title = ref('')
 // 接收props数据
-const props = defineProps<{
+// const props = defineProps<{
+//   selectData: {
+//     productList: any[]
+//     packageList: any[]
+//   }
+// }>()
+const props = defineProps({
   selectData: {
-    productList: any[]
-    packageList: any[]
+    type: Object,
+    default: () => ({})
   }
-}>()
+})
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   picihao: [{ required: true, trigger: 'blur', message: '批次号不能为空' }],
   productId: [{ required: true, trigger: 'change', message: '关联产品不能为空' }],
   date: [{ required: true, trigger: 'change', message: '购入日期不能为空' }],
   date2: [{ required: true, trigger: 'change', message: '交割日期不能为空' }],
-  packageId: [{ required: true, trigger: 'change', message: '资产包类型不能为空' }],
+  packageId: [{ required: true, trigger: 'change', message: '资产包类型不能为空' }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (row: any, type: number) => {
+const open = (row, type) => {
   if (type === 1) {
     title.value = '添加'
   } else if (type === 2) {
@@ -109,7 +113,7 @@ defineExpose({
   open
 })
 // 添加/编辑
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {

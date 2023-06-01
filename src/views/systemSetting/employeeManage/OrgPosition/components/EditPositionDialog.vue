@@ -66,17 +66,19 @@ const beforeClose = () => {
 const onSubmit = async () => {
   const isValid = await formRef.value.validate().catch(() => {})
   if (!isValid) return
-  loading.value = true
   const postData = { ...form }
   if (props.positionItem) {
     postData.id = props.positionItem.id
   }
   let apiFn = props.positionItem ? Apis.editPosition : Apis.addPosition
-  const { code } = await apiFn(postData)
-  loading.value = false
-  if (code === 200) {
+  loading.value = true
+  try {
+    await apiFn(postData)
+    loading.value = false
     emit('change')
     beforeClose()
+  } catch (err) {
+    loading.value = false
   }
 }
 </script>

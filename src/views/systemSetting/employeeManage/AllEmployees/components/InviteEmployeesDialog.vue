@@ -70,8 +70,8 @@ const emit = defineEmits(['update:dialogVisible'])
 
 const commonStore = useCommonStore()
 const formRef = ref()
-const deptTree = computed(() => commonStore.deptTree)
-const positionList = computed(() => commonStore.positionList)
+const deptTree = computed(() => commonStore.dropdownList.DEPT)
+const positionList = computed(() => commonStore.dropdownList.POSITION)
 const form = reactive({
   name: '',
   phone: '',
@@ -97,8 +97,7 @@ const loading = ref(false)
 const link = ref('')
 
 const fetchOptions = () => {
-  commonStore.fetchDeptTree()
-  commonStore.fetchPositionList()
+  commonStore.fetchItemList('DEPT,POSITION')
 }
 const handleOpen = () => {
   fetchOptions()
@@ -120,10 +119,12 @@ const onSubmit = async () => {
     deptId: form.deptId[form.deptId.length - 1]
   }
   loading.value = true
-  const { code, data } = await Apis.inviteEmployee(postData)
-  loading.value = false
-  if (code === 200) {
+  try {
+    const { data } = await Apis.inviteEmployee(postData)
+    loading.value = false
     successMounted(data)
+  } catch (err) {
+    loading.value = false
   }
 }
 </script>

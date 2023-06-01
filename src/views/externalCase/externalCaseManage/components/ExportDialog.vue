@@ -54,7 +54,7 @@
     </template>
   </el-dialog>
 </template>
-<script lang="ts" setup>
+<script setup>
 import { reactive, ref } from 'vue'
 const typeSub = ref(0)
 const isIndeterminate = ref(false)
@@ -62,9 +62,9 @@ const checkAll = ref(false)
 const disposalRecord = ref(false)
 const emits = defineEmits(['submitExport'])
 const state = reactive({
-  exportData: [] as any,
-  exportField: [] as any, //选中项
-  date: [] as any //记录提交时间
+  exportData: [],
+  exportField: [], //选中项
+  date: [] //记录提交时间
 })
 // 打开弹窗
 const dialogVisible = ref(false)

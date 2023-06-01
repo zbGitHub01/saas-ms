@@ -46,10 +46,22 @@
           <el-input v-model="form.people" placeholder="请输入法定代表人" clearable style="width: 300px"></el-input>
         </el-form-item>
         <el-form-item label="法人代表证件号：" prop="caseId">
-          <el-input v-model="form.caseId" placeholder="请输入法人代表证件号" clearable style="width: 300px" maxlength="18"></el-input>
+          <el-input
+            v-model="form.caseId"
+            placeholder="请输入法人代表证件号"
+            clearable
+            style="width: 300px"
+            maxlength="18"
+          ></el-input>
         </el-form-item>
         <el-form-item label="法人代表手机号：" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入法人代表手机号" clearable style="width: 300px" maxlength="11"></el-input>
+          <el-input
+            v-model="form.phone"
+            placeholder="请输入法人代表手机号"
+            clearable
+            style="width: 300px"
+            maxlength="11"
+          ></el-input>
         </el-form-item>
         <el-form-item label="法人代表证照：" prop="picture">
           <SingleImageUploader
@@ -90,14 +102,12 @@
   </el-dialog>
 </template>
   
-<script lang="ts" setup>
-// 表单验证规则的类型
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 import Apis from '@/api/modules/common'
 import SingleImageUploader from '@/components/UploadFile/SingleImageUploader.vue'
-const form: any = reactive({
+const form = reactive({
   name: '', //公司名称
   zhaiquanfangId: null,
   code: '', //社会信用码
@@ -111,29 +121,29 @@ const form: any = reactive({
   people: '', //法定代表人
   caseId: '', //法人代表证件号
   phone: '', //法人代表手机号
-  isUse: null, //是否启用
+  isUse: null //是否启用
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const selectData = reactive({
-  areaList: [] as any[], //省市区
+  areaList: [], //省市区
   optionsProps: {
     value: 'id',
     label: 'name',
     children: 'children',
     checkStrictly: true,
-    expandTrigger: 'hover' as const,
+    expandTrigger: 'hover'
   }
 })
-const title = ref<String>('')
+const title = ref('')
 // 校验规则
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   name: [{ required: true, trigger: 'blur', message: '公司名称不能为空' }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = async(row: any, type: number) => {
+const open = async (row, type) => {
   const { data } = await Apis.areaTree()
   selectData.areaList = data
   if (type === 1) {
@@ -161,7 +171,7 @@ defineExpose({
   open
 })
 // 添加/编辑
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {

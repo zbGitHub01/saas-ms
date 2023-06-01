@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 // watch: {
 //   $route: {
 //     handler: function(route) {

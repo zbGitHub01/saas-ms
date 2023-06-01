@@ -184,13 +184,13 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Folder } from '@element-plus/icons-vue'
 import CaseRecoveryDialog from './components/CaseRecoveryDialog.vue'
 const multipleTable = ref()
-const form: any = reactive({
+const form = reactive({
   caseId: ''
 })
 const originFormData = JSON.parse(JSON.stringify(form))
@@ -200,13 +200,13 @@ const query = reactive({
   pageSize: 10
 })
 const state = reactive({
-  tableData: [] as any[],
+  tableData: [],
   total: 0,
-  labelData: {} as any, //标签数据
-  selectData: [] as any[], //选中项
-  handleparams: {} as any, //操作的参数
+  labelData: {}, //标签数据
+  selectData: [], //选中项
+  handleparams: {}, //操作的参数
   taskId: null, //对选中数据操作的唯一标记id
-  caseInfo: {} as any //委案数据
+  caseInfo: {} //委案数据
 })
 const operation = ref(1)
 const caseRecoveryDialog = ref()
@@ -456,7 +456,7 @@ const reset = () => {
   getTableData()
 }
 //表格选择
-const handleSelectionChange = (val: any) => {
+const handleSelectionChange = val => {
   let arr = []
   val.map(item => {
     arr.push(item.caseId)

@@ -65,10 +65,10 @@ const rules = reactive({
   deptId: [{ required: true, message: '请选择所属部门', trigger: 'change' }]
 })
 const title = computed(() => (props.employeeItem ? '编辑员工' : '添加员工'))
-const deptTree = computed(() => commonStore.deptTree)
+const deptTree = computed(() => commonStore.dropdownList.DEPT)
 
 const handleOpen = () => {
-  form.deptId = getPathByKey(props.deptItem.id, deptTree.value).map(item => item.id)
+  form.deptId = getPathByKey(props.employeeItem.deptId, deptTree.value).map(item => item.id)
 }
 const beforeClose = () => {
   formRef.value.resetFields()
@@ -81,11 +81,15 @@ const onSubmit = async () => {
     employeeId: props.employeeItem.id,
     deptId: form.deptId[form.deptId.length - 1]
   }
-  const { code } = await Apis.updateDeptEmployee(postData)
-  if (code === 200) {
+  loading.value = true
+  try {
+    await Apis.updateDeptEmployee(postData)
+    loading.value = false
     emit('change')
     ElMessage.success('修改成功')
     beforeClose()
+  } catch (err) {
+    loading.value = false
   }
 }
 </script>

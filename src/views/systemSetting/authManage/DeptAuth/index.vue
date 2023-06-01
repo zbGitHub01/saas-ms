@@ -7,6 +7,7 @@
           ref="treeRef"
           :data="deptTree"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="defaultProps"
@@ -32,10 +33,8 @@ const deptTree = ref([])
 const permissionRef = ref()
 
 const fetchDeptTree = async () => {
-  const { code, data } = await Apis.findPermissionDeptTree()
-  if (code === 200) {
-    deptTree.value = data
-  }
+  const { data } = await Apis.findPermissionDeptTree()
+  deptTree.value = data
 }
 fetchDeptTree()
 const currDeptNode = ref({})

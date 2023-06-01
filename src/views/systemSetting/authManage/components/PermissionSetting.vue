@@ -9,6 +9,7 @@
           show-checkbox
           :data="menuTree"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="treeProps"
@@ -37,23 +38,36 @@
           <el-table-column prop="name" label="操作" width="220" />
           <el-table-column label="数据范围">
             <template #default="scope">
-              <el-tag class="tag" @click="onSetDataRange(scope.row)">
-                <span>不限</span>
-                <el-icon class="filter-icon"><Filter /></el-icon>
-              </el-tag>
+              <template v-if="scope.row.allDataScope">
+                <el-tag v-if="!scope.row.dataScope.length" class="tag" @click="onSetDataRange(scope.row)">
+                  <span>不限</span>
+                  <el-icon class="filter-icon"><Filter /></el-icon>
+                </el-tag>
+                <el-tag v-else class="tag" @click="onSetDataRange(scope.row)">
+                  <span @click="onSetDataRange(scope.row)">{{ formatScopeText(scope.row) }}</span>
+                  <el-icon class="filter-icon"><Filter /></el-icon>
+                </el-tag>
+              </template>
+              <span v-else>--</span>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
-    <DataRangeDrawer v-model:drawer-visible="drawerVisible" />
+    <DataRangeDrawer
+      v-model:drawer-visible="drawerVisible"
+      :api-config="permissionConfig"
+      :data="currDataPermission"
+      @change="fetchPermission"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, nextTick } from 'vue'
 import { Filter } from '@element-plus/icons-vue'
-import DataRangeDrawer from './DataRangeDrawer.vue'
+import DataRangeDrawer from './DataRangeDrawer/index.vue'
+import { useCommonStore } from '@/store/modules/common'
 import Apis from '@/api/modules/systemSetting'
 // import menuData from './permissionData.json'
 import cloneDeep from 'lodash/cloneDeep'
@@ -76,6 +90,7 @@ const treeProps = {
   label: 'name',
   value: 'id  '
 }
+const commonStore = useCommonStore()
 const treeRef = ref()
 const tableRef = ref()
 const menuTree = ref([])
@@ -85,6 +100,7 @@ const isIndeterminate = ref(false)
 const dataPermission = ref({
   data: []
 })
+const currDataPermission = ref({})
 const drawerVisible = ref(false)
 // 查询、添加、删除接口权限参数配置
 const permissionConfig = computed(() => {
@@ -93,44 +109,88 @@ const permissionConfig = computed(() => {
       params: { deptId: props.currNode.id },
       permissionListApiFn: Apis.findPermissionDeptPermit,
       addPermission: Apis.addPermissionDeptPermit,
-      removePermission: Apis.removePermissionDeptPermit
+      removePermission: Apis.removePermissionDeptPermit,
+      updatePermissionScope: Apis.updatePermissionDeptScope
     },
     role: {
       params: { roleId: props.currNode.id },
       permissionListApiFn: Apis.findPermissionRolePermit,
       addPermission: Apis.addPermissionRolePermit,
-      removePermission: Apis.removePermissionRolePermit
+      removePermission: Apis.removePermissionRolePermit,
+      updatePermissionScope: Apis.updatePermissionRoleScope
     },
     employee: {
       params: { employeeId: props.currNode.id },
       permissionListApiFn: Apis.fetchPermissionEmployeePermit,
       addPermission: Apis.addPermissionEmployeePermit,
-      removePermission: Apis.removePermissionEmployeePermit
+      removePermission: Apis.removePermissionEmployeePermit,
+      updatePermissionScope: Apis.updatePermissionEmployeeScope
     }
   }
   return paramsConfig[props.permissionType]
 })
 let prevCheckedKeys = [] // 存储菜单权限选中ids
 const fetchPermission = async (isRefresh = false) => {
-  const { code, data } = await permissionConfig.value.permissionListApiFn(permissionConfig.value.params)
-  if (code === 200) {
-    menuTree.value = formatMenuData(cloneDeep(data))
-    // 选择部门|角色|员工,清空操作数据权限数据
-    if (isRefresh) {
-      dataPermission.value = { data: [] }
-      await nextTick(() => {
-        const checkedKeys = getCheckedKeys(menuTree.value)
-        prevCheckedKeys = checkedKeys
-        treeRef.value.setCheckedKeys(checkedKeys)
-      })
-    } else {
-      await nextTick(() => {
-        treeRef.value.setCurrentKey(dataPermission.value.id)
-        const currentNode = treeRef.value.getCurrentNode()
-        if (currentNode) {
-          dataPermission.value = currentNode
+  const { data } = await permissionConfig.value.permissionListApiFn(permissionConfig.value.params)
+  menuTree.value = formatMenuData(cloneDeep(data))
+  // 选择部门|角色|员工,清空操作数据权限数据
+  if (isRefresh) {
+    dataPermission.value = { data: [] }
+    await nextTick(() => {
+      const checkedKeys = getCheckedKeys(menuTree.value)
+      prevCheckedKeys = checkedKeys
+      treeRef.value.setCheckedKeys(checkedKeys)
+    })
+  } else {
+    await nextTick(() => {
+      treeRef.value.setCurrentKey(dataPermission.value.id)
+      const currentNode = treeRef.value.getCurrentNode()
+      if (currentNode) {
+        dataPermission.value = currentNode
+      }
+    })
+  }
+}
+// 格式化深层数据范围文字
+const formatScopeText = row => {
+  const valueTextList = row.dataScope.map(item => {
+    const filterCodeItem = row.allDataScope.find(field => field.filterCode === item.filterCode)
+    const compareList = filterCodeItem.fields.find(field => field.field === item.field)
+    const compareData = compareList.compareValues.find(field => field.compare === item.compare)
+    const value = findValueName(compareData, item.value)
+    return `${compareList.fieldName} ${compareData.compareName} ${value}`
+  })
+  return valueTextList.join(' 且 ')
+}
+// 通过id查找各个列表的name
+const findValueName = (compareData, value) => {
+  if (compareData.valueInputType === 'text') {
+    return value
+  }
+  if (compareData.valueInputType.includes('dropdown')) {
+    let items = compareData.valueDropdownList
+    if (compareData.valueDropdownCode) {
+      const listConfig = {
+        ROLE: () => {
+          return commonStore.dropdownList[compareData.valueDropdownCode].map(item => {
+            return {
+              name: item.name,
+              value: item.id
+            }
+          })
         }
-      })
+      }
+      items = listConfig[compareData.valueDropdownCode]()
+    }
+    if (compareData.valueInputType === 'dropdown-single') {
+      return items.find(item => item.value === value).name
+    }
+    if (compareData.valueInputType === 'dropdown-multi') {
+      return JSON.parse(value)
+        .map(val => {
+          return items.find(item => item.value === val).name
+        })
+        .join(',')
     }
   }
 }
@@ -216,7 +276,7 @@ function formatMenuData(data) {
   return data
 }
 const onSetDataRange = data => {
-  console.log(data)
+  currDataPermission.value = data
   drawerVisible.value = true
 }
 const allCheckboxChange = value => {
@@ -333,5 +393,8 @@ defineExpose({ fetchPermission })
   .filter-icon {
     margin-left: 4px;
   }
+}
+.scope-text {
+  cursor: pointer;
 }
 </style>

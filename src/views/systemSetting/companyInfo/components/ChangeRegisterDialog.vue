@@ -13,7 +13,7 @@
         <el-form-item label="验证码：" prop="oldPhoneSmsCode">
           <el-input v-model="form.oldPhoneSmsCode" placeholder="请输入验证码" clearable maxlength="6"></el-input>
           <el-button type="primary" class="ml10" @click="getSmsCode(1)" :disabled="disabled">{{ smsTxt }}</el-button>
-          <div style="color: #e6a23c; font-size: 12px">验证码将送法到手机号{{ form.oldPhone }}，点击获取验证码后请注意查收</div>
+          <div style="color: #e6a23c; font-size: 12px">验证码将发送到手机号{{ form.oldPhone }}，点击获取验证码后请注意查收</div>
         </el-form-item>
         <el-form-item label="新注册手机号：" prop="newPhone">
           <el-input v-model="form.newPhone" placeholder="请输入新注册手机号" clearable maxlength="11"></el-input>
@@ -21,7 +21,7 @@
         <el-form-item label="验证码：" prop="newPhoneSmsCode">
           <el-input v-model="form.newPhoneSmsCode" placeholder="请输入验证码" clearable maxlength="6"></el-input>
           <el-button type="primary" class="ml10" @click="getSmsCode(2)" :disabled="disabledSub">{{ smsTxtSub }}</el-button>
-          <div style="color: #e6a23c; font-size: 12px">验证码将送法到手机号{{ form.newPhone }}，点击获取验证码后请注意查收</div>
+          <div style="color: #e6a23c; font-size: 12px">验证码将发送到手机号{{ form.newPhone }}，点击获取验证码后请注意查收</div>
         </el-form-item>
       </el-form>
     </span>
@@ -34,13 +34,11 @@
   </el-dialog>
 </template>
       
-<script lang="ts" setup>
-// 表单验证规则的类型
-import type { FormInstance, FormRules } from 'element-plus'
+<script setup>
 import { ref, reactive } from 'vue'
 import Apis from '@/api/modules/company'
 import { ElMessage } from 'element-plus'
-const form: any = reactive({
+const form = reactive({
   newPhone: '', //新手机号
   newPhoneSmsCode: '', //新手机号验证码
   oldPhone: '', //旧手机号
@@ -48,11 +46,11 @@ const form: any = reactive({
   tenantId: null //租户主键ID
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-const title = ref<String>('')
-const smsTxt = ref<String>('获取验证码')
-const smsTxtSub = ref<String>('获取验证码')
-const disabled = ref<boolean>(false)
-const disabledSub = ref<boolean>(false)
+const title = ref('')
+const smsTxt = ref('获取验证码')
+const smsTxtSub = ref('获取验证码')
+const disabled = ref(false)
+const disabledSub = ref(false)
 
 //校验规则
 //账号，密码验证码校验
@@ -72,8 +70,8 @@ const validateCode = (rule, value, callback) => {
     callback(new Error('请输入6位验证码'))
   }
 }
-const ruleFormRef = ref<FormInstance>()
-const rules = reactive<FormRules>({
+const ruleFormRef = ref()
+const rules = reactive({
   newPhoneSmsCode: [{ required: true, trigger: 'blur', validator: validateCode }],
   oldPhoneSmsCode: [{ required: true, trigger: 'blur', validator: validateCode }],
   newPhone: [{ required: true, trigger: 'blur', validator: validateUsername }]
@@ -81,7 +79,7 @@ const rules = reactive<FormRules>({
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (row: any) => {
+const open = row => {
   title.value = '变更注册手机号'
   Object.assign(form, originFormData)
   form.oldPhone = row.registerPhone
@@ -92,7 +90,7 @@ defineExpose({
   open
 })
 //获取验证码 1为原手机号验证码 2新手机号验证码
-const getSmsCode = async (type: number) => {
+const getSmsCode = async type => {
   if (type === 1) {
     if (!form.oldPhone) {
       return ElMessage.error('手机号不能为空！')
@@ -142,7 +140,7 @@ const getSmsCode = async (type: number) => {
   }
 }
 // 确定变更
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
@@ -155,7 +153,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   })
 }
 // 取消
-const cancelSubmit = (formEl: FormInstance | undefined) => {
+const cancelSubmit = formEl => {
   formEl?.resetFields()
   dialogVisible.value = false
 }

@@ -16,6 +16,7 @@
           ref="treeRef"
           :data="roleList"
           node-key="id"
+          :expand-on-click-node="false"
           default-expand-all
           highlight-current
           :props="defaultProps"
@@ -28,7 +29,7 @@
                 <span>{{ data.name }}</span>
                 <span class="operation">
                   <el-icon @click.stop="editRole(data)"><Edit /></el-icon>
-                  <el-icon><Delete /></el-icon>
+                  <el-icon @click.stop="delRole(data)"><Delete /></el-icon>
                 </span>
               </div>
             </el-tooltip>
@@ -107,7 +108,13 @@ const editRole = item => {
   roleItem = item
   roleVisible.value = true
 }
-
+const delRole = async item => {
+  const isConfirm = await ElMessageBox.confirm('是否确认移除该机构角色？', '提示', { type: 'warning' }).catch(() => {})
+  if (!isConfirm) return
+  await Apis.removeRole({ roleId: item.id })
+  ElMessage.success('删除成功！')
+  await fetchRoleList()
+}
 const defaultProps = {
   label: 'name',
   value: 'id'
@@ -116,19 +123,14 @@ const roleList = ref([])
 const roleDeptList = ref([])
 const employeeList = ref([])
 const fetchRoleList = async () => {
-  const { code, data } = await Apis.findRoleList()
-  if (code === 200) {
-    roleList.value = data
-  }
+  const { data } = await Apis.findRoleList()
+  roleList.value = data
 }
-fetchRoleList()
 
 let currRoleNode = {}
 const fetchRoleDeptList = async () => {
-  const { code, data } = await Apis.findRoleDeptList({ roleId: currRoleNode.id })
-  if (code === 200) {
-    roleDeptList.value = data
-  }
+  const { data } = await Apis.findRoleDeptList({ roleId: currRoleNode.id })
+  roleDeptList.value = data
 }
 const checkRole = node => {
   currRoleNode = node
@@ -139,11 +141,9 @@ const checkRole = node => {
 const delDept = async item => {
   const isConfirm = await ElMessageBox.confirm('是否确认移除授权部门？', '提示', { type: 'warning' }).catch(() => {})
   if (!isConfirm) return
-  const { code } = await Apis.removeDept({ deptId: item.id, roleId: currRoleNode.id })
-  if (code === 200) {
-    ElMessage.success('删除成功！')
-    await fetchRoleDeptList()
-  }
+  await Apis.removeDept({ deptId: item.id, roleId: currRoleNode.id })
+  ElMessage.success('删除成功！')
+  await fetchRoleDeptList()
 }
 
 let currDeptNode = {}
@@ -153,10 +153,8 @@ const checkDept = node => {
 }
 // 员工列表
 const fetchEmployeeList = async () => {
-  const { code, data } = await Apis.findRoleEmployeeList({ deptId: currDeptNode.id, roleId: currRoleNode.id })
-  if (code === 200) {
-    employeeList.value = data
-  }
+  const { data } = await Apis.findRoleEmployeeList({ deptId: currDeptNode.id, roleId: currRoleNode.id })
+  employeeList.value = data
 }
 const addEmployee = () => {
   if (!currDeptNode.id || !currRoleNode.id) {
@@ -168,12 +166,12 @@ const addEmployee = () => {
 const delEmployee = async item => {
   const isConfirm = await ElMessageBox.confirm('是否确认移除员工角色？', '提示', { type: 'warning' }).catch(() => {})
   if (!isConfirm) return
-  const { code } = await Apis.removeRoleEmployee({ employeeId: item.id, roleId: currRoleNode.id })
-  if (code === 200) {
-    ElMessage.success('删除成功')
-    await fetchEmployeeList()
-  }
+  await Apis.removeRoleEmployee({ employeeId: item.id, roleId: currRoleNode.id })
+  ElMessage.success('删除成功')
+  await fetchEmployeeList()
 }
+
+fetchRoleList()
 </script>
 
 <style lang="scss" scoped>
