@@ -1,5 +1,5 @@
 <script setup>
-import { ref, toRefs, reactive, getCurrentInstance } from 'vue'
+import { ref, toRefs, reactive, getCurrentInstance, watch } from 'vue'
 import { ElMessageBox } from 'element-plus'
 
 const props = defineProps({
@@ -24,6 +24,11 @@ const props = defineProps({
   },
   //label宽
   labelWidth: {
+    type: String,
+    default: null
+  },
+  //dialog宽度
+  width: {
     type: String,
     default: null
   },
@@ -53,11 +58,21 @@ let state = reactive({
 })
 const ruleFormRef = ref(0)
 
-const emit = defineEmits(['update:dialogFormVisible', 'handlePreview', 'handleRemove', 'handleExceed', 'submit'])
+const emit = defineEmits(['close', 'handlePreview', 'handleRemove', 'handleExceed', 'submit'])
 
 const closeClick = ruleFormRef => {
   resetFunc(ruleFormRef)
 }
+
+watch(
+  () => ruleForm.value,
+  // eslint-disable-next-line no-unused-vars
+  (newValue, _) => {
+    state.form = proxy.$deepCopy(newValue, true)
+  },
+  { deep: true },
+  { immediate: true }
+)
 
 //文件列表移除文件时的钩子
 const handleRemove = (file, uploadFiles) => {
@@ -104,8 +119,8 @@ const resetForm = formEl => {
   resetFunc(formEl)
 }
 const resetFunc = formEl => {
-  state.form = proxy.$deepCopy(ruleForm.value, true)
-  emit('update:dialogFormVisible', false)
+  // state.form = proxy.$deepCopy(props.defaultForm, true)
+  emit('close')
   formEl.resetFields()
 }
 console.log(rules)
@@ -113,6 +128,7 @@ console.log(rules)
 
 <template>
   <el-dialog
+    :width="props.width"
     :model-value="props.dialogFormVisible"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
@@ -151,6 +167,8 @@ console.log(rules)
         <el-select
           v-if="item.type === 'select'"
           v-model="state.form[item.prop]"
+          :disabled="item.disabled"
+          :multiple="item.multiple"
           :filterable="item.filterable"
           :clearable="item.clearable"
           :placeholder="item.placeholder"

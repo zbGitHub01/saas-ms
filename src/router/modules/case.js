@@ -197,6 +197,19 @@ const caseRouter = [
             name: 'divisionRecovered',
             component: () => import('@/views/caseCirculation/divisionManage/divisionRecovered/index.vue'),
             meta: { title: '分案收回记录', icon: '' }
+          },
+          {
+            path: '/caseCirculation/divisionManage/divisionStrategy',
+            name: 'divisionStrategy',
+            component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/index.vue'),
+            meta: { title: '机构策略分案', icon: '' }
+          },
+          {
+            path: '/caseCirculation/divisionManage/divisionStrategy/divisionSituation',
+            name: 'divisionSituation',
+            component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/divisionSituation/index.vue'),
+            meta: { title: 'CPE持案情况', icon: '' },
+            hidden: true
           }
         ]
       }
