@@ -3,9 +3,12 @@
     <template v-if="!subItem.hide">
       <el-sub-menu v-if="subItem.children && subItem.children.length" :index="subItem.path">
         <template #title>
-          <el-icon>
-            <component v-if="isElIcon(subItem.icon)" :is="subItem.icon" />
+          <el-icon v-if="subItem.icon">
+            <component :is="subItem.icon" v-if="isElIcon(subItem.icon)" />
             <svg-icon v-else :name="subItem.icon" />
+          </el-icon>
+          <el-icon v-else size="6">
+            <svg-icon :name="activeMatched.includes(subItem.path) ? 'dot-solid' : 'dot'" />
           </el-icon>
           <span>{{ subItem.name }}</span>
         </template>
@@ -13,7 +16,7 @@
       </el-sub-menu>
       <el-menu-item v-else :index="subItem.path">
         <el-icon v-if="subItem.icon">
-          <component v-if="isElIcon(subItem.icon)" :is="subItem.icon" />
+          <component :is="subItem.icon" v-if="isElIcon(subItem.icon)" />
           <svg-icon v-else :name="subItem.icon" />
         </el-icon>
         <el-icon v-else size="6">
@@ -42,6 +45,7 @@ const route = useRoute()
 
 const isElIcon = icon => capitalized.test(icon)
 const activePath = computed(() => route.path)
+const activeMatched = computed(() => route.matched.map(item => item.path))
 </script>
 
 <style lang="scss">
