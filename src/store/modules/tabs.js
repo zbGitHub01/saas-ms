@@ -23,13 +23,14 @@ export const useTabsStore = defineStore('tabsState', {
         icon: tabItem.icon,
         close: tabItem.close
       }
-      if (this.tabsMenuList.every((item) => item.path !== tabItem.path)) {
+      if (this.tabsMenuList.every(item => item.path !== tabItem.path)) {
         this.tabsMenuList.push(tabInfo)
       }
       this.setTabsMenuValue(tabItem.path)
     },
     // Remove Tabs
     async removeTabs(tabPath) {
+      console.log(tabPath)
       let tabsMenuValue = this.tabsMenuValue
       const tabsMenuList = this.tabsMenuList
       if (tabsMenuValue === tabPath) {
@@ -42,11 +43,11 @@ export const useTabsStore = defineStore('tabsState', {
         })
       }
       this.tabsMenuValue = tabsMenuValue
-      this.tabsMenuList = tabsMenuList.filter((item) => item.path !== tabPath)
+      this.tabsMenuList = tabsMenuList.filter(item => item.path !== tabPath)
     },
     // Change Tabs
     async changeTabs(tabItem) {
-      this.tabsMenuList.forEach((item) => {
+      this.tabsMenuList.forEach(item => {
         if (item.title === tabItem.label) router.push(item.path)
       })
     },
@@ -60,7 +61,7 @@ export const useTabsStore = defineStore('tabsState', {
     },
     // Close MultipleTab
     async closeMultipleTab(tabsMenuValue) {
-      this.tabsMenuList = this.tabsMenuList.filter((item) => {
+      this.tabsMenuList = this.tabsMenuList.filter(item => {
         return item.path === tabsMenuValue || item.path === HOME_URL
       })
     },

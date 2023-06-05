@@ -205,6 +205,13 @@ const caseRouter = [
             meta: { title: '机构策略分案', icon: '' }
           },
           {
+            path: '/caseCirculation/divisionManage/divisionStrategy/divisionRealStrategy',
+            name: 'divisionRealStrategy',
+            component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/divisionRealStrategy/index.vue'),
+            meta: { title: '策略实时分案', icon: '' },
+            hidden: true
+          },
+          {
             path: '/caseCirculation/divisionManage/divisionStrategy/divisionSituation',
             name: 'divisionSituation',
             component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/divisionSituation/index.vue'),

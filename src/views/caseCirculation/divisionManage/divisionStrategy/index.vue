@@ -80,9 +80,14 @@ const handleClose = () => {
   dialogFormVisible.value = false
 }
 
+//实时分案
+const handleDivision = val => {
+  router.push({ name: 'divisionRealStrategy', query: { orgName: val.orgName } })
+}
+
 //CPE持案情况查看
 const handleViewSituation = val => {
-  router.push({ name: 'divisionSituation' })
+  router.push({ name: 'divisionSituation', query: { orgName: val.orgName } })
   console.log(val)
 }
 
@@ -146,7 +151,7 @@ const handleRemove = row => {
                     </div>
                   </div>
                   <div>
-                    <el-button type="primary" plain @click="goRouter(item)">实时分案</el-button>
+                    <el-button type="primary" plain @click="handleDivision(item)">实时分案</el-button>
                     <el-button type="primary" plain @click="handleViewSituation(item)">CPE持案情况</el-button>
                     <el-button type="primary" plain @click="handleUpdate(item)">修改负责人</el-button>
                     <el-button type="danger" plain @click="handleRemove(item)">移除机构</el-button>
