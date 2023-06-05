@@ -30,7 +30,6 @@ export const useTabsStore = defineStore('tabsState', {
     },
     // Remove Tabs
     async removeTabs(tabPath) {
-      console.log(tabPath)
       let tabsMenuValue = this.tabsMenuValue
       const tabsMenuList = this.tabsMenuList
       if (tabsMenuValue === tabPath) {
