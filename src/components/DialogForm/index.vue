@@ -37,6 +37,11 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  //监听对象
+  watchItem: {
+    type: String,
+    default: null
+  },
   //form对象
   ruleForm: {
     type: Object,
@@ -58,7 +63,7 @@ let state = reactive({
 })
 const ruleFormRef = ref(0)
 
-const emit = defineEmits(['close', 'handlePreview', 'handleRemove', 'handleExceed', 'submit'])
+const emit = defineEmits(['close', 'handlePreview', 'handleRemove', 'handleExceed', 'submit', 'watchChange'])
 
 const closeClick = ruleFormRef => {
   resetFunc(ruleFormRef)
@@ -69,6 +74,17 @@ watch(
   // eslint-disable-next-line no-unused-vars
   (newValue, _) => {
     state.form = proxy.$deepCopy(newValue, true)
+  },
+  { deep: true },
+  { immediate: true }
+)
+
+//监听表单某个值变化
+watch(
+  () => state.form[props.watchItem],
+  // eslint-disable-next-line no-unused-vars
+  (newValue, _) => {
+    emit('watchChange', newValue)
   },
   { deep: true },
   { immediate: true }
@@ -123,7 +139,6 @@ const resetFunc = formEl => {
   emit('close')
   formEl.resetFields()
 }
-console.log(rules)
 </script>
 
 <template>
@@ -139,12 +154,13 @@ console.log(rules)
       ref="ruleFormRef"
       :model="state.form"
       :rules="rules"
-      label-width="120px"
+      :label-width="props.labelWidth || '120px'"
       class="demo-ruleForm"
       :label-position="labelPosition"
       :size="size"
       status-icon
     >
+      <slot name="validator" />
       <el-form-item
         v-for="item in formFields"
         :key="item.prop"
@@ -250,6 +266,7 @@ console.log(rules)
       </el-form-item>
       <slot name="more"></slot>
     </el-form>
+    <slot name="default" />
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="resetForm(ruleFormRef)">取消</el-button>
