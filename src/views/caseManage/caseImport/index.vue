@@ -6,7 +6,7 @@
 </template>
   
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 import attention from './components/attention.vue'
 import outcase from './components/outcase.vue'
 const selectData = reactive({
@@ -30,8 +30,8 @@ onMounted(() => {
 // 获取下载模版
 const importExcelPath = async () => {
   // 请求得到下载模版地址
-  // const { data } = await xx(params)
-  const downDataSub = {
+  // const { data } = await xx()
+  selectData.downData = {
     caseTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/案件导入模板.xlsx', //导入案件，更新覆盖案件
     addressTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/地址导入模板.xlsx',
     contactTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/联系人导入模板.xlsx',
@@ -45,12 +45,15 @@ const importExcelPath = async () => {
     specialRelationTemplateUrl: 'https://asfile.donganzichan.cn/assets/tmpl/特殊关联人模板.xlsx',
     caseLawsuitStatusTagUrl: 'https://asfile.donganzichan.cn/assets/tmpl/案件法诉状态标签模板.xlsx'
   }
-  selectData.downData = downDataSub
 }
 // 获取下拉
 const getSelecData = async () => {
   // 请求得到数据
-  // const { data } = await xx(form)
+  let params = {
+    codes: 'IVR_TAG,ROBOT_TAG,PRODUCT_LIST,BATCH_LIST,CREDITOR_LIST'
+  }
+  // const { data } = await xx(params)
+  //selectData.batchLis = data.BATCH_LIST;
   selectData.batchList = [
     {
       itemId: 2,
@@ -61,6 +64,7 @@ const getSelecData = async () => {
       itemText: '万腾浩达资产-我来贷20190911'
     }
   ]
+  // selectData.creditorList = data.CREDITOR_LIST;
   selectData.creditorList = [
     {
       itemId: 1,
@@ -71,6 +75,7 @@ const getSelecData = async () => {
       itemText: '马上贷债权方'
     }
   ]
+  // selectData.productList = data.PRODUCT_LIST;
   selectData.productList = [
     {
       itemId: 1,

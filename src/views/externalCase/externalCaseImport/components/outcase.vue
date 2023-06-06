@@ -1,7 +1,7 @@
 <template>
   <div class="outcase-container">
     <div
-      v-for="(item, index) in inputdata"
+      v-for="(item, index) in inputdateShow"
       :key="item.type"
       class="message-warp"
       :style="{ 'margin-right': (index + 1) % 4 === 0 ? '' : '1.3%' }"
@@ -27,104 +27,16 @@
         </el-button>
       </div>
     </div>
-    <!-- 导出 -->
-    <el-dialog
-      :title="title"
-      v-model="inputShow"
-      :width="width"
-      :close-on-click-modal="false"
-      :destroy-on-close="true"
-      :before-close="cancal"
-    >
-      <el-form ref="ruleFormRef" :model="Fdata" :rules="rules" v-if="select === true">
-        <el-form-item label="产品:" :label-width="formLabelWidth" prop="productId">
-          <el-select clearable v-model="Fdata.productId" filterable placeholder="请选择产品" style="width: 300px">
-            <el-option
-              v-for="item in selectData.productList"
-              :key="item.itemId"
-              :label="item.itemText"
-              :value="item.itemId"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="入库批次:" :label-width="formLabelWidth" prop="batchId">
-          <el-select clearable v-model="Fdata.batchId" filterable placeholder="请选择入库批次" style="width: 300px">
-            <el-option
-              v-for="item in selectData.batchList"
-              :key="item.itemId"
-              :label="item.itemText"
-              :value="item.itemId"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="债权方:" :label-width="formLabelWidth" prop="creditorId">
-          <el-select clearable v-model="Fdata.creditorId" filterable placeholder="请选择债权方" style="width: 300px">
-            <el-option
-              v-for="item in selectData.creditorList"
-              :key="item.itemId"
-              :label="item.itemText"
-              :value="item.itemId"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <!-- action再定，额外的参数data -->
-        <el-form-item label="导入文件:" :label-width="formLabelWidth" prop="upload">
-          <el-upload
-            v-model="form.upload"
-            ref="upload"
-            action="/caseCenter/caseImport/import"
-            accept=".xls,.xlsx"
-            :limit="1"
-            :headers="tokens"
-            :data="Fdata"
-            :auto-upload="false"
-            :file-list="info.fileList"
-            :on-success="successUpload"
-          >
-            <el-button size="small" type="primary">选择文件</el-button>
-          </el-upload>
-        </el-form-item>
-      </el-form>
-      <div v-else>
-        <div class="mr10 ml20" style="float: left">导入文件:</div>
-        <UploadFile
-          ref="uploadFileRef"
-          v-model:file-list="fileList"
-          accept-type="excel"
-          :auto-upload="false"
-          @check-validate="cancal"
-          :params="info.Ddata"
-        />
-        <!-- <el-upload
-          v-model="form.file"
-          ref="upload"
-          action="/caseCenter/caseImport/import"
-          accept=".xls,.xlsx"
-          :limit="1"
-          :headers="tokens"
-          :data="info.Ddata"
-          :auto-upload="false"
-          :file-list="info.fileList"
-          :on-success="successUpload"
-        >
-          <el-button size="small" type="primary">选择文件</el-button>
-        </el-upload> -->
-      </div>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="cancal">取 消</el-button>
-          <el-button type="primary" @click="handlerOk(ruleFormRef)">确 定</el-button>
-        </span>
-      </template>
-    </el-dialog>
+    <CaseBankDialog ref="caseBankDialog" :selectData="props.selectData" />
+    <CommonDialog ref="commonDialog" />
   </div>
 </template>
 
 <script setup>
-import { ElMessage } from 'element-plus'
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { useGlobalStore } from '@/store'
-import { UploadFile } from '@/components/Upload'
+import CaseBankDialog from './CaseBankDialog.vue'
+import CommonDialog from './CommonDialog.vue'
 const globalState = useGlobalStore()
 const tokens = reactive({
   Authorization: globalState.token
@@ -144,8 +56,8 @@ const props = defineProps({
     default: () => ({})
   }
 })
-const upload = ref()
-const uploadFileRef = ref()
+const caseBankDialog = ref()
+const commonDialog = ref()
 const inputdata = reactive([
   {
     title: '新案入库-特殊库',
@@ -153,7 +65,6 @@ const inputdata = reactive([
     type: 101,
     select: true, //弹窗内容是否展示其他选项
     downloadUrlKey: 'caseTemplateUrl',
-    downloadBanner: '下载案件导入模板', //再处理
     show: true
     // show: this.hasPerm("base_import_case"),
   },
@@ -196,11 +107,10 @@ const inputdata = reactive([
   // },
   {
     title: '导入临时标签',
-    btn: '导入临时标签', //再处理
+    btn: '导入临时标签',
     type: 106,
     select: false,
     downloadUrlKey: 'tagTemplateUrl',
-    downloadBanner: '下载临时标签导入模板', //再处理
     show: true
     // show: this.hasPerm("base_import_label"),
   }
@@ -251,34 +161,12 @@ const inputdata = reactive([
   //   // show: this.hasPerm('mng_case_data_base_import_lst'),
   // }
 ])
-const inputShow = ref(false)
-const formLabelWidth = ref('100px')
-const select = ref(false)
-const title = ref('')
-const width = ref('')
-const info = reactive({
-  fileList: [],
-  Ddata: {
-    importFileType: null
-  }
-})
-const Fdata = reactive({
-  productId: null,
-  batchId: null,
-  creditorId: null,
-  importFileType: 101 //写死了是新案入库的弹窗
-})
-const form = reactive({
-  upload: '',
-  file: ''
-})
-const originFormData = JSON.parse(JSON.stringify(form))
-// 校验规则
-const ruleFormRef = ref()
-const rules = reactive({
-  productId: [{ required: true, trigger: 'change', message: '请选择产品' }],
-  batchId: [{ required: true, trigger: 'change', message: '请选择入库批次' }],
-  creditorId: [{ required: true, trigger: 'change', message: '请选择债权方' }]
+const inputdateShow = computed(() => {
+  return inputdata.filter(item => {
+    if (item.show) {
+      return item
+    }
+  })
 })
 
 // watch: {
@@ -301,47 +189,17 @@ const download = url => {
   a.click()
 }
 
-// 打开导出弹窗，传输数据
+// 打开导出弹窗
 const inputClicks = item => {
-  title.value = item.title
-  select.value = item.select
-  width.value = select.value ? '500px' : '400px'
-  info.Ddata = {
-    importFileType: item.type
-  }
-  inputShow.value = true
-}
-
-// 保存提交数据
-const handlerOk = formEl => {
-  // 文件手动上传
-  // upload.value.submit()
-  console.log(formEl)
-  if (!formEl) {
-    console.log(form, info.Ddata)
-    upload.value.submit()
+  if (item.type === 101) {
+    // 新案入库的弹窗
+    caseBankDialog.value.open()
+  } else if (item.type === 111) {
+    // 法诉状态标签的弹窗
+    legalDialog.value.open(item.title)
   } else {
-    formEl.validate(async valid => {
-      if (valid) {
-        console.log(Fdata, form)
-        ElMessage.success('导入成功！')
-        formEl.resetFields()
-        inputShow.value = false
-      }
-    })
+    commonDialog.value.open(item.type, item.title)
   }
-}
-
-//文件成功
-const successUpload = res => {
-  ElMessage.success(res.msg)
-  cancal()
-}
-// 取消
-const cancal = () => {
-  inputShow.value = false
-  ruleFormRef.value?.resetFields()
-  Object.assign(form, originFormData)
 }
 </script>
 
@@ -388,12 +246,12 @@ const cancal = () => {
         cursor: pointer;
       }
     }
+    :deep(.el-button) {
+      width: 130px;
+    }
   }
 }
 :deep(.el-dialog__body .el-input) {
   width: 300px !important;
-}
-:deep(.el-button) {
-  width: 130px;
 }
 </style>
