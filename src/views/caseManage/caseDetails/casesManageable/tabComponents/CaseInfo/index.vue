@@ -37,6 +37,7 @@ const handleChange = val => {
 
 <template>
   <div>
+    <!--标签提示块-->
     <div :class="activeStyle">
       <div v-if="messageData.isHistoryComplaint === 1" class="complaint-history tip-text">
         <el-icon><Opportunity /></el-icon>
@@ -89,12 +90,13 @@ const handleChange = val => {
         </el-popover>
       </div>
     </div>
+    <!--基础信息块-->
     <el-collapse v-model="activeNames" @change="handleChange">
       <el-collapse-item title="基础信息" name="1">
         <component :is="componentsObj['BasicInformation']"></component>
       </el-collapse-item>
       <el-collapse-item title="案人资料" name="2">
-        <component :is="componentsObj['BasicInformation']"></component>
+        <component :is="componentsObj['CaseInformation']"></component>
       </el-collapse-item>
       <el-collapse-item title="联系方式" name="3"></el-collapse-item>
       <el-collapse-item title="借款/转让信息" name="4"></el-collapse-item>
