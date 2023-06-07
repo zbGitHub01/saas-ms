@@ -120,7 +120,14 @@ export default {
     >
       <span v-if="item.type === 'label'">{{ state.flatEntity[item.property] }}</span>
       <el-input v-if="item.type === 'input'" v-model="state.flatEntity[item.property]" :placeholder="item.placeholder" />
-      <el-select v-if="item.type === 'select'" v-model="state.flatEntity[item.property]" :placeholder="item.placeholder">
+      <el-select
+        v-if="item.type === 'select'"
+        v-model="state.flatEntity[item.property]"
+        :multiple="item.multiple || false"
+        :clearable="item.clearable || false"
+        :filterable="item.filterable || false"
+        :placeholder="item.placeholder"
+      >
         <el-option v-for="opts in item.options" :key="opts.value" :label="opts.label" :value="opts.value" />
       </el-select>
       <!-- 需要地区级联选择再开启 -->
@@ -197,8 +204,12 @@ export default {
 :deep(.el-range-editor.el-input__wrapper) {
   width: 210px;
 }
+:deep(.el-input > .el-input__wrapper) {
+  height: auto;
+}
 .el-form--inline .el-form-item {
   margin-right: 12px;
+  vertical-align: top;
 }
 .check-wrap {
   display: flex;

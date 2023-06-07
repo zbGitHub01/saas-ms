@@ -287,6 +287,8 @@ state.productList = [
           border-bottom: none;
         }
         div {
+          font-size: 16px;
+          color: #a0a0a0;
           cursor: pointer;
         }
         .textActive {

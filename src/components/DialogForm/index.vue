@@ -1,5 +1,5 @@
 <script setup>
-import { ref, toRefs, reactive, getCurrentInstance } from 'vue'
+import { ref, toRefs, reactive, getCurrentInstance, watch } from 'vue'
 import { ElMessageBox } from 'element-plus'
 
 const props = defineProps({
@@ -27,10 +27,20 @@ const props = defineProps({
     type: String,
     default: null
   },
+  //dialog宽度
+  width: {
+    type: String,
+    default: null
+  },
   //formItem配置json
   formFields: {
     type: Array,
     default: () => []
+  },
+  //监听对象
+  watchItem: {
+    type: String,
+    default: null
   },
   //form对象
   ruleForm: {
@@ -53,11 +63,32 @@ let state = reactive({
 })
 const ruleFormRef = ref(0)
 
-const emit = defineEmits(['update:dialogFormVisible', 'handlePreview', 'handleRemove', 'handleExceed', 'submit'])
+const emit = defineEmits(['close', 'handlePreview', 'handleRemove', 'handleExceed', 'submit', 'watchChange'])
 
 const closeClick = ruleFormRef => {
   resetFunc(ruleFormRef)
 }
+
+watch(
+  () => ruleForm.value,
+  // eslint-disable-next-line no-unused-vars
+  (newValue, _) => {
+    state.form = proxy.$deepCopy(newValue, true)
+  },
+  { deep: true },
+  { immediate: true }
+)
+
+//监听表单某个值变化
+watch(
+  () => state.form[props.watchItem],
+  // eslint-disable-next-line no-unused-vars
+  (newValue, _) => {
+    emit('watchChange', newValue)
+  },
+  { deep: true },
+  { immediate: true }
+)
 
 //文件列表移除文件时的钩子
 const handleRemove = (file, uploadFiles) => {
@@ -104,15 +135,15 @@ const resetForm = formEl => {
   resetFunc(formEl)
 }
 const resetFunc = formEl => {
-  state.form = proxy.$deepCopy(ruleForm.value, true)
-  emit('update:dialogFormVisible', false)
+  // state.form = proxy.$deepCopy(props.defaultForm, true)
+  emit('close')
   formEl.resetFields()
 }
-console.log(rules)
 </script>
 
 <template>
   <el-dialog
+    :width="props.width"
     :model-value="props.dialogFormVisible"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
@@ -123,12 +154,13 @@ console.log(rules)
       ref="ruleFormRef"
       :model="state.form"
       :rules="rules"
-      label-width="120px"
+      :label-width="props.labelWidth || '120px'"
       class="demo-ruleForm"
       :label-position="labelPosition"
       :size="size"
       status-icon
     >
+      <slot name="validator" />
       <el-form-item
         v-for="item in formFields"
         :key="item.prop"
@@ -151,6 +183,8 @@ console.log(rules)
         <el-select
           v-if="item.type === 'select'"
           v-model="state.form[item.prop]"
+          :disabled="item.disabled"
+          :multiple="item.multiple"
           :filterable="item.filterable"
           :clearable="item.clearable"
           :placeholder="item.placeholder"
@@ -232,6 +266,7 @@ console.log(rules)
       </el-form-item>
       <slot name="more"></slot>
     </el-form>
+    <slot name="default" />
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="resetForm(ruleFormRef)">取消</el-button>
