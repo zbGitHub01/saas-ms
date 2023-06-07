@@ -11,8 +11,9 @@
           :closable="item.close"
         >
           <template #label>
-            <el-icon class="tabs-icon" v-if="item.icon">
-              <component :is="item.icon"></component>
+            <el-icon class="tabs-icon">
+              <component :is="item.icon" v-if="item.icon"></component>
+              <Menu v-else />
             </el-icon>
             {{ item.title }}
           </template>
@@ -32,6 +33,7 @@ import MoreButton from './components/MoreButton.vue'
 const tabStore = useTabsStore()
 
 const tabsMenuList = computed(() => tabStore.tabsMenuList)
+console.log(tabsMenuList.value, '----tabs')
 const tabsMenuValue = computed({
   get: () => tabStore.tabsMenuValue,
   set: val => tabStore.setTabsMenuValue(val)
@@ -80,6 +82,7 @@ const removeTab = activeTabPath => {
     }
     .tabs-icon {
       top: 2px;
+      margin-right: 2px;
     }
     .el-tabs__nav-wrap {
       position: absolute;

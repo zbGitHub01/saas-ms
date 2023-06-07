@@ -10,7 +10,7 @@
   {
     "name": "案件管理",
     "code": "CASE_MANAGE",
-    "icon": "Coin",
+    "icon": "case-manage",
     "path": "/caseManage",
     "type": 1,
     "children": [
@@ -47,7 +47,7 @@
   {
     "name": "外部案件管理",
     "code": "EXTERNAL_CASE",
-    "icon": "TakeawayBox",
+    "icon": "extern-case",
     "path": "/externalCase",
     "type": 1,
     "children": [
@@ -105,7 +105,7 @@
   {
     "name": "案件流转",
     "code": "CASE_CIRCULATION",
-    "icon": "Guide",
+    "icon": "case-transfer",
     "path": "/caseCirculation",
     "type": 1,
     "children": [
