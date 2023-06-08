@@ -13,41 +13,41 @@
       <el-table :data="state.tableData" border>
         <el-table-column label="序" type="index" align="center" width="50" />
         <el-table-column label="产品" prop="productName" align="center" min-width="150"></el-table-column>
-        <el-table-column label="债权方" prop="zhaiquanfang" align="center" min-width="200"></el-table-column>
-        <el-table-column label="委托方" prop="zhaiquanfang" align="center" min-width="200"></el-table-column>
-        <el-table-column label="受托方" prop="shoutuofang" align="center" min-width="200"></el-table-column>
-        <el-table-column label="委托起始时间" prop="startTime" align="center" min-width="200"></el-table-column>
+        <el-table-column label="债权方" prop="creditorName" align="center" min-width="200"></el-table-column>
+        <el-table-column label="委托方" prop="tenantName" align="center" min-width="200"></el-table-column>
+        <el-table-column label="受托方" prop="trusteeName" align="center" min-width="200"></el-table-column>
+        <el-table-column label="委托起始时间" prop="proxyStartTime" align="center" min-width="200"></el-table-column>
         <el-table-column
           label="协议终止时间"
-          prop="xieyiEndTime"
+          prop="proxyEndTime"
           align="center"
           min-width="200"
           v-if="tabActive === '2'"
         ></el-table-column>
         <el-table-column
           label="委托截止时间"
-          prop="endTime"
+          prop="proxyEndTime"
           align="center"
           min-width="200"
           v-if="tabActive === '1'"
         ></el-table-column>
-        <el-table-column label="委托协议" prop="xieyi" align="center" min-width="150">
+        <el-table-column label="委托协议" prop="proxyAgreement" align="center" min-width="150">
           <template #default="scope">
             <el-button link type="primary" @click="lookAgreement(scope.row)">查看</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="委托创建人" prop="people" align="center" min-width="150"></el-table-column>
+        <el-table-column label="委托创建人" prop="createName" align="center" min-width="150"></el-table-column>
         <el-table-column label="委托创建时间" prop="createTime" align="center" min-width="200"></el-table-column>
         <el-table-column
           label="实际终止时间"
-          prop="realEndTime"
+          prop="actualEndTime"
           align="center"
           min-width="200"
           v-if="tabActive === '2'"
         ></el-table-column>
         <el-table-column
           label="终止操作人"
-          prop="endPeople"
+          prop="operatorName"
           align="center"
           min-width="150"
           v-if="tabActive === '2'"
@@ -69,11 +69,12 @@ import { Plus } from '@element-plus/icons-vue'
 import AddEntrustDialog from './components/AddEntrustDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
+import Apis, { proxyStop } from '@/api/modules/caseManage'
 const form = reactive({
-  positionStatus: 1 //1当前委托 2历史委托
+  state: null //null当前委托 4历史委托
 })
 const selectData = reactive({
-  productList: [], //产品列表
+  productAndCreList: [], //产品列表
   orgList: [] //机构列表
 })
 // 页码
@@ -92,62 +93,78 @@ onMounted(() => {
   getSelecData()
 })
 const getTableData = async () => {
-  console.log('查询', form)
   // 请求得到数据
-  // const { data } = await xx(form)
-  const tableDataSub = [
+  const params = {
+    ...query,
+    ...form
+  }
+  console.log('查询', params)
+  const { data } = await Apis.proxyPage(params)
+  // state.tableData = data.data
+  state.tableData = [
     {
       productName: '“360”借条',
-      zhaiquanfang: '丽水海树信用管理有限公司',
+      tenantName: '委托方',
+      creditorName: '丽水海树信用管理有限公司',
       weituofang: '丽水海树信用管理有限公司',
       shoutuofang: '丽水海树信用管理有限公司',
-      xieyi: '',
-      people: '赵光明',
-      startTime: '2020-03-05 22:22:22',
-      endTime: '2020-03-04 22:22:22',
+      proxyAgreement: '//asfile.donganzichan.cn/bb99ad393bc74e9c83a031f9288bb58b.xlsx',
+      createName: '赵光明',
+      proxyStartTime: '2020-03-05 22:22:22',
+      proxyEndTime: '2020-03-04 22:22:22',
       createTime: '2020-03-04 22:22:22',
-      xieyiEndTime: '2020-03-04 22:22:22',
-      realEndTime: '2020-03-04 22:22:22',
-      endPeople: 'zzzz'
+      actualEndTime: '2020-03-04 22:22:22',
+      operatorName: 'zzzz',
+      trusteeName: '受托方',
+      proxyId: 1
     },
     {
       productName: '万达贷',
-      zhaiquanfang: '丽水海树信用管理有限公司',
+      tenantName: '委托方',
+      creditorName: '丽水海树信用管理有限公司',
       weituofang: '丽水海树信用管理有限公司',
       shoutuofang: '丽水海树信用管理有限公司',
-      xieyi: '',
-      people: '赵光明',
-      startTime: '2020-03-05 22:22:22',
-      endTime: '永久',
+      proxyAgreement: '//asfile.donganzichan.cn/bb99ad393bc74e9c83a031f9288bb58b.xlsx',
+      createName: '赵光明',
+      proxyStartTime: '2020-03-05 22:22:22',
+      proxyEndTime: '永久',
       createTime: '2020-03-04 22:22:22',
-      xieyiEndTime: '2020-03-04 22:22:22',
-      realEndTime: '2020-03-04 22:22:22',
-      endPeople: 'zzzz'
+      actualEndTime: '2020-03-04 22:22:22',
+      operatorName: 'zzzz',
+      trusteeName: '受托方',
+      proxyId: 2
     }
   ]
-  state.tableData = tableDataSub
-  query.page = 1
-  state.total = 12
+  // state.total = data.total
 }
 const getSelecData = async () => {
   // 请求得到数据
-  // const { data } = await xx(form)
-  selectData.productList = [
+  const { data } = await Apis.productList({ isProxy: 0 })
+  selectData.productAndCreList = data
+  selectData.productAndCreList = [
     {
-      id: 1,
-      text: '小花袋'
+      creditorId: 1,
+      creditorName: '债权方1',
+      productId: 1,
+      productName: '产品1'
     },
     {
-      id: 2,
-      text: '“360”借条'
+      creditorId: 2,
+      creditorName: '债权方2',
+      productId: 2,
+      productName: '产品2'
     },
     {
-      id: 3,
-      text: '中腾信'
+      creditorId: 3,
+      creditorName: '债权方3',
+      productId: 3,
+      productName: '产品3'
     },
     {
-      id: 4,
-      text: '万达袋'
+      creditorId: 4,
+      creditorName: '债权方4',
+      productId: 4,
+      productName: '产品4'
     }
   ]
   selectData.orgList = [
@@ -163,9 +180,11 @@ const getSelecData = async () => {
 }
 
 // 切换tab
-const handleClick = row => {
+const handleClick = tab => {
   // 整理form参数
-  form.positionStatus = Number(row)
+  tab === '1' ? (form.state = null) : (form.state = 4)
+  query.page = 1
+  query.pageSize = 10
   getTableData()
 }
 
@@ -181,9 +200,9 @@ const toStop = row => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(
-    () => {
+    async () => {
       // 请求
-      // await xx(form)
+      await proxyStop(row.proxyId)
       ElMessage.success('终止合作成功！')
       getTableData()
     },
@@ -193,9 +212,9 @@ const toStop = row => {
     }
   )
 }
-// 查看协议
+// 查看下载协议
 const lookAgreement = row => {
-  window.open(row.url)
+  window.open(row.proxyAgreement)
 }
 </script>
 

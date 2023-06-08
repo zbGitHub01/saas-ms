@@ -34,13 +34,13 @@
 
 <script setup>
 import { reactive, ref, computed } from 'vue'
-import { useGlobalStore } from '@/store'
+// import { useGlobalStore } from '@/store'
 import CaseBankDialog from './CaseBankDialog.vue'
 import CommonDialog from './CommonDialog.vue'
-const globalState = useGlobalStore()
-const tokens = reactive({
-  Authorization: globalState.token
-})
+// const globalState = useGlobalStore()
+// const tokens = reactive({
+//   Authorization: globalState.token
+// })
 // 接收props数据
 // const props = defineProps<{
 //   selectData: {
@@ -63,7 +63,7 @@ const inputdata = reactive([
     title: '新案入库-特殊库',
     btn: '导入案件',
     type: 101,
-    select: true, //弹窗内容是否展示其他选项
+    // select: true, //弹窗内容是否展示其他选项
     downloadUrlKey: 'caseTemplateUrl',
     show: true
     // show: this.hasPerm("base_import_case"),
@@ -72,7 +72,7 @@ const inputdata = reactive([
     title: '更新覆盖案件信息',
     btn: '更新覆盖案件',
     type: 102,
-    select: false,
+    // select: false,
     downloadUrlKey: 'caseTemplateUrl',
     tipsList: ['1、案件更新模板同案件导入模板；', '2、导入文档必须保留“案件ID”字段；'],
     show: true
@@ -109,7 +109,7 @@ const inputdata = reactive([
     title: '导入临时标签',
     btn: '导入临时标签',
     type: 106,
-    select: false,
+    // select: false,
     downloadUrlKey: 'tagTemplateUrl',
     show: true
     // show: this.hasPerm("base_import_label"),
@@ -194,9 +194,9 @@ const inputClicks = item => {
   if (item.type === 101) {
     // 新案入库的弹窗
     caseBankDialog.value.open()
-  } else if (item.type === 111) {
+  // } else if (item.type === 111) {
     // 法诉状态标签的弹窗
-    legalDialog.value.open(item.title)
+    // legalDialog.value.open(item.title)
   } else {
     commonDialog.value.open(item.type, item.title)
   }

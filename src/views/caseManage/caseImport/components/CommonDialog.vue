@@ -9,20 +9,9 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <el-form :model="Fdata" ref="ruleFormRef">
+      <el-form ref="ruleFormRef">
         <el-form-item label="导入文件:" label-width="100px" prop="upload">
-          <!-- 平台端action="/caseCenter/caseImport/import" 还有tokens 绑定的值是form.file?-->
-          <!-- 这里用的公共组件有默认action 且无tokens 绑定的是数组 -->
-          <!-- check-validate绑定的函数是文件上传成功后执行 -->
-          <UploadFile
-            ref="uploadFileRef"
-            v-model:file-list="fileList"
-            accept-type="excel"
-            :auto-upload="false"
-            @check-validate="cancelSubmit"
-            :params="Ddata"
-            :api="'/caseCenter/caseImport/import'"
-          />
+          <UploadFile ref="uploadFileRef" v-model:file-list="fileList" accept-type="excel" />
         </el-form-item>
       </el-form>
     </span>
@@ -38,20 +27,17 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { UploadFile } from '@/components/Upload'
-const Fdata = reactive({})
-const originFormData = JSON.parse(JSON.stringify(Fdata))
+import { ElMessage } from 'element-plus'
+import Apis from '@/api/modules/caseManage'
 const fileList = ref([])
-const Ddata = reactive({
-  importFileType: ''
-})
+const importFileType = ref()
 const title = ref('')
 const uploadFileRef = ref()
 const ruleFormRef = ref()
 // 打开弹窗
 const dialogVisible = ref(false)
 const open = async (type, titleSub) => {
-  Object.assign(Fdata, originFormData)
-  Ddata.importFileType = type
+  importFileType.value = type
   title.value = titleSub
   fileList.value = []
   dialogVisible.value = true
@@ -60,14 +46,23 @@ defineExpose({
   open
 })
 
-const submitForm = () => {
+const submitForm = async () => {
+  if (!fileList.value[0]) {
+    return ElMessage.error('请上传文件！')
+  }
+  const params = {
+    importFileType: importFileType.value,
+    importUrl: fileList.value[0].url
+  }
+  console.log(params)
   // 文件手动上传
-  uploadFileRef.value.uploadSubmit()
+  // uploadFileRef.value.uploadSubmit()
+  await Apis.caseImport(params)
+  cancelSubmit()
 }
 // 取消
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
-  fileList.value = []
   dialogVisible.value = false
 }
 </script>

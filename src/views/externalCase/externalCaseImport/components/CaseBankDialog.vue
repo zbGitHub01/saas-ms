@@ -9,9 +9,9 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <el-form :model="Fdata" :rules="rules" ref="ruleFormRef">
+      <el-form :model="form" :rules="rules" ref="ruleFormRef">
         <el-form-item label="产品:" label-width="100px" prop="productId">
-          <el-select clearable v-model="Fdata.productId" filterable placeholder="请选择产品" style="width: 300px">
+          <el-select clearable v-model="form.productId" filterable placeholder="请选择产品" style="width: 300px">
             <el-option
               v-for="item in selectData.productList"
               :key="item.itemId"
@@ -21,7 +21,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="入库批次:" label-width="100px" prop="batchId">
-          <el-select clearable v-model="Fdata.batchId" filterable placeholder="请选择入库批次" style="width: 300px">
+          <el-select clearable v-model="form.batchId" filterable placeholder="请选择入库批次" style="width: 300px">
             <el-option
               v-for="item in selectData.batchList"
               :key="item.itemId"
@@ -31,7 +31,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="债权方:" label-width="100px" prop="creditorId">
-          <el-select clearable v-model="Fdata.creditorId" filterable placeholder="请选择债权方" style="width: 300px">
+          <el-select clearable v-model="form.creditorId" filterable placeholder="请选择债权方" style="width: 300px">
             <el-option
               v-for="item in selectData.creditorList"
               :key="item.itemId"
@@ -44,15 +44,7 @@
           <!-- 平台端action="/caseCenter/caseImport/import" 还有tokens 绑定的值是upload-->
           <!-- 这里用的公共组件有默认action 且无tokens 绑定的是数组 -->
           <!-- check-validate绑定的函数是文件上传成功后执行 -->
-          <UploadFile
-            ref="uploadFileRef"
-            v-model:file-list="fileList"
-            accept-type="excel"
-            :auto-upload="false"
-            @check-validate="cancelSubmit"
-            :params="Fdata"
-            :api="'/caseCenter/caseImport/import'"
-          />
+          <UploadFile ref="uploadFileRef" v-model:file-list="fileList" accept-type="excel" />
         </el-form-item>
       </el-form>
     </span>
@@ -69,19 +61,20 @@
 import { reactive, ref } from 'vue'
 import { UploadFile } from '@/components/Upload'
 import { ElMessage } from 'element-plus'
+import Apis from '@/api/modules/caseManage'
 const props = defineProps({
   selectData: {
     type: Object,
     default: () => ({})
   }
 })
-const Fdata = reactive({
+const form = reactive({
   productId: null,
   batchId: null,
   creditorId: null,
   importFileType: 101
 })
-const originFormData = JSON.parse(JSON.stringify(Fdata))
+const originFormData = JSON.parse(JSON.stringify(form))
 const fileList = ref([])
 const uploadFileRef = ref()
 // 校验规则
@@ -94,7 +87,7 @@ const rules = reactive({
 // 打开弹窗
 const dialogVisible = ref(false)
 const open = async () => {
-  Object.assign(Fdata, originFormData)
+  Object.assign(form, originFormData)
   fileList.value = []
   dialogVisible.value = true
 }
@@ -106,19 +99,25 @@ const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      console.log(Fdata)
-      // 文件手动上传
-      if (fileList.length === 0) {
-        return ElMessage.error('请上传文件')
+      if (!fileList.value[0]) {
+        return ElMessage.error('请上传文件！')
       }
-      uploadFileRef.value.uploadSubmit()
+      const params = {
+        ...form,
+        importUrl: fileList.value[0].url
+      }
+      console.log(params)
+      // 文件手动上传
+      // uploadFileRef.value.uploadSubmit()
+      await Apis.caseImport(params)
+      ElMessage.success('导入成功！')
+      cancelSubmit()
     }
   })
 }
 // 取消
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
-  fileList.value = []
   dialogVisible.value = false
 }
 </script>

@@ -19,24 +19,24 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="债权方：" prop="zhaiquanfangId">
-          <el-select v-model="form.zhaiquanfangId" placeholder="请选择债权方" clearable filterable>
+        <el-form-item label="债权方：" prop="creditorId">
+          <el-select v-model="form.creditorId" placeholder="请选择债权方" clearable filterable>
             <el-option v-for="(item, index) in selectData.orgList" :key="index" :label="item.text" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="SPV公司：" prop="SPV">
           <el-input v-model="form.SPV" placeholder="请输入SPV公司" clearable></el-input>
         </el-form-item>
-        <el-form-item label="官方咨询电话：" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入官方咨询电话" clearable></el-input>
+        <el-form-item label="官方咨询电话：" prop="contactPhone">
+          <el-input v-model="form.contactPhone" placeholder="请输入官方咨询电话" clearable></el-input>
         </el-form-item>
         <el-form-item label="产品资料：" prop="ziliao">
           <el-input v-model="form.ziliao" placeholder="请填写产品说明资料的链接" clearable></el-input>
         </el-form-item>
-        <el-form-item label="是否启用：" prop="isUse">
-          <el-radio-group v-model="form.isUse">
-            <el-radio :label="true">是</el-radio>
-            <el-radio :label="false">否</el-radio>
+        <el-form-item label="是否启用：" prop="productStatus">
+          <el-radio-group v-model="form.productStatus">
+            <el-radio :label="1">启用</el-radio>
+            <el-radio :label="0">不启用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -55,11 +55,11 @@ import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
 const form = reactive({
   productId: null,
-  zhaiquanfangId: null,
+  creditorId: null,
   SPV: '',
-  phone: '',
+  contactPhone: '',
   ziliao: '',
-  isUse: null
+  productStatus: null
 })
 const title = ref('')
 // 接收props数据
@@ -79,7 +79,7 @@ const props = defineProps({
 const ruleFormRef = ref()
 const rules = reactive({
   productId: [{ required: true, trigger: 'change', message: '委托产品不能为空' }],
-  zhaiquanfangId: [{ required: true, trigger: 'change', message: '债权方不能为空' }]
+  creditorId: [{ required: true, trigger: 'change', message: '债权方不能为空' }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
@@ -90,11 +90,11 @@ const open = (row, type) => {
   } else if (type === 2) {
     title.value = '编辑'
     form.productId = row.productId
-    form.zhaiquanfangId = row.zhaiquanfangId
+    form.creditorId = row.creditorId
     form.SPV = row.SPV
-    form.phone = row.phone
+    form.contactPhone = row.contactPhone
     form.ziliao = row.ziliao
-    form.isUse = row.isUse
+    form.productStatus = Number(row.productStatus)
   }
   dialogVisible.value = true
 }
@@ -109,10 +109,10 @@ const submitForm = formEl => {
       console.log(form)
       // 请求得到数据
       // await xx(form)
-      ElMessage.success('保存成功！')
-      emits('getTableData')
-      formEl.resetFields()
-      dialogVisible.value = false
+      // ElMessage.success('保存成功！')
+      // emits('getTableData')
+      // formEl.resetFields()
+      // dialogVisible.value = false
     }
   })
 }
