@@ -59,6 +59,10 @@ const handleDel = row => {
     })
 }
 
+const handleClick = () => {
+  console.log(props.title)
+}
+
 //取消
 const cancel = () => {
   if (type.value === 1) ruleForm.value.resetFields()

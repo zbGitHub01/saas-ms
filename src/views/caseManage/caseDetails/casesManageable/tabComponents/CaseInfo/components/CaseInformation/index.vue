@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import More from './component/more.vue'
 import MoreDialog from './component/moreDialog.vue'
+import TagDialog from './component/tagDialog.vue'
 import descriptionList from './config/descriptionList.js'
 
 const messageData = {
@@ -33,10 +34,11 @@ const state = reactive({
 })
 
 const dialogVisible = ref(false)
+const tagVisible = ref(false)
 
 const open = (item, val) => {
   state.type = item
-  dialogVisible.value = true
+  if (val !== 7) dialogVisible.value = true
   switch (val) {
     case 2:
       state.title = 'qq'
@@ -59,8 +61,8 @@ const open = (item, val) => {
       state.key = 'home_addr'
       break
     case 7:
-      state.labelShow = true
-      state.show = false
+      tagVisible.value = true
+      console.log(tagVisible.value)
       break
     default:
       break
@@ -105,6 +107,8 @@ const open = (item, val) => {
     </el-descriptions>
     <!--查看明细弹窗-->
     <MoreDialog v-model:dialog-visible="dialogVisible" :title="state.title" :type="state.type" />
+    <!--预警标签-->
+    <TagDialog v-model:tag-visible="tagVisible" :type="state.type" />
   </div>
 </template>
 <style scoped lang="scss">
