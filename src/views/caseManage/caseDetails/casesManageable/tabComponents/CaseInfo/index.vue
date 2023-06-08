@@ -44,7 +44,9 @@ const handleChange = val => {
       <el-collapse-item title="借款/转让信息" name="4">
         <component :is="componentsObj['LoanTransferInformation']"></component>
       </el-collapse-item>
-      <el-collapse-item title="处置金额/还款方式" name="5"></el-collapse-item>
+      <el-collapse-item title="处置金额/还款方式" name="5">
+        <component :is="componentsObj['DisposalRepayInformation']"></component>
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
