@@ -8,13 +8,18 @@ export const useCommonStore = defineStore('commonStore', {
       ROLE: [], // 角色列表
       DEPT: [], // 部门列表
       POSITION: [] // 职位列表
-    }
+    },
+    regionData: []
   }),
   actions: {
     async fetchItemList(code = null) {
       const codes = code || Object.keys(this.dropdownList).join(',')
       const { data } = await Apis.findItemList({ codes }, { headers: { noLoading: true } })
       this.dropdownList = { ...this.dropdownList, ...data }
+    },
+    async fetchRegion() {
+      const { data } = await Apis.areaTree({}, { headers: { noLoading: true } })
+      this.regionData = data
     }
   }
 })

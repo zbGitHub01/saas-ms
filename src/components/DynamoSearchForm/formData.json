@@ -1,0 +1,560 @@
+[
+  {
+    "data": [],
+    "title": "案件ID",
+    "type": "text",
+    "key": "caseNo",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "案人ID",
+    "type": "number",
+    "key": "caseUserId",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "债人ID",
+    "type": "number",
+    "key": "caseUserUniqueId",
+    "isShow": 1
+  },
+  {
+    "code": "PRODUCT_LIST",
+    "data": [],
+    "title": "产品",
+    "type": "multipleSelect",
+    "key": "productIdList",
+    "isShow": 1
+  },
+  {
+    "code": "BATCH_LIST",
+    "data": [],
+    "title": "入库批次",
+    "type": "select",
+    "key": "batchId",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "姓名",
+    "type": "text",
+    "key": "userName",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "证件号",
+    "type": "text",
+    "key": "idno",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "手机号",
+    "type": "text",
+    "key": "userPhone",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "户籍区域",
+    "type": "area",
+    "key": "regAddrList",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "全部",
+        "value": 0
+      },
+      {
+        "label": "未还款",
+        "value": 1
+      },
+      {
+        "label": "部分还款",
+        "value": 2
+      },
+      {
+        "label": "已结清",
+        "value": 3
+      },
+      {
+        "label": "未结清",
+        "value": 4
+      }
+    ],
+    "title": "还款情况",
+    "type": "radio",
+    "key": "refundStatus",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "正常",
+        "value": 1
+      },
+      {
+        "label": "关闭｜已结清",
+        "value": 10
+      },
+      {
+        "label": "关闭｜特殊原因",
+        "value": 15
+      },
+      {
+        "label": "关闭｜已核销",
+        "value": 12
+      },
+      {
+        "label": "关闭｜资产已转让",
+        "value": 16
+      },
+      {
+        "label": "关闭｜呆账/坏帐",
+        "value": 17
+      }
+    ],
+    "title": "案件状态",
+    "type": "multipleSelect",
+    "key": "caseStatusList",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "是",
+        "value": 1
+      },
+      {
+        "label": "否",
+        "value": 0
+      }
+    ],
+    "title": "是否留案",
+    "type": "radio",
+    "key": "isRetain",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "历史有关联",
+        "value": 1
+      },
+      {
+        "label": "分期计划中",
+        "value": 2
+      },
+      {
+        "label": "分期计划已失效",
+        "value": 3
+      },
+      {
+        "label": "履约完成",
+        "value": 4
+      },
+      {
+        "label": "无关联分期计划",
+        "value": 5
+      }
+    ],
+    "title": "留案分期计划",
+    "type": "radio",
+    "key": "retainStagingPlanStatus",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "历史有关联",
+        "value": 1
+      },
+      {
+        "label": "分期计划中",
+        "value": 2
+      },
+      {
+        "label": "分期计划已失效",
+        "value": 3
+      },
+      {
+        "label": "履约完成",
+        "value": 4
+      },
+      {
+        "label": "无关联分期计划",
+        "value": 5
+      }
+    ],
+    "title": "普通分期计划",
+    "type": "radio",
+    "key": "stagingPlanStatus",
+    "isShow": 1
+  },
+  {
+    "code": "TAG_TEMP",
+    "data": [],
+    "title": "临时标签",
+    "type": "lazyMultipleSelect",
+    "key": "tagTempNameList",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "是",
+        "value": 1
+      },
+      {
+        "label": "否",
+        "value": 0
+      }
+    ],
+    "title": "是否被标记预警标签",
+    "type": "radio",
+    "key": "isTagAlter",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "预警标签",
+    "type": "text",
+    "key": "tagAlterName",
+    "isShow": 1
+  },
+  {
+    "code": "IVR_TAG",
+    "data": [],
+    "title": "ivr标签",
+    "type": "select",
+    "key": "ivrTag",
+    "isShow": 1
+  },
+  {
+    "code": "ROBOT_TAG",
+    "data": [],
+    "title": "机器人标签",
+    "type": "select",
+    "key": "robotTag",
+    "isShow": 1
+  },
+  {
+    "code": "CREDITOR_LIST",
+    "data": [],
+    "title": "债权方",
+    "type": "select",
+    "key": "creditorId",
+    "isShow": 1
+  },
+  {
+    "code": "INVESTOR_LIST",
+    "data": [],
+    "title": "出资方",
+    "type": "select",
+    "key": "investorName",
+    "isShow": 1
+  },
+  {
+    "code": "DIST_LIST",
+    "data": [],
+    "title": "所属分库",
+    "type": "select",
+    "key": "storeId",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "待分库",
+        "value": 1
+      },
+      {
+        "label": "分库中",
+        "value": 0
+      }
+    ],
+    "title": "分库状态",
+    "type": "radio",
+    "key": "distState",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "已委案",
+        "value": 1
+      },
+      {
+        "label": "未委案",
+        "value": 0
+      }
+    ],
+    "title": "委案情况",
+    "type": "radio",
+    "key": "entrustStatus",
+    "isShow": 1
+  },
+  {
+    "code": "DUTY_ORG_LIST",
+    "data": [],
+    "title": "处置机构",
+    "type": "multipleSelect",
+    "key": "orgIdList",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "CPE",
+    "type": "select",
+    "key": "cpeId",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "委案日期",
+    "type": "dateRange",
+    "key": "joinTime",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "同产品共债剩余待还金额",
+    "type": "sumRange",
+    "key": "debtResidueAmount",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "在途诉讼案件",
+        "value": 1
+      },
+      {
+        "label": "已结案诉讼案件",
+        "value": 2
+      },
+      {
+        "label": "全部诉讼案件",
+        "value": 3
+      },
+      {
+        "label": "未关联诉讼案件",
+        "value": 4
+      }
+    ],
+    "title": "关联诉讼状态",
+    "type": "radio",
+    "key": "prosecuteOrderStatusGroup",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "A",
+        "value": "A"
+      },
+      {
+        "label": "B",
+        "value": "B"
+      },
+      {
+        "label": "C",
+        "value": "C"
+      },
+      {
+        "label": "D",
+        "value": "D"
+      },
+      {
+        "label": "E",
+        "value": "E"
+      }
+    ],
+    "title": "案件等级",
+    "type": "radio",
+    "key": "caseLevel",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "A1",
+        "value": "A1"
+      },
+      {
+        "label": "A2",
+        "value": "A2"
+      },
+      {
+        "label": "A3",
+        "value": "A3"
+      },
+      {
+        "label": "A4",
+        "value": "A4"
+      },
+      {
+        "label": "B1",
+        "value": "B1"
+      },
+      {
+        "label": "B2",
+        "value": "B2"
+      },
+      {
+        "label": "B3",
+        "value": "B3"
+      },
+      {
+        "label": "B4",
+        "value": "B4"
+      },
+      {
+        "label": "C1",
+        "value": "C1"
+      },
+      {
+        "label": "C2",
+        "value": "C2"
+      },
+      {
+        "label": "C3",
+        "value": "C3"
+      },
+      {
+        "label": "C4",
+        "value": "C4"
+      },
+      {
+        "label": "D1",
+        "value": "D1"
+      },
+      {
+        "label": "D2",
+        "value": "D2"
+      },
+      {
+        "label": "D3",
+        "value": "D3"
+      },
+      {
+        "label": "D4",
+        "value": "D4"
+      },
+      {
+        "label": "E1",
+        "value": "E1"
+      },
+      {
+        "label": "E2",
+        "value": "E2"
+      },
+      {
+        "label": "E3",
+        "value": "E3"
+      },
+      {
+        "label": "E4",
+        "value": "E4"
+      },
+      {
+        "label": "F",
+        "value": "F"
+      }
+    ],
+    "title": "案件等级明细",
+    "type": "radio",
+    "key": "caseLevelDesc",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "订单号或合同号",
+    "type": "text",
+    "key": "loanPactNo",
+    "isShow": 1
+  },
+  {
+    "code": "ENTRUST_TYPE",
+    "data": [],
+    "title": "委案类型",
+    "type": "select",
+    "key": "entrustType",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "平台用户ID",
+    "type": "text",
+    "key": "loanPlatformUserId",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "有",
+        "value": 1
+      },
+      {
+        "label": "无",
+        "value": 0
+      }
+    ],
+    "title": "有无投诉历史",
+    "type": "radio",
+    "key": "isHistoryComplaint",
+    "isShow": 1
+  },
+  {
+    "data": [],
+    "title": "剩余待还金额",
+    "type": "sumRange",
+    "key": "residueAmount",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "是",
+        "value": 1
+      },
+      {
+        "label": "否",
+        "value": 0
+      }
+    ],
+    "title": "是否锁定案件",
+    "type": "radio",
+    "key": "entrustLock",
+    "isShow": 1
+  },
+  {
+    "data": [
+      {
+        "label": "可以外呼",
+        "value": "RPS002"
+      },
+      {
+        "label": "不可外呼",
+        "value": "RPS001"
+      }
+    ],
+    "title": "三网修复",
+    "type": "radio",
+    "key": "repairStatus",
+    "isShow": 1
+  },
+  {
+    "code": "CASE_LAWSUIT_STATUS_TAG",
+    "data": [],
+    "title": "法诉状态标签",
+    "type": "select",
+    "key": "lawsuitStatus",
+    "isShow": 1
+  }
+]
