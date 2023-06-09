@@ -1,8 +1,13 @@
 <script setup>
 import { reactive, ref, computed, getCurrentInstance } from 'vue'
+import moment from 'moment'
+import { useGlobalStore } from '@/store'
+import Api from '@/api/modules/preCase.js'
 import tableColumnList from './config/tableColumnList.js'
 import dialogFormFieldsList from './config/dialogFormFieldsList.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
+
+const globalState = useGlobalStore()
 
 const state = reactive({
   tableData: [],
@@ -11,117 +16,70 @@ const state = reactive({
   dialogVisible: false,
   monthList: [],
   dialogRuleForm: {
-    case: '',
-    opera: '',
+    operStoreId: '', //分库Id
+    entrustStrategy: '', //操作维度 委案操作维度 1：案人 2: 案件 3: 剩余案人
     categoryCompany: '',
-    aimCompany: '',
-    caseType: '',
-    history: '',
-    date: '',
-    isAuto: '',
-    notes: '',
-    datetime: '',
-    checkTest: [],
-    fileList: [
-      {
-        name: 'element-plus-logo.svg',
-        url: 'https://element-plus.org/images/element-plus-logo.svg'
-      },
-      {
-        name: 'element-plus-logo2.svg',
-        url: 'https://element-plus.org/images/element-plus-logo.svg'
-      }
-    ]
+    orgId: '', //目标机构
+    entrustType: 1, //委案类型
+    isHideHisFollowRecord: 1, //历史处置记录
+    recoverDate: moment().endOf('month').format('YYYY-MM-DD'), //委案到期日
+    isAutoRecycle: 0, //是否自动收回
+    remark: '', //备注
+    execTime: '', //执行时间
+    entrustFileUrl: []
   }
 })
 
-const getOrderListAgain = (pageSize, pageNum) => {
-  const pageInfo = {
-    ...state.queryNewData,
-    pageNum,
-    pageSize
-  }
-  console.log(pageInfo)
-  // getOrderList(pageInfo).then(res => {
-  //   state.tableData = res.data.records
-  //   state.pageTotal = res.data.total
-  // })
+const getEntrustList = async () => {
+  const data = await Api.entrustList({ entrustBusType: 3 })
+  console.log('data', data)
 }
 
 const instance = getCurrentInstance()?.proxy
 const formFieldsList = computed(() => {
   dialogFormFieldsList.forEach(item => {
-    if (item.prop === 'case')
+    if (item.prop === 'operStoreId')
       item.options = instance?.$deepCopy(
         [
-          {
-            label: 'red',
-            value: 1
-          },
-          {
-            label: 'blue',
-            value: 2
-          }
+          { label: '大额处置库', value: 1 },
+          { label: '委外处置库', value: 2 }
         ],
         true
       )
     if (item.type === 'pairSelect') {
       item.childItem.filter(cItem => {
-        if (cItem.prop === 'aimCompany')
+        if (cItem.prop === 'orgId')
           cItem.options = instance?.$deepCopy([
-            {
-              label: 'red',
-              value: 1
-            },
-            {
-              label: 'blue',
-              value: 2
-            }
+            { label: 'red', value: 1 },
+            { label: 'blue', value: 2 }
           ])
       })
     }
-    if (item.prop === 'opera')
-      item.radioList = instance?.$deepCopy(
-        [
-          {
-            label: '案人'
-          },
-          {
-            label: '案件'
-          },
-          {
-            label: '库内剩余共债'
-          }
-        ],
-        true
-      )
+    if (item.prop === 'entrustFileUrl') {
+      item.headers = { Authorization: globalState.token }
+      item.action = import.meta.env.VITE_BASE_URL + 'upms/client/sys-file/upload'
+      console.log(item.action)
+    }
   })
   return dialogFormFieldsList
 })
 
 const rules = reactive({
-  case: [{ required: true, message: '请选择案件分库', trigger: 'blur' }],
+  operStoreId: [{ required: true, message: '请选择案件分库', trigger: 'blur' }],
   categoryCompany: [{ required: true, message: '请选择机构分类', trigger: 'change' }],
-  aimCompany: [{ required: true, message: '请选择目标机构', trigger: 'change' }],
-  caseType: [{ required: true, message: '请选择委案类型', trigger: 'change' }],
-  history: [{ required: true, message: '请选择历史处置记录', trigger: 'change' }],
-  date: [{ required: true, message: '请选择委案到期日', trigger: 'change' }],
-  isAuto: [{ required: true, message: '请选择是否自动收回', trigger: 'change' }],
-  datetime: [{ required: true, message: '请选择执行时间', trigger: 'change' }],
-  checkTest: [{ required: true, message: '请选择执行时间', trigger: 'change' }],
-  fileList: [{ required: true, message: '请上传委案文件', trigger: 'change' }]
+  orgId: [{ required: true, message: '请选择目标机构', trigger: 'change' }],
+  entrustType: [{ required: true, message: '请选择委案类型', trigger: 'change' }],
+  isHideHisFollowRecord: [{ required: true, message: '请选择历史处置记录', trigger: 'change' }],
+  recoverDate: [{ required: true, message: '请选择委案到期日', trigger: 'change' }],
+  isAutoRecycle: [{ required: true, message: '请选择是否自动收回', trigger: 'change' }],
+  execTime: [{ required: true, message: '请选择执行时间', trigger: 'change' }],
+  entrustFileUrl: [{ required: true, message: '请上传委案文件', trigger: 'change' }]
 })
 
 state.monthList = Array(20).fill({ label: '2021-01', name: Math.floor(Math.random(0, 1) * 10) })
 
-getOrderListAgain()
+getEntrustList()
 
-//formClass实例
-
-// const total = ref(0)
-// const page = ref(1)
-// const pageSize = ref(10)
-// state.tableData = Array(10).fill({ orderNo: 'test' })
 state.tableData = [
   { orderNo: 'test', isEnable: false, isOpen: true },
   { orderNo: '111', isEnable: true, isOpen: false },
@@ -211,8 +169,10 @@ const handleChange = row => {
 const handleEdit = () => {
   state.dialogVisible = true
 }
-const handleSubmit = data => {
-  console.log('formData', data.case)
+const handleSubmit = (data, form1) => {
+  console.log('formData', data)
+  // form1.resetFields()
+  // state.dialogVisible = false
 }
 </script>
 

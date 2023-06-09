@@ -63,7 +63,7 @@ let state = reactive({
 })
 const ruleFormRef = ref(0)
 
-const emit = defineEmits(['close', 'handlePreview', 'handleRemove', 'handleExceed', 'submit', 'watchChange'])
+const emit = defineEmits(['update:dialogFormVisible', 'handlePreview', 'handleRemove', 'handleExceed', 'submit', 'watchChange'])
 
 const closeClick = ruleFormRef => {
   resetFunc(ruleFormRef)
@@ -122,8 +122,8 @@ const submitForm = async formEl => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      emit('submit', state.form)
-      resetFunc(formEl)
+      emit('submit', state.form, formEl)
+      // resetFunc(formEl)
     } else {
       console.log('error submit!', fields)
     }
@@ -136,7 +136,7 @@ const resetForm = formEl => {
 }
 const resetFunc = formEl => {
   // state.form = proxy.$deepCopy(props.defaultForm, true)
-  emit('close')
+  emit('update:dialogFormVisible', false)
   formEl.resetFields()
 }
 </script>
@@ -197,14 +197,16 @@ const resetFunc = formEl => {
         </el-checkbox-group>
         <!--radio单选框-->
         <el-radio-group v-if="item.type === 'radio'" v-model="state.form[item.prop]">
-          <el-radio v-for="(opts, index) in item.radioList" :key="index" :label="opts.label" />
+          <el-radio v-for="(opts, index) in item.radioList" :key="index" :label="opts.label">
+            {{ opts.name }}
+          </el-radio>
         </el-radio-group>
         <!--date日期选择器-->
         <el-date-picker
           v-if="item.type === 'date'"
           v-model="state.form[item.prop]"
           type="date"
-          value-format="x"
+          value-format="YYYY-MM-DD"
           :placeholder="item.placeholder"
         />
         <!--datetime日期时间选择器-->
@@ -212,7 +214,7 @@ const resetFunc = formEl => {
           v-if="item.type === 'datetime'"
           v-model="state.form[item.prop]"
           type="datetime"
-          value-format="x"
+          value-format="yyyy-MM-dd HH:mm:ss"
           :placeholder="item.placeholder"
         />
         <!--目标机构（特殊）-->
@@ -256,7 +258,8 @@ const resetFunc = formEl => {
           :on-remove="handleRemove"
           :before-remove="beforeRemove"
           :on-exceed="handleExceed"
-          multiple
+          :headers="item.headers"
+          :multiple="item.multiple"
         >
           <el-button type="primary">点击上传</el-button>
           <template v-if="!!item.uploadTips" #tip>
