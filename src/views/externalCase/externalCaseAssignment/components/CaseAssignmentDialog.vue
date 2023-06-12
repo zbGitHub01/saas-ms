@@ -31,7 +31,7 @@
           </div>
         </div>
       </div> -->
-      <LabelClass :labelData="props.timeData" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
+      <LabelClass :labelData="props.timeData" :isSpaceAround="true" :isBkgColor="false"/>
       <el-divider style="margin-top: 40px"></el-divider>
       <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="130px" :rules="rules" v-if="!last">
         <el-form-item label="案件分库：" prop="bank">

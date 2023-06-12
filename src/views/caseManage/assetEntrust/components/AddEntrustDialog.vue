@@ -37,7 +37,7 @@
             <el-radio :label="'永久'">永久</el-radio>
             <el-radio :label="time">截止时间</el-radio>
           </el-radio-group>
-          <el-date-picker
+          <el-date-picker 
             v-model="time"
             type="date"
             placeholder="请选择截止时间"
@@ -127,7 +127,6 @@ const submitForm = formEl => {
         params.proxyEndTime = null
       } else {
         params.proxyDurationType = 2
-        params.proxyEndTime = params.proxyEndTime + ' 23:59:59'
       }
       await Apis.proxyCreate(params)
       ElMessage.success('操作成功！')

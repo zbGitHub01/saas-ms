@@ -70,11 +70,13 @@ const getSelecData = async () => {
   selectData.creditorList = [
     {
       itemId: 1,
-      itemText: '广西广投资产管理股份有限公司'
+      itemText: '广西广投资产管理股份有限公司',
+      importCaseType: 1, //1: 导入债权方为租户本身的案件 2: 导入债权方非本租户的案件
     },
     {
       itemId: 2,
-      itemText: '马上贷债权方'
+      itemText: '马上贷债权方',
+      importCaseType: 2,
     }
   ]
   // selectData.productList = data.PRODUCT_LIST;

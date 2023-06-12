@@ -12,10 +12,10 @@
     <div class="mt20">
       <el-table :data="state.tableData" border>
         <el-table-column label="序" type="index" align="center" width="50" />
-        <el-table-column label="产品" prop="productName" align="center" min-width="150"></el-table-column>
-        <el-table-column label="债权方" prop="creditorName" align="center" min-width="200"></el-table-column>
-        <el-table-column label="委托方" prop="tenantName" align="center" min-width="200"></el-table-column>
-        <el-table-column label="受托方" prop="trusteeName" align="center" min-width="200"></el-table-column>
+        <el-table-column label="产品" prop="productName" align="center" min-width="200"></el-table-column>
+        <el-table-column label="债权方" prop="creditorName" align="center" min-width="300"></el-table-column>
+        <el-table-column label="委托方" prop="tenantName" align="center" min-width="300"></el-table-column>
+        <el-table-column label="受托方" prop="trusteeName" align="center" min-width="300"></el-table-column>
         <el-table-column label="委托起始时间" prop="proxyStartTime" align="center" min-width="200"></el-table-column>
         <el-table-column
           label="协议终止时间"
@@ -100,42 +100,42 @@ const getTableData = async () => {
   }
   console.log('查询', params)
   const { data } = await Apis.proxyPage(params)
-  // state.tableData = data.data
-  state.tableData = [
-    {
-      productName: '“360”借条',
-      tenantName: '委托方',
-      creditorName: '丽水海树信用管理有限公司',
-      weituofang: '丽水海树信用管理有限公司',
-      shoutuofang: '丽水海树信用管理有限公司',
-      proxyAgreement: '//asfile.donganzichan.cn/bb99ad393bc74e9c83a031f9288bb58b.xlsx',
-      createName: '赵光明',
-      proxyStartTime: '2020-03-05 22:22:22',
-      proxyEndTime: '2020-03-04 22:22:22',
-      createTime: '2020-03-04 22:22:22',
-      actualEndTime: '2020-03-04 22:22:22',
-      operatorName: 'zzzz',
-      trusteeName: '受托方',
-      proxyId: 1
-    },
-    {
-      productName: '万达贷',
-      tenantName: '委托方',
-      creditorName: '丽水海树信用管理有限公司',
-      weituofang: '丽水海树信用管理有限公司',
-      shoutuofang: '丽水海树信用管理有限公司',
-      proxyAgreement: '//asfile.donganzichan.cn/bb99ad393bc74e9c83a031f9288bb58b.xlsx',
-      createName: '赵光明',
-      proxyStartTime: '2020-03-05 22:22:22',
-      proxyEndTime: '永久',
-      createTime: '2020-03-04 22:22:22',
-      actualEndTime: '2020-03-04 22:22:22',
-      operatorName: 'zzzz',
-      trusteeName: '受托方',
-      proxyId: 2
-    }
-  ]
-  // state.total = data.total
+  state.tableData = data.data
+  // state.tableData = [
+  //   {
+  //     productName: '“360”借条',
+  //     tenantName: '委托方',
+  //     creditorName: '丽水海树信用管理有限公司',
+  //     weituofang: '丽水海树信用管理有限公司',
+  //     shoutuofang: '丽水海树信用管理有限公司',
+  //     proxyAgreement: '//asfile.donganzichan.cn/bb99ad393bc74e9c83a031f9288bb58b.xlsx',
+  //     createName: '赵光明',
+  //     proxyStartTime: '2020-03-05 22:22:22',
+  //     proxyEndTime: '2020-03-04 22:22:22',
+  //     createTime: '2020-03-04 22:22:22',
+  //     actualEndTime: '2020-03-04 22:22:22',
+  //     operatorName: 'zzzz',
+  //     trusteeName: '受托方',
+  //     proxyId: 1
+  //   },
+  //   {
+  //     productName: '万达贷',
+  //     tenantName: '委托方',
+  //     creditorName: '丽水海树信用管理有限公司',
+  //     weituofang: '丽水海树信用管理有限公司',
+  //     shoutuofang: '丽水海树信用管理有限公司',
+  //     proxyAgreement: '//asfile.donganzichan.cn/bb99ad393bc74e9c83a031f9288bb58b.xlsx',
+  //     createName: '赵光明',
+  //     proxyStartTime: '2020-03-05 22:22:22',
+  //     proxyEndTime: '永久',
+  //     createTime: '2020-03-04 22:22:22',
+  //     actualEndTime: '2020-03-04 22:22:22',
+  //     operatorName: 'zzzz',
+  //     trusteeName: '受托方',
+  //     proxyId: 2
+  //   }
+  // ]
+  state.total = data.total
 }
 const getSelecData = async () => {
   // 请求得到数据

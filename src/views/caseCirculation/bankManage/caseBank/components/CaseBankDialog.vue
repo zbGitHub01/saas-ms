@@ -31,7 +31,7 @@
           </div>
         </div>
       </div> -->
-      <LabelClass :labelData="props.distInfo" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
+      <LabelClass :labelData="props.distInfo" :isSpaceAround="true" :isBkgColor="false" />
       <el-divider></el-divider>
       <el-form :model="form" ref="ruleFormRef">
         <el-form-item label="操作维度" prop="isWithProductPublicDebt">

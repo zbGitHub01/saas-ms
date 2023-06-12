@@ -8,7 +8,7 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <LabelClass :labelData="props.timeData" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
+      <LabelClass :labelData="props.timeData" :isSpaceAround="true" :isBkgColor="false"/>
       <!-- <div class="flx-justify-between allTab">
         <div class="flx-justify-between tab">
           <el-icon class="icon"><Memo /></el-icon>
