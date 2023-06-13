@@ -9,8 +9,7 @@
         </el-form>
       </template>
     </FormWrap>
-    <!-- <LabelData :labelData="state.labelData" /> -->
-    <LabelClass :labelData="state.labelData" />
+    <LabelClass :labelData="state.CaseStatisticsExternal" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -200,7 +199,7 @@
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
-    <AddOrRemoveTagDialog ref="addOrRemoveTagDialog" @submitForm="submitTagForm" />
+    <TemporaryLabel ref="temporaryLabel" @get-table-data="getTableData" />
     <HandleCaseDialog ref="handleCaseDialog" @submitForm="submitCaseForm" />
     <ExportDialog ref="exportDialog" @submitExport="submitExport" />
   </div>
@@ -210,15 +209,16 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Close, VideoPause, VideoPlay, CirclePlus, Delete, Download, Document } from '@element-plus/icons-vue'
-import AddOrRemoveTagDialog from './components/AddOrRemoveTagDialog.vue'
 import HandleCaseDialog from './components/HandleCaseDialog.vue'
 import ExportDialog from './components/ExportDialog.vue'
+import Apis from '@/api/modules/caseManage'
+import CaseStatisticsExternal from '@/constants/CaseStatisticsExternal' //统计数据
 const multipleTable = ref(null)
 const form = reactive({
   caseId: ''
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-const addOrRemoveTagDialog = ref()
+const temporaryLabel = ref()
 const handleCaseDialog = ref()
 const exportDialog = ref()
 // 页码
@@ -229,7 +229,7 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  labelData: {}, //标签数据
+  CaseStatisticsExternal: {}, //统计数据
   selectData: [], //选中项
   handleparams: {}, //操作的参数
   exportData: {} //导出项参数
@@ -476,60 +476,18 @@ const getTableData = async () => {
       userPhone: '18435838528'
     }
   ]
-  query.page = 1
   state.total = 12
-  // 得到label数据
-  state.labelData = [
-    {
-      customizeIcon: 'caselist',
-      eplusIcon: '',
-      labelTitle: '案件数量',
-      isHaveRmbSign: false,
-      value: null, //total
-      key: 'total'
-    },
-    {
-      customizeIcon: 'peoplenum',
-      eplusIcon: '',
-      labelTitle: '案人人数',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'caseUserCount'
-    },
-    {
-      customizeIcon: 'moneynum',
-      eplusIcon: '',
-      labelTitle: '处置金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumHandleAmount'
-    },
-    {
-      customizeIcon: 'backmoney',
-      eplusIcon: '',
-      labelTitle: '已还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumRefundAmount'
-    },
-    {
-      customizeIcon: 'moneing',
-      eplusIcon: '',
-      labelTitle: '待还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumResidueAmount'
-    }
-  ]
   const labelData2 = {
+    totalCase: 33,
     caseUserCount: 239278,
     sumHandleAmount: 4889285788.62,
     sumRefundAmount: 184079143.85,
     sumResidueAmount: 4711200212.03
   }
-  state.labelData.forEach(item => {
+  CaseStatisticsExternal.forEach(item => {
     item.value = labelData2[item.key]
   })
+  state.CaseStatisticsExternal = CaseStatisticsExternal
 }
 // 重置
 const reset = () => {
@@ -604,22 +562,7 @@ const handleClick = item => {
 }
 // 1添加临时标签/2删除临时标签
 const handleTag = type => {
-  addOrRemoveTagDialog.value.open(type)
-}
-// 确认添加/删除临时标签
-const submitTagForm = (tempTagName, type, isDeleteAllRelationTag) => {
-  // 处理入参
-  let params = getParams()
-  params.tempTagName = tempTagName
-  if (type === 2) {
-    params['isDeleteAllRelationTag'] = isDeleteAllRelationTag === true ? 1 : 0
-  }
-  console.log(params)
-  // 请求得到数据
-  // await xx(form)
-  ElMessage.success('操作成功！')
-  toggleSelection()
-  getTableData()
+  temporaryLabel.value.open(type, getParams())
 }
 // 1关闭案件/2暂停案件/3恢复案件
 const handleCase = type => {

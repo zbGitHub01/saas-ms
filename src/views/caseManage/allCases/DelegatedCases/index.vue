@@ -4,9 +4,9 @@
       <template #default>
         <el-form inline :model="form">
           <el-form-item label="案件ID">
-            <el-input v-model="form.caseId" placeholder="请输入案件ID" clearable></el-input>
+            <el-input v-model="form.caseNo" placeholder="请输入案件ID" clearable></el-input>
           </el-form-item>
-          <el-form-item label="产品：" prop="productId">
+          <!-- <el-form-item label="产品：" prop="productId">
             <el-select clearable v-model="form.productId" filterable placeholder="请选择产品">
               <el-option label="产品1" :value="1"></el-option>
             </el-select>
@@ -15,12 +15,11 @@
             <el-select clearable v-model="form.investorName" filterable placeholder="请选择出资方">
               <el-option label="出资方1" :value="1"></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
       </template>
     </FormWrap>
-    <!-- <LabelData :labelData="state.labelData" /> -->
-    <LabelClass :labelData="state.labelData" />
+    <LabelClass :labelData="state.CaseStatisticsEntrust" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -56,80 +55,30 @@
         @sort-change="handlesort"
         ref="multipleTable"
         :row-class-name="tableRowClassName"
+        :row-key="getRowKeys"
       >
-        <el-table-column type="selection" fixed align="center" width="55"></el-table-column>
-        <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left" :show-overflow-tooltip="true">
+        <el-table-column type="selection" fixed align="center" width="55" :reserve-selection="true"></el-table-column>
+        <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left">
           <template #default="scope">
             <status :row="scope.row" pageType="disposalCasemessage" />
           </template>
         </el-table-column>
-        <el-table-column
-          label="产品"
-          prop="productName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="姓名"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="证件号"
-          prop="idno"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="手机号"
-          prop="userPhone"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="委案金额"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="还款入账金额"
-          prop="entrustRefundAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="减免金额"
-          prop="entrustReductionAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="剩余待还金额"
-          prop="entrustResidueAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-          sortable
-        ></el-table-column>
-        <!-- 再处理，看看需不需要处理，还是直接拿 -->
-        <el-table-column label="临时标签" prop="tagTempName" align="left" min-width="180" :show-overflow-tooltip="true">
+        <el-table-column label="产品" prop="productName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="姓名" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="证件号" prop="idno" align="center" min-width="180"></el-table-column>
+        <el-table-column label="手机号" prop="userPhone" align="center" min-width="150"></el-table-column>
+        <el-table-column label="委案金额" prop="entrustAmount" align="center" min-width="150" sortable></el-table-column>
+        <el-table-column label="还款入账金额" prop="totalRefundAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="减免金额" prop="totalReductionAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="剩余待还金额" prop="residueAmount" align="center" min-width="150" sortable></el-table-column>
+        <el-table-column label="临时标签" prop="tagTempList" align="left" min-width="180" :show-overflow-tooltip="true">
           <template #default="scope">
             <span v-for="(item, index) in scope.row.tagTempList" :key="index">
               <span>{{ index === scope.row.tagTempList.length - 1 ? item.tagName : item.tagName + ',' }}</span>
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="预警标签" prop="tagAlterName" align="left" min-width="180" :show-overflow-tooltip="true">
+        <el-table-column label="预警标签" prop="tagAlterList" align="left" min-width="180" :show-overflow-tooltip="true">
           <template #default="scope">
             <span v-for="(item, index) in scope.row.tagAlterList" :key="index">
               <span :style="{ color: item.isShare === 1 ? 'red' : '' }">
@@ -142,63 +91,27 @@
           label="IVR标签"
           prop="ivrTag"
           align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="委案方"
-          prop="weianfang"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="CPE"
-          prop="cpeName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="分案时间"
-          prop="allotTime"
-          align="center"
           min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
+        <el-table-column label="委案方" prop="weianfang" align="center" min-width="200"></el-table-column>
+        <el-table-column label="CPE" prop="cpeName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="分案时间" prop="allotTime" align="center" min-width="180"></el-table-column>
         <el-table-column
           label="跟进结果"
           prop="entrustContactResultText"
           align="center"
-          min-width="250"
+          min-width="200"
           :show-overflow-tooltip="true"
         ></el-table-column>
-        <el-table-column
-          label="处置状态"
-          prop="followStatusText"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="跟进次数"
-          prop="entrustFollowTimes"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="最近更进时间"
-          prop="entrustLastFollowTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="处置状态" prop="followStatusText" align="center" min-width="150"></el-table-column>
+        <el-table-column label="跟进次数" prop="entrustFollowTimes" align="center" min-width="150"></el-table-column>
+        <el-table-column label="最近更进时间" prop="entrustLastFollowTime" align="center" min-width="180"></el-table-column>
         <el-table-column label="案件状态" prop="caseStatusText" align="center" min-width="150" fixed="right"></el-table-column>
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
-    <AddOrRemoveTagDialog ref="addOrRemoveTagDialog" @submitForm="submitTagForm" />
+    <TemporaryLabel ref="temporaryLabel" @get-table-data="getTableData" />
     <EditStatusDialog ref="editStatusDialog" @submitForm="submitEditForm" />
     <ExportDialog ref="exportDialog" @submitExport="submitExport" />
     <ColorShowDialog ref="colorShowDialog" @submitForm="submitColorForm" @getTableData="getTableData" />
@@ -210,21 +123,22 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Close, VideoPause, VideoPlay, CirclePlus, Delete, Download, Document } from '@element-plus/icons-vue'
-import AddOrRemoveTagDialog from './components/AddOrRemoveTagDialog.vue'
 import EditStatusDialog from './components/EditStatusDialog.vue'
 import ExportDialog from './components/ExportDialog.vue'
 import ColorShowDialog from './components/ColorShowDialog.vue'
 import CreatBatchDialog from './components/CreatBatchDialog.vue'
+import CaseStatisticsEntrust from '@/constants/CaseStatisticsEntrust' //统计数据
+import Apis from '@/api/modules/caseManage'
 const multipleTable = ref(null)
 const form = reactive({
-  caseId: '',
-  productId: null, //产品
-  investorName: null, //出资方
-  entrustAmountSort: null, //委案金额排序
-  entrustResidueAmountSort: null //剩余待还金额排序
+  caseNo: ''
+  // productId: null, //产品
+  // investorName: null, //出资方
+  // entrustAmountSort: null, //委案金额排序
+  // entrustResidueAmountSort: null //剩余待还金额排序
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-const addOrRemoveTagDialog = ref()
+const temporaryLabel = ref()
 const editStatusDialog = ref()
 const exportDialog = ref()
 const colorShowDialog = ref()
@@ -237,7 +151,7 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  labelData: [], //标签数据
+  CaseStatisticsEntrust: [], //统计数据
   selectData: [], //选中项
   handleparams: {
     caseIdList: [],
@@ -330,9 +244,15 @@ onMounted(() => {
   getTableData()
 })
 const getTableData = async () => {
-  console.log('可管理案件搜索', form)
+  console.log('可管理案件搜索')
   // 请求得到数据
-  // const { data } = await xx(form)
+  const params = {
+    ...form,
+    ...query,
+    queryType: 'ENTRUSTED' //案件查询类型：ENTRUSTED-委派处置案件
+  }
+  const { data } = await Apis.caseList(params)
+  state.tableData = data.data
   state.tableData = [
     {
       allotLogId: 0,
@@ -384,7 +304,7 @@ const getTableData = async () => {
       regAddrCity: '吕梁市',
       regAddrProvince: '山西省',
       repairStatus: 'RPS001',
-      entrustResidueAmount: 7266.75,
+      residueAmount: 7266.75,
       retainId: 0,
       robotTag: '机器人评语',
       stagingPlan: { stagingPlanUuid: 'e20a60db43fd43f190ea2e8c919d62c5', historyRetainCount: 0, debtSignStatus: 0 },
@@ -425,8 +345,8 @@ const getTableData = async () => {
       ],
       totalCouponAmount: 0,
       totalIntegralAmount: 0,
-      entrustReductionAmount: 0,
-      entrustRefundAmount: 0,
+      totalReductionAmount: 0,
+      totalRefundAmount: 0,
       transAmount: 4844.5,
       userName: '马海山',
       userPhone: '18435838528'
@@ -482,7 +402,7 @@ const getTableData = async () => {
       regAddrCity: '吕梁市',
       regAddrProvince: '山西省',
       repairStatus: 'RPS001',
-      entrustResidueAmount: 7266.75,
+      residueAmount: 7266.75,
       retainId: 0,
       robotTag: '机器人评语',
       stagingPlan: { stagingPlanUuid: 'e20a60db43fd43f190ea2e8c919d62c5', historyRetainCount: 0, debtSignStatus: 0 },
@@ -492,67 +412,19 @@ const getTableData = async () => {
       tagTempList: [{ caseId: 1, caseTagId: 3371889, tagName: '888' }],
       totalCouponAmount: 0,
       totalIntegralAmount: 0,
-      entrustReductionAmount: 0,
-      entrustRefundAmount: 0,
+      totalReductionAmount: 0,
+      totalRefundAmount: 0,
       transAmount: 4844.5,
       userName: '马海山',
       userPhone: '18435838528'
     }
   ]
-  query.page = 1
-  state.total = 12
-  // 得到label数据
-  state.labelData = [
-    {
-      customizeIcon: '',
-      eplusIcon: 'Memo',
-      labelTitle: '案件数量',
-      isHaveRmbSign: false,
-      value: null, //total
-      key: 'total'
-    },
-    {
-      customizeIcon: '',
-      eplusIcon: 'UserFilled',
-      labelTitle: '案人人数',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'caseUserCount'
-    },
-    {
-      customizeIcon: '',
-      eplusIcon: 'Money',
-      labelTitle: '处置金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumHandleAmount'
-    },
-    {
-      customizeIcon: '',
-      eplusIcon: 'Money',
-      labelTitle: '已还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumRefundAmount'
-    },
-    {
-      customizeIcon: '',
-      eplusIcon: 'Money',
-      labelTitle: '待还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumResidueAmount'
-    }
-  ]
-  const labelData2 = {
-    caseUserCount: 239278,
-    sumHandleAmount: 4889285788.62,
-    sumRefundAmount: 184079143.85,
-    sumResidueAmount: 4711200212.03
-  }
-  state.labelData.forEach(item => {
-    item.value = labelData2[item.key]
+  state.total = data.total
+  const { data: data1 } = await Apis.caseListStats(params)
+  CaseStatisticsEntrust.forEach(item => {
+    item.value = data1[item.key]
   })
+  state.CaseStatisticsEntrust = CaseStatisticsEntrust
 }
 // 重置
 const reset = () => {
@@ -579,6 +451,10 @@ const toggleSelection = () => {
   state.selectData = []
   multipleTable.value.clearSelection()
   console.log(state.selectData)
+}
+//跨页选择
+const getRowKeys = row => {
+  return row.caseId
 }
 //通过此函数整体过滤事件
 const handleClick = item => {
@@ -631,22 +507,7 @@ const handleClick = item => {
 }
 // 1添加临时标签/2删除临时标签
 const handleTag = type => {
-  addOrRemoveTagDialog.value.open(type)
-}
-// 确认添加/删除临时标签
-const submitTagForm = (tempTagName, type, isDeleteAllRelationTag) => {
-  // 处理入参
-  let params = getParams()
-  params['tempTagName'] = tempTagName
-  if (type === 2) {
-    params['isDeleteAllRelationTag'] = isDeleteAllRelationTag === true ? 1 : 0
-  }
-  console.log(params)
-  // 请求得到数据
-  // await xx(form)
-  ElMessage.success('操作成功！')
-  toggleSelection()
-  getTableData()
+  temporaryLabel.value.open(type, getParams())
 }
 //排序
 const handlesort = val => {
@@ -654,7 +515,7 @@ const handlesort = val => {
     if (val.prop === 'entrustAmount') {
       form.entrustResidueAmountSort = null
       form.entrustAmountSort = val.order === 'ascending' ? 0 : 1
-    } else if (val.prop === 'entrustResidueAmount') {
+    } else if (val.prop === 'residueAmount') {
       form.entrustAmountSort = null
       form.entrustResidueAmountSort = val.order === 'ascending' ? 0 : 1
     }

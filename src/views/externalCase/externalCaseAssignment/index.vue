@@ -9,8 +9,7 @@
         </el-form>
       </template>
     </FormWrap>
-    <!-- <LabelData :labelData="state.labelData" /> -->
-    <LabelClass :labelData="state.labelData" />
+    <LabelClass :labelData="state.CaseStatistics" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -197,6 +196,8 @@ import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Folder } from '@element-plus/icons-vue'
 import CaseAssignmentDialog from './components/CaseAssignmentDialog.vue'
+import CaseStatistics from '@/constants/CaseStatistics' //统计数据
+import CaseLabelData3 from '@/constants/CaseLabelData3' //收回查询数据
 const multipleTable = ref(null)
 const form = reactive({
   caseId: ''
@@ -216,7 +217,7 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  labelData: {}, //标签数据
+  CaseStatistics: [], //统计数据
   selectData: [], //选中项
   handleparams: {}, //操作的参数
   taskId: null, //对选中数据操作的唯一标记id
@@ -404,60 +405,19 @@ const getTableData = async () => {
       userPhone: '18435838528'
     }
   ]
-  query.page = 1
   state.total = 12
-  // 得到label数据
-  state.labelData = [
-    {
-      customizeIcon: 'caselist',
-      eplusIcon: '',
-      labelTitle: '案件数量',
-      isHaveRmbSign: false,
-      value: null, //total
-      key: 'total'
-    },
-    {
-      customizeIcon: 'peoplenum',
-      eplusIcon: '',
-      labelTitle: '案人人数',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'caseUserCount'
-    },
-    {
-      customizeIcon: 'moneynum',
-      eplusIcon: '',
-      labelTitle: '处置金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumHandleAmount'
-    },
-    {
-      customizeIcon: 'backmoney',
-      eplusIcon: '',
-      labelTitle: '已还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumRefundAmount'
-    },
-    {
-      customizeIcon: 'moneing',
-      eplusIcon: '',
-      labelTitle: '待还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumResidueAmount'
-    }
-  ]
+  // 得到labelData数据
   const labelData2 = {
+    totalCase: 33,
     caseUserCount: 239278,
     sumHandleAmount: 4889285788.62,
     sumRefundAmount: 184079143.85,
     sumResidueAmount: 4711200212.03
   }
-  state.labelData.forEach(item => {
+  CaseStatistics.forEach(item => {
     item.value = labelData2[item.key]
   })
+  state.CaseStatistics = CaseStatistics
 }
 const getSelecData = async () => {
   // 请求得到数据
@@ -574,32 +534,6 @@ const fetchTimingSearch = (entrustStrategy = 1) => {
   // const { data } = await xx(params)
   // state.taskId = data.taskId
   // state.timeData = data
-  const label = [
-    {
-      customizeIcon: 'caselist',
-      eplusIcon: '',
-      labelTitle: '选中案件数',
-      isHaveRmbSign: false,
-      value: null, //total
-      key: 'caseNum'
-    },
-    {
-      customizeIcon: 'peoplenum',
-      eplusIcon: '',
-      labelTitle: '选中案人数',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'personNum'
-    },
-    {
-      customizeIcon: 'moneynum',
-      eplusIcon: '',
-      labelTitle: '预计分库金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'totalAmount'
-    }
-  ]
   if (entrustStrategy === 1) {
     state.taskId = 1
     state.timeData = {
@@ -625,10 +559,10 @@ const fetchTimingSearch = (entrustStrategy = 1) => {
       totalAmount: 4
     }
   }
-  label.forEach(item => {
+  CaseLabelData3.forEach(item => {
     item.value = state.timeData[item.key]
   })
-  state.timeData = label
+  state.timeData = CaseLabelData3
 }
 </script>
 

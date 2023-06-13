@@ -2,7 +2,7 @@
   <el-dialog
     v-model="dialogVisible"
     :title="title"
-    width="25%"
+    width="360px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item v-if="typeSub === 2" label="临时标签:" prop="tempTagName">
           <el-select v-model="form.tempTagName" filterable clearable placeholder="请选择临时标签">
-            <el-option v-for="item in selectData.tagList" :key="item" :label="item" :value="item"></el-option>
+            <el-option v-for="item in state.tagList" :key="item" :label="item" :value="item"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item v-if="typeSub === 2" label="从所有案件中删除此标签：" prop="isDeleteAllRelationTag">
@@ -22,17 +22,6 @@
         </el-form-item>
         <el-form-item v-if="typeSub === 3">
           <UploadFile ref="uploadFileRef" accept-type="excel" :auto-upload="false" />
-          <!-- <el-upload
-          ref="upload"
-          action="/caseCenter/case/orgTagTemp/import"
-          :limit="1"
-          :auto-upload="false"
-          :on-change="onChangeFiel"
-          :on-success="onSuccess"
-        >
-          <span>上传文件：</span>
-          <el-button type="primary" size="small">点击上传</el-button>
-        </el-upload> -->
         </el-form-item>
       </el-form>
     </span>
@@ -46,22 +35,23 @@
   </el-dialog>
 </template>
 <script setup>
-import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
+import Apis from '@/api/modules/caseManage'
+import { ElMessage } from 'element-plus'
 import { UploadFile } from '@/components/Upload'
 const form = reactive({
-  tempTagName: null, //临时标签
+  tempTagName: null, //临时标签名字
   isDeleteAllRelationTag: false //是否操作所有案件中删除
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-const typeSub = ref(1)
-const title = ref('')
-const upload = ref()
-const uploadFileRef = ref()
-const selectData = reactive({
+const state = reactive({
+  params: {},
   tagList: [] //临时标签列表
 })
-const emits = defineEmits(['submitForm', 'getTableData'])
+const typeSub = ref(1)
+const title = ref('')
+const uploadFileRef = ref()
+const emits = defineEmits(['getTableData'])
 // 校验规则
 const ruleFormRef = ref()
 const rules = reactive({
@@ -70,15 +60,16 @@ const rules = reactive({
 })
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = type => {
+const open = (type, params) => {
   if (type === 1) {
     title.value = '添加临时标签'
   } else if (type === 2) {
     title.value = '删除临时标签'
     getSelecData()
-  } else if (type == 3) {
+  } else if (type === 3) {
     title.value = '导入批量添加标签'
   }
+  state.params = params
   typeSub.value = type
   Object.assign(form, originFormData)
   dialogVisible.value = true
@@ -92,15 +83,18 @@ const submitForm = formEl => {
   formEl.validate(async valid => {
     if (valid) {
       if (typeSub.value === 1) {
-        emits('submitForm', form.tempTagName, 1)
+        state.params.tempTagName = form.tempTagName
+        await Apis.tagTempAdd(state.params)
       } else if (typeSub.value === 2) {
-        emits('submitForm', form.tempTagName, 2, form.isDeleteAllRelationTag)
+        state.params.tempTagName = form.tempTagName
+        state.params.isDeleteAllRelationTag = form.isDeleteAllRelationTag === true ? 1 : 0
+        await Apis.tagTempDelete(state.params)
       } else if (typeSub.value === 3) {
-        // 只要上传文件即可
-        // upload.value.submit()
+        // 只要上传文件就好吗？
         uploadFileRef.value.uploadSubmit()
-        emits('getTableData')
       }
+      ElMessage.success('操作成功！')
+      emits('getTableData')
       cancelSubmit()
     }
   })
@@ -111,19 +105,8 @@ const cancelSubmit = () => {
   dialogVisible.value = false
 }
 const getSelecData = async () => {
-  // 请求得到数据
-  // const { data } = await xx(params)
-  selectData.tagList = ['111', '116', 'test1', 'test', '99', 'jjj', '测试']
-}
-const onChangeFiel = (files, fileList) => {}
-//上传成功
-const onSuccess = res => {
-  // 不要code
-  if (res.code === 200) {
-    dialogVisible.value = false
-  } else if (res.code === 500) {
-    ElMessage.error('上传文档格式错误')
-  }
+  const { data } = await Apis.tagTempList()
+  state.tagList = data
 }
 //点击下载模板
 const downloadHandle = () => {

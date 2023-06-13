@@ -41,6 +41,10 @@ const apiConfig = {
     tagTempAdd: 'POST /caseCenter/case/tagTemp/add', //临时标签添加
     tagTempDelete: 'POST /caseCenter/case/tagTemp/delete', //删除标签添加
     tagTempList: 'GET /caseCenter/case/tagTemp/list', //临时标签列表
+
+    // 全部案件
+    caseList: 'POST /caseCenter/case/list', //案件列表
+    caseListStats: 'POST /caseCenter/case/list/stats', //案件列表统计数据
     
     // 资产包类型
     packagetypeList: 'GET /caseCenter/packagetype/list', //不分页资产包类型

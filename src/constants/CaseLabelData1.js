@@ -1,4 +1,4 @@
-const label = [
+const CaseLabelData1 = [
   {
     customizeIcon: 'caselist',
     eplusIcon: '',
@@ -24,4 +24,4 @@ const label = [
     key: 'totalAmount'
   }
 ]
-export default label
+export default CaseLabelData1

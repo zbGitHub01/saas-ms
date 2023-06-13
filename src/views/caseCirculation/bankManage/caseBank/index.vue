@@ -12,7 +12,7 @@
         </el-form>
       </template>
     </FormWrap>
-    <LabelClass :labelData="labelData" />
+    <LabelClass :labelData="state.CaseStatistics" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -189,7 +189,7 @@
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
-    <AddOrRemoveTagDialog ref="addOrRemoveTagDialog" @submitForm="submitForm" />
+    <TemporaryLabel ref="temporaryLabel" @get-table-data="getTableData" />
     <CaseBankDialog
       ref="caseBankDialog"
       :distInfo="state.distInfo"
@@ -214,21 +214,21 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-import AddOrRemoveTagDialog from './components/AddOrRemoveTagDialog.vue'
 import CaseBankDialog from './components/CaseBankDialog.vue'
 import CaseRecoveryDialog from './components/CaseRecoveryDialog.vue'
 import { CirclePlus, Delete, Folder } from '@element-plus/icons-vue'
 import Apis from '@/api/modules/caseManage'
 import Apis2 from '@/api/modules/common'
-import labelData from './components/labelData' //统计数据
-import label from './components/label' //分库查询数据
+import CaseStatistics from '@/constants/CaseStatistics' //统计数据
+import CaseLabelData1 from '@/constants/CaseLabelData1' //分库查询数据
+import CaseLabelData2 from '@/constants/CaseLabelData2' //收回查询数据
 const multipleTable = ref(null)
 const tabActive = ref(0)
 const form = reactive({
   caseNo: ''
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-const addOrRemoveTagDialog = ref()
+const temporaryLabel = ref()
 const caseBankDialog = ref()
 const caseRecoveryDialog = ref()
 // 页码
@@ -239,6 +239,7 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
+  CaseStatistics: [], //统计数据
   selectData: [], //选中项
   handleparams: {}, //操作的参数
   tabList: [], //分库列表
@@ -466,9 +467,10 @@ const getTableData = async () => {
   //   sumRefundAmount: 184079143.85,
   //   sumResidueAmount: 4711200212.03
   // }
-  labelData.forEach(item => {
+  CaseStatistics.forEach(item => {
     item.value = data1[item.key]
   })
+  state.CaseStatistics = CaseStatistics
 }
 // 获取分库数据
 const getTabList = async () => {
@@ -552,21 +554,9 @@ const handleClick = item => {
 }
 // 1添加临时标签/2删除临时标签
 const open = type => {
-  addOrRemoveTagDialog.value.open(type)
-}
-// 确认添加/删除临时标签
-const submitForm = async(tempTagName, type, isDeleteAllRelationTag) => {
-  // 处理入参
   let params =
     operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
-  params.tempTagName = tempTagName
-  if (type === 2) {
-    params['isDeleteAllRelationTag'] = isDeleteAllRelationTag === true ? 1 : 0
-  }
-  console.log(params)
-  // 请求得到数据
-  type === 1? await Apis.tagTempAdd(params):await Apis.tagTempDelete(params)
-  ElMessage.success('操作成功！')
+  temporaryLabel.value.open(type, params)
 }
 // 案件分库
 const caseBank = () => {
@@ -591,19 +581,21 @@ const fetchCaseDistSelect = async (type, isWithProductPublicDebt = true) => {
   }
   console.log('委案数据参数：', params)
   // 请求得到数据
-  const { data } = await Apis.caseDistSelect(params)
-  state.taskId = data.taskId
-  state.distInfo = data
-  // state.distInfo = {
-  //   caseNum: 1,
-  //   personNum: 1,
-  //   taskId: 2313,
-  //   totalAmount: 7266.75
-  // }
-  label.forEach(item => {
+  // const { data } = await Apis.caseDistSelect(params)
+  // state.taskId = data.taskId
+  // state.distInfo = data
+  state.distInfo = {
+    caseNum: 1,
+    personNum: 1,
+    taskId: 2313,
+    totalAmount: 7266.75
+  }
+  // 区分分库和收回战时的label不一样
+  const labelData = type === 1? CaseLabelData1: CaseLabelData2
+  labelData.forEach(item => {
     item.value = state.distInfo[item.key]
   })
-  state.distInfo = label
+  state.distInfo = labelData
 }
 // 切换分库
 const changTab = () => {

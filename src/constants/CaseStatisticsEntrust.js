@@ -1,4 +1,4 @@
-const labelData = [
+const CaseStatisticsEntrust = [
   {
     customizeIcon: 'caselist',
     eplusIcon: '',
@@ -18,10 +18,10 @@ const labelData = [
   {
     customizeIcon: 'moneynum',
     eplusIcon: '',
-    labelTitle: '处置金额',
+    labelTitle: '委案金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'sumHandleAmount'
+    key: 'sumEntrustAmount'
   },
   {
     customizeIcon: 'backmoney',
@@ -29,7 +29,7 @@ const labelData = [
     labelTitle: '已还金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'sumRefundAmount'
+    key: 'sumEntrustRefundAmount'
   },
   {
     customizeIcon: 'moneing',
@@ -37,7 +37,7 @@ const labelData = [
     labelTitle: '待还金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'sumResidueAmount'
+    key: 'sumEntrustResidueAmount'
   }
 ]
-export default labelData
+export default CaseStatisticsEntrust
