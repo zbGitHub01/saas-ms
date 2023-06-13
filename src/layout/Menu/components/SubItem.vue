@@ -1,26 +1,26 @@
 <template>
-  <template v-for="subItem in props.menuList" :key="subItem.path">
+  <template v-for="subItem in props.menuList" :key="subItem.webPath">
     <template v-if="!subItem.hide">
-      <el-sub-menu v-if="subItem.children && subItem.children.length" :index="subItem.path">
+      <el-sub-menu v-if="subItem.children && subItem.children.length" :index="subItem.webPath">
         <template #title>
           <el-icon v-if="subItem.icon">
             <component :is="subItem.icon" v-if="isElIcon(subItem.icon)" />
             <svg-icon v-else :name="subItem.icon" />
           </el-icon>
           <el-icon v-else size="6">
-            <svg-icon :name="activeMatched.includes(subItem.path) ? 'dot-solid' : 'dot'" />
+            <svg-icon :name="activeMatched.includes(subItem.webPath) ? 'dot-solid' : 'dot'" />
           </el-icon>
           <span>{{ subItem.name }}</span>
         </template>
         <SubItem :menu-list="subItem.children" />
       </el-sub-menu>
-      <el-menu-item v-else :index="subItem.path">
+      <el-menu-item v-else :index="subItem.webPath">
         <el-icon v-if="subItem.icon">
           <component :is="subItem.icon" v-if="isElIcon(subItem.icon)" />
           <svg-icon v-else :name="subItem.icon" />
         </el-icon>
         <el-icon v-else size="6">
-          <svg-icon :name="activePath === subItem.path ? 'dot-solid' : 'dot'" />
+          <svg-icon :name="activePath === subItem.webPath ? 'dot-solid' : 'dot'" />
         </el-icon>
         <template v-if="!subItem.isLink" #title>
           <span>{{ subItem.name }}</span>

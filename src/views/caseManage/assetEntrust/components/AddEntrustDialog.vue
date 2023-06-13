@@ -70,9 +70,9 @@
     </template>
   </el-dialog>
 </template>
-  
+
 <script setup>
-import { ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+import { ElMessage, genFileId } from 'element-plus'
 import { reactive, ref } from 'vue'
 import { UploadFile } from '@/components/Upload'
 // 上传
@@ -169,11 +169,10 @@ const cancelSubmit = () => {
   dialogVisible.value = false
 }
 </script>
-  
+
 <style lang="scss" scoped>
 .center {
   text-align: center;
   font-size: 18px;
 }
 </style>
-  

@@ -100,8 +100,8 @@ const pageSize = ref(10)
 
 const onReset = () => {}
 const employeeList = ref([])
-const roleList = computed(() => commonStore.dropdownList.ROLE)
-const deptTree = computed(() => commonStore.dropdownList.DEPT)
+const roleList = computed(() => commonStore.dropdownList.ROLE_LIST)
+const deptTree = computed(() => commonStore.dropdownList.DEPT_LIST)
 const inviteEmployeesShow = ref(false)
 const batchImportVisible = ref(false)
 const editEmployeeVisible = ref(false)

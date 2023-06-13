@@ -19,7 +19,7 @@
             v-model="form.deptId"
             :options="deptTree"
             clearable
-            :props="{ label: 'name', value: 'id', checkStrictly: true }"
+            :props="{ label: 'itemText', value: 'itemId', checkStrictly: true }"
             placeholder="请选择所属部门"
           />
         </el-form-item>
@@ -65,10 +65,10 @@ const rules = reactive({
   deptId: [{ required: true, message: '请选择所属部门', trigger: 'change' }]
 })
 const title = computed(() => (props.employeeItem ? '编辑员工' : '添加员工'))
-const deptTree = computed(() => commonStore.dropdownList.DEPT)
+const deptTree = computed(() => commonStore.dropdownList.DEPT_LIST)
 
 const handleOpen = () => {
-  form.deptId = getPathByKey(props.employeeItem.deptId, deptTree.value).map(item => item.id)
+  form.deptId = getPathByKey(props.employeeItem.deptId, deptTree.value, 'itemId').map(item => item.itemId)
 }
 const beforeClose = () => {
   formRef.value.resetFields()

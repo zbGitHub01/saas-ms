@@ -6,7 +6,7 @@ import cloneDeep from 'lodash/cloneDeep'
  * @returns result 返回父级路径
  */
 // 子查父路径
-export const getPathByKey = (curKey, treeData) => {
+export const getPathByKey = (curKey, treeData, key = 'id') => {
   let result = []
   let traverse = (curKey, path, data) => {
     if (data.length === 0) {
@@ -14,7 +14,7 @@ export const getPathByKey = (curKey, treeData) => {
     }
     for (let item of data) {
       path.push(item)
-      if (item.id === curKey) {
+      if (item[key] === curKey) {
         result = cloneDeep(path)
         return
       }

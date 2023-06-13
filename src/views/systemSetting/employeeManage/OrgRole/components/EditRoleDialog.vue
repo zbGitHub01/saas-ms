@@ -47,8 +47,8 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:dialogVisible', 'change'])
 const cascaderProps = {
-  label: 'name',
-  value: 'id',
+  label: 'itemText',
+  value: 'itemId',
   checkStrictly: true,
   multiple: true
 }
@@ -66,7 +66,7 @@ const rules = reactive({
 })
 const title = computed(() => (props.positionItem ? '编辑' : '添加'))
 
-const deptTree = computed(() => commonStore.dropdownList.DEPT)
+const deptTree = computed(() => commonStore.dropdownList.DEPT_LIST)
 const handleOpen = () => {
   if (props.positionItem) {
     form.name = props.positionItem.name

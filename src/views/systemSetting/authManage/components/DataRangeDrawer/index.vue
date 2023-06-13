@@ -182,8 +182,8 @@ const formatDropdownList = (code, list) => {
     ROLE: () => {
       return list.map(item => {
         return {
-          name: item.name,
-          value: item.id
+          name: item.itemText,
+          value: item.itemId
         }
       })
     }

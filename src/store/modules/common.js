@@ -5,9 +5,9 @@ export const useCommonStore = defineStore('commonStore', {
   state: () => ({
     dropdownList: {
       COOPERATION_STATUS: [], // 机构合作状态
-      ROLE: [], // 角色列表
-      DEPT: [], // 部门列表
-      POSITION: [] // 职位列表
+      ROLE_LIST: [], // 角色列表
+      DEPT_LIST: [], // 部门列表
+      POSITION_LIST: [] // 职位列表
     },
     regionData: []
   }),
