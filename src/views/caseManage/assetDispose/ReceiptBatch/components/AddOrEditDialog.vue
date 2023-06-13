@@ -17,8 +17,8 @@
             <el-option
               v-for="(item, index) in selectData.productList"
               :key="index"
-              :label="item.text"
-              :value="item.id"
+              :label="item.productName"
+              :value="item.productId"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -27,8 +27,8 @@
             <el-option
               v-for="(item, index) in selectData.packageList"
               :key="index"
-              :label="item.text"
-              :value="item.id"
+              :label="item.packageTypeName"
+              :value="item.packageTypeId"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -75,12 +75,6 @@ const form = reactive({
 const originFormData = JSON.parse(JSON.stringify(form))
 const title = ref('')
 // 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     productList: any[]
-//     packageList: any[]
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,

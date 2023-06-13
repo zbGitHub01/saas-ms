@@ -3,7 +3,7 @@
     <FormWrap @search="getTableData" @reset="reset">
       <template #default>
         <el-form inline :model="form">
-          <el-form-item label="案件ID" prop="date">
+          <el-form-item label="收回时间" prop="date">
             <el-date-picker
               v-model="date"
               type="daterange"

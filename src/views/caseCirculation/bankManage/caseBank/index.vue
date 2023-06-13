@@ -1,19 +1,18 @@
 <template>
   <div class="card-wrap">
-    <el-tabs class="mb16" v-model="tabActive" @tab-click="changTab">
+    <el-tabs class="mb16" v-model="tabActive" @tab-change="changTab">
       <el-tab-pane v-for="item in state.tabList" :key="item.itemId" :label="item.itemText" :name="item.itemId"></el-tab-pane>
     </el-tabs>
     <FormWrap @search="getTableData" @reset="reset">
       <template #default>
         <el-form inline :model="form">
           <el-form-item label="案件ID">
-            <el-input v-model="form.caseId" placeholder="请输入案件ID" clearable></el-input>
+            <el-input v-model="form.caseNo" placeholder="请输入案件ID" clearable></el-input>
           </el-form-item>
         </el-form>
       </template>
     </FormWrap>
-    <!-- <LabelData :labelData="state.labelData" /> -->
-    <LabelClass :labelData="state.labelData" />
+    <LabelClass :labelData="labelData" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -21,7 +20,7 @@
           <div v-for="(item, index) in operationList" :key="index">
             <el-button
               v-if="
-                item.isShow && (item.type === 1 || (item.type === 2 && tabActive === 1) || (item.type === 3 && tabActive !== 1))
+                item.isShow && (item.type === 1 || (item.type === 2 && tabActive === 0) || (item.type === 3 && tabActive !== 0))
               "
               type="primary"
               :icon="item.icon"
@@ -107,7 +106,7 @@
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
-        <el-table-column label="临时标签" prop="tagTempName" align="left" min-width="180" :show-overflow-tooltip="true">
+        <el-table-column label="临时标签" prop="tagTempList" align="left" min-width="180" :show-overflow-tooltip="true">
           <template #default="scope">
             <span v-for="(item, index) in scope.row.tagTempList" :key="index">
               <span>{{ index === scope.row.tagTempList.length - 1 ? item.tagName : item.tagName + ',' }}</span>
@@ -137,7 +136,6 @@
           min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
-        <!-- 无 -->
         <el-table-column
           label="所属分库"
           prop="storeName"
@@ -145,10 +143,9 @@
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
-        <!-- 无 -->
         <el-table-column
           label="分库时间"
-          prop="allotTime"
+          prop="distTime"
           align="center"
           min-width="180"
           :show-overflow-tooltip="true"
@@ -188,11 +185,7 @@
           min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
-        <el-table-column label="案件状态" prop="distState" align="center" min-width="150" fixed="right">
-          <template #default="scope">
-            <span>{{ scope.row.distState === 0 ? '待分库' : '分库中' }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column label="案件状态" prop="caseStatusText" align="center" min-width="150" fixed="right"></el-table-column>
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
@@ -200,6 +193,7 @@
     <CaseBankDialog
       ref="caseBankDialog"
       :distInfo="state.distInfo"
+      :taskId="state.taskId"
       :sourceStoreId="tabActive"
       @get-table-data="getTableData"
       @toggleSelection="toggleSelection"
@@ -224,10 +218,14 @@ import AddOrRemoveTagDialog from './components/AddOrRemoveTagDialog.vue'
 import CaseBankDialog from './components/CaseBankDialog.vue'
 import CaseRecoveryDialog from './components/CaseRecoveryDialog.vue'
 import { CirclePlus, Delete, Folder } from '@element-plus/icons-vue'
+import Apis from '@/api/modules/caseManage'
+import Apis2 from '@/api/modules/common'
+import labelData from './components/labelData' //统计数据
+import label from './components/label' //分库查询数据
 const multipleTable = ref(null)
-const tabActive = ref(1)
+const tabActive = ref(0)
 const form = reactive({
-  caseId: ''
+  caseNo: ''
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const addOrRemoveTagDialog = ref()
@@ -241,7 +239,6 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  labelData: {}, //标签数据
   selectData: [], //选中项
   handleparams: {}, //操作的参数
   tabList: [], //分库列表
@@ -281,26 +278,28 @@ const operationList = reactive([
   }
 ])
 onMounted(() => {
-  getTableData()
   getTabList()
+  getTableData()
 })
 // 获取表格数据
 const getTableData = async () => {
   // 请求得到数据
   const params = { ...form, ...query, storeId: tabActive.value }
-  // const { data } = await xx(params) //表格
-  // const { data } = await xx(params) //label
-  console.log(params)
+  // 待分配库和已分配库分开的接口
+  const { data } = tabActive.value === 0 ? await Apis.waitDistCaseList(params) : await Apis.doneDistCaseList(params)
+  state.tableData = data.data
   state.tableData = [
     {
       allotLogId: 0,
       allotState: 0,
+      distTime: '2022-12-02 09:50:43',
       allotTime: '2022-12-02 09:50:43',
+      orgTitle: '所属机构',
       arbitrationStatus: 1,
       arbitrationTime: '2023-03-31 14:49:46',
       batchId: 117,
       batchNo: '丽水邦恩-邦恩佰仟20201118',
-      caseId: 3,
+      caseId: 1,
       caseNo: 'BE-BQ-0001003',
       caseStatus: 1,
       caseStatusChild: 0,
@@ -390,12 +389,14 @@ const getTableData = async () => {
     {
       allotLogId: 0,
       allotState: 0,
+      distTime: '2022-12-02 09:50:43',
       allotTime: '2022-12-02 09:50:43',
+      orgTitle: '所属机构',
       arbitrationStatus: 1,
       arbitrationTime: '2023-03-31 14:49:46',
       batchId: 117,
       batchNo: '丽水邦恩-邦恩佰仟20201118',
-      caseId: 1,
+      caseId: 3,
       caseNo: 'BE-BQ-0001001',
       caseStatus: 1,
       caseStatusChild: 0,
@@ -453,81 +454,43 @@ const getTableData = async () => {
       userPhone: '18435838528'
     }
   ]
-  query.page = 1
-  state.total = 12
-  // 得到label数据
-  state.labelData = [
-    {
-      customizeIcon: 'caselist',
-      eplusIcon: '',
-      labelTitle: '案件数量',
-      isHaveRmbSign: false,
-      value: null, //total
-      key: 'total'
-    },
-    {
-      customizeIcon: 'peoplenum',
-      eplusIcon: '',
-      labelTitle: '案人人数',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'caseUserCount'
-    },
-    {
-      customizeIcon: 'moneynum',
-      eplusIcon: '',
-      labelTitle: '处置金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumHandleAmount'
-    },
-    {
-      customizeIcon: 'backmoney',
-      eplusIcon: '',
-      labelTitle: '已还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumRefundAmount'
-    },
-    {
-      customizeIcon: 'moneing',
-      eplusIcon: '',
-      labelTitle: '待还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumResidueAmount'
-    }
-  ]
-  const labelData2 = {
-    caseUserCount: 239278,
-    sumHandleAmount: 4889285788.62,
-    sumRefundAmount: 184079143.85,
-    sumResidueAmount: 4711200212.03
-  }
-  state.labelData.forEach(item => {
-    item.value = labelData2[item.key]
+  state.total = data.total
+  // 得到labelData数据
+  const { data: data1 } =
+    tabActive.value === 0 ? await Apis.waitDistCaseListStats(params) : await Apis.doneDistCaseListStats(params)
+  // const labelData2 = data1
+  // const labelData2 = {
+  //   totalCase: 23,
+  //   caseUserCount: 239278,
+  //   sumHandleAmount: 4889285788.62,
+  //   sumRefundAmount: 184079143.85,
+  //   sumResidueAmount: 4711200212.03
+  // }
+  labelData.forEach(item => {
+    item.value = data1[item.key]
   })
 }
 // 获取分库数据
-const getTabList = () => {
+const getTabList = async () => {
   // 请求得到数据
-  // const { data } = await xx(form)
+  // const { data } = await Apis2.findItemList({ codes: 'DIST_LIST' })
+  // state.tabList = data.DIST_LIST
   state.tabList = [
     {
       itemText: '待分库案件',
-      itemId: 1
+      itemId: 0
     },
     {
       itemText: '委外处置库',
-      itemId: 2
+      itemId: 1
     },
     {
       itemText: '智能处置库',
-      itemId: 3
+      itemId: 2
     },
     {
       itemText: '勾销处置库',
-      itemId: 4
+      itemId: 3
     }
   ]
   state.tabListSub = state.tabList.slice(1) //去掉待分库配这个选项
@@ -536,6 +499,8 @@ const getTabList = () => {
 const reset = () => {
   console.log('重置')
   Object.assign(form, originFormData)
+  query.page = 1
+  query.pageSize = 10
   getTableData()
 }
 //表格选择
@@ -590,7 +555,7 @@ const open = type => {
   addOrRemoveTagDialog.value.open(type)
 }
 // 确认添加/删除临时标签
-const submitForm = (tempTagName, type, isDeleteAllRelationTag) => {
+const submitForm = async(tempTagName, type, isDeleteAllRelationTag) => {
   // 处理入参
   let params =
     operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
@@ -600,7 +565,7 @@ const submitForm = (tempTagName, type, isDeleteAllRelationTag) => {
   }
   console.log(params)
   // 请求得到数据
-  // await xx(form)
+  type === 1? await Apis.tagTempAdd(params):await Apis.tagTempDelete(params)
   ElMessage.success('操作成功！')
 }
 // 案件分库
@@ -615,7 +580,7 @@ const caseRecover = () => {
   caseRecoveryDialog.value.open()
 }
 // 获取委案数据 1分库2收回
-const fetchCaseDistSelect = (type, isWithProductPublicDebt = true) => {
+const fetchCaseDistSelect = async (type, isWithProductPublicDebt = true) => {
   // 处理入参
   let params =
     operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
@@ -626,47 +591,22 @@ const fetchCaseDistSelect = (type, isWithProductPublicDebt = true) => {
   }
   console.log('委案数据参数：', params)
   // 请求得到数据
-  // const { data } = await caseDistSelect(params)
-  state.taskId = 1 //案件回收需要
-  state.distInfo = {
-    caseNum: 1,
-    personNum: 1,
-    taskId: 2313,
-    totalAmount: 7266.75
-  }
-  const label = [
-    {
-      customizeIcon: 'caselist',
-      eplusIcon: '',
-      labelTitle: '选中案件数',
-      isHaveRmbSign: false,
-      value: null, //total
-      key: 'caseNum'
-    },
-    {
-      customizeIcon: 'peoplenum',
-      eplusIcon: '',
-      labelTitle: '选中案件人数',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'personNum'
-    },
-    {
-      customizeIcon: 'moneynum',
-      eplusIcon: '',
-      labelTitle: '预计分库金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'totalAmount'
-    }
-  ]
+  const { data } = await Apis.caseDistSelect(params)
+  state.taskId = data.taskId
+  state.distInfo = data
+  // state.distInfo = {
+  //   caseNum: 1,
+  //   personNum: 1,
+  //   taskId: 2313,
+  //   totalAmount: 7266.75
+  // }
   label.forEach(item => {
     item.value = state.distInfo[item.key]
   })
   state.distInfo = label
 }
 // 切换分库
-const changTab = val => {
+const changTab = () => {
   reset()
   toggleSelection()
 }

@@ -29,7 +29,22 @@ const apiConfig = {
     // 资产委托
     proxyPage: 'GET /caseCenter/case/proxy/page', //分页查询
     proxyCreate: 'POST /caseCenter/case/proxy/create', //新增委托
-    // proxyStop: 'POST /caseCenter/case/proxy/stop', //终止委托
+
+    // 分库管理
+    waitDistCaseList: 'POST /caseCenter/case/dist/waitDistCaseList', //待分配库列表
+    waitDistCaseListStats: 'POST /caseCenter/case/dist/waitDistCaseList/stats', //待分配库统计
+    doneDistCaseList: 'POST /caseCenter/case/dist/doneDistCaseList', //已分配库列表
+    doneDistCaseListStats: 'POST /caseCenter/case/dist/doneDistCaseList/stats', //已分配库统计
+    distRecordList: 'POST /caseCenter/case/dist/distRecordList', //分库记录
+    caseDistSelect: 'POST /caseCenter/case/dist/caseDistSelect', //发起分库-查询
+    caseDistSave: 'POST /caseCenter/case/dist/caseDistSave', //发起分库-保存
+    tagTempAdd: 'POST /caseCenter/case/tagTemp/add', //临时标签添加
+    tagTempDelete: 'POST /caseCenter/case/tagTemp/delete', //删除标签添加
+    tagTempList: 'GET /caseCenter/case/tagTemp/list', //临时标签列表
+    
+    // 资产包类型
+    packagetypeList: 'GET /caseCenter/packagetype/list', //不分页资产包类型
+
 }
 
 // 删除产品名录

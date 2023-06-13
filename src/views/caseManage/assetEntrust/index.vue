@@ -139,7 +139,7 @@ const getTableData = async () => {
 }
 const getSelecData = async () => {
   // 请求得到数据
-  const { data } = await Apis.productList({ isProxy: 0 })
+  const { data } = await Apis.productList({ isProxy: 0 }) //productStatus 1已启用 0不启用，没传
   selectData.productAndCreList = data
   selectData.productAndCreList = [
     {

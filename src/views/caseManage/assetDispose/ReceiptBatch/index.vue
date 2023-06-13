@@ -16,8 +16,11 @@
         <el-table-column label="备注" prop="remark" align="center" min-width="150"></el-table-column>
         <el-table-column label="操作" width="140" align="center" fixed="right">
           <template #default="scope">
-            <el-button link type="primary" @click="addOrEdit(scope.row, 2)">编辑</el-button>
-            <el-button link type="danger" @click="toDelete(scope.row)">删除</el-button>
+            <div v-if="scope.row.isProxy === 0">
+              <el-button link type="primary" @click="addOrEdit(scope.row, 2)">编辑</el-button>
+              <el-button link type="danger" @click="toDelete(scope.row)">删除</el-button>
+            </div>
+            <div v-if="scope.row.isProxy === 1" style="background-color: #67c23a">委托方批次</div>
           </template>
         </el-table-column>
       </el-table>
@@ -61,7 +64,8 @@ onMounted(() => {
 })
 const getTableData = async () => {
   console.log('入库批次')
-  // const { data } = await Apis.batchPage({ ...query })
+  const { data } = await Apis.batchPage({ ...query })
+  state.tableData = data?.data
   state.tableData = [
     {
       productName: '“360”借条',
@@ -70,10 +74,11 @@ const getTableData = async () => {
       batchNo: '丽水海量-时光分期-202010',
       buyTime: '2019-03-26',
       deliveryDay: '2019-03-26',
-      packageTypeId:1,
+      packageTypeId: 1,
       packageTypeName: '资产包1',
       packageId: 1,
-      remark: '逾期天数＜300天'
+      remark: '逾期天数＜300天',
+      isProxy: 1
     },
     {
       productName: '我来带',
@@ -85,10 +90,11 @@ const getTableData = async () => {
       packageTypeId: 2,
       packageTypeName: '资产包2',
       packageId: 2,
-      remark: '逾期天数＜300天'
+      remark: '逾期天数＜300天',
+      isProxy: 0
     }
   ]
-  // state.total = data.total
+  state.total = data?.total
 }
 
 // 新增/编辑

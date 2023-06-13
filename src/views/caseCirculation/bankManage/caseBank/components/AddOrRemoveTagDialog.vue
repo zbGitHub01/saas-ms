@@ -2,7 +2,7 @@
   <el-dialog
     v-model="dialogVisible"
     :title="title"
-    width="25%"
+    width="360px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
@@ -31,8 +31,8 @@
   </el-dialog>
 </template>
 <script setup>
-import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
+import Apis from '@/api/modules/caseManage'
 const form = reactive({
   tempTagName: null, //临时标签
   isDeleteAllRelationTag: false //是否操作所有案件中删除
@@ -87,7 +87,8 @@ const cancelSubmit = () => {
 }
 const getSelecData = async () => {
   // 请求得到数据
-  // const { data } = await xx(params)
+  const { data } = await Apis.tagTempList()
+  selectData.tagList = data
   selectData.tagList = ['111', '116', 'test1', 'test', '99', 'jjj', '测试']
 }
 </script>

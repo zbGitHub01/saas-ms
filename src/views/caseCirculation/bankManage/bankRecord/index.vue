@@ -43,38 +43,38 @@
     </FormWrap>
     <div class="mt20">
       <el-table :data="state.tableData" border>
-        <el-table-column label="序号" type="index" align="center" width="50"></el-table-column>
+        <el-table-column label="序号" type="index" align="center" width="100"></el-table-column>
         <el-table-column
           label="分库批次号"
-          prop="caseId"
+          prop="distBatchNo"
           align="center"
-          min-width="150"
+          min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="分库时间"
-          prop="productName"
+          prop="distTimeStr"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="操作人"
-          prop="productName"
+          prop="operName"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="原分库"
-          prop="name"
+          prop="sourceStoreName"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="目标分库"
-          prop="caseNo"
+          prop="targetStoreName"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
@@ -91,27 +91,27 @@
         </el-table-column>
         <el-table-column
           label="分库金额"
-          prop="money2"
+          prop="distAmount"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="完成时间"
-          prop="money3"
+          prop="finishTimeStr"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="分库进度"
-          prop="money4"
+          prop="distStateStr"
           align="center"
           min-width="150"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <!-- 失败数据下载 -->
-        <el-table-column label="失败数据" prop="url" align="center" min-width="150">
+        <el-table-column label="失败数据" prop="errorDataUrl" align="center" min-width="150">
           <template #default="scope">
             <el-button link type="primary" @click="download(scope.row)" v-if="scope.row.isFailed === 1">下载</el-button>
           </template>
@@ -126,15 +126,19 @@
 import { ElMessage } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { beformonth } from '@/utils/formatedate'
+import Apis from '@/api/modules/caseManage'
+import Apis2 from '@/api/modules/common'
 const selectData = reactive({
   peopleList: [], //人员列表
   bankList: [] //分库列表
 })
 const form = reactive({
-  operDateDuration: null, //时间，开始和结束用～拼接
+  // operDateDuration: null, //时间，开始和结束用～拼接
   operUserId: null,
   targetStoreId: null,
-  distBatchNo: ''
+  distBatchNo: '',
+  startDistTime: null,
+  endDistTime: null,
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const date = ref()
@@ -156,49 +160,44 @@ onMounted(() => {
 const getTableData = async () => {
   console.log('案件分库', form)
   // 请求得到数据
-  // const { data } = await xx(form)
-  state.tableData = [
-    {
-      distId: 1,
-      caseId: 'WTD-SJD-0000002',
-      productName: '“360”借条',
-      name: '王亚瑞',
-      caseNo: '450332198908202719',
-      distCaseNum: 22,
-      distTotalCaseNum: 33,
-      distuserNum: 11,
-      distTotalUserNum: 22,
-      money2: 22,
-      money3: 33,
-      money4: 44,
-      picihao: '万腾浩达资产-手机贷20190326',
-      zhaiquanfang: '丽水海树信用管理有限公司',
-      shoutuofang: '丽水海树信用管理有限公司',
-      status: '正常',
-      isFailed: 1 //是否失败
-    },
-    {
-      distId: 2,
-      caseId: 'GJ-WLD-0132768',
-      productName: '“360”借条',
-      name: '王亚瑞',
-      caseNo: '450332198908202719',
-      distCaseNum: 44,
-      distTotalCaseNum: 55,
-      distuserNum: 11,
-      distTotalUserNum: 33,
-      money2: 22,
-      money3: 33,
-      money4: 44,
-      picihao: '万腾浩达资产-手机贷20190326',
-      zhaiquanfang: '丽水海树信用管理有限公司',
-      shoutuofang: '丽水海树信用管理有限公司',
-      status: '暂停 | 投诉',
-      isFailed: 0
-    }
-  ]
-  query.page = 1
-  state.total = 12
+  const { data } = await Apis.distRecordList({ ...form, ...query})
+  state.tableData = data.data
+  // state.tableData = [
+  //   {
+  //     distId: 1,
+  //     distBatchNo: 'WTD-SJD-0000002',
+  //     distTimeStr: '“360”借条',
+  //     operName: '王亚瑞',
+  //     sourceStoreName: '原分库1',
+  //     targetStoreName: '目标分库1',
+  //     distCaseNum: 22,
+  //     distTotalCaseNum: 33,
+  //     distuserNum: 11,
+  //     distTotalUserNum: 22,
+  //     distAmount: 22,
+  //     finishTimeStr: '2023-02-02 21:21:21',
+  //     distStateStr: '已完成',
+  //     isFailed: 1, //是否失败
+  //     errorDataUrl: 'https://asfile.donganzichan.cn/assets/tmpl/案件导入模板.xlsx'
+  //   },
+  //   {
+  //     distId: 2,
+  //     distBatchNo: 'GJ-WLD-0132768',
+  //     distTimeStr: '“360”借条',
+  //     operName: '王亚瑞',
+  //     sourceStoreName: '原分库2',
+  //     targetStoreName: '目标分库2',
+  //     distCaseNum: 44,
+  //     distTotalCaseNum: 55,
+  //     distuserNum: 11,
+  //     distTotalUserNum: 33,
+  //     distAmount: 22,
+  //     finishTimeStr: '2023-02-02 21:21:21',
+  //     distStateStr: '进行中',
+  //     isFailed: 0
+  //   }
+  // ]
+  state.total = data.total
 }
 const getSelecData = async () => {
   // 请求得到数据
@@ -213,14 +212,24 @@ const getSelecData = async () => {
       username: '啊三'
     }
   ]
-  selectData.bankList = [
+  // const { data } = await Apis2.findItemList({ codes: 'DIST_LIST' })
+  // state.bankList = data.DIST_LIST
+  state.bankList = [
     {
-      itemId: 1,
-      itemText: '分库1'
+      itemText: '待分库案件',
+      itemId: 0
     },
     {
-      itemId: 2,
-      itemText: '分库2'
+      itemText: '委外处置库',
+      itemId: 1
+    },
+    {
+      itemText: '智能处置库',
+      itemId: 2
+    },
+    {
+      itemText: '勾销处置库',
+      itemId: 3
     }
   ]
 }
@@ -232,30 +241,34 @@ const reset = () => {
   getTableData()
 }
 const changeDate = val => {
-  console.log(val)
   if (val) {
-    form.operDateDuration = val[0] + '~' + val[1]
+    // form.operDateDuration = val[0] + '~' + val[1]
+    form.startDistTime = val[0]
+    form.endDistTime = val[1]
   } else {
-    form.operDateDuration = null
+    // form.operDateDuration = null
+    form.startDistTime = val[0]
+    form.endDistTime = val[1]
   }
 }
 //下载
-// url可能需要发送接口获取，再处理
 const download = async row => {
-  const params = {
-    distId: row.distId
-  }
+  // const params = {
+  //   distId: row.distId
+  // }
   // const { data } = await xx(params)
   // let urls =  data.url.replace(/^http:/, "https:");
-  let urls = 'https://asfile.donganzichan.cn/assets/tmpl/案件导入模板.xlsx'
+  // let urls = 'https://asfile.donganzichan.cn/assets/tmpl/案件导入模板.xlsx'
   let a = document.createElement('a')
-  a.href = urls
+  a.href = row.errorDataUrl
   a.download = '失败记录'
   a.click()
 }
 const setDefault = () => {
   date.value = beformonth()
-  form.operDateDuration = beformonth().join('~')
+  // form.operDateDuration = beformonth().join('~')
+  form.startDistTime = beformonth()[0]
+  form.endDistTime = beformonth()[1]
 }
 </script>
 
