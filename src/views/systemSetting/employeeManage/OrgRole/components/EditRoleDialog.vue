@@ -66,7 +66,7 @@ const rules = reactive({
 })
 const title = computed(() => (props.positionItem ? '编辑' : '添加'))
 
-const deptTree = computed(() => commonStore.dropdownList.DEPT_LIST)
+const deptTree = computed(() => commonStore.dropdownList.DEPT_TREE)
 const handleOpen = () => {
   if (props.positionItem) {
     form.name = props.positionItem.name

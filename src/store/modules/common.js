@@ -4,12 +4,19 @@ import Apis from '@/api/modules/common'
 export const useCommonStore = defineStore('commonStore', {
   state: () => ({
     dropdownList: {
-      COOPERATION_STATUS: [], // 机构合作状态
+      GLE_UPMS_COOPERATION_STATUS: [], // 机构合作状态
       ROLE_LIST: [], // 角色列表
       DEPT_LIST: [], // 部门列表
-      POSITION_LIST: [] // 职位列表
+      DEPT_TREE: [], // 部门树
+      POSITION_LIST: [], // 职位列表
+      EMPLOYEE_LIST: [], // 员工列表
+      TENANT_LIST: [], // 租户列表
+      PERMISSION_TEMPLATE_LIST: [], // 权限模版列表
+      CREDITOR_LIST: [], // 债权方列表
+      WORK_TYPE: [], // 工单类型
+      WORK_TYPE_ALL: [] // 全部工单类型
     },
-    regionData: []
+    regionData: [] // 省市区
   }),
   actions: {
     async fetchItemList(code = null) {

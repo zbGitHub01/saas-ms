@@ -23,14 +23,14 @@
             <el-cascader
               v-model="searchForm.deptId"
               :options="deptTree"
-              :props="{ checkStrictly: true, label: 'name', value: 'id' }"
+              :props="{ checkStrictly: true, label: 'itemText', value: 'itemId' }"
               clearable
               placeholder="请选择所属部门"
             />
           </el-form-item>
           <el-form-item label="部门角色" prop="roleId">
             <el-select v-model="searchForm.roleId" clearable placeholder="请选择部门角色">
-              <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id" />
+              <el-option v-for="item in roleList" :key="item.id" :label="item.itemText" :value="item.itemId" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -38,7 +38,9 @@
     </FormWrap>
     <OperationBar>
       <template #default>
-        <el-button type="primary" :icon="Plus" @click="inviteEmployeesShow = true">邀请员工</el-button>
+        <el-button v-auth="'ALL_EMPLOYEE_ADD'" type="primary" :icon="Plus" @click="inviteEmployeesShow = true">
+          邀请员工
+        </el-button>
         <el-button type="primary" :icon="Upload" @click="batchImportVisible = true">批量导入</el-button>
       </template>
     </OperationBar>
@@ -101,7 +103,7 @@ const pageSize = ref(10)
 const onReset = () => {}
 const employeeList = ref([])
 const roleList = computed(() => commonStore.dropdownList.ROLE_LIST)
-const deptTree = computed(() => commonStore.dropdownList.DEPT_LIST)
+const deptTree = computed(() => commonStore.dropdownList.DEPT_TREE)
 const inviteEmployeesShow = ref(false)
 const batchImportVisible = ref(false)
 const editEmployeeVisible = ref(false)

@@ -241,7 +241,7 @@ import { useCommonStore } from '@/store/modules/common'
 import { UploadImg, UploadFile, UploadImgs } from '@/components/Upload'
 
 const commonStore = useCommonStore()
-const deptTree = computed(() => commonStore.dropdownList.DEPT_LIST)
+const deptTree = computed(() => commonStore.dropdownList.DEPT_TREE)
 
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])

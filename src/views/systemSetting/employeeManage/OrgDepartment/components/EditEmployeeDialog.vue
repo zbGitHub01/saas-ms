@@ -65,7 +65,7 @@ const rules = reactive({
   deptId: [{ required: true, message: '请选择所属部门', trigger: 'change' }]
 })
 const title = computed(() => (props.employeeItem ? '编辑员工' : '添加员工'))
-const deptTree = computed(() => commonStore.dropdownList.DEPT_LIST)
+const deptTree = computed(() => commonStore.dropdownList.DEPT_TREE)
 
 const handleOpen = () => {
   form.deptId = getPathByKey(props.employeeItem.deptId, deptTree.value, 'itemId').map(item => item.itemId)

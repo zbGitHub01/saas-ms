@@ -66,7 +66,7 @@ const emit = defineEmits(['update:dialogVisible'])
 
 const commonStore = useCommonStore()
 const formRef = ref()
-const deptTree = computed(() => commonStore.dropdownList.DEPT_LIST)
+const deptTree = computed(() => commonStore.dropdownList.DEPT_TREE)
 const positionList = computed(() => commonStore.dropdownList.POSITION_LIST)
 const form = reactive({
   name: '',
@@ -93,7 +93,7 @@ const loading = ref(false)
 const link = ref('')
 
 const fetchOptions = () => {
-  commonStore.fetchItemList('DEPT_LIST,POSITION_LIST')
+  commonStore.fetchItemList('DEPT_LIST,DEPT_TREE,POSITION_LIST')
 }
 const handleOpen = () => {
   fetchOptions()

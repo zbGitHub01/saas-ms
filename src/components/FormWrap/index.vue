@@ -1,6 +1,6 @@
 <template>
   <div class="form-wrapper">
-    <div class="pd20">
+    <div>
       <div v-show="isOperation" class="operation-wrap">
         <slot name="operation" />
       </div>

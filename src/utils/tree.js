@@ -95,8 +95,8 @@ export const filterAuth = treeData => {
   const tabPageMap = {}
   function traverse(data) {
     data.forEach(item => {
-      if (item.path) {
-        authRouter.push(item.path)
+      if (item.webPath) {
+        authRouter.push(item.webPath)
       }
       if (item.type === 3) {
         buttonList.push(item.code)
@@ -104,7 +104,7 @@ export const filterAuth = treeData => {
       if (item.children && item.children.length) {
         const tabPage = item.children.filter(child => child.type === 2)
         if (tabPage.length) {
-          tabPageMap[item.path] = {
+          tabPageMap[item.webPath] = {
             tabs: tabPage.map(child => child.code),
             tabActive: tabPage[0].code
           }
