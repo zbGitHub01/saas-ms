@@ -12,8 +12,8 @@
       >
         <el-form-item :label="detailData.label" prop="name">
           <el-input
-            clearable
             v-model="form.name"
+            clearable
             :placeholder="detailData.placeholder"
             class="w300"
           />
@@ -35,11 +35,10 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
 const formSize = ref('default')
-const ruleFormRef = ref<FormInstance>()
+const ruleFormRef = ref()
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
 const detailData = reactive({
@@ -56,10 +55,10 @@ const form = reactive({
   isOpen: 0
 })
 const defaultForm = JSON.parse(JSON.stringify(form))
-const rules = reactive<FormRules>({
+const rules = reactive({
   name: [{ required: true, message: '请输入内容', trigger: 'blur' }]
 })
-const open = (stateData: any, type: string, row?: any) => {
+const open = (stateData, type, row) => {
   const { name, label, placeholder } = stateData.detail
   detailData.name = name
   detailData.label = label
@@ -85,7 +84,7 @@ const handleClose = () => {
   ruleFormRef.value?.resetFields()
   dialogVisible.value = false
 }
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = async formEl => {
   if (!formEl) return
   await formEl.validate(valid => {
     if (valid) {

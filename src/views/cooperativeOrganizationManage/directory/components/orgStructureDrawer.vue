@@ -12,7 +12,7 @@
   </el-drawer>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 const drawer = ref(false)
@@ -23,7 +23,7 @@ const state = reactive({
 const handleClose = () => {
   drawer.value = false
 }
-const open = (relationTenantId: number) => {
+const open = relationTenantId => {
   getOrgDeptDetail(relationTenantId)
   drawer.value = true
 }

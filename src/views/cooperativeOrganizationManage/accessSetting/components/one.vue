@@ -5,59 +5,59 @@
         <div class="img-warp">
           <img class="img" :src="index < 2 ? accessAvatar : accessLogo" />
         </div>
-        <div class="content-wrap" v-if="index < 2">
+        <div v-if="index < 2" class="content-wrap">
           <span class="node-name">{{ item.nodeName }}</span>
-          <div class="flx-align-center" v-if="index === 1">
+          <div v-if="index === 1" class="flx-align-center">
             <span
-              style="color: #7F7F80"
-              class="ft800 mr8"
               v-if="item.handlerName"
+              style="color: #7f7f80"
+              class="ft800 mr8"
             >{{ item.handlerName }}</span>
-            <div class="select_warp" v-if="item.handlerName">
+            <div v-if="item.handlerName" class="select_warp">
               <span class="btn" @click="onSelect('edit', item)">重选</span>
               <span class="btn btn1" @click="onRemoveInvite(item)">移除</span>
             </div>
-            <div @click="onSelect('edit', item)" v-else>
+            <div v-else @click="onSelect('edit', item)">
               <span class="item-add">追加审批人</span>
             </div>
           </div>
           <div class="content-input">
             <span>{{ item.step === 1 ? '准入邀请工单发出后' : '准入工单生成后' }}</span>
             <el-input-number
+              v-model="item.day"
               class="input-number"
-              @change="changeDay(item)"
               :min="0"
               :controls="false"
-              v-model="item.day"
+              @change="changeDay(item)"
             ></el-input-number>
             <span>{{ item.step === 1 ? '天内，如未能提交准入审核则自动失效' : '天内，如邀请人未能完成审批则审批工单失效' }}</span>
           </div>
         </div>
-        <div class="content-wrap" v-else>
+        <div v-else class="content-wrap">
           <span class="node-name">{{ item.nodeName }}</span>
           <div class="flx-align-center">
             <span
-              style="color: #7F7F80"
-              class="ft800 mr8"
               v-if="item.handlerName"
+              style="color: #7f7f80"
+              class="ft800 mr8"
             >{{ item.handlerName }}</span>
             <div class="select_warp">
               <span
                 class="btn"
                 :class="!item.handlerName && 'w84'"
                 @click="onSelect('edit', item)"
-              >{{item.handlerName ? '重选':'添加审批人'}}</span>
+              >{{ item.handlerName ? '重选' : '添加审批人' }}</span>
               <span v-if="index !== 2" class="btn btn1" @click="onRemove(item.id)">移除</span>
             </div>
           </div>
           <div class="content-input">
             <span>上一步审批通过后</span>
             <el-input-number
+              v-model="item.day"
               class="input-number"
-              @change="changeDay(item)"
               :min="0"
               :controls="false"
-              v-model="item.day"
+              @change="changeDay(item)"
             ></el-input-number>
             <span>天内，如该审批环节未进行审批则审批工单失效</span>
           </div>
@@ -90,7 +90,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import accessAvatar from '@/assets/images/access-avatar.png'
 import accessLogo from '@/assets/images/access-logo.png'
@@ -101,9 +101,12 @@ import approverDialog from './approverDialog.vue'
 import { ElMessage } from 'element-plus'
 import { useConfirm } from '@/hooks/useConfirm'
 import Apis from '@/api/modules/cooperativeOrganization'
-const props = defineProps<{
-  categoryId: string
-}>()
+const props = defineProps({
+  categoryId: {
+    type: String,
+    default: ''
+  }
+})
 const templateData = ref([])
 const selectData = ref({
   type: '',
@@ -114,7 +117,7 @@ const selectData = ref({
 })
 const approverDialogRef = ref()
 // 添加重选审批人
-const onSelect = (type: string, item?: any) => {
+const onSelect = (type, item) => {
   selectData.value = {
     ...item,
     type
@@ -122,12 +125,12 @@ const onSelect = (type: string, item?: any) => {
   approverDialogRef.value.open(item)
 }
 //移除审批人
-const onRemove = async (id: number) => {
+const onRemove = async id => {
   await useConfirm('移除当前审批人', Apis.configTmplDel, { id })
   getConfigList()
 }
 //更新节点
-const updateItem = (item: any) => {
+const updateItem = item => {
   const { type, day, nodeName, step, id } = selectData.value
   let temItem = {
     day: type === 'edit' ? day : 0,
@@ -144,11 +147,11 @@ const updateItem = (item: any) => {
   otherConfigTmplSave(params)
 }
 // 改变天数
-const changeDay = async (item: any) => {
+const changeDay = async item => {
   await otherConfigTmplSave({ ...item })
 }
 // 移除邀请人审批
-const onRemoveInvite = async (item: any) => {
+const onRemoveInvite = async item => {
   const params = {
     applyType: 3, //审批业务类型 1-减免审批 2-认领审批 3-机构准入审批
     ...item,
@@ -162,7 +165,7 @@ const onRemoveInvite = async (item: any) => {
   ElMessage.success(msg)
 }
 // 保存
-const otherConfigTmplSave = async (item: any) => {
+const otherConfigTmplSave = async item => {
   const params = {
     applyType: 3, //审批业务类型 1-减免审批 2-认领审批 3-机构准入审批
     ...item,
@@ -184,9 +187,9 @@ const getConfigList = async () => {
   templateData.value = data2
 }
 // 排序
-const compare = (p: string) => {
+const compare = p => {
   //这是比较函数
-  return function (m: any, n: any) {
+  return function (m, n) {
     let a = m[p]
     let b = n[p]
     return a - b //升序

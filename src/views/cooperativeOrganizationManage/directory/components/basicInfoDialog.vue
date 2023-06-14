@@ -38,8 +38,8 @@
             </el-form-item>
             <el-form-item label="备注：" prop="remark">
               <el-input
-                class="w280"
                 v-model="form.remark"
+                class="w280"
                 type="textarea"
                 :autosize="{ minRows: 4, maxRows: 6 }"
                 placeholder="请输入备注"
@@ -66,8 +66,8 @@
             </el-form-item>
             <el-form-item label prop="whiteIp">
               <el-input
-                class="w320"
                 v-model="form.whiteIp"
+                class="w320"
                 type="textarea"
                 :autosize="{ minRows: 4, maxRows: 6 }"
                 placeholder="必须为固定IP地址，不可提供动态IP地址；如设置多个IP请用逗号区分"
@@ -86,17 +86,16 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
-import type { FormInstance, FormRules } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 const formSize = ref('default')
-const ruleFormRef = ref<FormInstance>()
+const ruleFormRef = ref()
 const dialogVisible = ref(false)
-const orgCategoryList = ref<any[]>([])
-const taskModelList = ref<any[]>([])
-const entrustStaffList = ref<any[]>([])
+const orgCategoryList = ref([])
+const taskModelList = ref([])
+const entrustStaffList = ref([])
 const form = reactive({
   orgCategoryId: '',
   entrustStaffId: '',
@@ -106,7 +105,7 @@ const form = reactive({
   isWhiteIp: 0,
   whiteIp: ''
 })
-const rules = reactive<FormRules>({
+const rules = reactive({
   orgCategoryId: [{ required: true, message: '请选择机构分类', trigger: 'change' }],
   entrustStaffId: [{ required: true, message: '请选择委外经理', trigger: 'change' }],
   mail: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
@@ -135,7 +134,7 @@ const handleClose = () => {
   ruleFormRef.value?.resetFields()
   dialogVisible.value = false
 }
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = async formEl => {
   if (!formEl) return
   await formEl.validate(valid => {
     if (valid) {

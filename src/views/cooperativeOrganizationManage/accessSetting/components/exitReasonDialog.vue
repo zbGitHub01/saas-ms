@@ -24,13 +24,12 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
-import type { FormInstance, FormRules } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 const formSize = ref('default')
-const ruleFormRef = ref<FormInstance>()
+const ruleFormRef = ref()
 const dialogVisible = ref(false)
 const emits = defineEmits(['getTableData'])
 const form = reactive({
@@ -39,10 +38,10 @@ const form = reactive({
   optionId: ''
 })
 const defaultForm = JSON.parse(JSON.stringify(form))
-const rules = reactive<FormRules>({
+const rules = reactive({
   name: [{ required: true, message: '请输入退出原因', trigger: 'blur' }]
 })
-const open = (categoryId: string, item?: any) => {
+const open = (categoryId, item) => {
   item?.id ? Object.assign(form, item) : Object.assign(form, defaultForm)
   form.optionId = categoryId
   dialogVisible.value = true
@@ -68,7 +67,7 @@ const handleClose = () => {
   ruleFormRef.value?.resetFields()
   dialogVisible.value = false
 }
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = async formEl => {
   if (!formEl) return
   await formEl.validate(valid => {
     if (valid) {

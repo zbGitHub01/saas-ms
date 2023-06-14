@@ -7,7 +7,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 const dialogVisible = ref(false)
@@ -15,12 +15,12 @@ const tableData = ref([])
 const handleClose = () => {
   dialogVisible.value = false
 }
-const open = (applyId: number, type: string) => {
+const open = (applyId, type) => {
   getTableData(applyId, type)
   dialogVisible.value = true
 }
 
-const getTableData = async (applyId: number, type: string) => {
+const getTableData = async (applyId, type) => {
   // let data = ''
   // if (type === 'compliance') {
   //   data = await Apis.registerAuditComplianceApproveProgress({ applyId })

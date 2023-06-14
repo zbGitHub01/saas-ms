@@ -13,8 +13,8 @@
           <div style="height: calc(100% - 50px)">
             <h4>准入报告审批</h4>
             <div
-              class="approval-type"
               v-if="props.approveType !== '0' && props.approveType !== '4'"
+              class="approval-type"
             >
               <img
                 :src="`/src/assets/images/approval-${Number(props.approveType)}.png`"
@@ -37,16 +37,16 @@
             </div>
             <div style="height: calc(100% - 66px)">
               <access-data
-                :scrollTop="260"
-                accessId="compliance-personal-info"
-                :accessDetail="detailData"
                 ref="accessDataRef"
+                :scroll-top="260"
+                access-id="compliance-personal-info"
+                :access-detail="detailData"
               ></access-data>
             </div>
           </div>
-          <div class="operate-btn" v-if="props.approveType === '0'">
-            <el-button @click="onApproval(1)" type="danger" plain>审批拒绝</el-button>
-            <el-button @click="onApproval(0)" type="primary" plain>审批通过</el-button>
+          <div v-if="props.approveType === '0'" class="operate-btn">
+            <el-button type="danger" plain @click="onApproval(1)">审批拒绝</el-button>
+            <el-button type="primary" plain @click="onApproval(0)">审批通过</el-button>
           </div>
         </div>
       </template>
@@ -55,15 +55,18 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, nextTick } from 'vue'
 import accessData from './../../components/accessData/index.vue'
 import approveOperate from './approveOperate.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 const emits = defineEmits(['getTableData'])
-const props = defineProps<{
-  approveType: string
-}>()
+const props = defineProps({
+  approveType: {
+    type: String,
+    default: ''
+  }
+})
 const drawer = ref(false)
 const direction = ref('rtl')
 const logId = ref()
@@ -74,7 +77,7 @@ const hitList = ref([])
 const handleClose = () => {
   drawer.value = false
 }
-const onApproval = (type: number) => {
+const onApproval = type => {
   const temData = {
     pageHandlerResult: detailData.value.handlerResult,
     registerId: detailData.value.registerId,
@@ -82,7 +85,7 @@ const onApproval = (type: number) => {
   }
   approveOperateRef.value.open(type, temData, hitList.value)
 }
-const open = (id: any) => {
+const open = id => {
   logId.value = id
   drawer.value = true
   nextTick(() => {
@@ -101,7 +104,7 @@ const registerDetail = async () => {
   detailData.value = data
   accessDataRef.value.handleData(detailData.value, hitList.value)
 }
-const fetchOrgBlacklistHit = (id: number) => {
+const fetchOrgBlacklistHit = id => {
   // const { code, data } = Apis.findRegisterOrgBlacklistHit({ registerId: id })
   // if (code !== 200) return
   // hitList.value = data

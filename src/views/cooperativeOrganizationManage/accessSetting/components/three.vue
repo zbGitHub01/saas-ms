@@ -3,7 +3,7 @@
     <div style="width: 65%; height: 100%" class="pt16">
       <h4 class="pl16 pb16 ft-text" style="border-bottom: 1px solid #efefef">拒绝原因和准入周期设置</h4>
       <div class="pt16 pl20 pr20 pb20" style="height: calc(100% - 54px); overflow-y: auto">
-        <el-button type="primary" size="small" @click="addReason" :icon="Plus">拒绝原因</el-button>
+        <el-button type="primary" size="small" :icon="Plus" @click="addReason">拒绝原因</el-button>
         <div class="tip-text mt8 mb16">重新准入周期：拒绝后此天数内拒绝再次准入</div>
         <el-table :data="tableData">
           <el-table-column label="拒绝原因" prop="name" min-width="100" align="center"></el-table-column>
@@ -20,12 +20,12 @@
     <div style="width: 35%; border-left: 12px solid #f0f2f5" class="pt16">
       <h4 class="pl16 pb16 ft-text" style="border-bottom: 1px solid #f0f2f5">准入更新提醒</h4>
       <div class="pt20 pl20">
-        <div style="font-size:14px">
+        <div style="font-size: 14px">
           <div class="mr8 mb20">合作间断时长</div>
           <el-input
             v-model="breakTimeData.day"
             placeholder="请输入"
-            style="width: 100px;margin-right:10px"
+            style="width: 100px; margin-right: 10px"
           ></el-input>天
         </div>
         <div class="tip-text mt12 mb20">如合作中的机构未持有案件超过 n 天即提示准入更新</div>
@@ -36,26 +36,29 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { useConfirm } from '@/hooks/useConfirm'
 import rejectReasonDialog from './rejectReasonDialog.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { ElMessage } from 'element-plus'
-const props = defineProps<{
-  categoryId: string
-}>()
+const props = defineProps({
+  categoryId: {
+    type: String,
+    default: ''
+  }
+})
 const rejectReasonDialogRef = ref()
-const addReason = (item: any) => {
+const addReason = item => {
   rejectReasonDialogRef.value.open(props.categoryId, item)
 }
-const tableData = ref<any[]>([])
+const tableData = ref([])
 const breakTimeData = reactive({
   day: null,
   id: null
 })
-const deleteReason = async (id: number) => {
+const deleteReason = async id => {
   await useConfirm('删除', Apis.configDelete, { id })
   getTableData()
 }

@@ -1,24 +1,24 @@
 <template>
-  <div class="card-wrap" style="display: flex; height: 100%;padding:0">
-    <div style="width: 18%;" class="pt22">
+  <div class="card-wrap" style="display: flex; height: 100%; padding: 0">
+    <div style="width: 18%" class="pt22">
       <div class="card-title mb10 pl20">机构类型</div>
-      <el-tabs tab-position="right" class="custom-tabs" v-model="categoryId" @tab-click="onTypeTab">
+      <el-tabs v-model="categoryId" tab-position="right" class="custom-tabs" @tab-click="onTypeTab">
         <el-tab-pane
-          :name="String(item.id)"
-          :label="item.name"
           v-for="item in categoryData"
           :key="item.id"
+          :name="String(item.id)"
+          :label="item.name"
           lazy
         ></el-tab-pane>
       </el-tabs>
     </div>
-    <div style="width: 82%; height: 100%;border-left: 12px solid #f0f2f5;">
-      <el-tabs class="pl20 custom-title-tabs" v-model="pageTabName" @tab-click="onPageTab">
+    <div style="width: 82%; height: 100%; border-left: 12px solid #f0f2f5">
+      <el-tabs v-model="pageTabName" class="pl20 custom-title-tabs" @tab-click="onPageTab">
         <el-tab-pane
-          :name="item.value"
-          :label="item.label"
           v-for="item in pageTabData"
           :key="item.label"
+          :name="item.value"
+          :label="item.label"
         ></el-tab-pane>
       </el-tabs>
       <div class="content-wrap">
@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive, computed, nextTick, onMounted } from 'vue'
 import one from './components/one.vue'
 import two from './components/two.vue'
@@ -62,12 +62,12 @@ const pageTabData = reactive([
     value: 'five'
   }
 ])
-const onTypeTab = (e: any) => {
+const onTypeTab = e => {
   pageTabName.value = 'one'
   categoryId.value = e.props.name
   getTableData()
 }
-const onPageTab = (e?: any) => {
+const onPageTab = e => {
   pageTabName.value = e.props.name
   getTableData()
 }

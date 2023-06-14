@@ -20,7 +20,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'

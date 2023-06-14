@@ -6,14 +6,17 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import score from './score.vue'
 import decisionTag from './decisionTag.vue'
 import standard from './standard.vue'
-const props = defineProps<{
-  categoryId: string
-}>()
+const props = defineProps({
+  categoryId: {
+    type: String,
+    default: ''
+  }
+})
 const scoreRef = ref()
 const standardRef = ref()
 const decisionTagRef = ref()

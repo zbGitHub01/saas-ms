@@ -1,6 +1,6 @@
 <template>
   <div class="card-wrap">
-    <el-tabs class="mb12" v-model="approveType" @tab-click="onSearch">
+    <el-tabs v-model="approveType" class="mb12" @tab-click="onSearch">
       <el-tab-pane
         v-for="item in tabPaneData"
         :key="item.name"
@@ -23,7 +23,7 @@
           <el-form-item label="邀请人">
             <el-input v-model="form.inviteName" placeholder="请输入邀请人"></el-input>
           </el-form-item>
-          <el-form-item label="注册时间" v-if="approveType !== '2'">
+          <el-form-item v-if="approveType !== '2'" label="注册时间">
             <el-date-picker
               v-model="state.registerTime"
               type="daterange"
@@ -43,7 +43,7 @@
               end-placeholder="结束时间"
             />
           </el-form-item>
-          <el-form-item label="准入通过时间" v-if="approveType === '1'">
+          <el-form-item v-if="approveType === '1'" label="准入通过时间">
             <el-date-picker
               v-model="state.accessTime"
               type="daterange"
@@ -53,7 +53,7 @@
               end-placeholder="结束时间"
             />
           </el-form-item>
-          <el-form-item label="失效时间" v-if="approveType === '3'">
+          <el-form-item v-if="approveType === '3'" label="失效时间">
             <el-date-picker
               v-model="state.lastApplyTime"
               type="daterange"
@@ -63,7 +63,7 @@
               end-placeholder="结束时间"
             />
           </el-form-item>
-          <el-form-item label="准入状态" v-if="approveType === '4'">
+          <el-form-item v-if="approveType === '4'" label="准入状态">
             <el-select v-model="form.inviteStatus" placeholder="请选择准入状态">
               <el-option
                 v-for="item in optionData.inviteStatusOptions"
@@ -73,7 +73,7 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="审核提交时间" v-if="approveType === '2'">
+          <el-form-item v-if="approveType === '2'" label="审核提交时间">
             <el-date-picker
               v-model="state.submitTime"
               type="daterange"
@@ -83,7 +83,7 @@
               end-placeholder="结束时间"
             />
           </el-form-item>
-          <el-form-item label="审核拒绝时间" v-if="approveType === '2'">
+          <el-form-item v-if="approveType === '2'" label="审核拒绝时间">
             <el-date-picker
               v-model="state.checkTime"
               type="daterange"
@@ -109,16 +109,16 @@
     <el-table :data="state.tableData">
       <el-table-column label="机构名称" prop="companyName" width="210" align="center">
         <template #default="scope">
-          <div style="display:flex;align-items:center;justify-content: center;">
+          <div style="display: flex; align-items: center; justify-content: center">
             <el-tooltip
+              v-if="scope.row.companyName.length > 10"
               effect="dark"
-              v-if="scope.row.companyName.length>10"
               :content="scope.row.companyName"
               placement="top"
             >
-              <div>{{scope.row.companyName.substring(0,10)+'...'}}</div>
+              <div>{{ scope.row.companyName.substring(0, 10) + '...' }}</div>
             </el-tooltip>
-            <div v-else>{{scope.row.companyName}}</div>
+            <div v-else>{{ scope.row.companyName }}</div>
             <svg-icon
               v-if="scope.row.isRisk === 1"
               class="risk-icon"
@@ -130,10 +130,10 @@
       </el-table-column>
       <el-table-column label="邀请时间" prop="inviteTime" min-width="180" align="center"></el-table-column>
       <el-table-column
+        v-if="approveType === '4'"
         label="准入状态"
         prop="inviteStatus"
         min-width="180"
-        v-if="approveType === '4'"
         align="center"
       >
         <template #default="scope">
@@ -142,52 +142,52 @@
       </el-table-column>
       <el-table-column label="提交审核时间" prop="submitTime" min-width="180" align="center"></el-table-column>
       <el-table-column
+        v-if="approveType === '0' || approveType === '4'"
         label="资料提交截止日"
         prop="endTime"
         min-width="180"
-        v-if="approveType === '0' || approveType === '4'"
         align="center"
       ></el-table-column>
       <el-table-column
+        v-if="approveType === '0' || approveType === '4'"
         label="审批截止日"
         prop="lastApplyTime"
         min-width="180"
-        v-if="approveType === '0' || approveType === '4'"
         align="center"
       ></el-table-column>
       <el-table-column
+        v-if="approveType === '1'"
         label="准入通过时间"
         prop="checkTime"
         min-width="180"
-        v-if="approveType === '1'"
         align="center"
       ></el-table-column>
       <el-table-column
+        v-if="approveType === '2'"
         label="审核拒绝时间"
         prop="checkTime"
         min-width="150"
-        v-if="approveType === '2'"
         align="center"
       ></el-table-column>
       <el-table-column
+        v-if="approveType === '2'"
         label="拒绝原因"
         prop="refuseReason"
         min-width="150"
-        v-if="approveType === '2'"
         align="center"
       ></el-table-column>
       <el-table-column
+        v-if="approveType === '2'"
         label="拒绝人"
         prop="handlerName"
         min-width="150"
-        v-if="approveType === '2'"
         align="center"
       ></el-table-column>
       <el-table-column
+        v-if="approveType === '3'"
         label="失效时间"
         prop="lastApplyTime"
         min-width="180"
-        v-if="approveType === '3'"
         align="center"
       ></el-table-column>
       <el-table-column label="注册手机号" prop="phone" min-width="150" align="center"></el-table-column>
@@ -208,14 +208,14 @@
             type="primary"
             link
             @click="onDetail(scope.row.logId)"
-          >{{approveType === '0' ? '查看资料并审核' :'查看资料/审批结果'}}</el-button>
+          >{{ approveType === '0' ? '查看资料并审核' : '查看资料/审批结果' }}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <pagination
-      :total="state.total"
       v-model:page="queryParams.page"
       v-model:page-size="queryParams.pageSize"
+      :total="state.total"
       @pagination="getTableData"
     />
     <approval-progress-dialog ref="approvalProgressDialogRef"></approval-progress-dialog>
@@ -224,7 +224,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { reactive, ref, onMounted, nextTick } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import approvalProgressDialog from '../components/approvalProgressDialog.vue'
@@ -329,7 +329,7 @@ const onReset = () => {
   Object.assign(form, defaultForm)
   getTableData()
 }
-const onProgress = (id: number, type: string) => {
+const onProgress = (id, type) => {
   approvalProgressDialogRef.value.open(id, type)
 }
 const onDetail = id => {

@@ -1,6 +1,6 @@
 <template>
   <div class="pt16 pl20 pr20 pb20" style="height: calc(100% - 20px); overflow-y: auto">
-    <el-button type="primary" size="small" @click="addReason" :icon="Plus" class="mb16">退出原因</el-button>
+    <el-button type="primary" size="small" :icon="Plus" class="mb16" @click="addReason">退出原因</el-button>
     <el-table :data="tableData">
       <el-table-column label="退出原因" prop="name" min-width="150" align="center"></el-table-column>
       <el-table-column label="操作" min-width="110" align="center">
@@ -14,21 +14,24 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { useConfirm } from '@/hooks/useConfirm'
 import exitReasonDialog from './exitReasonDialog.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
-const props = defineProps<{
-  categoryId: string
-}>()
-const tableData = ref<any[]>([])
+const props = defineProps({
+  categoryId: {
+    type: String,
+    default: ''
+  }
+})
+const tableData = ref([])
 const exitReasonDialogRef = ref()
-const addReason = (item?: any) => {
+const addReason = item => {
   exitReasonDialogRef.value.open(props.categoryId, item)
 }
-const deleteReason = async (id: number) => {
+const deleteReason = async id => {
   await useConfirm('删除', Apis.configDelete, { id })
   getConfigList()
 }

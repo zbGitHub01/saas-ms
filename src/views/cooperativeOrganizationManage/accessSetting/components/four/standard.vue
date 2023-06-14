@@ -1,13 +1,13 @@
 <template>
   <div class="two-wrap pt14">
     <!-- 机构类型标准 -->
-    <div style="border-bottom: 12px solid #f0f2f5;">
-      <div class="title-wrap pb14 pl20 pr20" style="border-bottom: 1px solid #f0f2f5;">处置经验判断标准</div>
+    <div style="border-bottom: 12px solid #f0f2f5">
+      <div class="title-wrap pb14 pl20 pr20" style="border-bottom: 1px solid #f0f2f5">处置经验判断标准</div>
       <div class="flx-align-center pt20 pl20 pr20 pb30">
         <div
           v-for="(orgItem, index) in orgTypeList"
           :key="`org${index}`"
-          style="margin-right:64px;font-size:14px"
+          style="margin-right: 64px; font-size: 14px"
           class="list1-item"
         >
           <div>{{ orgItem.state === 0 ? '有经验处置机构定义：' : '新成立处置机构定义：' }}</div>
@@ -29,13 +29,13 @@
     </div>
     <!-- 准入标准 -->
     <div>
-      <div class="title-wrap pt14 pb14 pl20 pr20" style="border-bottom: 1px solid #f0f2f5;">准入标准</div>
+      <div class="title-wrap pt14 pb14 pl20 pr20" style="border-bottom: 1px solid #f0f2f5">准入标准</div>
       <div class="flx-align-center pt20 pl20 pr20 pb30">
         <div
           v-for="(accessItem, index) in orgTypeList"
           :key="`access${index}`"
           class="list-item pt5 pb5"
-          style="margin-right:104px;font-size:14px"
+          style="margin-right: 104px; font-size: 14px"
         >
           <div>{{ accessItem.state === 0 ? '有经验机构准入分：' : '新机构准入分：' }}</div>
           <span style="margin: 0 10px">≥</span>
@@ -54,17 +54,21 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { ElMessage } from 'element-plus'
-const props = defineProps<{
-  optionIds: string
-}>()
-const orgTypeList = ref<any[]>([])
+const props = defineProps({
+  optionIds: {
+    type: String,
+    default: ''
+  }
+})
+
+const orgTypeList = ref([])
 const orgTypeText = ref('业务运营处置累计时长')
 // 保存
-const onSave = async (item: any) => {
+const onSave = async item => {
   const params = {
     type: 5,
     ...item,

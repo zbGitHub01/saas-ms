@@ -4,7 +4,7 @@
       <h4>角色权限</h4>
     </template>
     <template #default>
-      <el-tabs class="mb16" v-model="tabActive" @tab-click="onSearch">
+      <el-tabs v-model="tabActive" class="mb16" @tab-click="onSearch">
         <el-tab-pane label="在职员工" name="0"></el-tab-pane>
         <el-tab-pane label="离职员工" name="1"></el-tab-pane>
       </el-tabs>
@@ -74,19 +74,19 @@
         <el-table-column label="证件号" prop="idNo" min-width="200" align="center"></el-table-column>
         <el-table-column label="角色权限" prop="roleNames" min-width="150" align="center">
           <template #default="scope">
-            <div>{{ scope.row.roleNames && scope.row.roleNames.length>0?scope.row.roleNames.join(','):scope.row.roleNames }}</div>
+            <div>{{ scope.row.roleNames && scope.row.roleNames.length > 0 ? scope.row.roleNames.join(',') : scope.row.roleNames }}</div>
           </template>
         </el-table-column>
         <el-table-column label="是否接案" prop="isAcceptCase" min-width="150" align="center">
           <template #default="scope">
-            <div>{{ scope.row.isAcceptCase ===0 ? '否':'是' }}</div>
+            <div>{{ scope.row.isAcceptCase === 0 ? '否' : '是' }}</div>
           </template>
         </el-table-column>
         <el-table-column label="性别" prop="sex" min-width="150" align="center"></el-table-column>
         <el-table-column label="入职日期" prop="entryDate" min-width="150" align="center"></el-table-column>
         <el-table-column label="账号状态" prop="isDisable" min-width="150" align="center">
           <template #default="scope">
-            <div>{{ scope.row.isDisable ===0?'启用':'禁用' }}</div>
+            <div>{{ scope.row.isDisable === 0 ? '启用' : '禁用' }}</div>
           </template>
         </el-table-column>
         <el-table-column label="钉钉" prop="dingDingName" min-width="150" align="center"></el-table-column>
@@ -99,7 +99,7 @@
   </el-drawer>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive, nextTick, computed } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { useCommonStore } from '@/store/modules/common'
@@ -128,7 +128,7 @@ const handleClose = () => {
   drawer.value = false
 }
 
-const open = (relationTenantId: number) => {
+const open = relationTenantId => {
   orgTenantId.value = relationTenantId
   getTableData()
   drawer.value = true
@@ -144,7 +144,7 @@ const onReset = () => {
   getTableData()
 }
 const positionText = val => {
-  return positionList.find(item => item.id === val)?.name
+  return positionList.value.find(item => item.id === val)?.name
 }
 
 const getTableData = async () => {

@@ -1,6 +1,6 @@
 <template>
   <div class="one-wrap pt14">
-    <div class="title-wrap ft18 pb14 pl20 pr20" style="border-bottom: 1px solid #f0f2f5;">评分项和评分标准</div>
+    <div class="title-wrap ft18 pb14 pl20 pr20" style="border-bottom: 1px solid #f0f2f5">评分项和评分标准</div>
     <div class="score-wrap pl20 pr20">
       <el-button type="primary" style="margin: 14px 0 30px" @click="addScore">+评分项</el-button>
       <div style="display: flex">
@@ -15,9 +15,9 @@
         </div>
         <div style="display: flex; flex-wrap: wrap; width: 60%">
           <div
-            style="width: 33%; margin-bottom: 20px"
             v-for="(score, scoreIndex) in item.json"
             :key="scoreIndex"
+            style="width: 33%; margin-bottom: 20px"
           >
             <el-input
               v-model="score.scoreCriteria"
@@ -34,8 +34,8 @@
               placeholder="评分值"
             ></el-input-number>
             <span
-              class="mt4"
               v-if="item.json.length > 3"
+              class="mt4"
               style="color: #999; margin-left: 8px; cursor: pointer"
               @click="delStandard(item, scoreIndex)"
             >
@@ -46,11 +46,11 @@
           </div>
         </div>
         <div>
-          <el-button type="primary" v-if="item.json.length < 6" plain @click="addStandard(item)">+标准</el-button>
+          <el-button v-if="item.json.length < 6" type="primary" plain @click="addStandard(item)">+标准</el-button>
           <el-button type="primary" @click="onSave(item)">保存</el-button>
           <el-button
-            type="primary"
             v-if="scoreList.length > 1"
+            type="primary"
             plain
             @click="delScore(item, index)"
           >删除</el-button>
@@ -60,18 +60,21 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { CircleClose } from '@element-plus/icons-vue'
 import { useConfirm } from '@/hooks/useConfirm'
 import { ElMessage } from 'element-plus'
-const props = defineProps<{
-  optionIds: string
-}>()
-const scoreList = ref<any[]>([])
+const props = defineProps({
+  optionIds: {
+    type: String,
+    default: ''
+  }
+})
+const scoreList = ref([])
 // 保存
-const onSave = async (item: any) => {
+const onSave = async item => {
   const params = {
     type: 3,
     ...item,
@@ -111,7 +114,7 @@ const addScore = () => {
   scoreList.value.push(temItem)
 }
 // 删除评分项
-const delScore = async (item: any, index: number) => {
+const delScore = async (item, index) => {
   if (item.id) {
     await useConfirm('要删除该条评分项', Apis.configDelete, { id: item.id })
     getTableData()
@@ -120,7 +123,7 @@ const delScore = async (item: any, index: number) => {
   }
 }
 // 添加标准
-const addStandard = (item: any) => {
+const addStandard = item => {
   const temItem = {
     scoreCriteria: '',
     scoreValue: ''
@@ -129,7 +132,7 @@ const addStandard = (item: any) => {
   scoreList.value = JSON.parse(JSON.stringify(scoreList.value))
 }
 // 删除标准
-const delStandard = (item: any, index: number) => {
+const delStandard = (item, index) => {
   item.json.splice(index, 1)
   scoreList.value = JSON.parse(JSON.stringify(scoreList.value))
 }
@@ -142,7 +145,7 @@ const getTableData = async () => {
   const { code, data } = await Apis.configList(params)
   if (code !== 200) return
   if (data.length > 0) {
-    data.forEach((item: any) => {
+    data.forEach(item => {
       item.json = JSON.parse(item.json)
     })
     scoreList.value = JSON.parse(JSON.stringify(data))
