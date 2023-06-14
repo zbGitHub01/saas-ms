@@ -33,7 +33,6 @@ import MoreButton from './components/MoreButton.vue'
 const tabStore = useTabsStore()
 
 const tabsMenuList = computed(() => tabStore.tabsMenuList)
-console.log(tabsMenuList.value, '----tabs')
 const tabsMenuValue = computed({
   get: () => tabStore.tabsMenuValue,
   set: val => tabStore.setTabsMenuValue(val)

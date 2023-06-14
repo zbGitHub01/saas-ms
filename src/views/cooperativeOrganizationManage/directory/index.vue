@@ -214,7 +214,7 @@ import riskDialog from '../components/riskDialog.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { useCommonStore } from '@/store/modules/common'
 const commonStore = useCommonStore()
-const accessOptions = computed(() => commonStore.dropdownList.COOPERATION_STATUS)
+const accessOptions = computed(() => commonStore.dropdownList.GLE_UPMS_COOPERATION_STATUS)
 const optionData = reactive({
   orgTypeList: [],
   orgModelList: []
