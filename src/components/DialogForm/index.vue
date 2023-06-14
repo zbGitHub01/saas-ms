@@ -1,6 +1,6 @@
 <script setup>
-import { ref, toRefs, reactive, getCurrentInstance, watch } from 'vue'
-import { ElMessageBox } from 'element-plus'
+import { ref, toRefs, reactive, getCurrentInstance, watch, nextTick } from 'vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const props = defineProps({
   dialogFormVisible: {
@@ -61,9 +61,17 @@ const { ruleForm, rules } = toRefs(props)
 let state = reactive({
   form: instance?.$deepCopy(ruleForm.value, true)
 })
-const ruleFormRef = ref(0)
+const ruleFormRef = ref(null)
 
-const emit = defineEmits(['update:dialogFormVisible', 'handlePreview', 'handleRemove', 'handleExceed', 'submit', 'watchChange'])
+const emit = defineEmits([
+  'update:dialogFormVisible',
+  'handlePreview',
+  'handleRemove',
+  'handleExceed',
+  'submit',
+  'watchChange',
+  'fileList'
+])
 
 const closeClick = ruleFormRef => {
   resetFunc(ruleFormRef)
@@ -74,6 +82,7 @@ watch(
   // eslint-disable-next-line no-unused-vars
   (newValue, _) => {
     state.form = instance?.$deepCopy(newValue, true)
+    console.log(newValue)
   },
   { deep: true },
   { immediate: true }
@@ -100,6 +109,24 @@ const handleRemove = (file, uploadFiles) => {
 const handlePreview = uploadFile => {
   emit('handlePreview', uploadFile)
   console.log(uploadFile)
+}
+
+//文件上传失败
+const uploadError = () => {
+  ElMessage.error('上传失败！')
+}
+
+const fileList = ref([])
+//文件上传成功
+// eslint-disable-next-line no-unused-vars
+const uploadSuccess = (response, uploadFile, _) => {
+  const fileObj = {}
+  fileObj['name'] = uploadFile?.name
+  fileObj['url'] = response?.data?.url
+  fileList.value.push(fileObj)
+  console.log(fileList.value)
+  emit('fileList', fileList.value)
+  // console.log('response, uploadFile, uploadFiles', response, uploadFile, uploadFiles)
 }
 
 //当超出限制时，执行的钩子函数
@@ -134,10 +161,17 @@ const resetForm = formEl => {
   //假如有传默认重置对象，则深拷贝进行重置
   resetFunc(formEl)
 }
+
+//打开前清楚校验
+const open = ruleFormRef => {
+  nextTick(() => {
+    ruleFormRef.clearValidate()
+  })
+}
 const resetFunc = formEl => {
-  // state.form = proxy.$deepCopy(props.defaultForm, true)
-  emit('update:dialogFormVisible', false)
+  state.form = instance?.$deepCopy(props.ruleForm, true)
   formEl.resetFields()
+  emit('update:dialogFormVisible', false)
 }
 </script>
 
@@ -148,6 +182,7 @@ const resetFunc = formEl => {
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :title="props.title"
+    @open="open(ruleFormRef)"
     @close="closeClick(ruleFormRef)"
   >
     <el-form
@@ -214,7 +249,7 @@ const resetFunc = formEl => {
           v-if="item.type === 'datetime'"
           v-model="state.form[item.prop]"
           type="datetime"
-          value-format="yyyy-MM-dd HH:mm:ss"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :placeholder="item.placeholder"
         />
         <!--目标机构（特殊）-->
@@ -253,9 +288,12 @@ const resetFunc = formEl => {
           v-model:file-list="state.form[item.prop]"
           class="upload-demo"
           :action="item.action"
+          :accept="item.accept || ''"
           :limit="item.limit"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
+          :on-success="uploadSuccess"
+          :on-error="uploadError"
           :before-remove="beforeRemove"
           :on-exceed="handleExceed"
           :headers="item.headers"

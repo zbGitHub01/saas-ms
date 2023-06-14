@@ -15,29 +15,40 @@ export default [
       { name: '库内剩余共债', label: 3 }
     ]
   },
+  // {
+  //   type: 'pairSelect',
+  //   label: '目标机构',
+  //   prop: 'categoryCompany',
+  //   childItem: [
+  //     {
+  //       type: 'select',
+  //       prop: 'categoryCompany',
+  //       options: [
+  //         {
+  //           label: '哇哈哈',
+  //           value: 1
+  //         },
+  //         {
+  //           label: '哇哈哈',
+  //           value: 2
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       type: 'select',
+  //       prop: 'orgId',
+  //       options: []
+  //     }
+  //   ]
+  // },
   {
-    type: 'pairSelect',
+    type: 'select',
     label: '目标机构',
-    prop: 'categoryCompany',
-    childItem: [
+    prop: 'orgId',
+    options: [
       {
-        type: 'select',
-        prop: 'categoryCompany',
-        options: [
-          {
-            label: '哇哈哈',
-            value: 1
-          },
-          {
-            label: '哇哈哈',
-            value: 2
-          }
-        ]
-      },
-      {
-        type: 'select',
-        prop: 'orgId',
-        options: []
+        label: '默认',
+        value: 1
       }
     ]
   },
@@ -106,6 +117,7 @@ export default [
     prop: 'entrustFileUrl',
     limit: 1,
     headers: {},
+    accept: '.xls,.xlsx',
     // uploadTips: 'jpg/png files with a size less than 500KB.',
     action: ''
   }

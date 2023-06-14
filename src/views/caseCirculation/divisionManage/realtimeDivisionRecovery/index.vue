@@ -11,7 +11,8 @@ const state = reactive({
   tableData: [],
   pageTotal: 4,
   labelData: {},
-  queryNewData: {}
+  queryNewData: {},
+  currSelectArr: []
 })
 
 const getOrderListAgain = (pageSize, pageNum) => {

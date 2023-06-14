@@ -60,7 +60,6 @@ export default {
     },
     total: {
       type: Number,
-      required: true,
       default: 0
     }
   },

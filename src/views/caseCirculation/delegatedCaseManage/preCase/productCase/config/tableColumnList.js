@@ -1,36 +1,44 @@
 export default [
   {
     label: '案件分库',
-    prop: 'caseCategory',
+    prop: 'storeName',
     width: 100
   },
   {
     label: '委案产品',
-    prop: 'caseProduct',
-    // popoverProp: 'productString',
-    // isPopover: true,
+    prop: 'productName',
     width: 200
   },
   {
     label: '操作维度',
-    prop: 'operaNum'
-    // enableEdit: true
+    prop: 'entrustStrategy',
+    formatter({ entrustStrategy }) {
+      const textMap = {
+        1: '案人',
+        2: '案件',
+        3: '剩余共债'
+      }
+      return textMap[entrustStrategy]
+    }
   },
   {
     label: '委案类型',
-    prop: 'orderNo'
+    prop: 'entrustTypeStr'
   },
   {
     label: '委案备注',
-    prop: 'orderNo'
+    prop: 'remark'
   },
   {
     label: '执行时间',
-    prop: 'orderNo'
+    prop: 'execTime'
   },
   {
     label: '预委案金额',
-    prop: 'orderNo'
+    prop: 'preEntrustAmount',
+    formatter({ preEntrustAmount }) {
+      return Number(preEntrustAmount).toLocaleString()
+    }
   },
   {
     label: '委案配置',
@@ -40,10 +48,10 @@ export default [
   },
   {
     label: '操作人',
-    prop: 'orderNo'
+    prop: 'createName'
   },
   {
     label: '操作时间',
-    prop: 'orderNo'
+    prop: 'createTime'
   }
 ]
