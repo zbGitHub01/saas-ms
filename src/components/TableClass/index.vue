@@ -172,10 +172,10 @@ export default {
       return str
     }
 
-    const { proxy } = getCurrentInstance()
+    const instance = getCurrentInstance()?.proxy
 
     const toggleSelection = rows => {
-      const ultipleTabInstance = proxy.$refs.multipleTableRef
+      const ultipleTabInstance = instance?.$refs.multipleTableRef
       if (rows) {
         rows.forEach(row => {
           ultipleTabInstance.toggleRowSelection(row, undefined)

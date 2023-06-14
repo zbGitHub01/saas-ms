@@ -60,7 +60,7 @@ const submitForm = () => {
   console.log(data)
 }
 
-const { proxy } = getCurrentInstance()
+const instance = getCurrentInstance()?.proxy
 
 const resetFormFields = () => {
   const defaultChildForm = {
@@ -74,8 +74,8 @@ const resetFormFields = () => {
     region: '',
     notes: ''
   }
-  state.form = proxy.$deepCopy(defaultForm, true)
-  state.childForm = proxy.$deepCopy(defaultChildForm, true)
+  state.form = instance?.$deepCopy(defaultForm, true)
+  state.childForm = instance?.$deepCopy(defaultChildForm, true)
   emit('update:dialogFormVisible', false)
 }
 

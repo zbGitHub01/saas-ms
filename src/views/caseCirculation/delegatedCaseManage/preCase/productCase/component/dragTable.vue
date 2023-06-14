@@ -21,9 +21,9 @@ const state = reactive({
 })
 
 const { tableData } = toRefs(props)
-const { proxy } = getCurrentInstance()
+const instance = getCurrentInstance()?.proxy
 
-state.dataArr = proxy.$deepCopy(tableData.value, true)
+state.dataArr = instance?.$deepCopy(tableData.value, true)
 
 const handleDel = row => {
   console.log(row)

@@ -15,12 +15,12 @@ const props = defineProps({
 })
 
 const { tableData } = toRefs(props)
-const { proxy } = getCurrentInstance()
+const instance = getCurrentInstance()?.proxy
 
 const state = reactive({
   dataArr: []
 })
-state.dataArr = proxy.$deepCopy(tableData.value, true)
+state.dataArr = instance?.$deepCopy(tableData.value, true)
 
 const lastDropVisible = ref(false)
 const thirdDropVisible = ref(false)

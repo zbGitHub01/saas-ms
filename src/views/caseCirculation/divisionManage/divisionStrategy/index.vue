@@ -29,7 +29,7 @@ const getList = async () => {
 getList()
 
 const dialogFormVisible = ref(false)
-const { proxy } = getCurrentInstance()
+const instance = getCurrentInstance()?.proxy
 
 const handleEdit = async (va, val) => {
   const data = await Apis.getOrgNameList()
@@ -73,7 +73,7 @@ const handleUpdate = obj => {
 
 //关闭弹窗
 const handleClose = () => {
-  state.dialogForm = proxy.$deepCopy(defaultForm, true)
+  state.dialogForm = instance?.$deepCopy(defaultForm, true)
   dialogFormFields.map(item => {
     if (item.prop === 'orgName') item['disabled'] = false
   })

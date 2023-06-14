@@ -48,11 +48,11 @@ const getOrderListAgain = (pageSize, pageNum) => {
   // })
 }
 
-const { proxy } = getCurrentInstance()
+const instance = getCurrentInstance()?.proxy
 const formFieldsList = computed(() => {
   dialogFormFieldsList.forEach(item => {
     if (item.prop === 'case')
-      item.options = proxy.$deepCopy(
+      item.options = instance?.$deepCopy(
         [
           {
             label: 'red',
@@ -68,7 +68,7 @@ const formFieldsList = computed(() => {
     if (item.type === 'pairSelect') {
       item.childItem.filter(cItem => {
         if (cItem.prop === 'aimCompany')
-          cItem.options = proxy.$deepCopy([
+          cItem.options = instance?.$deepCopy([
             {
               label: 'red',
               value: 1
@@ -81,7 +81,7 @@ const formFieldsList = computed(() => {
       })
     }
     if (item.prop === 'opera')
-      item.radioList = proxy.$deepCopy(
+      item.radioList = instance?.$deepCopy(
         [
           {
             label: '案人'

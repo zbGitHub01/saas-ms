@@ -54,12 +54,12 @@ const props = defineProps({
     default: () => {}
   }
 })
-const { proxy } = getCurrentInstance()
+const instance = getCurrentInstance()?.proxy
 
 const { ruleForm, rules } = toRefs(props)
 
 let state = reactive({
-  form: proxy.$deepCopy(ruleForm.value, true)
+  form: instance?.$deepCopy(ruleForm.value, true)
 })
 const ruleFormRef = ref(0)
 
@@ -73,7 +73,7 @@ watch(
   () => ruleForm.value,
   // eslint-disable-next-line no-unused-vars
   (newValue, _) => {
-    state.form = proxy.$deepCopy(newValue, true)
+    state.form = instance?.$deepCopy(newValue, true)
   },
   { deep: true },
   { immediate: true }
