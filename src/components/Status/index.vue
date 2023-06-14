@@ -129,10 +129,11 @@ const calcStyleClass = key => {
   const classKey = timeClassMap[key]
   map[classKey] = classMap[classMapKey]
 }
+// 点击案件编号，跳转案件详情
 const goDetail = () => {
   if (!props.row.caseId) return
   router.push({
-    name: 'caseImport',
+    name: 'casesManageable',
     query: { caseNo: props.row.caseNo }
   })
 }

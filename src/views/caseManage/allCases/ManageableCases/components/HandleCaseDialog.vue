@@ -8,7 +8,7 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <el-form :model="form" ref="ruleFormRef" :rules="rules" label-width="122px" label-position="right">
+      <el-form :model="form" ref="ruleFormRef" :rules="rules" label-width="110px" label-position="right">
         <el-form-item v-if="typeSub === 1" label="关闭原因:" prop="caseStatus">
           <el-select clearable v-model="form.caseStatus" placeholder="请选择关闭原因">
             <el-option v-for="(item, index) in closeReason" :key="index" :label="item.label" :value="item.value" />
@@ -28,33 +28,21 @@
               日
             </div>
           </el-form-item>
-          <el-form-item label="暂停至" v-if="form.reasonId !== 25" prop="pauseEndTime" class="date">
+          <el-form-item label="暂停至" v-if="form.reasonId !== 25" prop="pauseEndTime">
             <el-date-picker
               v-model="form.pauseEndTime"
               type="datetime"
               placeholder="选择日期时间"
-              value-format="YYYY-MM-DD hh:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
+              class="date"
             ></el-date-picker>
           </el-form-item>
           <el-form-item label="暂停备注" prop="caseStatusRemark">
-            <el-input clearable v-model="form.caseStatusRemark" type="textarea" placeholder="请输入备注" />
+            <el-input clearable v-model="form.caseStatusRemark" type="textarea" placeholder="请输入备注" style="width: 220px" />
           </el-form-item>
           <el-form-item label="凭证附件" v-if="form.reasonId !== 25" :prop="StopFormData.isMust ? 'pauseUrl' : ''">
-            <UploadFile ref="uploadFileRef" v-model:file-list="form.pauseUrl" />
+            <UploadFile ref="uploadFileRef" v-model:file-list="form.pauseUrl" :limit="100" />
             <div>请上传相关凭证或附件文档</div>
-            <!-- <el-upload
-              v-model:file-list="form.pauseUrl"
-              action=""
-              multiple
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-            >
-              <el-button type="primary">上传附件</el-button>
-              <template #tip>
-                <div>请上传相关凭证或附件文档</div>
-              </template>
-            </el-upload> -->
           </el-form-item>
         </div>
       </el-form>
@@ -83,7 +71,7 @@ const typeSub = ref(1)
 const title = ref('')
 const uploadFileRef = ref()
 const selectData = reactive({
-  StopReasonList: [] //临时标签列表
+  StopReasonList: [] //暂停原因列表
 })
 const StopFormData = reactive({
   pauseDay: 0,
@@ -198,7 +186,7 @@ const getSelecData = async () => {
     page: 1,
     pageSize: 10000
   }
-  // const { data } = await xx(params)
+  // const { data } = await caseStatePauseConfigList(params)
   // let temData = JSON.parse(JSON.stringify(data.data));
   // temData = temData.filter((item) => item.state === 0);
   // temData = temData.filter((item) => item.id !== 20 && item.id !== 30);
@@ -280,25 +268,10 @@ const changeStopReasonId = () => {
     form.caseStatus = null
   }
 }
-const handleRemove = (file, uploadFiles) => {
-  console.log(file, uploadFiles)
-}
-
-const handlePreview = uploadFile => {
-  console.log(uploadFile)
-}
-const beforeRemove = (uploadFile, uploadFiles) => {
-  return ElMessageBox.confirm(`Cancel the transfer of ${uploadFile.name} ?`).then(
-    () => true,
-    () => false
-  )
-}
 </script>
   
 <style lang="scss" scoped>
-.date {
-  :deep(.el-input__wrapper) {
-    width: 146px !important;
-  }
+:deep(.el-input__wrapper) {
+  width: 146px !important;
 }
 </style>

@@ -66,10 +66,10 @@
           </div>
         </template>
       </OperationBar>
-      <div class="mb10">
+      <!-- <div class="mb10">
         <span>选中项：{{ state.selectedData.length }}</span>
         <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
-      </div>
+      </div> -->
       <el-table
         :data="state.tableData"
         border

@@ -43,7 +43,7 @@
     <div class="spacing"></div>
     <div class="mt20">
       <el-table :data="state.tableData" border>
-        <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150">
+        <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left">
           <template #default="scope">
             <status :row="scope.row" pageType="disposalCasemessage" />
           </template>
@@ -111,7 +111,7 @@ const getTableData = async () => {
   state.tableData  = [
     {
       caseId: 1,
-      caseNo: 'WTD-SJD-0000002',
+      caseNo: 'BE-BQ-0001003',
       productName: '“360”借条',
       userName: '王亚瑞',
       idno: '4503321989082027',
@@ -127,7 +127,7 @@ const getTableData = async () => {
     },
     {
       caseId: 3,
-      caseNo: 'GJ-WLD-0132768',
+      caseNo: 'BE-BQ-0001001',
       productName: '“360”借条',
       userName: '王亚瑞',
       idno: '4503321989082027',

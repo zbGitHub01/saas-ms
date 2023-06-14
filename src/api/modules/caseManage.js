@@ -45,7 +45,10 @@ const apiConfig = {
     // 全部案件
     caseList: 'POST /caseCenter/case/list', //案件列表
     caseListStats: 'POST /caseCenter/case/list/stats', //案件列表统计数据
-    
+    saveCaseStatus: 'POST /caseCenter/case/saveCaseStatus', //暂停关闭恢复案件
+    caseExport: 'POST /caseCenter/case/export', //导出案件
+    generateCertificate: 'POST /caseCenter/case/generate/certificate', //生成结清证明
+
     // 资产包类型
     packagetypeList: 'GET /caseCenter/packagetype/list', //不分页资产包类型
 

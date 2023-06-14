@@ -44,10 +44,10 @@
           </div>
         </template>
       </OperationBar>
-      <div class="mb10">
+      <!-- <div class="mb10">
         <span>选中项：{{ state.selectData.length }}</span>
         <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
-      </div>
+      </div> -->
       <el-table
         :data="state.tableData"
         border
@@ -67,10 +67,10 @@
         <el-table-column label="姓名" prop="userName" align="center" min-width="150"></el-table-column>
         <el-table-column label="证件号" prop="idno" align="center" min-width="180"></el-table-column>
         <el-table-column label="手机号" prop="userPhone" align="center" min-width="150"></el-table-column>
-        <el-table-column label="委案金额" prop="entrustAmount" align="center" min-width="150" sortable></el-table-column>
+        <el-table-column label="委案金额" prop="entrustAmount" align="center" min-width="150" sortable="custom"></el-table-column>
         <el-table-column label="还款入账金额" prop="totalRefundAmount" align="center" min-width="150"></el-table-column>
         <el-table-column label="减免金额" prop="totalReductionAmount" align="center" min-width="150"></el-table-column>
-        <el-table-column label="剩余待还金额" prop="residueAmount" align="center" min-width="150" sortable></el-table-column>
+        <el-table-column label="剩余待还金额" prop="residueAmount" align="center" min-width="150" sortable="custom"></el-table-column>
         <el-table-column label="临时标签" prop="tagTempList" align="left" min-width="180" :show-overflow-tooltip="true">
           <template #default="scope">
             <span v-for="(item, index) in scope.row.tagTempList" :key="index">
@@ -466,7 +466,6 @@ const handleClick = item => {
         exportModel('EXPORT_CASE_FIELD', 0)
         break
       case '导出案件2':
-        // this.form.caseStatus = 25;
         exportModel('EXPORT_CASE_FIELD', 0)
         break
       case '导出处置记录':
@@ -519,11 +518,11 @@ const handlesort = val => {
       form.entrustAmountSort = null
       form.entrustResidueAmountSort = val.order === 'ascending' ? 0 : 1
     }
-    getTableData()
   } else {
     form.entrustAmountSort = null
     form.entrustResidueAmountSort = null
   }
+  getTableData()
 }
 // 修改处置状态
 const editStatus = () => {
@@ -644,8 +643,19 @@ const submitExport = async (paramsSub, type) => {
 }
 //导出下载
 const exportDownload = item => {
-  ElMessage.success('导出成功')
-  // exportMethod(item)
+  ElMessage.success('导出成功！')
+  exportMethod(item)
+}
+const exportMethod = (data, target = '_self') => {
+  if (data === null || data === '') {
+    ElMessage.error('下载链接异常！')
+  } else {
+    let url = data;
+    let a = document.createElement("a");
+    a.href = url;
+    a.target = target || '_self';
+    a.click();
+  }
 }
 // 案件标色
 const colorShow = () => {

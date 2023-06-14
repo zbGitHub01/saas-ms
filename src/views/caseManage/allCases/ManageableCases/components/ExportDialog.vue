@@ -80,7 +80,7 @@ defineExpose({
 const submitForm = () => {
   const params = {}
   params['exportField'] = state.exportField
-  params['exportType'] = 0
+  params['exportType'] = 0 //导出类型：0-全部导出 1-部分字段导出
   if (typeSub.value === 1) {
     params['createTimeStart'] = state.date[0]
     params['createTimeEnd'] = state.date[1]

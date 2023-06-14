@@ -21,10 +21,10 @@
           </div>
         </template>
       </OperationBar>
-      <div class="mb10">
+      <!-- <div class="mb10">
         <span>选中项：{{ state.selectData.length }}</span>
         <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
-      </div>
+      </div> -->
       <el-table
         :data="state.tableData"
         border
@@ -501,7 +501,7 @@ const toggleSelection = () => {
 }
 //跨页选择
 const getRowKeys = row => {
-  return row.caseNo
+  return row.caseId
 }
 //通过此函数整体过滤事件
 const handleClick = item => {
