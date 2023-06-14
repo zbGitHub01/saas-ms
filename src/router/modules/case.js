@@ -28,6 +28,25 @@ const caseRouter = [
         name: 'assetDispose',
         component: () => import('@/views/caseManage/assetDispose/index.vue'),
         meta: { title: '资产基础配置', icon: '' }
+      },
+      {
+        path: '/caseManage/casesDetails',
+        name: 'casesDetails',
+        meta: { title: '可管理案件', icon: '' },
+        children: [
+          {
+            path: '/caseManage/casesDetails/casesManageable',
+            name: 'casesManageable',
+            component: () => import('@/views/caseManage/caseDetails/casesManageable/index.vue'),
+            meta: { title: '可管理案件', icon: '' }
+          },
+          {
+            path: '/caseManage/casesDetails/casesEntrusted',
+            name: 'casesEntrusted',
+            component: () => import('@/views/caseManage/caseDetails/casesEntrusted/index.vue'),
+            meta: { title: '受委托案件', icon: '' }
+          }
+        ]
       }
     ]
   },
@@ -179,6 +198,46 @@ const caseRouter = [
             name: 'realtimeDivision',
             component: () => import('@/views/caseCirculation/divisionManage/realtimeDivision/index.vue'),
             meta: { title: '实时分案', icon: '' }
+          },
+          {
+            path: '/caseCirculation/divisionManage/caseGather',
+            name: 'caseGather',
+            component: () => import('@/views/caseCirculation/divisionManage/caseGather/index.vue'),
+            meta: { title: '分案汇总', icon: '' }
+          },
+          {
+            path: '/caseCirculation/divisionManage/realtimeDivisionRecovery',
+            name: 'realtimeDivisionRecovery',
+            component: () => import('@/views/caseCirculation/divisionManage/realtimeDivisionRecovery/index.vue'),
+            meta: { title: '实时分案收回', icon: '' }
+          },
+          {
+            path: '/caseCirculation/divisionManage/divisionRecovered',
+            name: 'divisionRecovered',
+            component: () => import('@/views/caseCirculation/divisionManage/divisionRecovered/index.vue'),
+            meta: { title: '分案收回记录', icon: '' }
+          },
+          {
+            path: '/caseCirculation/divisionManage/divisionStrategy',
+            name: 'divisionStrategy',
+            component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/index.vue'),
+            meta: { title: '机构策略分案', icon: '' },
+            children: [
+              {
+                path: '/caseCirculation/divisionManage/divisionStrategy/divisionRealStrategy',
+                name: 'divisionRealStrategy',
+                component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/divisionRealStrategy/index.vue'),
+                meta: { title: '策略实时分案', icon: '' },
+                hidden: true
+              },
+              {
+                path: '/caseCirculation/divisionManage/divisionStrategy/divisionSituation',
+                name: 'divisionSituation',
+                component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/divisionSituation/index.vue'),
+                meta: { title: 'CPE持案情况', icon: '' },
+                hidden: true
+              }
+            ]
           }
         ]
       }

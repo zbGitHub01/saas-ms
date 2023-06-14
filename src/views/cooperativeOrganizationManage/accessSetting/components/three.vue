@@ -1,8 +1,8 @@
 <template>
   <div style="display: flex; height: 100%">
     <div style="width: 65%; height: 100%" class="pt16">
-      <h4 class="pl16 pb16" style="border-bottom: 1px solid #efefef">拒绝原因和准入周期设置</h4>
-      <div class="pt16 pl20 pr20 pb20" style="height: calc(100% - 40px); overflow-y: auto">
+      <h4 class="pl16 pb16 ft-text" style="border-bottom: 1px solid #efefef">拒绝原因和准入周期设置</h4>
+      <div class="pt16 pl20 pr20 pb20" style="height: calc(100% - 54px); overflow-y: auto">
         <el-button type="primary" size="small" @click="addReason" :icon="Plus">拒绝原因</el-button>
         <div class="tip-text mt8 mb16">重新准入周期：拒绝后此天数内拒绝再次准入</div>
         <el-table :data="tableData">
@@ -17,12 +17,16 @@
         </el-table>
       </div>
     </div>
-    <div style="width: 35%; border-left: 16px solid #efefef" class="pt16">
-      <h4 class="pl16 pb16" style="border-bottom: 1px solid #efefef">准入更新提醒</h4>
+    <div style="width: 35%; border-left: 12px solid #f0f2f5" class="pt16">
+      <h4 class="pl16 pb16 ft-text" style="border-bottom: 1px solid #f0f2f5">准入更新提醒</h4>
       <div class="pt20 pl20">
-        <div>
-          <span class="mr8" style="vertical-align: middle">合作间断时长/天</span>
-          <el-input v-model="breakTimeData.day" placeholder="请输入" style="width: 100px"></el-input>
+        <div style="font-size:14px">
+          <div class="mr8 mb20">合作间断时长</div>
+          <el-input
+            v-model="breakTimeData.day"
+            placeholder="请输入"
+            style="width: 100px;margin-right:10px"
+          ></el-input>天
         </div>
         <div class="tip-text mt12 mb20">如合作中的机构未持有案件超过 n 天即提示准入更新</div>
         <el-button type="primary" size="small" @click="onBreakTimeSave">保存</el-button>
@@ -105,6 +109,10 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
+.ft-text {
+  font-weight: 800 !important;
+  font-size: 18px !important;
+}
 .tip-text {
   font-size: 12px;
   color: #ff9921;

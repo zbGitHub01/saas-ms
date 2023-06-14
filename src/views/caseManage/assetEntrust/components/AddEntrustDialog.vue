@@ -58,7 +58,7 @@
     </template>
   </el-dialog>
 </template>
-  
+
 <script setup>
 import { ElMessage, genFileId } from 'element-plus'
 import { reactive, ref, computed } from 'vue'
@@ -153,7 +153,7 @@ const cancelSubmit = () => {
   dialogVisible.value = false
 }
 </script>
-  
+
 <style lang="scss" scoped>
 .timeRadio {
   :deep(.el-form-item__content) {
@@ -166,4 +166,3 @@ const cancelSubmit = () => {
   flex-direction: column;
 }
 </style>
-  

@@ -1,9 +1,11 @@
 import copy from './modules/copy'
+import auth from './modules/auth'
 import tabVisible from './modules/tabVisible'
 
 const directivesList = {
   copy,
-  tabVisible
+  tabVisible,
+  auth
 }
 
 const directives = {

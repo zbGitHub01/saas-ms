@@ -1,14 +1,6 @@
 <template>
   <div>
-    <FormWrap @search="getTableData" @reset="reset">
-      <template #default>
-        <el-form inline :model="form">
-          <el-form-item label="案件ID">
-            <el-input v-model="form.caseNo" placeholder="请输入案件ID" clearable></el-input>
-          </el-form-item>
-        </el-form>
-      </template>
-    </FormWrap>
+    <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" />
     <LabelClass :labelData="state.CaseStatistics" />
     <div class="spacing"></div>
     <div class="mt20">
@@ -113,10 +105,12 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Close, VideoPause, VideoPlay, CirclePlus, Delete, Download, Document } from '@element-plus/icons-vue'
+import DynamoSearchForm from '@/components/DynamoSearchForm/index.vue'
 import HandleCaseDialog from './components/HandleCaseDialog.vue'
 import ExportDialog from './components/ExportDialog.vue'
 import Apis from '@/api/modules/caseManage'
 import CaseStatistics from '@/constants/CaseStatistics' //统计数据
+const dynamoSearchFormRef = ref()
 const multipleTable = ref(null)
 const form = reactive({
   caseNo: ''
@@ -373,7 +367,6 @@ const getTableData = async () => {
   CaseStatistics.forEach(item => {
     item.value = data1[item.key]
   })
-  state.CaseStatistics = CaseStatistics
 }
 // 重置
 const reset = () => {

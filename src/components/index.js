@@ -9,7 +9,7 @@ import DialogForm from '@/components/DialogForm/index.vue'
 import TableClass from '@/components/TableClass/index.vue'
 import LabelClass from '@/components/LabelClass/index.vue'
 import ColorShow from '@/components/ColorShow/index.vue'
-import Status  from '@/components/Status/index.vue'
+import Status from '@/components/Status/index.vue'
 import TemporaryLabel from '@/components/TemporaryLabel/index.vue'
 
 export default {

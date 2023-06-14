@@ -1,5 +1,5 @@
 <template>
-  <div class="pt16 pl20 pr20 pb20" style="height: 100%; overflow-y: auto">
+  <div class="pt16 pl20 pr20 pb20" style="height: calc(100% - 20px); overflow-y: auto">
     <el-button type="primary" size="small" @click="addReason" :icon="Plus" class="mb16">退出原因</el-button>
     <el-table :data="tableData">
       <el-table-column label="退出原因" prop="name" min-width="150" align="center"></el-table-column>

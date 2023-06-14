@@ -37,9 +37,9 @@
               <el-select v-model="form.positionId" placeholder="请选择职位">
                 <el-option
                   v-for="item in positionList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
+                  :key="item.itemId"
+                  :label="item.itemText"
+                  :value="item.itemId"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -47,9 +47,9 @@
               <el-select v-model="form.roleId" placeholder="请选择角色权限">
                 <el-option
                   v-for="item in roleList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
+                  :key="item.itemId"
+                  :label="item.itemText"
+                  :value="item.itemId"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -108,8 +108,8 @@ const tabActive = ref('0')
 const drawer = ref(false)
 const direction = ref('rtl')
 const orgTenantId = ref()
-const roleList = computed(() => commonStore.dropdownList.ROLE)
-const positionList = computed(() => commonStore.dropdownList.POSITION)
+const roleList = computed(() => commonStore.dropdownList.ROLE_LIST)
+const positionList = computed(() => commonStore.dropdownList.POSITION_LIST)
 const state = reactive({
   tableData: [],
   entryDate: []

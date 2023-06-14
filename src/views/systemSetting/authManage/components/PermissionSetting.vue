@@ -174,8 +174,8 @@ const findValueName = (compareData, value) => {
         ROLE: () => {
           return commonStore.dropdownList[compareData.valueDropdownCode].map(item => {
             return {
-              name: item.name,
-              value: item.id
+              name: item.itemText,
+              value: item.itemId
             }
           })
         }
