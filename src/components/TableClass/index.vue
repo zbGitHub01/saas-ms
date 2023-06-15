@@ -1,5 +1,5 @@
 <script>
-import { computed, reactive, ref, getCurrentInstance, toRefs } from 'vue'
+import { computed, reactive, ref, getCurrentInstance, toRefs, watch } from 'vue'
 export default {
   props: {
     //是否需要分页，默认有
@@ -61,18 +61,47 @@ export default {
     total: {
       type: Number,
       default: 0
+    },
+    page: {
+      type: Number,
+      default: 1
+    },
+    pageSize: {
+      type: Number,
+      default: 10
+    },
+    pageSizes: {
+      type: Array,
+      default: () => [10, 50, 100, 200]
     }
   },
   emits: ['handleOperation', 'query', 'changeStatus', 'operaClick', 'editSave', 'popoverTable', 'selectChange'],
   setup(props, { emit }) {
     const state = reactive({
-      currentPage: 1,
       currEditObj: {},
-      pageSize: 10,
-      pageSizes: [10, 50, 100, 200]
+      currentPage: 1,
+      pageSize: 10
     })
 
     let { columnList, spanRowParam, tableData, spanColArray } = toRefs(props)
+
+    watch(
+      () => props.page,
+      // eslint-disable-next-line no-unused-vars
+      (newValue, _) => {
+        state.currentPage = newValue
+      },
+      { immediate: true }
+    )
+
+    watch(
+      () => props.pageSize,
+      // eslint-disable-next-line no-unused-vars
+      (newValue, _) => {
+        state.pageSize = newValue
+      },
+      { immediate: true }
+    )
 
     const columnListData = computed(() => {
       const list = []
@@ -91,11 +120,11 @@ export default {
     }
     const handleSizeChange = val => {
       state.pageSize = val
-      emit('query', state.pageSize, state.currentPage)
+      emit('query', state.currentPage, state.pageSize)
     }
     const handleCurrentChange = val => {
       state.currentPage = val
-      emit('query', state.pageSize, state.currentPage)
+      emit('query', state.currentPage, state.pageSize)
     }
 
     const multipleSelection = ref([])
@@ -186,6 +215,7 @@ export default {
 
     return {
       state,
+      props,
       spanRow,
       columnListData,
       multipleSelection,
@@ -362,7 +392,7 @@ export default {
       <el-pagination
         v-model:current-page="state.currentPage"
         v-model:page-size="state.pageSize"
-        :page-sizes="state.pageSizes"
+        :page-sizes="props.pageSizes"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
         :background="true"

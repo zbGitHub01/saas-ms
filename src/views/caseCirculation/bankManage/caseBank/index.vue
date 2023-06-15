@@ -1,6 +1,6 @@
 <template>
   <div class="card-wrap">
-    <el-tabs class="mb16" v-model="tabActive" @tab-click="changTab">
+    <el-tabs v-model="tabActive" class="mb16" @tab-click="changTab">
       <el-tab-pane v-for="item in state.tabList" :key="item.itemId" :label="item.itemText" :name="item.itemId"></el-tab-pane>
     </el-tabs>
     <FormWrap @search="getTableData" @reset="reset">
@@ -13,7 +13,7 @@
       </template>
     </FormWrap>
     <!-- <LabelData :labelData="state.labelData" /> -->
-    <LabelClass :labelData="state.labelData" />
+    <LabelClass :label-data="state.labelData" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -25,9 +25,9 @@
               "
               type="primary"
               :icon="item.icon"
-              @click="handleClick(item.title)"
               plain
               class="mr10"
+              @click="handleClick(item.title)"
             >
               {{ item.title }}
             </el-button>
@@ -36,19 +36,19 @@
       </OperationBar>
       <div class="mb10">
         <span>选中项：{{ state.selectData.length }}</span>
-        <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
+        <el-button link type="primary" size="large" class="ml20" @click="toggleSelection">取消</el-button>
       </div>
       <el-table
+        ref="multipleTable"
         :data="state.tableData"
         border
-        @selection-change="handleSelectionChange"
-        ref="multipleTable"
         :row-key="getRowKeys"
+        @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" fixed align="center" width="55" :reserve-selection="true"></el-table-column>
         <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left" :show-overflow-tooltip="true">
           <template #default="scope">
-            <status :row="scope.row" pageType="disposalCasemessage" />
+            <status :row="scope.row" page-type="disposalCasemessage" />
           </template>
         </el-table-column>
         <el-table-column
@@ -194,22 +194,22 @@
           </template>
         </el-table-column>
       </el-table>
-      <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
+      <pagination v-model:page="query.page" v-model:page-size="query.pageSize" :total="state.total" @pagination="getTableData" />
     </div>
     <AddOrRemoveTagDialog ref="addOrRemoveTagDialog" @submitForm="submitForm" />
     <CaseBankDialog
       ref="caseBankDialog"
-      :distInfo="state.distInfo"
-      :sourceStoreId="tabActive"
+      :dist-info="state.distInfo"
+      :source-store-id="tabActive"
+      :resouerdist-list="state.tabListSub"
       @get-table-data="getTableData"
       @toggleSelection="toggleSelection"
-      :resouerdist-list="state.tabListSub"
       @fetchCaseDistSelect="fetchCaseDistSelect"
     />
     <CaseRecoveryDialog
       ref="caseRecoveryDialog"
-      :taskId="state.taskId"
-      :caseInfo="state.distInfo"
+      :task-id="state.taskId"
+      :case-info="state.distInfo"
       @get-table-data="getTableData"
       @toggleSelection="toggleSelection"
       @fetchCaseDistSelect="fetchCaseDistSelect"
