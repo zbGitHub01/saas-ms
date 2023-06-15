@@ -1,146 +1,100 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, toRefs, watch, computed } from 'vue'
+import { useGlobalStore } from '@/store'
 import AddCorporation from './AddCorporation.vue'
 import DragTable from './dragTable.vue'
+import deepCopy from '@/utils/deepCopy.js'
 import labelList from '../config/labelList.js'
+
+const globalState = useGlobalStore()
 
 const props = defineProps({
   drawerFormVisible: {
     type: Boolean,
     default: false
+  },
+  sizeForm: {
+    type: Object,
+    default: () => {}
+  },
+  //机构数组
+  tableData: {
+    type: Array,
+    default: () => []
   }
 })
 
-const emit = defineEmits(['update:drawerFormVisible'])
+const { sizeForm, tableData } = toRefs(props)
+
+const emit = defineEmits(['update:drawerFormVisible', 'caseCfgSave'])
 
 const size = ref('default')
 const labelPosition = ref('right')
 
 const state = reactive({
-  tableData: [
-    {
-      orgName: '杭州温泽企业管理有限公司贵阳分公司',
-      name: 'Tom',
-      entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
-      address: 'No. 189, Grove St, Los Angeles'
-    },
-    {
-      orgName: '前海中英投（深圳）投资有限公司',
-      name: 'Tom',
-      entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
-      address: 'No. 189, Grove St, Los Angeles'
-    },
-    {
-      orgName: '前海中英投（深圳）投资有限公司',
-      name: 'Tom',
-      entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
-      address: 'No. 189, Grove St, Los Angeles'
-    },
-    {
-      orgName: '前海中英投（深圳）投资有限公司',
-      name: 'Tom',
-      entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
-      address: 'No. 189, Grove St, Los Angeles'
-    },
-    {
-      orgName: '苏州微合力网络科技有限公司',
-      name: 'Tom',
-      entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
-      address: 'No. 189, Grove St, Los Angeles'
-    },
-    {
-      orgName: '湖南荣辉法律咨询服务有限公司',
-      name: 'Tom',
-      entrustAmount: 8000,
-      amount: '0.0916%',
-      households: '0.0916%',
-      address: 'No. 189, Grove St, Los Angeles'
+  sizeForm: {}
+})
+
+const uploadAction = computed(() => {
+  return import.meta.env.VITE_BASE_URL + '/caseCenter/case/entrust/transformExcel'
+})
+
+watch(
+  () => props.sizeForm,
+  // eslint-disable-next-line no-unused-vars
+  (newValue, _) => {
+    if (newValue) {
+      state.sizeForm = deepCopy(sizeForm.value, true)
     }
-  ]
-})
+  },
+  { deep: true },
+  { immediate: true }
+)
 
-const sizeForm = reactive({
-  name: '委外处置库',
-  region: [
-    '测试组一（省份）',
-    '上个月委案金额为10000至15000',
-    '测试组一（省份）',
-    '上个月委案金额为10000至15000',
-    '测试组一（省份）',
-    '上个月委案金额为10000至15000',
-    '测试组一（省份）',
-    '上个月委案金额为10000至15000',
-    '测试组一（省份）',
-    '上个月委案金额为10000至15000',
-    '测试组一（省份）',
-    '上个月委案金额为10000至15000'
-  ],
-  type: [
-    '“360”借条',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟',
-    '还呗',
-    '佰仟'
-  ],
-  caseType: '默认',
-  history: '隐藏',
-  caseDate: '2021-12-31',
-  isAuto: '不自动收回',
-  notes: '打发发发发发',
-  resource: '',
-  productList: ['"360"借条', '还呗', '佰仟'],
-  currProduct: ''
-})
+const addCorporation = ref()
+const dragTables = ref()
+const dialogVisible = ref(false)
 
+//取消配置
 const handleClose = () => {
+  //退出配置重置机构数组
+  state.newTableData = []
+  addCorporation.value.resetRightValue()
   emit('update:drawerFormVisible', false)
 }
-
-const dialogVisible = ref(false)
 
 const handleAddCorporation = () => {
   dialogVisible.value = true
 }
 
+//删除本地新添加的机构
+const updateNewTableData = val => {
+  state.newTableData = state.newTableData.filter(item => item.orgId !== val.orgId)
+}
+
 const handleSubmit = arr => {
+  state.newTableData = arr
   dialogVisible.value = false
-  arr.map(item => state.tableData.push(item))
+}
+
+const onSubmit = () => {
+  const dataObj = deepCopy(dragTables.value.dataArr, true)
+  if (state.sizeForm.currProduct && state.sizeForm.resource === '分产品委案') {
+    const currProObj = JSON.parse(state.sizeForm.productArr).filter(item => item.productName === state.sizeForm.currProduct)
+    dataObj.map(item => {
+      item['productId'] = currProObj[0].productId
+    })
+  }
+  const data = {
+    entrustId: sizeForm.value.entrustId,
+    entrustInfoList: dataObj
+  }
+  emit('caseCfgSave', data)
+}
+
+//切换分产品委案调取api获取最新table
+const handleChange = () => {
+  console.log(state.sizeForm.currProduct)
 }
 </script>
 
@@ -158,66 +112,86 @@ const handleSubmit = arr => {
         委案配置
       </h4>
     </template>
-    <el-form ref="form" style="width: 90%" :model="sizeForm" label-width="auto" :label-position="labelPosition" :size="size">
+    <el-form ref="form" style="width: 90%" label-width="auto" :label-position="labelPosition" :size="size">
       <el-form-item label="案件分库">
-        <div>{{ sizeForm.name }}</div>
+        <div>{{ state.sizeForm.storeName || '' }}</div>
       </el-form-item>
-      <el-form-item label="案人模型">
-        <div v-for="(item, index) in sizeForm.region" :key="index" class="listStyle">
-          <span>{{ item }}</span>
-        </div>
-      </el-form-item>
-      <el-form-item label="包含产品">
-        <div v-for="(item, index) in sizeForm.type" :key="index" class="listStyle">
-          <span>{{ item }}</span>
+      <el-form-item label="委案产品">
+        <div v-for="(item, index) in JSON.parse(state.sizeForm.productArr)" :key="index" class="listStyle">
+          <span>{{ item.productName }}</span>
         </div>
       </el-form-item>
       <div class="specialItem">
         <el-form-item width="20%" label="委案类型">
-          <div>{{ sizeForm.caseType }}</div>
+          <div>{{ state.sizeForm.entrustType }}</div>
         </el-form-item>
         <el-form-item width="20%" label="历史处置记录">
-          <div>{{ sizeForm.history }}</div>
+          <div>{{ Number(state.sizeForm.isHideHisFollowRecord) === 0 ? '不隐藏' : '隐藏' }}</div>
         </el-form-item>
         <el-form-item width="20%" label="委案到期日">
-          <div>{{ sizeForm.caseDate }}</div>
+          <div>{{ state.sizeForm.recoverDate || '' }}</div>
         </el-form-item>
         <el-form-item width="20%" label="是否自动收回">
-          <div>{{ sizeForm.isAuto }}</div>
+          <div>{{ Number(state.sizeForm.isAutoRecycle) === 0 ? '不自动收回' : '自动收回' }}</div>
         </el-form-item>
         <el-form-item width="20%" label="备注">
-          <div>{{ sizeForm.notes }}</div>
+          <div>{{ state.sizeForm.remark }}</div>
         </el-form-item>
       </div>
       <div class="spacing"></div>
       <el-form-item prop="resource" style="padding-top: 20px">
-        <el-radio-group v-model="sizeForm.resource">
+        <el-radio-group v-model="state.sizeForm.resource">
           <el-radio label="综合委案" />
           <el-radio label="分产品委案" />
         </el-radio-group>
       </el-form-item>
-      <el-form-item v-if="sizeForm.resource === '分产品委案'" prop="currProduct">
-        <el-radio-group v-model="sizeForm.currProduct" size="large">
-          <el-radio-button v-for="(item, index) in sizeForm.productList" :key="index" class="radio-style" :label="item" />
+      <el-form-item v-if="state.sizeForm.resource === '分产品委案'" prop="currProduct">
+        <el-radio-group v-model="state.sizeForm.currProduct" size="large">
+          <el-radio-button
+            v-for="(item, index) in JSON.parse(state.sizeForm.productArr)"
+            :key="index"
+            class="radio-style"
+            :label="item.productName"
+            @change="handleChange"
+          />
         </el-radio-group>
       </el-form-item>
       <div class="spacing"></div>
       <LabelClass :label-data="labelList" :is-bkg-color="false" :is-space-around="true" />
       <div class="line"></div>
-      <DragTable :curr-type="sizeForm.resource" :table-data="state.tableData" />
+      <DragTable
+        ref="dragTables"
+        :table-data="tableData"
+        :curr-type="state.sizeForm.resource"
+        :new-table-data="state.newTableData"
+        @del-org="updateNewTableData"
+      />
       <el-form-item style="margin-top: 20px">
         <el-button type="primary" icon="Plus" plain @click="handleAddCorporation">添加机构</el-button>
-        <el-button type="primary" plain>导入委案计划</el-button>
+        <el-upload
+          class="upload-demo"
+          accept=".xls,.xlsx"
+          :headers="{ Authorization: globalState.token }"
+          :action="uploadAction"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :limit="1"
+          :on-exceed="handleExceed"
+          multiple
+        >
+          <el-button type="primary" plain>导入委案计划</el-button>
+        </el-upload>
         <el-button type="primary" link>下载导入模板</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button>取消</el-button>
+        <el-button @click="handleClose">取消</el-button>
         <el-button type="primary" @click="onSubmit">保存</el-button>
       </el-form-item>
     </el-form>
   </el-drawer>
   <!--添加机构弹窗-->
-  <AddCorporation v-model:dialog-visible="dialogVisible" @submit="handleSubmit" />
+  <AddCorporation ref="addCorporation" v-model:dialog-visible="dialogVisible" @submit="handleSubmit" />
 </template>
 
 <style lang="scss" scoped>
@@ -318,6 +292,7 @@ const handleSubmit = arr => {
   }
 }
 .radio-style {
+  margin-bottom: 8px;
   margin-right: 10px;
   border-radius: 5px;
   :deep(.el-radio-button__inner) {
@@ -329,5 +304,9 @@ const handleSubmit = arr => {
     background: #02a7f0 !important;
     color: white !important;
   }
+}
+.upload-demo {
+  height: 32px;
+  margin: 0 20px;
 }
 </style>

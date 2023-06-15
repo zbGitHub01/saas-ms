@@ -46,8 +46,8 @@ export default [
     label: '历史处置记录',
     prop: 'isHideHisFollowRecord',
     radioList: [
-      { name: '隐藏', label: 1 },
-      { name: '不隐藏', label: 0 }
+      { name: '隐藏', label: '1' },
+      { name: '不隐藏', label: '0' }
     ]
   },
   {
@@ -60,8 +60,8 @@ export default [
     label: '是否自动收回',
     prop: 'isAutoRecycle',
     radioList: [
-      { name: '不自动收回', label: 0 },
-      { name: '自动收回', label: 1 }
+      { name: '不自动收回', label: '0' },
+      { name: '自动收回', label: '1' }
     ]
   },
   {

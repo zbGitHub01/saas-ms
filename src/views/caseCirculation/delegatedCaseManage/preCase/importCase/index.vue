@@ -16,9 +16,9 @@ const defaultRuleForm = {
   // categoryCompany: '',
   orgId: '', //目标机构
   entrustType: 1, //委案类型
-  isHideHisFollowRecord: 1, //历史处置记录
+  isHideHisFollowRecord: '1', //历史处置记录
   recoverDate: moment().endOf('month').format('YYYY-MM-DD'), //委案到期日
-  isAutoRecycle: 0, //是否自动收回
+  isAutoRecycle: '0', //是否自动收回
   remark: '', //备注
   execTime: '', //执行时间
   entrustFileUrl: []
@@ -88,56 +88,12 @@ const rules = reactive({
 
 getEntrustList()
 
-//临时假数据
-// state.tableData = [
-//   {
-//     orderNo: 'test',
-//     entrustId: 2,
-//     operStoreId: 2,
-//     entrustType: 1,
-//     isAutoRecycle: 1,
-//     isHideHisFollowRecord: 0,
-//     orgId: 1,
-//     entrustFileUrl: '//asfile.donganzichan.cn/为二位反对法地方(2).xlsx'
-//   },
-//   {
-//     orderNo: '111',
-//     operStoreId: 2,
-//     entrustId: 1,
-//     entrustType: 1,
-//     isAutoRecycle: 1,
-//     isHideHisFollowRecord: 0,
-//     orgId: 1,
-//     entrustFileUrl: '//asfile.donganzichan.cn/wetrgcdvhgfhdfg.xlsx'
-//   },
-//   {
-//     orderNo: 'te222st',
-//     operStoreId: 2,
-//     entrustId: 3,
-//     entrustType: 1,
-//     isAutoRecycle: 1,
-//     isHideHisFollowRecord: 0,
-//     orgId: 1,
-//     entrustFileUrl: '//asfile.donganzichan.cn/呼啦啦啦.xlsx'
-//   },
-//   {
-//     orderNo: 't3333est',
-//     operStoreId: 2,
-//     entrustId: 4,
-//     entrustType: 1,
-//     isAutoRecycle: 1,
-//     isHideHisFollowRecord: 0,
-//     orgId: 1,
-//     entrustFileUrl: '//asfile.donganzichan.cn/哈哈哈哈.xlsx'
-//   }
-// ]
-
 const tableClass = ref(null)
 const tipDialogVisible = ref(false)
 
 const handlePub = (index, row) => {
   tipDialogVisible.value = true
-  state.entrustIds.push(row.entrustId)
+  state.entrustIds = [row.entrustId]
   console.log(index, row)
 }
 //发布委案确认
@@ -238,6 +194,7 @@ const handleBatchPub = () => {
     ElMessage({ message: '请选择操作对象.', type: 'warning' })
     return
   }
+  state.entrustIds = state.currSelectArr.map(item => item.entrustId)
   tipDialogVisible.value = true
 }
 

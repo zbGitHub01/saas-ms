@@ -1,9 +1,12 @@
 <script setup>
-import { ref, reactive, toRefs } from 'vue'
+import { ref, reactive, toRefs, computed } from 'vue'
+import { useGlobalStore } from '@/store'
 import AddCorporation from './AddCorporation.vue'
 import deepCopy from '@/utils/deepCopy.js'
 import DragTable from './dragTable.vue'
 import labelList from '../config/labelList.js'
+
+const globalState = useGlobalStore()
 
 const props = defineProps({
   drawerFormVisible: {
@@ -35,6 +38,10 @@ const { tableData } = toRefs(props)
 
 const dragTables = ref()
 const addCorporation = ref()
+
+const uploadAction = computed(() => {
+  return import.meta.env.VITE_BASE_URL + '/caseCenter/case/entrust/transformExcel'
+})
 
 const onSubmit = () => {
   const dataObj = deepCopy(dragTables.value.dataArr, true)
@@ -99,13 +106,13 @@ const handleSubmit = arr => {
           <div>{{ sizeForm.entrustType }}</div>
         </el-form-item>
         <el-form-item width="20%" label="历史处置记录">
-          <div>{{ sizeForm.isHideHisFollowRecord === 0 ? '不隐藏' : '隐藏' }}</div>
+          <div>{{ Number(sizeForm.isHideHisFollowRecord) === 0 ? '不隐藏' : '隐藏' }}</div>
         </el-form-item>
         <el-form-item width="20%" label="委案到期日">
           <div>{{ sizeForm.recoverDate || '' }}</div>
         </el-form-item>
         <el-form-item width="20%" label="是否自动收回">
-          <div>{{ sizeForm.isAutoRecycle === 0 ? '不自动收回' : '自动收回' }}</div>
+          <div>{{ Number(sizeForm.isAutoRecycle) === 0 ? '不自动收回' : '自动收回' }}</div>
         </el-form-item>
         <el-form-item width="20%" label="备注">
           <div>{{ sizeForm.remark }}</div>
@@ -117,7 +124,20 @@ const handleSubmit = arr => {
       <DragTable ref="dragTables" :table-data="tableData" :new-table-data="state.newTableData" @del-org="updateNewTableData" />
       <el-form-item style="margin-top: 20px">
         <el-button type="primary" icon="Plus" plain @click="handleAddCorporation">添加机构</el-button>
-        <el-button type="primary" plain>导入委案计划</el-button>
+        <el-upload
+          class="upload-demo"
+          accept=".xls,.xlsx"
+          :headers="{ Authorization: globalState.token }"
+          :action="uploadAction"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :limit="1"
+          :on-exceed="handleExceed"
+          multiple
+        >
+          <el-button type="primary" plain>导入委案计划</el-button>
+        </el-upload>
         <el-button type="primary" link>下载导入模板</el-button>
       </el-form-item>
       <el-form-item>
@@ -239,5 +259,9 @@ const handleSubmit = arr => {
     background: #02a7f0 !important;
     color: white !important;
   }
+}
+.upload-demo {
+  height: 32px;
+  margin: 0 20px;
 }
 </style>

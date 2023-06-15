@@ -57,7 +57,6 @@ const { tableData, newTableData } = toRefs(props)
 dataArr.value = tableData.value.concat(props.newTableData)
 
 const handleDel = val => {
-  console.log(val)
   ElMessageBox.confirm('确定删除？').then(
     () => {
       newTableData.value.map(item => {
@@ -87,9 +86,6 @@ const onStart = () => {
 const onEnd = () => {
   console.log('结束拖拽')
 }
-const click = () => {
-  console.log(dataArr.value)
-}
 </script>
 
 <template>
@@ -97,7 +93,7 @@ const click = () => {
     <div class="order_warp">
       <el-row>
         <el-col :span="2">
-          <div class="grid" @click="click">委案顺序</div>
+          <div class="grid">委案顺序</div>
         </el-col>
         <el-col :span="22" style="display: flex">
           <el-col :span="8" style="text-align: center">

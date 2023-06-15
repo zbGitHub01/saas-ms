@@ -70,7 +70,8 @@ const emit = defineEmits([
   'handleExceed',
   'submit',
   'watchChange',
-  'fileList'
+  'fileList',
+  'btnClick'
 ])
 
 const closeClick = ruleFormRef => {
@@ -162,6 +163,11 @@ const resetForm = formEl => {
   resetFunc(formEl)
 }
 
+//表单按钮
+const handleClick = () => {
+  emit('btnClick')
+}
+
 //打开前清楚校验
 const open = ruleFormRef => {
   nextTick(() => {
@@ -224,16 +230,21 @@ const resetFunc = formEl => {
           :clearable="item.clearable"
           :placeholder="item.placeholder"
         >
-          <el-option v-for="opts in item.options" :key="opts.value" :label="opts.label" :value="opts.value" />
+          <el-option
+            v-for="(opts, index) in item.options"
+            :key="index"
+            :label="opts.label || opts[item.optionLabel]"
+            :value="opts.value || opts[item.optionValue]"
+          />
         </el-select>
         <!--checkbox多选框-->
         <el-checkbox-group v-if="item.type === 'checkbox'" v-model="state.form[item.prop]">
-          <el-checkbox v-for="opts in item.checkList" :key="opts.value" :label="opts.label" />
+          <el-checkbox v-for="(opts, index) in item.checkList" :key="index" :label="opts.label || opts[item.checkboxLabel]" />
         </el-checkbox-group>
         <!--radio单选框-->
         <el-radio-group v-if="item.type === 'radio'" v-model="state.form[item.prop]">
-          <el-radio v-for="(opts, index) in item.radioList" :key="index" :label="opts.label">
-            {{ opts.name }}
+          <el-radio v-for="(opts, index) in item.radioList" :key="index" :label="opts.label || opts[item.radioLabel]">
+            {{ opts.name || opts[item.radioName] }}
           </el-radio>
         </el-radio-group>
         <!--date日期选择器-->
@@ -252,8 +263,11 @@ const resetFunc = formEl => {
           value-format="YYYY-MM-DD HH:mm:ss"
           :placeholder="item.placeholder"
         />
+        <el-button v-if="item.needBtn" type="primary" style="margin-left: 20px" :disabled="item.btnDisabled" @click="handleClick">
+          {{ item.btnText }}
+        </el-button>
         <!--目标机构（特殊）-->
-        <template v-if="item.type === 'pairSelect'">
+        <!-- <template v-if="item.type === 'pairSelect'">
           <el-col :span="6">
             <el-form-item :prop="item.childItem[0].prop">
               <el-select
@@ -281,7 +295,7 @@ const resetFunc = formEl => {
               </el-select>
             </el-form-item>
           </el-col>
-        </template>
+        </template> -->
         <!--文件上传-->
         <el-upload
           v-if="item.type === 'upload'"

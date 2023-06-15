@@ -13,9 +13,9 @@ const defaultRuleForm = {
   entrustStrategy: '', //操作维度 委案操作维度 1：案人 2: 案件 3: 剩余案人
   productId: '', //委案产品
   entrustType: 1, //委案类型
-  isHideHisFollowRecord: 1, //历史处置记录
+  isHideHisFollowRecord: '1', //历史处置记录
   recoverDate: moment().endOf('month').format('YYYY-MM-DD'), //委案到期日
-  isAutoRecycle: 0, //是否自动收回
+  isAutoRecycle: '0', //是否自动收回
   remark: '', //备注
   execTime: '' //执行时间
 }
@@ -95,7 +95,7 @@ const tipDialogVisible = ref(false)
 
 const handlePub = (index, row) => {
   tipDialogVisible.value = true
-  state.entrustIds.push(row.entrustId)
+  state.entrustIds = [row.entrustId]
   console.log(index, row)
 }
 
@@ -178,6 +178,7 @@ const handleBatchPub = () => {
     ElMessage({ message: '请选择操作对象.', type: 'warning' })
     return
   }
+  state.entrustIds = state.currSelectArr.map(item => item.entrustId)
   tipDialogVisible.value = true
 }
 
@@ -219,6 +220,7 @@ const operaClick = async data => {
     const { data: dataObj } = await Api.entrustListInfo({ entrustId: data.entrustId })
     state.currEntrustInfo = { ...dataObj, entrustId: data.entrustId }
     state.drawerVisible = true
+    console.log(state.currEntrustInfo)
   } catch (error) {
     console.log(error)
   }

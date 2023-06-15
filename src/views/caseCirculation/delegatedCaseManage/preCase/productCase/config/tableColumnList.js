@@ -42,7 +42,7 @@ export default [
   },
   {
     label: '委案配置',
-    prop: 'orderNo',
+    prop: 'config',
     operaBtn: true,
     operaBtnName: '配置'
   },

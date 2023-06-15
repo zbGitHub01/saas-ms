@@ -208,11 +208,11 @@ export default {
 <template>
   <div>
     <!-- 是否开启多选 -->
-    <div v-if="isSelection" class="select-style">
+    <!-- <div v-if="isSelection" class="select-style">
       <span>选中项：{{ multipleSelection.length }}</span>
       &nbsp;
       <el-button class="cancel" type="primary" link @click="toggleSelection()">取消</el-button>
-    </div>
+    </div> -->
     <el-table
       ref="multipleTableRef"
       :data="tableData"
@@ -305,7 +305,7 @@ export default {
           <template v-if="item.isPopover">
             <el-popover :visible="false">
               <template #reference>
-                <el-tag>{{ row[item.prop][0][item.popoverProp] }}</el-tag>
+                <el-tag>{{ row[item.prop][0][item.popoverProp] || '' }}</el-tag>
               </template>
             </el-popover>
             &nbsp;
