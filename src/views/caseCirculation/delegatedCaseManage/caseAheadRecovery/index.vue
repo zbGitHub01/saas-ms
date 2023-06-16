@@ -12,8 +12,7 @@ const state = reactive({
   drawerVisible: false,
   recoverBatchIdList: [], //预收回方案发布id集合
   currSelectArr: [],
-  orgList: [], //机构列表
-  currEditRecoverId: '' //当前编辑回收机构id
+  orgList: [] //机构列表
 })
 
 //获取列表数据
@@ -83,11 +82,11 @@ const formFieldsList = computed(() => {
 
 const tipDialogVisible = ref(false)
 const tableClass = ref(null)
+const dialog = ref(null)
 
 //table多选操作
 const selectChange = obj => {
   state.currSelectArr = obj
-  state.entrustIds = obj?.map(item => item.entrustId)
 }
 
 //批量发布预收回方案
@@ -121,7 +120,7 @@ const handlePubConfirm = async () => {
 
 //发布取消
 const pubCancel = () => {
-  state.entrustIds.length = 0 //清空集合
+  state.recoverBatchIdList.length = 0 //清空集合
   tipDialogVisible.value = false
 }
 
@@ -173,19 +172,19 @@ const deleteEntrust = async data => {
   }
 }
 
-const handleChange = row => {
-  console.log(row)
-}
-const handleEdit = row => {
-  state.currEditRecoverId = row.recoverId
+const handleEdit = async row => {
+  state.currEditRow = row
   state.dialogVisible = true
 }
-const handleSubmit = data => {
-  console.log('formData', data.case)
+
+const handleCancel = () => {
+  state.currEditRow = {}
+  state.dialogVisible = false
 }
-const operaClick = data => {
-  state.drawerVisible = true
-  console.log('operaClick', data)
+const handleSubmit = () => {
+  getList()
+  state.currEditRow = {}
+  state.dialogVisible = false
 }
 </script>
 
@@ -210,15 +209,13 @@ const operaClick = data => {
         :is-selection="true"
         :pagination="false"
         @select-change="selectChange"
-        @change-status="handleChange"
-        @opera-click="operaClick"
       >
         <template #operation>
           <el-table-column align="center" fixed="right" label="操作" width="200">
             <template #default="scope">
-              <el-button type="primary" size="small" link @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button type="primary" size="small" link @click="handleEdit(scope.row)">编辑</el-button>
               <el-button type="primary" size="small" link @click="handlePub(scope.$index, scope.row)">确认发布</el-button>
-              <el-button type="danger" size="small" link @click="handleDel(scope.row)">删除</el-button>
+              <el-button type="danger" size="small" link @click="handleDel(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </template>
@@ -226,10 +223,12 @@ const operaClick = data => {
     </div>
     <!--编辑新增form弹框-->
     <DialogForm
+      ref="dialog"
       v-model:dialog-form-visible="state.dialogVisible"
-      :recover-id="state.currEditRecoverId"
+      :curr-edit-row="state.currEditRow"
       :org-list="state.orgList"
       :form-fields="formFieldsList"
+      @cancel="handleCancel"
       @submit="handleSubmit"
     />
     <!--发布委案方案提示弹框-->

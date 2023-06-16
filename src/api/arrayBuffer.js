@@ -11,11 +11,10 @@ export const downArrayBufferFile = (action, data) => {
     params: {
       isXlsx: false
     },
-    responseType: 'arraybuffer',
+    responseType: 'blob',
     headers: {
       accept: '*/*',
       'Content-Type': 'application/json',
-      'Accept-Encoding': 'gzip, deflate',
       Authorization: globalState.token
     }
   }).then(res => {

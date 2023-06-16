@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import Api from '@/api/modules/caseAheadRecovery'
 
@@ -12,15 +12,16 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
-  recoverId: {
-    type: String,
-    default: ''
+  //当前编辑行对象
+  currEditRow: {
+    type: Object,
+    default: () => {}
   }
 })
 
 const defaultForm = {
   executeTime: '',
-  orgList: '',
+  orgId: '',
   remark: ''
 }
 
@@ -28,24 +29,44 @@ const state = reactive({
   productList: [],
   form: {
     executeTime: '',
-    orgList: '',
+    orgId: '',
     remark: ''
   },
   taskId: '',
   currCheckProduct: {},
   rules: {
     executeTime: [{ required: true, message: '请选择执行时间', trigger: 'blur' }],
-    orgId: [
-      {
-        required: true,
-        message: '请选择收回机构',
-        trigger: 'change'
-      }
-    ]
+    orgId: [{ required: true, message: '请选择收回机构', trigger: 'change' }]
   }
 })
 
-const emit = defineEmits(['update:dialogFormVisible'])
+const emit = defineEmits(['cancel', 'submit'])
+
+watch(
+  () => state.currCheckProduct,
+  (newVal, oldVal) => {
+    if (!oldVal) return
+    state.productList.forEach(item => {
+      if (item.productId === oldVal.productId) item = oldVal
+    })
+  },
+  { immediate: true }
+)
+
+watch(
+  () => props.currEditRow,
+  // eslint-disable-next-line no-unused-vars
+  (newVal, _) => {
+    if (!newVal || Object.keys(newVal).length < 1) return
+    Object.keys(state.form).map(item => {
+      Object.keys(props.currEditRow).forEach(cItem => {
+        if (item === cItem) state.form[item] = props.currEditRow[cItem]
+      })
+    })
+    getOrgProductList(state.form)
+  },
+  { immediate: true }
+)
 
 const size = ref('default')
 const labelPosition = ref('right')
@@ -54,48 +75,23 @@ const checkChange = value => {
   state.currCheckProduct = value
 }
 
-const submitForm = async () => {
-  const { taskId, currCheckProduct: recoverInfo } = state
-  const data = {
-    ...state.form,
-    taskId,
-    recoverInfo,
-    recoverId: props?.recoverId
-  }
-  try {
-    await Api.casePreRecoverSave(data)
-    resetFormFields()
-    ElMessage.success('保存成功')
-  } catch (error) {
-    console.log(error)
-  }
-  console.log(data)
-}
-
-const resetFormFields = () => {
-  state.form = Object.assign({}, defaultForm)
-  state.currCheckProduct = {}
-  state.productList = []
-  emit('update:dialogFormVisible', false)
-}
-
-const ruleFormRef = ref()
-
-const cancel = () => {
-  resetFormFields()
-}
-
-const handleLast = ruleFormRef => {
+const submitForm = async ruleFormRef => {
   if (!ruleFormRef) return
   ruleFormRef.validate(async (valid, fields) => {
     if (valid) {
+      const { taskId, productList: recoverInfo } = state
+      const data = {
+        ...state.form,
+        taskId,
+        recoverInfo: JSON.stringify(recoverInfo),
+        recoverId: props?.currEditRow?.recoverId
+      }
       try {
-        const { data } = await Api.casePreRecoverNext(state.form)
-        const tableData = JSON.parse(data.recoverInfo)[0]?.productInfo || []
-        state.taskId = data.taskId
-        state.productList = tableData
+        await Api.casePreRecoverSave(data)
+        resetFormFields(ruleFormRef)
+        emit('submit')
+        ElMessage.success('保存成功')
       } catch (error) {
-        state.form.orgId = ''
         console.log(error)
       }
     } else {
@@ -103,6 +99,44 @@ const handleLast = ruleFormRef => {
       console.log('error submit!', fields)
     }
   })
+}
+
+const resetFormFields = ruleFormRef => {
+  state.form = Object.assign({}, defaultForm)
+  state.currCheckProduct = {}
+  state.productList = []
+  ruleFormRef.resetFields()
+}
+
+const ruleFormRef = ref()
+
+const cancel = ruleFormRef => {
+  resetFormFields(ruleFormRef)
+  emit('cancel')
+}
+
+const handleLast = ruleFormRef => {
+  if (!ruleFormRef) return
+  ruleFormRef.validate(async (valid, fields) => {
+    if (valid) {
+      getOrgProductList(state.form)
+    } else {
+      state.form.orgId = ''
+      console.log('error submit!', fields)
+    }
+  })
+}
+
+const getOrgProductList = async dataArr => {
+  try {
+    const { data } = await Api.casePreRecoverNext(dataArr)
+    const tableData = JSON.parse(data.recoverInfo)[0]?.productInfo || []
+    state.taskId = data.taskId
+    state.productList = tableData
+  } catch (error) {
+    state.form.orgId = ''
+    console.log(error)
+  }
 }
 </script>
 
@@ -112,7 +146,7 @@ const handleLast = ruleFormRef => {
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     title="预收回"
-    @close="cancel"
+    @close="cancel(ruleFormRef)"
   >
     <el-form
       ref="ruleFormRef"
@@ -136,7 +170,7 @@ const handleLast = ruleFormRef => {
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="收回机构" prop="orgIdList">
+          <el-form-item label="收回机构" prop="orgId">
             <el-select v-model="state.form.orgId" placeholder="请选择收回机构" filterable @change="handleLast(ruleFormRef)">
               <el-option v-for="item in props.orgList" :key="item.orgId" :label="item.orgName" :value="item.orgId" />
             </el-select>
@@ -154,12 +188,14 @@ const handleLast = ruleFormRef => {
         <ul v-if="state.productList.length > 0">
           <li v-for="(item, index) in state.productList" :key="index">
             <div
-              :class="!!state.currCheckProduct && state.currCheckProduct.productId === item.productId ? 'textActive' : null"
+              :class="
+                !!state.currCheckProduct && state.currCheckProduct.productId === item.productId ? 'textActive li_div' : 'li_div'
+              "
               @click="checkChange(item)"
             >
-              {{ item.productName }}
+              <div>{{ item.productName }}</div>
+              <el-switch v-model="item.ischecked" />
             </div>
-            <el-switch v-model="item.ischecked" />
           </li>
         </ul>
       </div>
@@ -241,7 +277,7 @@ const handleLast = ruleFormRef => {
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="cancel">取消</el-button>
+        <el-button @click="cancel(ruleFormRef)">取消</el-button>
         <el-button type="primary" @click="submitForm(ruleFormRef)">确认</el-button>
       </span>
     </template>
@@ -270,13 +306,16 @@ const handleLast = ruleFormRef => {
       border-radius: 5px;
       overflow-y: auto;
       li {
-        display: flex;
         padding: 10px 20px;
-        align-items: center;
-        justify-content: space-between;
         border-bottom: 1px solid rgb(209, 206, 206);
         &:last-child {
           border-bottom: none;
+        }
+        .li_div {
+          display: flex;
+          width: 100%;
+          align-items: center;
+          justify-content: space-between;
         }
         div {
           font-size: 16px;
@@ -284,7 +323,9 @@ const handleLast = ruleFormRef => {
           cursor: pointer;
         }
         .textActive {
-          color: #3178ff;
+          div {
+            color: #3178ff;
+          }
         }
       }
     }

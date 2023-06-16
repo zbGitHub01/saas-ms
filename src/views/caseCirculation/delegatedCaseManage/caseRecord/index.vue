@@ -70,7 +70,7 @@ const handleExport = async () => {
   let data = {}
   if (Number(operationType.value) === 1) {
     data['operateType'] = 1
-    data['entrustNoList'] = state.currSelectArr.map(item => item.entrustId)
+    data['entrustNoList'] = state.currSelectArr.map(item => item.entrustNo)
   } else {
     data = { ...formClass.value.getEntity() }
     data['operateType'] = 2
