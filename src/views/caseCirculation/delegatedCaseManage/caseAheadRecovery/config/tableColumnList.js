@@ -1,40 +1,36 @@
 export default [
   {
     label: '收回机构',
-    prop: 'caseCategory',
+    prop: 'orgName',
     width: 100
   },
   {
     label: '收回备注',
-    prop: 'caseProduct',
+    prop: 'remark',
     width: 200
   },
   {
-    label: '操作维度',
-    prop: 'operaNum'
-  },
-  {
     label: '执行时间',
-    prop: 'orderNo'
+    prop: 'executeTime'
   },
   {
     label: '预计收回金额',
-    prop: 'orderNo'
+    prop: 'preRecoverAmount'
   },
   {
     label: '预计收回案件量',
-    prop: 'orderNo'
+    prop: 'preRecoverCaseNum'
   },
   {
     label: '预计收回案人数',
-    prop: 'orderNo'
+    prop: 'preRecoverUserNum'
   },
   {
     label: '操作人',
-    prop: 'orderNo'
+    prop: 'operatorName'
   },
   {
     label: '操作时间',
-    prop: 'orderNo'
+    prop: 'operatorTime'
   }
 ]

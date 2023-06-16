@@ -185,7 +185,6 @@ const handleEdit = (index, row) => {
 //table多选操作
 const selectChange = obj => {
   state.currSelectArr = obj
-  state.entrustIds = obj?.map(item => item.entrustId)
 }
 
 //批量发布委案方案

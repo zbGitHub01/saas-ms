@@ -207,7 +207,6 @@ const deleteEntrust = async ids => {
 //table多选操作
 const selectChange = obj => {
   state.currSelectArr = obj
-  state.entrustIds = obj?.map(item => item.entrustId)
 }
 
 const handleChange = row => {
