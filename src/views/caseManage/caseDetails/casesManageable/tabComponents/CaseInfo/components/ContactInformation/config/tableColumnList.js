@@ -34,31 +34,3 @@ export const ordinaryColumnList = [
     prop: 'createTime'
   }
 ]
-
-export const specialColumnList = [
-  {
-    label: '关联关系',
-    prop: 'relation',
-    width: '250'
-  },
-  {
-    label: '姓名',
-    prop: 'name',
-    width: '250'
-  },
-  {
-    label: '电话',
-    prop: 'phone',
-    width: '300'
-  },
-  {
-    label: '证件号',
-    prop: 'idno',
-    width: '300'
-  },
-  {
-    label: '地址',
-    prop: 'address',
-    width: '450'
-  }
-]

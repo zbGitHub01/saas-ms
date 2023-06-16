@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
-import { ordinaryColumnList, specialColumnList } from './config/tableColumnList.js'
+import { ordinaryColumnList } from './config/tableColumnList.js'
 
 const state = reactive({
   tableData: [
@@ -57,15 +57,15 @@ const state = reactive({
         </el-table-column>
       </template>
     </TableClass>
-    <div class="special">特殊联系人</div>
+    <!-- <div class="special">特殊联系人</div> -->
     <!--特殊联系人-->
-    <TableClass
+    <!--  <TableClass
       ref="specialTable"
       :table-data="state.tableData"
       :column-list="specialColumnList"
       :pagination="false"
       :stripe="true"
-    ></TableClass>
+    ></TableClass> -->
   </div>
 </template>
 <style scoped lang="scss">

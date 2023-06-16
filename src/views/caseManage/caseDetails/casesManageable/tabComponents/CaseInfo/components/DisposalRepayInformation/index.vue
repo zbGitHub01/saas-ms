@@ -1,8 +1,23 @@
 <script setup>
-import { reactive } from 'vue'
-const state = reactive({})
-const messageData = {}
-const repayDataList = [[], [], []]
+import { ref, toRefs, reactive } from 'vue'
+import CurrentCase from './component/currentCase.vue'
+
+const props = defineProps({
+  messageData: {
+    type: Object,
+    default: () => {}
+  }
+})
+
+const { messageData } = toRefs(props)
+
+const state = reactive({
+  repayDataList: [[], [], []]
+})
+
+const { repayDataList } = toRefs(state)
+
+const activeName1 = ref(0)
 </script>
 
 <template>
@@ -10,7 +25,7 @@ const repayDataList = [[], [], []]
     <div class="first_body">
       <div class="table_warp_title">处置金额</div>
       <el-tabs v-model="activeName1">
-        <el-tab-pane label="共债合计" name="first">
+        <el-tab-pane label="共债合计" :name="0">
           <current-case
             ref="jointDebt"
             :message-data="messageData.debtCaseAmountInfo"
@@ -18,7 +33,7 @@ const repayDataList = [[], [], []]
             @get-detail="getDetail"
           ></current-case>
         </el-tab-pane>
-        <el-tab-pane label="当前案件" name="two">
+        <el-tab-pane label="当前案件" :name="1">
           <current-case
             ref="currentCase"
             :message-data="messageData.currentCaseAmountInfo"
@@ -76,7 +91,7 @@ const repayDataList = [[], [], []]
   width: 100%;
   .first_body,
   .second_body {
-    width: 50%;
+    width: 49%;
   }
 }
 .table_warp_title {

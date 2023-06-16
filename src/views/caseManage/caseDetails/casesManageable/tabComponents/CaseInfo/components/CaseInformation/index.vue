@@ -1,31 +1,19 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 import More from './component/more.vue'
 import MoreDialog from './component/moreDialog.vue'
 import TagDialog from './component/tagDialog.vue'
 import descriptionList from './config/descriptionList.js'
 
-const messageData = {
-  userName: '王尼玛',
-  idno: '5113811987******18',
-  sex: '	男',
-  ethnicity: '汉族',
-  marital: '已婚',
-  regAddrProvince: '四川省',
-  regAddrCity: '东州市',
-  regAddrArea: '不知道哪区',
-  regAddr: '四川省南充市阆中市彭城镇白安村*组**号',
-  qq: '1402266051',
-  mail: '1402266051@qq.com',
-  companyName: '崇州诚信汽修厂',
-  companyAddr: '四川省成都市崇州市崇阳镇金盆地大道***号',
-  post: '维修部',
-  homeAddr: '四川省成都市崇州市崇阳镇兰岛*栋三单元*号',
-  caseTagAlertUserList: [
-    { tagAlertName: '欠款', isShare: 0 },
-    { tagAlertName: '信誉差', isShare: 1 }
-  ]
-}
+const props = defineProps({
+  messageData: {
+    type: Object,
+    default: () => {}
+  }
+})
+
+const { messageData } = toRefs(props)
+
 const state = reactive({
   type: 1,
   title: '',
@@ -81,7 +69,7 @@ const open = (item, val) => {
 <template>
   <div>
     <el-descriptions class="margin-top" :column="3" size="default" border>
-      <el-descriptions-item v-for="(item, index) in descriptionList" :key="index">
+      <el-descriptions-item v-for="(item, index) in descriptionList" :key="index" align="center">
         <template #label>
           <div class="cell-item">{{ item.label }}</div>
         </template>
@@ -121,5 +109,11 @@ const open = (item, val) => {
 }
 .share_warp {
   background-color: rgba(245, 154, 35, 1);
+}
+:deep(.el-descriptions__label) {
+  width: 180px !important;
+}
+:deep(.el-descriptions__content) {
+  width: 350px !important;
 }
 </style>

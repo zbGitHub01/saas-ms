@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onBeforeMount, onMounted } from 'vue'
+import { ref, reactive } from 'vue'
 import ReductionDialog from './components/reductionDialog/index.vue'
 import tabComponentObj from './tabComponents/index.js'
 import operaBtnConfig from './config/operaBtnConfig.js'
@@ -39,9 +39,6 @@ const reductionDialogVisible = ref(false)
 const handleClick = item => {
   if (item.btnText === '申请减免') reductionDialogVisible.value = true
 }
-
-onBeforeMount(() => {})
-onMounted(() => {})
 </script>
 
 <template>
@@ -65,7 +62,7 @@ onMounted(() => {})
     <el-tabs v-model="tabActive" class="mb20">
       <el-tab-pane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="index">
         <div class="spacing"></div>
-        <component :is="tabComponentObj[item.component]"></component>
+        <component :is="tabComponentObj[item.component]" v-if="tabActive === index"></component>
       </el-tab-pane>
     </el-tabs>
     <!--申请减免dialog-->

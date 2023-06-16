@@ -1,26 +1,36 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, toRefs } from 'vue'
 import StopInfoDialog from './component/stopInfoDialog.vue'
 import descriptionList from './config/descriptionList.js'
-const messageData = {
-  caseNo: 'BE-BQ-0001017',
-  productName: '邦恩佰仟',
-  originCreditor: '哇哈哈',
-  creditorName: '测试债权方1',
-  transTime: '2020-11-18',
-  batchNo: '	丽水邦恩-邦恩佰仟20201118',
-  caseStatusText: '	正常',
-  ivrTag: '啦啦啦',
-  robotTag: '啦啦啦',
-  orgTitle: '公司名称T79',
-  entrustTime: '2023-04-10 16:54:59',
-  entrustTypeText: '	默认',
-  cpeName: '花园宝宝',
-  allotTime: '2023-1-1',
-  remark: '无',
-  caseLevel: 'A',
-  caseStatus: 30
-}
+
+const props = defineProps({
+  messageData: {
+    type: Object,
+    default: () => {}
+  }
+})
+
+const { messageData } = toRefs(props)
+
+// const messageData = {
+//   caseNo: 'BE-BQ-0001017',
+//   productName: '邦恩佰仟',
+//   originCreditor: '哇哈哈',
+//   creditorName: '测试债权方1',
+//   transTime: '2020-11-18',
+//   batchNo: '	丽水邦恩-邦恩佰仟20201118',
+//   caseStatusText: '	正常',
+//   ivrTag: '啦啦啦',
+//   robotTag: '啦啦啦',
+//   orgTitle: '公司名称T79',
+//   entrustTime: '2023-04-10 16:54:59',
+//   entrustTypeText: '	默认',
+//   cpeName: '花园宝宝',
+//   allotTime: '2023-1-1',
+//   remark: '无',
+//   caseLevel: 'A',
+//   caseStatus: 30
+// }
 const dialogVisible = ref(false)
 
 const onStopCase = () => (dialogVisible.value = true)
@@ -29,7 +39,7 @@ const onStopCase = () => (dialogVisible.value = true)
 <template>
   <div>
     <el-descriptions class="margin-top" :column="3" size="default" border>
-      <el-descriptions-item v-for="(item, index) in descriptionList" :key="index">
+      <el-descriptions-item v-for="(item, index) in descriptionList" :key="index" align="center">
         <template #label>
           <div class="cell-item">{{ item.label }}</div>
         </template>
@@ -58,4 +68,11 @@ const onStopCase = () => (dialogVisible.value = true)
     <StopInfoDialog v-model:dialog-visible="dialogVisible" />
   </div>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+:deep(.el-descriptions__label) {
+  width: 180px !important;
+}
+:deep(.el-descriptions__content) {
+  width: 350px !important;
+}
+</style>
