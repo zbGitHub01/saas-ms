@@ -5,9 +5,9 @@
       <el-tab-pane label="已委托案件" name="2"></el-tab-pane>
       <el-tab-pane label="委派处置案件" name="3"></el-tab-pane>
     </el-tabs>
-    <ManageableCases v-if="tabActive === '1'" />
-    <EntrustedCases v-if="tabActive === '2'" />
-    <DelegatedCases v-if="tabActive === '3'" />
+    <ManageableCases v-show="tabActive === '1'" />
+    <EntrustedCases v-show="tabActive === '2'" />
+    <DelegatedCases v-show="tabActive === '3'" />
   </div>
 </template>
 

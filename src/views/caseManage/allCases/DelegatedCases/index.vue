@@ -1,24 +1,7 @@
 <template>
   <div>
-    <FormWrap @search="getTableData" @reset="reset">
-      <template #default>
-        <el-form inline :model="form">
-          <el-form-item label="案件ID">
-            <el-input v-model="form.caseNo" placeholder="请输入案件ID" clearable></el-input>
-          </el-form-item>
-          <!-- <el-form-item label="产品：" prop="productId">
-            <el-select clearable v-model="form.productId" filterable placeholder="请选择产品">
-              <el-option label="产品1" :value="1"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="出资方：" prop="investorName">
-            <el-select clearable v-model="form.investorName" filterable placeholder="请选择出资方">
-              <el-option label="出资方1" :value="1"></el-option>
-            </el-select>
-          </el-form-item> -->
-        </el-form>
-      </template>
-    </FormWrap>
+    <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
+    <div class="spacing"></div>
     <LabelClass :labelData="state.CaseStatisticsEntrust" />
     <div class="spacing"></div>
     <div class="mt20">
@@ -70,7 +53,13 @@
         <el-table-column label="委案金额" prop="entrustAmount" align="center" min-width="150" sortable="custom"></el-table-column>
         <el-table-column label="还款入账金额" prop="totalRefundAmount" align="center" min-width="150"></el-table-column>
         <el-table-column label="减免金额" prop="totalReductionAmount" align="center" min-width="150"></el-table-column>
-        <el-table-column label="剩余待还金额" prop="residueAmount" align="center" min-width="150" sortable="custom"></el-table-column>
+        <el-table-column
+          label="剩余待还金额"
+          prop="residueAmount"
+          align="center"
+          min-width="150"
+          sortable="custom"
+        ></el-table-column>
         <el-table-column label="临时标签" prop="tagTempList" align="left" min-width="180" :show-overflow-tooltip="true">
           <template #default="scope">
             <span v-for="(item, index) in scope.row.tagTempList" :key="index">
@@ -112,16 +101,16 @@
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
     <TemporaryLabel ref="temporaryLabel" @get-table-data="getTableData" />
-    <EditStatusDialog ref="editStatusDialog" @submitForm="submitEditForm" />
+    <EditStatusDialog ref="editStatusDialog" @getTableData="getTableData" />
     <ExportDialog ref="exportDialog" @submitExport="submitExport" />
-    <ColorShowDialog ref="colorShowDialog" @submitForm="submitColorForm" @getTableData="getTableData" />
-    <CreatBatchDialog ref="creatBatchDialog" @submitForm="submitBatchForm" />
+    <ColorShowDialog ref="colorShowDialog" @getTableData="getTableData" />
+    <!-- <CreatBatchDialog ref="creatBatchDialog" @submitForm="submitBatchForm" /> -->
   </div>
 </template>
 
 <script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { Close, VideoPause, VideoPlay, CirclePlus, Delete, Download, Document } from '@element-plus/icons-vue'
 import EditStatusDialog from './components/EditStatusDialog.vue'
 import ExportDialog from './components/ExportDialog.vue'
@@ -129,20 +118,16 @@ import ColorShowDialog from './components/ColorShowDialog.vue'
 import CreatBatchDialog from './components/CreatBatchDialog.vue'
 import CaseStatisticsEntrust from '@/constants/CaseStatisticsEntrust' //统计数据
 import Apis from '@/api/modules/caseManage'
+import DynamoSearchForm from '@/components/DynamoSearchForm/index.vue'
 const multipleTable = ref(null)
-const form = reactive({
-  caseNo: ''
-  // productId: null, //产品
-  // investorName: null, //出资方
-  // entrustAmountSort: null, //委案金额排序
-  // entrustResidueAmountSort: null //剩余待还金额排序
-})
-const originFormData = JSON.parse(JSON.stringify(form))
+const dynamoSearchFormRef = ref()
 const temporaryLabel = ref()
 const editStatusDialog = ref()
 const exportDialog = ref()
 const colorShowDialog = ref()
 const creatBatchDialog = ref()
+const entrustResidueAmountSort = ref() //剩余待还金额排序：0-正序，1-倒序
+const entrustAmountSort = ref() //委案金额排序 0-正序，1-倒序
 // 页码
 const query = reactive({
   page: 1,
@@ -206,50 +191,52 @@ const operationList = reactive([
     icon: 'Delete',
     isShow: true
     // isShow: this.hasPerm("disposal_case_dellabel"),
-  },
-  {
-    title: '创建诉讼批次',
-    icon: 'CirclePlus',
-    isShow: true,
-    // isShow: this.hasPerm("disposal_case_excase"),
-    dropdown: [
-      {
-        title: '以案件筛选结果创建诉讼批次',
-        notCheck: true
-      },
-      {
-        title: '表格上传案件创建诉讼批次',
-        notCheck: true
-      }
-    ]
-  },
-  {
-    title: '创建单保全批次',
-    icon: 'CirclePlus',
-    isShow: true,
-    // isShow: this.hasPerm("disposal_case_exrecord"),
-    dropdown: [
-      {
-        title: '以案件筛选结果创建单保全批次',
-        notCheck: true
-      },
-      {
-        title: '表格上传案件创建单保全批次',
-        notCheck: true
-      }
-    ]
   }
+  // {
+  //   title: '创建诉讼批次',
+  //   icon: 'CirclePlus',
+  //   isShow: true,
+  //   // isShow: this.hasPerm("disposal_case_excase"),
+  //   dropdown: [
+  //     {
+  //       title: '以案件筛选结果创建诉讼批次',
+  //       notCheck: true
+  //     },
+  //     {
+  //       title: '表格上传案件创建诉讼批次',
+  //       notCheck: true
+  //     }
+  //   ]
+  // },
+  // {
+  //   title: '创建单保全批次',
+  //   icon: 'CirclePlus',
+  //   isShow: true,
+  //   // isShow: this.hasPerm("disposal_case_exrecord"),
+  //   dropdown: [
+  //     {
+  //       title: '以案件筛选结果创建单保全批次',
+  //       notCheck: true
+  //     },
+  //     {
+  //       title: '表格上传案件创建单保全批次',
+  //       notCheck: true
+  //     }
+  //   ]
+  // }
 ])
 onMounted(() => {
   getTableData()
 })
-const getTableData = async () => {
+const getTableData = async paramsSub => {
   console.log('可管理案件搜索')
   // 请求得到数据
   const params = {
-    ...form,
+    ...dynamoSearchFormRef.value.getParams(),
     ...query,
-    queryType: 'ENTRUSTED' //案件查询类型：ENTRUSTED-委派处置案件
+    queryType: 'ENTRUSTED', //案件查询类型：ENTRUSTED-委派处置案件
+    entrustAmountSort: entrustAmountSort.value,
+    entrustResidueAmountSort: entrustResidueAmountSort.value
   }
   const { data } = await Apis.caseList(params)
   state.tableData = data.data
@@ -426,12 +413,6 @@ const getTableData = async () => {
   })
   state.CaseStatisticsEntrust = CaseStatisticsEntrust
 }
-// 重置
-const reset = () => {
-  console.log('重置')
-  Object.assign(form, originFormData)
-  getTableData()
-}
 //表格选择
 const handleSelectionChange = val => {
   let arr = []
@@ -444,7 +425,6 @@ const handleSelectionChange = val => {
     caseIdList: state.selectData,
     operateType: 1
   }
-  console.log(state.selectData, state.handleparams, operation.value)
 }
 //取消选择
 const toggleSelection = () => {
@@ -487,57 +467,46 @@ const handleClick = item => {
       case '删除临时标签':
         handleTag(2)
         break
-      case '以案件筛选结果创建诉讼批次':
-        createBatch(0, 1)
-        break
-      case '表格上传案件创建诉讼批次':
-        createBatch(0, 2)
-        break
-      case '以案件筛选结果创建单保全批次':
-        createBatch(1, 1)
-        break
-      case '表格上传案件创建单保全批次':
-        createBatch(1, 2)
-        break
+      // case '以案件筛选结果创建诉讼批次':
+      //   createBatch(0, 1)
+      //   break
+      // case '表格上传案件创建诉讼批次':
+      //   createBatch(0, 2)
+      //   break
+      // case '以案件筛选结果创建单保全批次':
+      //   createBatch(1, 1)
+      //   break
+      // case '表格上传案件创建单保全批次':
+      //   createBatch(1, 2)
+      //   break
       default:
         break
     }
   }
 }
-// 1添加临时标签/2删除临时标签
+// 1添加临时标签/2删除临时标签/3批量导入临时标签
 const handleTag = type => {
-  temporaryLabel.value.open(type, getParams())
+  temporaryLabel.value.open(type, getParams(), true) //true表示是机构端的标签操作
 }
 //排序
 const handlesort = val => {
   if (val.order) {
     if (val.prop === 'entrustAmount') {
-      form.entrustResidueAmountSort = null
-      form.entrustAmountSort = val.order === 'ascending' ? 0 : 1
+      entrustResidueAmountSort.value = null
+      entrustAmountSort.value = val.order === 'ascending' ? 0 : 1
     } else if (val.prop === 'residueAmount') {
-      form.entrustAmountSort = null
-      form.entrustResidueAmountSort = val.order === 'ascending' ? 0 : 1
+      entrustAmountSort.value = null
+      entrustResidueAmountSort.value = val.order === 'ascending' ? 0 : 1
     }
   } else {
-    form.entrustAmountSort = null
-    form.entrustResidueAmountSort = null
+    entrustAmountSort.value = null
+    entrustResidueAmountSort.value = null
   }
   getTableData()
 }
 // 修改处置状态
 const editStatus = () => {
-  editStatusDialog.value.open()
-}
-// 确认修改处置状态
-const submitEditForm = async paramsSub => {
-  let params = getParams()
-  Object.assign(params, paramsSub)
-  // 发送确认修改处置状态接口
-  console.log('修改处置状态', params)
-  // await xx(params)
-  ElMessage.success('操作成功！')
-  toggleSelection()
-  getTableData()
+  editStatusDialog.value.open(getParams())
 }
 // 0导出案件1和导出案件2， 1导出处置记录
 const exportModel = async (code, type) => {
@@ -650,23 +619,16 @@ const exportMethod = (data, target = '_self') => {
   if (data === null || data === '') {
     ElMessage.error('下载链接异常！')
   } else {
-    let url = data;
-    let a = document.createElement("a");
-    a.href = url;
-    a.target = target || '_self';
-    a.click();
+    let url = data
+    let a = document.createElement('a')
+    a.href = url
+    a.target = target || '_self'
+    a.click()
   }
 }
 // 案件标色
 const colorShow = () => {
-  colorShowDialog.value.open()
-}
-// 确认案件标色
-const submitColorForm = paramsSub => {
-  let params = getParams()
-  Object.assign(params, paramsSub)
-  console.log('案件标色：', params)
-  // 发送接口
+  colorShowDialog.value.open(getParams())
 }
 // 设置表格行颜色
 const tableRowClassName = ({ row, rowIndex }) => {
@@ -688,77 +650,58 @@ const tableRowClassName = ({ row, rowIndex }) => {
     return 'ref-row'
   }
 }
-// 创建批次 typType:0诉讼 1保全 OpeType:1筛选结果 2表格上传
-const createBatch = async (typType, opeType) => {
-  if (opeType === 1) {
-    if (!form.investorName) {
-      return ElMessage.warning('请先查询出资方!')
-    }
-    if (!form.productId) {
-      return ElMessage.warning('请先查询产品!')
-    }
-    if (state.selectData.length === 0 && operation.value === 1) {
-      return ElMessage.warning('请先选择操作对象!')
-    }
-    const params = {
-      operateType: operation.value,
-      companyCaseSearchParam: Object.assign({}, form),
-      caseIdList: state.selectData,
-      type: typType
-    }
-    // 获取批次数量信息
-    // const {data } = await xx(params)
-    // const numInfo = data
-    const numInfo = {
-      createCaseNum: 9,
-      createCaseUserNum: 7,
-      filterCaseUserNum: 7,
-      orgList: ['公司名称T79'],
-      filterCaseNum: 9,
-      productList: ['“360”借条']
-    }
-    console.log('操作类型1', numInfo)
-    creatBatchDialog.value.open(typType, opeType, numInfo)
-  } else if (opeType === 2) {
-    creatBatchDialog.value.open(typType, opeType, {})
-  }
-}
-// 确认创建批次
-const submitBatchForm = paramsSub => {
-  const params = {
-    operateType: operation.value,
-    companyCaseSearchParam: Object.assign({}, form),
-    caseIdList: state.selectData
-  }
-  Object.assign(params, paramsSub)
-  console.log('创建批次：', params)
-  ElMessage.success('创建诉讼批次成功!')
-}
-// 生成结清证明
-const certificate = async () => {
-  ElMessageBox.confirm('是否确认本次操作?', '温馨提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(
-    () => {
-      let params = getParams()
-      console.log('结清证明', params)
-      // await xx(params)
-      toggleSelection()
-      getTableData()
-    },
-    res => {
-      ElMessage.info('已取消')
-    }
-  )
-}
+// // 创建批次 typType:0诉讼 1保全 OpeType:1筛选结果 2表格上传
+// const createBatch = async (typType, opeType) => {
+//   if (opeType === 1) {
+//     if (!dynamoSearchFormRef.value.getParams().investorName) {
+//       return ElMessage.warning('请先查询出资方!')
+//     }
+//     if (!dynamoSearchFormRef.value.getParams().productIdList) { //到底是productId还是productIdList
+//       return ElMessage.warning('请先查询产品!')
+//     }
+//     if (state.selectData.length === 0 && operation.value === 1) {
+//       return ElMessage.warning('请先选择操作对象!')
+//     }
+//     const params = {
+//       operateType: operation.value,
+//       companyCaseSearchParam: Object.assign({}, dynamoSearchFormRef.value.getParams()),
+//       caseIdList: state.selectData,
+//       type: typType
+//     }
+//     // 获取批次数量信息
+//     // const {data } = await xx(params)
+//     // const numInfo = data
+//     const numInfo = {
+//       createCaseNum: 9,
+//       createCaseUserNum: 7,
+//       filterCaseUserNum: 7,
+//       orgList: ['公司名称T79'],
+//       filterCaseNum: 9,
+//       productList: ['“360”借条']
+//     }
+//     console.log('操作类型1', numInfo)
+//     creatBatchDialog.value.open(typType, opeType, numInfo)
+//   } else if (opeType === 2) {
+//     creatBatchDialog.value.open(typType, opeType, {})
+//   }
+// }
+// // 确认创建批次
+// const submitBatchForm = paramsSub => {
+//   const params = {
+//     operateType: operation.value,
+//     companyCaseSearchParam: Object.assign({}, dynamoSearchFormRef.value.getParams()),
+//     caseIdList: state.selectData
+//   }
+//   Object.assign(params, paramsSub)
+//   console.log('创建批次：', params)
+//   ElMessage.success('创建诉讼批次成功!')
+// }
 // 处理基础入参
 const getParams = () => {
   let params =
     operation.value === 1
       ? Object.assign({}, state.handleparams)
-      : { operateType: 2, companyCaseSearchParam: Object.assign({}, form) }
+      : { operateType: 2, caseSearchParam: Object.assign({}, dynamoSearchFormRef.value.getParams()) }
   return params
 }
 </script>

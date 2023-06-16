@@ -1,14 +1,7 @@
 <template>
   <div class="card-wrap">
-    <FormWrap @search="getTableData" @reset="reset">
-      <template #default>
-        <el-form inline :model="form">
-          <el-form-item label="案件ID">
-            <el-input v-model="form.caseId" placeholder="请输入案件ID" clearable></el-input>
-          </el-form-item>
-        </el-form>
-      </template>
-    </FormWrap>
+    <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
+    <div class="spacing"></div>
     <LabelClass :labelData="state.CaseStatistics" />
     <div class="spacing"></div>
     <div class="mt20">
@@ -33,66 +26,33 @@
         :row-key="getRowKeys"
       >
         <el-table-column type="selection" fixed align="center" width="55" :reserve-selection="true"></el-table-column>
-        <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left" :show-overflow-tooltip="true">
+        <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left">
           <template #default="scope">
             <status :row="scope.row" pageType="disposalCasemessage" />
           </template>
         </el-table-column>
-        <el-table-column
-          label="产品"
-          prop="productName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="姓名"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="证件号"
-          prop="idno"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="手机号"
-          prop="userPhone"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="处置金额"
-          prop="handleAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="产品" prop="productName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="姓名" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="证件号" prop="idno" align="center" min-width="180"></el-table-column>
+        <el-table-column label="手机号" prop="userPhone" align="center" min-width="150"></el-table-column>
+        <el-table-column label="处置金额" prop="handleAmount" align="center" min-width="150"></el-table-column>
         <!-- <el-table-column
           label="还款入账金额"
           prop="totalRefundAmount"
           align="center"
           min-width="150"
-          :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="减免金额"
           prop="totalReductionAmount"
           align="center"
           min-width="150"
-          :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="剩余待还金额"
           prop="residueAmount"
           align="center"
           min-width="150"
-          :show-overflow-tooltip="true"
         ></el-table-column> -->
         <el-table-column label="临时标签" prop="tagTempName" align="left" min-width="180" :show-overflow-tooltip="true">
           <template #default="scope">
@@ -110,71 +70,17 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column
-          label="入库批次号"
-          prop="batchNo"
-          align="center"
-          min-width="250"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="债权方"
-          prop="creditorName"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="入库批次号" prop="batchNo" align="center" min-width="250"></el-table-column>
+        <el-table-column label="债权方" prop="creditorName" align="center" min-width="180"></el-table-column>
         <!-- 无 -->
-        <el-table-column
-          label="所属分库"
-          prop="storeName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="所属分库" prop="storeName" align="center" min-width="150"></el-table-column>
         <!-- 无 -->
-        <el-table-column
-          label="分库时间"
-          prop="allotTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="处置机构"
-          prop="orgTitle"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="委案时间"
-          prop="entrustTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="委案金额"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="CPE"
-          prop="cpeName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="分案时间"
-          prop="allotTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="分库时间" prop="allotTime" align="center" min-width="180"></el-table-column>
+        <el-table-column label="处置机构" prop="orgTitle" align="center" min-width="150"></el-table-column>
+        <el-table-column label="委案时间" prop="entrustTime" align="center" min-width="180"></el-table-column>
+        <el-table-column label="委案金额" prop="entrustAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="CPE" prop="cpeName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="分案时间" prop="allotTime" align="center" min-width="180"></el-table-column>
         <el-table-column label="案件状态" prop="caseStatusText" align="center" min-width="150" fixed="right"></el-table-column>
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
@@ -197,18 +103,16 @@ import { reactive, ref, onMounted } from 'vue'
 import { Folder } from '@element-plus/icons-vue'
 import CaseAssignmentDialog from './components/CaseAssignmentDialog.vue'
 import CaseStatistics from '@/constants/CaseStatistics' //统计数据
-import CaseLabelData3 from '@/constants/CaseLabelData3' //收回查询数据
+import CaseLabelData3 from '@/constants/CaseLabelData3' //查询数据
+import DynamoSearchForm from '@/components/DynamoSearchForm/index.vue'
 const multipleTable = ref(null)
-const form = reactive({
-  caseId: ''
-})
+const dynamoSearchFormRef = ref()
 const selectData = reactive({
   caseTypeList: [], //委案类型列表
   orgList: [], //机构列表
   defalutType: null, //批次为普通批次的id
   bankList: [] //案件分库列表
 })
-const originFormData = JSON.parse(JSON.stringify(form))
 // 页码
 const query = reactive({
   page: 1,
@@ -238,7 +142,7 @@ onMounted(() => {
   getSelecData()
 })
 const getTableData = async () => {
-  const params = { ...form, ...query, storeId: 2 }
+  const params = { ...dynamoSearchFormRef.value.getParams(), ...query, storeId: 2 }
   // 请求得到数据
   // const { data } = await xx(params)
   // const { data } = await xx(params) //label
@@ -473,12 +377,6 @@ const getSelecData = async () => {
     }
   ]
 }
-// 重置
-const reset = () => {
-  console.log('重置')
-  Object.assign(form, originFormData)
-  getTableData()
-}
 //表格选择
 const handleSelectionChange = val => {
   let arr = []
@@ -526,7 +424,9 @@ const caseAssignment = () => {
 const fetchTimingSearch = (entrustStrategy = 1) => {
   // 处理入参
   let params =
-    operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
+    operation.value === 1
+      ? Object.assign({}, state.handleparams)
+      : { operateType: 2, caseSearchParam: Object.assign({}, dynamoSearchFormRef.value.getParams()) }
   params.storeId = 2
   params.entrustStrategy = entrustStrategy
   console.log('委案数据参数：', params)

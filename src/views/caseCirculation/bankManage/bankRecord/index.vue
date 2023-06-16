@@ -44,72 +44,24 @@
     <div class="mt20">
       <el-table :data="state.tableData" border>
         <el-table-column label="序号" type="index" align="center" width="100"></el-table-column>
-        <el-table-column
-          label="分库批次号"
-          prop="distBatchNo"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="分库时间"
-          prop="distTimeStr"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="操作人"
-          prop="operName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="原分库"
-          prop="sourceStoreName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="目标分库"
-          prop="targetStoreName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column label="分库案件数" prop="distCaseNum" align="center" min-width="150" :show-overflow-tooltip="true">
+        <el-table-column label="分库批次号" prop="distBatchNo" align="center" min-width="250"></el-table-column>
+        <el-table-column label="分库时间" prop="distTimeStr" align="center" min-width="180"></el-table-column>
+        <el-table-column label="操作人" prop="operName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="原分库" prop="sourceStoreName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="目标分库" prop="targetStoreName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="分库案件数" prop="distCaseNum" align="center" min-width="150">
           <template #default="scope">
             <span>{{ scope.row.distCaseNum }}/{{ scope.row.distTotalCaseNum }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="分库案人数" prop="distuserNum" align="center" min-width="150" :show-overflow-tooltip="true">
+        <el-table-column label="分库案人数" prop="distuserNum" align="center" min-width="150">
           <template #default="scope">
             <span>{{ scope.row.distuserNum }}/{{ scope.row.distTotalUserNum }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          label="分库金额"
-          prop="distAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="完成时间"
-          prop="finishTimeStr"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="分库进度"
-          prop="distStateStr"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="分库金额" prop="distAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="完成时间" prop="finishTimeStr" align="center" min-width="180"></el-table-column>
+        <el-table-column label="分库进度" prop="distStateStr" align="center" min-width="150"></el-table-column>
         <!-- 失败数据下载 -->
         <el-table-column label="失败数据" prop="errorDataUrl" align="center" min-width="150">
           <template #default="scope">
@@ -138,7 +90,7 @@ const form = reactive({
   targetStoreId: null,
   distBatchNo: '',
   startDistTime: null,
-  endDistTime: null,
+  endDistTime: null
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const date = ref()
@@ -158,9 +110,9 @@ onMounted(() => {
 })
 // 获取表格数据
 const getTableData = async () => {
-  console.log('案件分库', form)
+  console.log('案件分库')
   // 请求得到数据
-  const { data } = await Apis.distRecordList({ ...form, ...query})
+  const { data } = await Apis.distRecordList({ ...form, ...query })
   state.tableData = data.data
   // state.tableData = [
   //   {
@@ -243,12 +195,12 @@ const reset = () => {
 const changeDate = val => {
   if (val) {
     // form.operDateDuration = val[0] + '~' + val[1]
-    form.startDistTime = val[0]
-    form.endDistTime = val[1]
+    form.startDistTime = val[0] + ' 00:00:00'
+    form.endDistTime = val[1] + ' 23:59:59'
   } else {
     // form.operDateDuration = null
-    form.startDistTime = val[0]
-    form.endDistTime = val[1]
+    form.startDistTime = null
+    form.endDistTime = null
   }
 }
 //下载
@@ -267,8 +219,8 @@ const download = async row => {
 const setDefault = () => {
   date.value = beformonth()
   // form.operDateDuration = beformonth().join('~')
-  form.startDistTime = beformonth()[0]
-  form.endDistTime = beformonth()[1]
+  form.startDistTime = beformonth()[0] + ' 00:00:00'
+  form.endDistTime = beformonth()[1] + ' 23:59:59'
 }
 </script>
 

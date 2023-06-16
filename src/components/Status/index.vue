@@ -134,7 +134,7 @@ const goDetail = () => {
   if (!props.row.caseId) return
   router.push({
     name: 'casesManageable',
-    query: { caseNo: props.row.caseNo }
+    query: { caseNo: props.row.caseNo, caseId: props.row.caseId }
   })
 }
 //查看结清证明

@@ -10,7 +10,7 @@ const CaseLabelData3 = [
   {
     customizeIcon: 'peoplenum',
     eplusIcon: '',
-    labelTitle: '操作案件人数',
+    labelTitle: '操作案人数',
     isHaveRmbSign: false,
     value: null,
     key: 'personNum'

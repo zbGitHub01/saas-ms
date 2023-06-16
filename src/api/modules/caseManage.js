@@ -43,11 +43,29 @@ const apiConfig = {
     tagTempList: 'GET /caseCenter/case/tagTemp/list', //临时标签列表
 
     // 全部案件
-    caseList: 'POST /caseCenter/case/list', //案件列表
-    caseListStats: 'POST /caseCenter/case/list/stats', //案件列表统计数据
-    saveCaseStatus: 'POST /caseCenter/case/saveCaseStatus', //暂停关闭恢复案件
+    caseList: 'POST /caseCenter/case/list', //全部案件列表
+    caseListStats: 'POST /caseCenter/case/list/stats', //全部案件列表统计数据
+    caseStatusUpdate: 'POST /caseCenter/case/status/update', //暂停关闭恢复案件
+    caseLock: 'POST /caseCenter/case/lock', //案件锁定
     caseExport: 'POST /caseCenter/case/export', //导出案件
     generateCertificate: 'POST /caseCenter/case/generate/certificate', //生成结清证明
+    updateColor: 'POST /caseCenter/case/update/color', //案件标色
+    updateFollowStatus: 'POST /caseCenter/case/update/followStatus', //案件处置状态修改
+    orgTagTempAdd: 'POST /caseCenter/case/orgTagTemp/add', //临时标签添加
+    orgTagTempDelete: 'POST /caseCenter/case/orgTagTemp/delete', //删除标签添加
+    orgTagTempList: 'GET /caseCenter/case/orgTagTemp/list', //临时标签列表
+
+    // 委案管理
+    entrustCaseList: 'POST /caseCenter/case/entrust/entrustCaseList', //实时委案案件列表
+    entrustCaseListStats: 'POST /caseCenter/case/entrust/entrustCaseList/stats', //实时委案案件列表统计数
+    caseEntrustSelect: 'POST /caseCenter/case/entrust/caseEntrustSelect', //发起委案 查询
+    caseAllotRefresh: 'POST /caseCenter/case/entrust/caseAllotRefresh', //发起委案 刷新
+    caseEntrustSave: 'POST /caseCenter/case/entrust/caseEntrustSave', //发起委案 保存
+    recoverCaseList: 'POST /caseCenter/case/recover/recoverCaseList', //实时委案收回案件列表
+    recoverCaseListStats: 'POST /caseCenter/case/recover/recoverCaseList/stats', //实时委案收回案件列表统计数
+    recoverNowSelect: 'POST /caseCenter/case/recover/recoverNowSelect', //实时收回 查询
+    recoverNowSave: 'POST /caseCenter/case/recover/recoverNowSave', //实时收回 保存
+    recoverRecordList: 'POST /caseCenter/case/recover/recoverRecordList', //实时收回列表
 
     // 资产包类型
     packagetypeList: 'GET /caseCenter/packagetype/list', //不分页资产包类型

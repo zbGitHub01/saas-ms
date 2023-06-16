@@ -257,7 +257,8 @@ onMounted(() => {
 })
 
 defineExpose({
-  getParams
+  getParams,
+  onReset
 })
 </script>
 

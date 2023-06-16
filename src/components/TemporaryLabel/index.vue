@@ -50,6 +50,7 @@ const state = reactive({
 })
 const typeSub = ref(1)
 const title = ref('')
+const isOrg = ref(false)
 const uploadFileRef = ref()
 const emits = defineEmits(['getTableData'])
 // 校验规则
@@ -60,7 +61,7 @@ const rules = reactive({
 })
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (type, params) => {
+const open = (type, params, isOrgSub) => {
   if (type === 1) {
     title.value = '添加临时标签'
   } else if (type === 2) {
@@ -69,6 +70,7 @@ const open = (type, params) => {
   } else if (type === 3) {
     title.value = '导入批量添加标签'
   }
+  isOrg.value = isOrgSub
   state.params = params
   typeSub.value = type
   Object.assign(form, originFormData)
@@ -84,11 +86,11 @@ const submitForm = formEl => {
     if (valid) {
       if (typeSub.value === 1) {
         state.params.tempTagName = form.tempTagName
-        await Apis.tagTempAdd(state.params)
+        isOrg.value ? await Apis.orgTagTempAdd(state.params) : await Apis.tagTempAdd(state.params)
       } else if (typeSub.value === 2) {
         state.params.tempTagName = form.tempTagName
         state.params.isDeleteAllRelationTag = form.isDeleteAllRelationTag === true ? 1 : 0
-        await Apis.tagTempDelete(state.params)
+        isOrg.value ? await Apis.orgTagTempDelete(state.params) : await Apis.tagTempDelete(state.params)
       } else if (typeSub.value === 3) {
         // 只要上传文件就好吗？
         uploadFileRef.value.uploadSubmit()
@@ -105,7 +107,7 @@ const cancelSubmit = () => {
   dialogVisible.value = false
 }
 const getSelecData = async () => {
-  const { data } = await Apis.tagTempList()
+  const { data } = isOrg.value ? await Apis.orgTagTempList() : await Apis.tagTempList()
   state.tagList = data
 }
 //点击下载模板

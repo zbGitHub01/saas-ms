@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    title="修改处置状态"
+    title="案件标色"
     width="440px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
@@ -20,27 +20,37 @@
 </template>
   <script setup>
 import { reactive, ref } from 'vue'
+import Apis from '@/api/modules/caseManage'
+import { ElMessage, ElMessageBox } from 'element-plus'
 const colorShow = ref()
-const emits = defineEmits(['submitForm'])
+const state = reactive({
+  paramsSub: {}
+})
+const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = () => {
+const open = paramsSub => {
+  state.paramsSub = { ...paramsSub }
   dialogVisible.value = true
 }
 defineExpose({
   open
 })
 // 确认
-const submitForm = () => {
+const submitForm = async () => {
   const params = {
-    color: colorShow.value.radio
+    color: colorShow.value.radio,
+    ...state.paramsSub
   }
-  emits('submitForm', params)
+  console.log('案件标色：', params)
+  await Apis.updateColor(params)
+  ElMessage.success('标色成功！')
+  emits('getTableData')
   cancelSubmit()
 }
 // 取消
 const cancelSubmit = () => {
-  colorShow.value.radio = '100'
+  colorShow.value.radio = 100
   dialogVisible.value = false
 }
 </script>

@@ -78,97 +78,19 @@
         :row-key="getRowKeys"
       >
         <el-table-column type="selection" fixed align="center" width="55" :reserve-selection="true"></el-table-column>
-        <el-table-column
-          label="产品"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="姓名"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="证件号"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="手机号"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="批次号"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="入账案件编号"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="还款金额"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="到账时间"
-          prop="allotTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="账单id"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="收款债权方"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="导入人"
-          prop="creditorName"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="导入机构"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="导入时间"
-          prop="allotTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="产品" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="姓名" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="证件号" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="手机号" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="批次号" prop="userName" align="center" min-width="250"></el-table-column>
+        <el-table-column label="入账案件编号" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="还款金额" prop="entrustAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="到账时间" prop="allotTime" align="center" min-width="180"></el-table-column>
+        <el-table-column label="账单id" prop="entrustAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="收款债权方" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="导入人" prop="creditorName" align="center" min-width="180"></el-table-column>
+        <el-table-column label="导入机构" prop="entrustAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="导入时间" prop="allotTime" align="center" min-width="180"></el-table-column>
         <el-table-column label="操作" width="140" align="center" fixed="right">
           <template #default="scope">
             <el-button link type="primary" @click="deleteDetail(scope.row)">删除</el-button>
@@ -360,7 +282,7 @@ const exportFile = () => {
   const params =
     operation.value === 1
       ? Object.assign({}, state.handleparams)
-      : { operateType: 2, companyCaseSearchParam: Object.assign({}, form) }
+      : { operateType: 2, companyCaseSearchParam: Object.assign({}, form) } //注意caseSearchParam
   console.log(params)
   //  const {data} =  await xx({ key: 'xx' })
   //  exportMethod(data)

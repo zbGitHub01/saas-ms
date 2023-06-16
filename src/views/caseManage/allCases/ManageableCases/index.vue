@@ -1,6 +1,7 @@
 <template>
   <div>
-    <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" />
+    <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
+    <div class="spacing"></div>
     <LabelClass :labelData="state.CaseStatistics" />
     <div class="spacing"></div>
     <div class="mt20">
@@ -112,10 +113,6 @@ import Apis from '@/api/modules/caseManage'
 import CaseStatistics from '@/constants/CaseStatistics' //统计数据
 const dynamoSearchFormRef = ref()
 const multipleTable = ref(null)
-const form = reactive({
-  caseNo: ''
-})
-const originFormData = JSON.parse(JSON.stringify(form))
 const temporaryLabel = ref()
 const handleCaseDialog = ref()
 const exportDialog = ref()
@@ -190,7 +187,7 @@ const getTableData = async () => {
   console.log('可管理案件搜索')
   // 请求得到数据
   const params = {
-    ...form,
+    ...dynamoSearchFormRef.value.getParams(),
     ...query,
     queryType: 'MANAGEABLE' //案件查询类型：MANAGEABLE-可管理案件
   }
@@ -367,12 +364,7 @@ const getTableData = async () => {
   CaseStatistics.forEach(item => {
     item.value = data1[item.key]
   })
-}
-// 重置
-const reset = () => {
-  console.log('重置')
-  Object.assign(form, originFormData)
-  getTableData()
+  state.CaseStatistics = CaseStatistics
 }
 //表格选择
 const handleSelectionChange = val => {
@@ -465,7 +457,7 @@ const submitCaseForm = async paramsSub => {
   Object.assign(params, paramsSub)
   // 发送处理案件接口
   console.log('处理案件：', params)
-  await Apis.saveCaseStatus(params)
+  await Apis.caseStatusUpdate(params)
   ElMessage.success('操作成功！')
   toggleSelection()
   getTableData()
@@ -580,11 +572,11 @@ const exportMethod = (data, target = '_self') => {
   if (data === null || data === '') {
     ElMessage.error('下载链接异常！')
   } else {
-    let url = data;
-    let a = document.createElement("a");
-    a.href = url;
-    a.target = target || '_self';
-    a.click();
+    let url = data
+    let a = document.createElement('a')
+    a.href = url
+    a.target = target || '_self'
+    a.click()
   }
 }
 // 生成结清证明
@@ -609,7 +601,9 @@ const certificate = async () => {
 // 处理基础入参
 const getParams = () => {
   let params =
-    operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
+    operation.value === 1
+      ? Object.assign({}, state.handleparams)
+      : { operateType: 2, caseSearchParam: Object.assign({}, dynamoSearchFormRef.value.getParams()) }
   return params
 }
 </script>
