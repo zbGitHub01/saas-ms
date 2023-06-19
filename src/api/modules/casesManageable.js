@@ -14,9 +14,15 @@ const debtNoticeApi = {
   getDebtNoticeList: 'GET /caseCenter/case/notice/list' //案件详情列表
 }
 
+//案件流转记录Api
+const transferLogApi = {
+  getTransferLogList: 'GET /caseCenter/case/transferLog/list' //案件流转记录
+}
+
 const apiConfig = {
   ...caseInfoApi,
-  ...debtNoticeApi
+  ...debtNoticeApi,
+  ...transferLogApi
 }
 
 const apis = generateApiFnc(apiConfig)
