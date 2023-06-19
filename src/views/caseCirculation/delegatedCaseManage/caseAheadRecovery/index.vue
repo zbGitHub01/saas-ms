@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref, computed, getCurrentInstance } from 'vue'
+import Api from '@/api/modules/caseAheadRecovery'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import DialogForm from './component/dialogForm.vue'
 import tableColumnList from './config/tableColumnList.js'
@@ -7,47 +8,26 @@ import dialogFormFieldsList from './config/dialogFormFieldsList.js'
 
 const state = reactive({
   tableData: [],
-  pageTotal: 4,
-  queryNewData: {},
   dialogVisible: false,
   drawerVisible: false,
-  dialogRuleForm: {
-    case: '',
-    opera: '',
-    categoryCompany: '',
-    aimCompany: '',
-    caseType: '',
-    history: '',
-    date: '',
-    isAuto: '',
-    notes: '',
-    datetime: '',
-    checkTest: [],
-    fileList: [
-      {
-        name: 'element-plus-logo.svg',
-        url: 'https://element-plus.org/images/element-plus-logo.svg'
-      },
-      {
-        name: 'element-plus-logo2.svg',
-        url: 'https://element-plus.org/images/element-plus-logo.svg'
-      }
-    ]
-  }
+  recoverBatchIdList: [], //预收回方案发布id集合
+  currSelectArr: [],
+  orgList: [] //机构列表
 })
 
-const getOrderListAgain = (pageSize, pageNum) => {
-  const pageInfo = {
-    ...state.queryNewData,
-    pageNum,
-    pageSize
+//获取列表数据
+const getList = async () => {
+  try {
+    const { data } = await Api.getPreRecoverList()
+    state.tableData = data.data
+  } catch (error) {
+    console.log(error)
   }
-  console.log(pageInfo)
-  // getOrderList(pageInfo).then(res => {
-  //   state.tableData = res.data.records
-  //   state.pageTotal = res.data.total
-  // })
 }
+
+getList()
+
+state.orgList = [{ orgId: 1, orgName: 'test' }]
 
 const instance = getCurrentInstance()?.proxy
 const formFieldsList = computed(() => {
@@ -100,118 +80,111 @@ const formFieldsList = computed(() => {
   return dialogFormFieldsList
 })
 
-const rules = reactive({
-  case: [{ required: true, message: '请选择案件分库', trigger: 'blur' }],
-  categoryCompany: [{ required: true, message: '请选择机构分类', trigger: 'change' }],
-  aimCompany: [{ required: true, message: '请选择目标机构', trigger: 'change' }],
-  caseType: [{ required: true, message: '请选择委案类型', trigger: 'change' }],
-  history: [{ required: true, message: '请选择历史处置记录', trigger: 'change' }],
-  date: [{ required: true, message: '请选择委案到期日', trigger: 'change' }],
-  isAuto: [{ required: true, message: '请选择是否自动收回', trigger: 'change' }],
-  datetime: [{ required: true, message: '请选择执行时间', trigger: 'change' }],
-  checkTest: [{ required: true, message: '请选择执行时间', trigger: 'change' }],
-  fileList: [{ required: true, message: '请上传委案文件', trigger: 'change' }]
-})
-
-getOrderListAgain()
-
-// const total = ref(0)
-// const page = ref(1)
-// const pageSize = ref(10)
-// state.tableData = Array(10).fill({ orderNo: 'test' })
-state.tableData = [
-  {
-    caseCategory: '大额处置库',
-    caseModel: [
-      { modelString: '温泽4月新案+激励', id: 1 },
-      { modelString: '嘎嘎撒大噶', id: 2 }
-    ],
-    caseProduct: '“360”借条',
-    orderNo: 'test',
-    operaNum: 100,
-    id: 1,
-    isOpen: true
-  },
-  {
-    caseCategory: '委外处置库',
-    caseModel: [
-      { modelString: '温泽4月新案+激励', id: 1 },
-      { modelString: '嘎嘎撒大噶', id: 2 }
-    ],
-    caseProduct: '皆彩还呗',
-    orderNo: '111',
-    operaNum: 100,
-    id: 2,
-    isOpen: false
-  },
-  {
-    caseCategory: '法诉处置库',
-    caseModel: [
-      { modelString: '温泽4月新案+激励', id: 1 },
-      { modelString: '嘎嘎撒大噶', id: 2 }
-    ],
-    caseProduct: '还呗',
-    orderNo: 'te222st',
-    operaNum: 100,
-    id: 3,
-    isOpen: true
-  },
-  {
-    caseCategory: '大额处置库',
-    caseModel: [
-      { modelString: '温泽4月新案+激励', id: 1 },
-      { modelString: '嘎嘎撒大噶', id: 2 }
-    ],
-    caseProduct: '祁岸来分期',
-    orderNo: 't3333est',
-    operaNum: 100,
-    id: 4,
-    isOpen: true
-  }
-]
-
 const tipDialogVisible = ref(false)
+const tableClass = ref(null)
+const dialog = ref(null)
+
+//table多选操作
+const selectChange = obj => {
+  state.currSelectArr = obj
+}
+
+//批量发布预收回方案
+const handleBatchPub = () => {
+  if (state.currSelectArr.length < 1) {
+    ElMessage({ message: '请选择操作对象.', type: 'warning' })
+    return
+  }
+  state.recoverBatchIdList = state.currSelectArr.map(item => item.recoverId)
+  tipDialogVisible.value = true
+}
+
+//发布委案确认
+const handlePubConfirm = async () => {
+  try {
+    const data = {
+      operateType: 1,
+      recoverBatchIdList: state.recoverBatchIdList
+    }
+    await Api.preRecoverPublish(data)
+    tipDialogVisible.value = false
+    ElMessage.success('发布成功')
+    //如果是多选操作调取table实例清空多选项
+    if (state.currSelectArr.length < 1) return
+    tableClass.value.toggleSelection()
+  } catch (error) {
+    ElMessage.error('发布失败')
+    tipDialogVisible.value = false
+  }
+}
+
+//发布取消
+const pubCancel = () => {
+  state.recoverBatchIdList.length = 0 //清空集合
+  tipDialogVisible.value = false
+}
 
 const handlePub = (index, row) => {
+  state.recoverBatchIdList = [row.recoverId]
   tipDialogVisible.value = true
-  console.log(index, row)
 }
 const handleUpload = (index, row) => {
   state.dialogVisible = true
   console.log(index, row)
 }
+
+//删除预收回方案
 const handleDel = (index, row) => {
-  ElMessageBox.confirm('proxy will permanently delete the file. Continue?', 'Warning', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
+  if (!row && state.currSelectArr.length < 1) {
+    ElMessage({ message: '请选择操作对象.', type: 'warning' })
+    return
+  }
+  ElMessageBox.confirm('确认删除预收回方案?', '注意', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
     type: 'warning'
   })
     .then(() => {
-      ElMessage({
-        type: 'success',
-        message: 'Delete completed'
-      })
+      let data = {}
+      if (row) data = { operateType: 1, recoverBatchIdList: [row.recoverId] }
+      else data = { operateType: 1, recoverBatchIdList: state.recoverBatchIdList }
+      deleteEntrust(data)
     })
     .catch(() => {
       ElMessage({
         type: 'info',
-        message: 'Delete canceled'
+        message: '取消删除'
       })
     })
-  console.log(index, row)
 }
-const handleChange = row => {
-  console.log(row)
+
+//删除委案方案api
+const deleteEntrust = async data => {
+  try {
+    await Api.preRecoverDelete(data)
+    //如果是多选操作调取table实例清空多选项
+    ElMessage.success('删除成功')
+    getList()
+    if (state.currSelectArr.length < 1) return
+    tableClass.value.toggleSelection()
+  } catch (error) {
+    console.log(error)
+  }
 }
-const handleEdit = () => {
+
+const handleEdit = async row => {
+  state.currEditRow = row
   state.dialogVisible = true
 }
-const handleSubmit = data => {
-  console.log('formData', data.case)
+
+const handleCancel = () => {
+  state.currEditRow = {}
+  state.dialogVisible = false
 }
-const operaClick = data => {
-  state.drawerVisible = true
-  console.log('operaClick', data)
+const handleSubmit = () => {
+  getList()
+  state.currEditRow = {}
+  state.dialogVisible = false
 }
 </script>
 
@@ -220,8 +193,8 @@ const operaClick = data => {
     <div>
       <OperationBar>
         <template #default>
-          <el-button type="primary" plain icon="CirclePlusFilled" @click="handleClick">批量发布方案</el-button>
-          <el-button type="primary" plain icon="CircleCloseFilled" @click="handleClick">删除收回方案</el-button>
+          <el-button type="primary" plain icon="CirclePlusFilled" @click="handleBatchPub">批量发布方案</el-button>
+          <el-button type="primary" plain icon="CircleCloseFilled" @click="handleDel">删除收回方案</el-button>
         </template>
         <template #tool>
           <el-button type="primary" icon="CirclePlusFilled" @click="handleUpload">添加收回方案</el-button>
@@ -229,18 +202,18 @@ const operaClick = data => {
       </OperationBar>
       <!--table-->
       <TableClass
+        ref="tableClass"
         :table-data="state.tableData"
         :column-list="tableColumnList"
         :stripe="true"
         :is-selection="true"
         :pagination="false"
-        @change-status="handleChange"
-        @opera-click="operaClick"
+        @select-change="selectChange"
       >
         <template #operation>
           <el-table-column align="center" fixed="right" label="操作" width="200">
             <template #default="scope">
-              <el-button type="primary" size="small" link @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button type="primary" size="small" link @click="handleEdit(scope.row)">编辑</el-button>
               <el-button type="primary" size="small" link @click="handlePub(scope.$index, scope.row)">确认发布</el-button>
               <el-button type="danger" size="small" link @click="handleDel(scope.$index, scope.row)">删除</el-button>
             </template>
@@ -250,22 +223,24 @@ const operaClick = data => {
     </div>
     <!--编辑新增form弹框-->
     <DialogForm
+      ref="dialog"
       v-model:dialog-form-visible="state.dialogVisible"
-      :rule-form="state.dialogRuleForm"
-      :rules="rules"
+      :curr-edit-row="state.currEditRow"
+      :org-list="state.orgList"
       :form-fields="formFieldsList"
+      @cancel="handleCancel"
       @submit="handleSubmit"
     />
     <!--发布委案方案提示弹框-->
-    <el-dialog v-model="tipDialogVisible" title="提示" width="30%">
+    <el-dialog v-model="tipDialogVisible" title="提示" width="30%" @close="pubCancel">
       <div style="margin-left: 50px">
         <el-icon><QuestionFilled /></el-icon>
-        是否确认发布该方案？
+        是否确认发布委案方案？
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="tipDialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="tipDialogVisible = false">Confirm</el-button>
+          <el-button @click="pubCancel">取消</el-button>
+          <el-button type="primary" @click="handlePubConfirm">确认</el-button>
         </span>
       </template>
     </el-dialog>
@@ -282,7 +257,8 @@ const operaClick = data => {
   display: inline-block;
   margin-top: 2px;
 }
-:deep(.el-input__wrapper) {
+:deep(.el-date-picker .el-input__wrapper) {
+  width: 146px !important;
   height: 32px;
 }
 </style>

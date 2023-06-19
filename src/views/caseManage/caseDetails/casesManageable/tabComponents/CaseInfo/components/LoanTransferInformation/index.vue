@@ -1,13 +1,17 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref, toRefs } from 'vue'
 import PayInfo from './component/PayInfo.vue'
-const state = reactive({
+
+const props = defineProps({
   messageData: {
-    caseTransferInfoVOList: []
+    type: Object,
+    default: () => {}
   }
 })
 
-state.messageData.caseTransferInfoVOList = [
+const { messageData } = toRefs(props)
+
+/* state.messageData.caseTransferInfoVOList = [
   {
     loanPlatformUserId: 'BE-BQ-00fafafafa01017',
     loanPactNo: 'dsadaf',
@@ -76,9 +80,9 @@ state.messageData.caseTransferInfoVOList = [
     creditAmount: 30,
     loanIsPeriod: 2
   }
-]
+] */
 
-const tabActive = ref('1')
+const tabActive = ref(0)
 
 const tabClick = () => {
   console.log(tabActive.value)
@@ -89,13 +93,21 @@ const tabClick = () => {
   <div>
     <el-tabs v-model="tabActive" class="mb20" @tab-click="tabClick">
       <el-tab-pane
-        v-for="(item, index) in state.messageData.caseTransferInfoVOList"
+        v-for="(item, index) in messageData.caseTransferInfoVOList"
         :key="index"
         :label="index === 0 ? '当前案件' : `共债案件${index}`"
+        :name="index"
       >
         <PayInfo ref="payInfo" :message-data="item" :active-name="item.loanIsPeriod" @get-detail="getDetail" />
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+:deep(.el-descriptions__label) {
+  width: 180px !important;
+}
+:deep(.el-descriptions__content) {
+  width: 350px !important;
+}
+</style>

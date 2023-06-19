@@ -1,60 +1,60 @@
 export default [
   {
     label: '委案批次',
-    prop: 'caseNum'
+    prop: 'entrustNo'
   },
   {
     label: '委案分库',
-    prop: 'caseStore'
+    prop: 'storeName'
   },
   {
     label: '处置机构',
-    prop: 'operaCompany'
+    prop: 'orgName'
   },
   {
     label: '委案类型',
-    prop: 'caseType'
+    prop: 'entrustTypeName'
   },
   {
     label: '委案到期日',
-    prop: 'orderNo'
+    prop: 'recoverDateStr'
   },
   {
     label: '委案备注',
-    prop: 'orderNo'
+    prop: 'remark'
   },
   {
     label: '实际委案量',
-    prop: 'caseNumber',
+    prop: 'entrustCaseNum',
     isPopoverTable: true,
     width: 200
   },
   {
     label: '委案户数（实际/目标）',
-    prop: 'orderNo'
+    prop: 'entrustActualUserNum'
   },
   {
     label: '委案金额（实际/目标）',
-    prop: 'orderNo'
+    prop: 'entrustActualAmount'
   },
   {
     label: '开始时间',
-    prop: 'orderNo'
+    prop: 'beginTimeStr'
   },
   {
     label: '完成时间',
-    prop: 'orderNo'
+    prop: 'finishTimeStr'
   },
   {
     label: '操作人',
-    prop: 'orderNo'
+    prop: 'createName'
   },
   {
     label: '操作时间',
-    prop: 'orderNo'
+    prop: 'createTimeStr'
   },
   {
     label: '委案状态',
-    prop: 'orderNo'
+    prop: 'stateStr'
   }
 ]

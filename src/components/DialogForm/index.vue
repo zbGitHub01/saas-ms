@@ -1,6 +1,6 @@
 <script setup>
-import { ref, toRefs, reactive, getCurrentInstance, watch } from 'vue'
-import { ElMessageBox } from 'element-plus'
+import { ref, toRefs, reactive, getCurrentInstance, watch, nextTick } from 'vue'
+import { ElMessageBox, ElMessage } from 'element-plus'
 
 const props = defineProps({
   dialogFormVisible: {
@@ -61,9 +61,18 @@ const { ruleForm, rules } = toRefs(props)
 let state = reactive({
   form: instance?.$deepCopy(ruleForm.value, true)
 })
-const ruleFormRef = ref(0)
+const ruleFormRef = ref(null)
 
-const emit = defineEmits(['close', 'handlePreview', 'handleRemove', 'handleExceed', 'submit', 'watchChange'])
+const emit = defineEmits([
+  'update:dialogFormVisible',
+  'handlePreview',
+  'handleRemove',
+  'handleExceed',
+  'submit',
+  'watchChange',
+  'fileList',
+  'btnClick'
+])
 
 const closeClick = ruleFormRef => {
   resetFunc(ruleFormRef)
@@ -74,6 +83,7 @@ watch(
   // eslint-disable-next-line no-unused-vars
   (newValue, _) => {
     state.form = instance?.$deepCopy(newValue, true)
+    console.log(newValue)
   },
   { deep: true },
   { immediate: true }
@@ -102,6 +112,24 @@ const handlePreview = uploadFile => {
   console.log(uploadFile)
 }
 
+//文件上传失败
+const uploadError = () => {
+  ElMessage.error('上传失败！')
+}
+
+const fileList = ref([])
+//文件上传成功
+// eslint-disable-next-line no-unused-vars
+const uploadSuccess = (response, uploadFile, _) => {
+  const fileObj = {}
+  fileObj['name'] = uploadFile?.name
+  fileObj['url'] = response?.data?.url
+  fileList.value.push(fileObj)
+  console.log(fileList.value)
+  emit('fileList', fileList.value)
+  // console.log('response, uploadFile, uploadFiles', response, uploadFile, uploadFiles)
+}
+
 //当超出限制时，执行的钩子函数
 const handleExceed = (files, uploadFiles) => {
   emit('handleExceed', files, uploadFiles)
@@ -122,8 +150,8 @@ const submitForm = async formEl => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      emit('submit', state.form)
-      resetFunc(formEl)
+      emit('submit', state.form, formEl)
+      // resetFunc(formEl)
     } else {
       console.log('error submit!', fields)
     }
@@ -134,10 +162,22 @@ const resetForm = formEl => {
   //假如有传默认重置对象，则深拷贝进行重置
   resetFunc(formEl)
 }
+
+//表单按钮
+const handleClick = () => {
+  emit('btnClick')
+}
+
+//打开前清楚校验
+const open = ruleFormRef => {
+  nextTick(() => {
+    ruleFormRef.clearValidate()
+  })
+}
 const resetFunc = formEl => {
-  // state.form = proxy.$deepCopy(props.defaultForm, true)
-  emit('close')
+  state.form = instance?.$deepCopy(props.ruleForm, true)
   formEl.resetFields()
+  emit('update:dialogFormVisible', false)
 }
 </script>
 
@@ -148,6 +188,7 @@ const resetFunc = formEl => {
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :title="props.title"
+    @open="open(ruleFormRef)"
     @close="closeClick(ruleFormRef)"
   >
     <el-form
@@ -189,22 +230,29 @@ const resetFunc = formEl => {
           :clearable="item.clearable"
           :placeholder="item.placeholder"
         >
-          <el-option v-for="opts in item.options" :key="opts.value" :label="opts.label" :value="opts.value" />
+          <el-option
+            v-for="(opts, index) in item.options"
+            :key="index"
+            :label="opts.label || opts[item.optionLabel]"
+            :value="opts.value || opts[item.optionValue]"
+          />
         </el-select>
         <!--checkbox多选框-->
         <el-checkbox-group v-if="item.type === 'checkbox'" v-model="state.form[item.prop]">
-          <el-checkbox v-for="opts in item.checkList" :key="opts.value" :label="opts.label" />
+          <el-checkbox v-for="(opts, index) in item.checkList" :key="index" :label="opts.label || opts[item.checkboxLabel]" />
         </el-checkbox-group>
         <!--radio单选框-->
         <el-radio-group v-if="item.type === 'radio'" v-model="state.form[item.prop]">
-          <el-radio v-for="(opts, index) in item.radioList" :key="index" :label="opts.label" />
+          <el-radio v-for="(opts, index) in item.radioList" :key="index" :label="opts.label || opts[item.radioLabel]">
+            {{ opts.name || opts[item.radioName] }}
+          </el-radio>
         </el-radio-group>
         <!--date日期选择器-->
         <el-date-picker
           v-if="item.type === 'date'"
           v-model="state.form[item.prop]"
           type="date"
-          value-format="x"
+          value-format="YYYY-MM-DD"
           :placeholder="item.placeholder"
         />
         <!--datetime日期时间选择器-->
@@ -212,11 +260,14 @@ const resetFunc = formEl => {
           v-if="item.type === 'datetime'"
           v-model="state.form[item.prop]"
           type="datetime"
-          value-format="x"
+          value-format="YYYY-MM-DD HH:mm:ss"
           :placeholder="item.placeholder"
         />
+        <el-button v-if="item.needBtn" type="primary" style="margin-left: 20px" :disabled="item.btnDisabled" @click="handleClick">
+          {{ item.btnText }}
+        </el-button>
         <!--目标机构（特殊）-->
-        <template v-if="item.type === 'pairSelect'">
+        <!-- <template v-if="item.type === 'pairSelect'">
           <el-col :span="6">
             <el-form-item :prop="item.childItem[0].prop">
               <el-select
@@ -244,19 +295,23 @@ const resetFunc = formEl => {
               </el-select>
             </el-form-item>
           </el-col>
-        </template>
+        </template> -->
         <!--文件上传-->
         <el-upload
           v-if="item.type === 'upload'"
           v-model:file-list="state.form[item.prop]"
           class="upload-demo"
           :action="item.action"
+          :accept="item.accept || ''"
           :limit="item.limit"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
+          :on-success="uploadSuccess"
+          :on-error="uploadError"
           :before-remove="beforeRemove"
           :on-exceed="handleExceed"
-          multiple
+          :headers="item.headers"
+          :multiple="item.multiple"
         >
           <el-button type="primary">点击上传</el-button>
           <template v-if="!!item.uploadTips" #tip>

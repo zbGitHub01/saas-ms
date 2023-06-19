@@ -17,9 +17,9 @@
               "
               type="primary"
               :icon="item.icon"
-              @click="handleClick(item.title)"
               plain
               class="mr10"
+              @click="handleClick(item.title)"
             >
               {{ item.title }}
             </el-button>
@@ -31,16 +31,16 @@
         <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
       </div> -->
       <el-table
+        ref="multipleTable"
         :data="state.tableData"
         border
-        @selection-change="handleSelectionChange"
-        ref="multipleTable"
         :row-key="getRowKeys"
+        @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" fixed align="center" width="55" :reserve-selection="true"></el-table-column>
         <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left">
           <template #default="scope">
-            <status :row="scope.row" pageType="disposalCasemessage" />
+            <status :row="scope.row" page-type="disposalCasemessage" />
           </template>
         </el-table-column>
         <el-table-column label="产品" prop="productName" align="center" min-width="150"></el-table-column>
@@ -78,7 +78,7 @@
         <el-table-column label="分案时间" prop="allotTime" align="center" min-width="180"></el-table-column>
         <el-table-column label="案件状态" prop="caseStatusText" align="center" min-width="150" fixed="right"></el-table-column>
       </el-table>
-      <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
+      <pagination v-model:page="query.page" v-model:page-size="query.pageSize" :total="state.total" @pagination="getTableData" />
     </div>
     <TemporaryLabel ref="temporaryLabel" @get-table-data="getTableData" />
     <CaseBankDialog
@@ -88,13 +88,12 @@
       :sourceStoreId="tabActive"
       @get-table-data="getTableData"
       @toggleSelection="toggleSelection"
-      :resouerdist-list="state.tabListSub"
       @fetchCaseDistSelect="fetchCaseDistSelect"
     />
     <CaseRecoveryDialog
       ref="caseRecoveryDialog"
-      :taskId="state.taskId"
-      :caseInfo="state.distInfo"
+      :task-id="state.taskId"
+      :case-info="state.distInfo"
       @get-table-data="getTableData"
       @toggleSelection="toggleSelection"
       @fetchCaseDistSelect="fetchCaseDistSelect"

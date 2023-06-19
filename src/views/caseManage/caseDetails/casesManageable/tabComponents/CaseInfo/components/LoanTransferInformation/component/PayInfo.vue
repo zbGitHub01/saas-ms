@@ -68,7 +68,7 @@ onMounted(() => {
     </table>
 
     <el-descriptions class="margin-top" :column="3" size="default" border>
-      <el-descriptions-item v-for="(item, index) in activeDescriptionList" :key="index">
+      <el-descriptions-item v-for="(item, index) in activeDescriptionList" :key="index" align="center" width="120px">
         <template #label>
           <div class="cell-item">{{ item.label }}</div>
         </template>

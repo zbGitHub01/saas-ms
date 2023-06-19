@@ -1,129 +1,143 @@
 <script setup>
-import { ref, reactive, getCurrentInstance } from 'vue'
+import { ref, reactive, watch } from 'vue'
+import { ElMessage } from 'element-plus'
+import Api from '@/api/modules/caseAheadRecovery'
 
 const props = defineProps({
   dialogFormVisible: {
     type: Boolean,
     default: false
+  },
+  orgList: {
+    type: Array,
+    default: () => []
+  },
+  //当前编辑行对象
+  currEditRow: {
+    type: Object,
+    default: () => {}
   }
 })
+
+const defaultForm = {
+  executeTime: '',
+  orgId: '',
+  remark: ''
+}
 
 const state = reactive({
   productList: [],
   form: {
-    user: '',
-    region: '',
-    notes: ''
+    executeTime: '',
+    orgId: '',
+    remark: ''
   },
-  childForm: {
-    radio1: '1',
-    radio2: '1',
-    radio3: '1',
-    radio4: '1'
-  },
+  taskId: '',
+  currCheckProduct: {},
   rules: {
-    user: [
-      { required: true, message: 'Please input Activity name', trigger: 'blur' },
-      { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' }
-    ],
-    region: [
-      {
-        required: true,
-        message: 'Please select Activity zone',
-        trigger: 'change'
-      }
-    ]
+    executeTime: [{ required: true, message: '请选择执行时间', trigger: 'blur' }],
+    orgId: [{ required: true, message: '请选择收回机构', trigger: 'change' }]
   }
 })
 
-const emit = defineEmits(['update:dialogFormVisible'])
+const emit = defineEmits(['cancel', 'submit'])
+
+watch(
+  () => state.currCheckProduct,
+  (newVal, oldVal) => {
+    if (!oldVal) return
+    state.productList.forEach(item => {
+      if (item.productId === oldVal.productId) item = oldVal
+    })
+  },
+  { immediate: true }
+)
+
+watch(
+  () => props.currEditRow,
+  // eslint-disable-next-line no-unused-vars
+  (newVal, _) => {
+    if (!newVal || Object.keys(newVal).length < 1) return
+    Object.keys(state.form).map(item => {
+      Object.keys(props.currEditRow).forEach(cItem => {
+        if (item === cItem) state.form[item] = props.currEditRow[cItem]
+      })
+    })
+    getOrgProductList(state.form)
+  },
+  { immediate: true }
+)
 
 const size = ref('default')
 const labelPosition = ref('right')
 
-const handleClose = () => {
-  emit('update:dialogFormVisible', false)
-}
-
-const currCheckProduct = ref(null)
-console.log(currCheckProduct.value)
-
 const checkChange = value => {
-  currCheckProduct.value = value
+  state.currCheckProduct = value
 }
 
-const submitForm = () => {
-  const data = {
-    ...state.form,
-    ...state.childForm
-  }
-  console.log(data)
+const submitForm = async ruleFormRef => {
+  if (!ruleFormRef) return
+  ruleFormRef.validate(async (valid, fields) => {
+    if (valid) {
+      const { taskId, productList: recoverInfo } = state
+      const data = {
+        ...state.form,
+        taskId,
+        recoverInfo: JSON.stringify(recoverInfo),
+        recoverId: props?.currEditRow?.recoverId
+      }
+      try {
+        await Api.casePreRecoverSave(data)
+        resetFormFields(ruleFormRef)
+        emit('submit')
+        ElMessage.success('保存成功')
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      state.form.orgId = ''
+      console.log('error submit!', fields)
+    }
+  })
 }
 
-const instance = getCurrentInstance()?.proxy
-
-const resetFormFields = () => {
-  const defaultChildForm = {
-    radio1: '1',
-    radio2: '1',
-    radio3: '1',
-    radio4: '1'
-  }
-  const defaultForm = {
-    user: '',
-    region: '',
-    notes: ''
-  }
-  state.form = instance?.$deepCopy(defaultForm, true)
-  state.childForm = instance?.$deepCopy(defaultChildForm, true)
-  emit('update:dialogFormVisible', false)
+const resetFormFields = ruleFormRef => {
+  state.form = Object.assign({}, defaultForm)
+  state.currCheckProduct = {}
+  state.productList = []
+  ruleFormRef.resetFields()
 }
 
 const ruleFormRef = ref()
 
-const resetForm = ruleFormRef => {
-  resetFormFields()
-  ruleFormRef.resetFields()
+const cancel = ruleFormRef => {
+  resetFormFields(ruleFormRef)
+  emit('cancel')
 }
 
-state.productList = [
-  { text: '来分期', value: true },
-  { text: '去分期', value: true },
-  { text: '走分期', value: true },
-  { text: '跑分期', value: true },
-  { text: '来分期', value: true },
-  { text: '去分期', value: true },
-  { text: '走分期', value: true },
-  { text: '跑分期', value: true },
-  { text: '来分期', value: true },
-  { text: '去分期', value: true },
-  { text: '走分期', value: true },
-  { text: '跑分期', value: true },
-  { text: '来分期', value: true },
-  { text: '去分期', value: true },
-  { text: '走分期', value: true },
-  { text: '跑分期', value: true },
-  { text: '来分期', value: true },
-  { text: '去分期', value: true },
-  { text: '走分期', value: true },
-  { text: '跑分期', value: true },
-  { text: '来分期', value: true },
-  { text: '去分期', value: true },
-  { text: '走分期', value: true },
-  { text: '跑分期', value: true },
-  { text: '来分期', value: true },
-  { text: '去分期', value: true },
-  { text: '走分期', value: true },
-  { text: '跑分期', value: true },
-  { text: '来分期', value: true },
-  { text: '去分期', value: true },
-  { text: '走分期', value: true },
-  { text: '跑分期', value: true },
-  { text: '来分期', value: true },
-  { text: '去分期', value: true },
-  { text: '走分期', value: true },
-  { text: '跑分期', value: true }
-]
+const handleLast = ruleFormRef => {
+  if (!ruleFormRef) return
+  ruleFormRef.validate(async (valid, fields) => {
+    if (valid) {
+      getOrgProductList(state.form)
+    } else {
+      state.form.orgId = ''
+      console.log('error submit!', fields)
+    }
+  })
+}
+
+const getOrgProductList = async dataArr => {
+  try {
+    const { data } = await Api.casePreRecoverNext(dataArr)
+    const tableData = JSON.parse(data.recoverInfo)[0]?.productInfo || []
+    state.taskId = data.taskId
+    state.productList = tableData
+  } catch (error) {
+    state.form.orgId = ''
+    console.log(error)
+  }
+}
 </script>
 
 <template>
@@ -132,7 +146,7 @@ state.productList = [
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     title="预收回"
-    @close="handleClose(ruleFormRef)"
+    @close="cancel(ruleFormRef)"
   >
     <el-form
       ref="ruleFormRef"
@@ -145,102 +159,116 @@ state.productList = [
     >
       <el-row>
         <el-col :span="12">
-          <el-form-item label="执行时间" prop="user">
-            <el-input v-model="state.form.user" placeholder="Approved by" />
+          <el-form-item label="执行时间" prop="executeTime">
+            <el-date-picker
+              v-model="state.form.executeTime"
+              class="date_style"
+              type="datetime"
+              value-format="YYYY-MM-DD HH:mm:ss"
+              placeholder="请选择执行时间"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="收回机构" prop="region">
-            <el-select v-model="state.form.region" placeholder="Activity zone">
-              <el-option label="Zone one" value="shanghai" />
-              <el-option label="Zone two" value="beijing" />
+          <el-form-item label="收回机构" prop="orgId">
+            <el-select v-model="state.form.orgId" placeholder="请选择收回机构" filterable @change="handleLast(ruleFormRef)">
+              <el-option v-for="item in props.orgList" :key="item.orgId" :label="item.orgName" :value="item.orgId" />
             </el-select>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="备注" prop="notes">
-        <el-input v-model="state.form.notes" type="textarea"></el-input>
+      <el-form-item label="备注" prop="remark">
+        <el-input v-model="state.form.remark" type="textarea"></el-input>
       </el-form-item>
       <div class="line"></div>
     </el-form>
     <div class="title">产品/是否收回</div>
     <div class="under_body">
       <div class="div_fir">
-        <ul>
+        <ul v-if="state.productList.length > 0">
           <li v-for="(item, index) in state.productList" :key="index">
             <div
-              :class="!!currCheckProduct && currCheckProduct.text === item.text ? 'textActive' : null"
+              :class="
+                !!state.currCheckProduct && state.currCheckProduct.productId === item.productId ? 'textActive li_div' : 'li_div'
+              "
               @click="checkChange(item)"
             >
-              {{ item.text }}
+              <div>{{ item.productName }}</div>
+              <el-switch v-model="item.ischecked" />
             </div>
-            <el-switch v-model="item.value" />
           </li>
         </ul>
       </div>
-      <div v-if="!!currCheckProduct" class="div_sec">
-        <div class="title">{{ currCheckProduct.text }}回收方案</div>
+      <div v-if="Object.keys(state.currCheckProduct).length > 0" class="div_sec">
+        <div class="title">{{ state.currCheckProduct.text }}回收方案</div>
         <div class="div_info">
           <el-row>
             <el-col :span="12">
               <div>当前载案量：</div>
-              <div>620065</div>
+              <div>{{ state.currCheckProduct.caseNum }}</div>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <div>当前载案量：</div>
-              <div>21219</div>
+              <div>{{ state.currCheckProduct.retainCaseNum }}</div>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <div>留案分期还款计划数（未失效）：</div>
-              <div>0</div>
+              <div>{{ state.currCheckProduct.retainStagingPlanCount }}</div>
             </el-col>
             <el-col :span="12">
               <div>留案分期计划关联案件数：</div>
-              <div>0</div>
+              <div>{{ state.currCheckProduct.retainStagingCaseCount }}</div>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <div>普通分期还款计划数（未失效）：</div>
-              <div>0</div>
+              <div>{{ state.currCheckProduct.stagingPlanCount }}</div>
             </el-col>
             <el-col :span="12">
               <div>普通分期计划关联案件数：</div>
-              <div>0</div>
+              <div>{{ state.currCheckProduct.stagingCaseCount }}</div>
             </el-col>
           </el-row>
         </div>
-        <el-form :model="state.childForm" label-position="top" style="margin-top: 15px">
-          <el-form-item label="操作维度：">
-            <el-radio-group v-model="state.childForm.radio1" class="ml-4">
-              <el-radio label="1" size="small">案人</el-radio>
-              <el-radio label="2" size="small">案件</el-radio>
-            </el-radio-group>
-          </el-form-item>
+        <el-form ref="currForm" v-model="state.currCheckProduct" label-position="top" style="margin-top: 15px">
           <div class="solid_line"></div>
           <el-form-item label="普通留案案件：">
-            <el-radio-group v-model="state.childForm.radio2" class="ml-4">
-              <el-radio label="1" size="large">不收回纯留案案件</el-radio>
-              <el-radio label="2" size="large">强制收回纯留案案件</el-radio>
+            <el-radio-group v-model="state.currCheckProduct.isRecoverRetain" class="ml-4">
+              <el-radio :label="0" size="large">不收回纯留案案件</el-radio>
+              <el-radio :label="1" size="large">强制收回纯留案案件</el-radio>
             </el-radio-group>
           </el-form-item>
           <div class="solid_line"></div>
           <el-form-item label="留案分期还款案件：">
-            <el-radio-group v-model="state.childForm.radio3" class="ml-4">
-              <el-radio label="1" size="large">不收回留案分期还款案件</el-radio>
-              <el-radio label="2" size="large">只收回未签署协议的分期还款案件</el-radio>
-              <el-radio label="3" size="large">强制收回全部留案分期还款案件</el-radio>
+            <el-radio-group v-model="state.currCheckProduct.retainStagingPlan" class="ml-4">
+              <el-radio :label="0" size="large">不收回留案分期还款案件</el-radio>
+              <el-radio :label="1" size="large">只收回未签署协议的分期还款案件</el-radio>
+              <el-radio :label="3" size="large">强制收回全部留案分期还款案件</el-radio>
             </el-radio-group>
           </el-form-item>
+          <div
+            v-if="
+              Number(state.currCheckProduct.retainStagingPlan) === 1 || Number(state.currCheckProduct.retainStagingPlan) === 3
+            "
+            class="isShow-warp"
+          >
+            <el-radio-group v-model="state.currCheckProduct.subRadio">
+              <el-radio :label="0">收回后保留分期还款计划</el-radio>
+              <el-radio v-if="Number(state.currCheckProduct.retainStagingPlan) === 3" :label="2">
+                收回后将未签署分期协议的分期还款计划置为失效
+              </el-radio>
+            </el-radio-group>
+          </div>
           <div class="solid_line"></div>
           <el-form-item label="普通分期还款计划案件：">
-            <el-radio-group v-model="state.childForm.radio4" class="ml-4">
-              <el-radio label="1" size="large">不收回关联案件</el-radio>
-              <el-radio label="2" size="large">强制收回关联案件</el-radio>
+            <el-radio-group v-model="state.currCheckProduct.stagingPlan" class="ml-4">
+              <el-radio :label="0" size="large">不收回关联案件</el-radio>
+              <el-radio :label="1" size="large">强制收回关联案件</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-form>
@@ -249,7 +277,7 @@ state.productList = [
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="resetForm(ruleFormRef)">取消</el-button>
+        <el-button @click="cancel(ruleFormRef)">取消</el-button>
         <el-button type="primary" @click="submitForm(ruleFormRef)">确认</el-button>
       </span>
     </template>
@@ -278,13 +306,16 @@ state.productList = [
       border-radius: 5px;
       overflow-y: auto;
       li {
-        display: flex;
         padding: 10px 20px;
-        align-items: center;
-        justify-content: space-between;
         border-bottom: 1px solid rgb(209, 206, 206);
         &:last-child {
           border-bottom: none;
+        }
+        .li_div {
+          display: flex;
+          width: 100%;
+          align-items: center;
+          justify-content: space-between;
         }
         div {
           font-size: 16px;
@@ -292,7 +323,9 @@ state.productList = [
           cursor: pointer;
         }
         .textActive {
-          color: #3178ff;
+          div {
+            color: #3178ff;
+          }
         }
       }
     }
@@ -319,6 +352,22 @@ state.productList = [
       border-bottom: 1px solid #dde0e7;
     }
   }
+}
+.isShow-warp {
+  border-radius: 6px;
+  background-color: #f2f2f2;
+  padding: 15px 20px;
+  margin: 5px;
+  margin-bottom: 10px;
+  .el-radio-group {
+    .el-radio {
+      line-height: 20px;
+    }
+  }
+}
+
+.el-input__wrapper {
+  width: 140px !important;
 }
 ::-webkit-scrollbar {
   width: 1px;

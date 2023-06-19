@@ -2,45 +2,60 @@ export default [
   {
     type: 'select',
     label: '案件分库',
-    prop: 'case',
+    prop: 'operStoreId',
     options: []
   },
   {
     type: 'radio',
     label: '操作维度',
-    prop: 'opera',
-    radioList: []
+    prop: 'entrustStrategy',
+    radioList: [
+      { name: '案人', label: 1 },
+      { name: '案件', label: 2 },
+      { name: '库内剩余共债', label: 3 }
+    ]
   },
+  // {
+  //   type: 'pairSelect',
+  //   label: '目标机构',
+  //   prop: 'categoryCompany',
+  //   childItem: [
+  //     {
+  //       type: 'select',
+  //       prop: 'categoryCompany',
+  //       options: [
+  //         {
+  //           label: '哇哈哈',
+  //           value: 1
+  //         },
+  //         {
+  //           label: '哇哈哈',
+  //           value: 2
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       type: 'select',
+  //       prop: 'orgId',
+  //       options: []
+  //     }
+  //   ]
+  // },
   {
-    type: 'pairSelect',
+    type: 'select',
     label: '目标机构',
-    prop: 'categoryCompany',
-    childItem: [
+    prop: 'orgId',
+    options: [
       {
-        type: 'select',
-        prop: 'categoryCompany',
-        options: [
-          {
-            label: '哇哈哈',
-            value: 1
-          },
-          {
-            label: '哇哈哈',
-            value: 2
-          }
-        ]
-      },
-      {
-        type: 'select',
-        prop: 'aimCompany',
-        options: []
+        label: '默认',
+        value: 1
       }
     ]
   },
   {
     type: 'select',
     label: '委案类型',
-    prop: 'caseType',
+    prop: 'entrustType',
     options: [
       {
         label: '默认',
@@ -51,61 +66,59 @@ export default [
   {
     type: 'radio',
     label: '历史处置记录',
-    prop: 'history',
+    prop: 'isHideHisFollowRecord',
     radioList: [
-      {
-        label: '隐藏'
-      },
-      { label: '不隐藏' }
+      { name: '隐藏', label: '1' },
+      { name: '不隐藏', label: '0' }
     ]
   },
   {
     type: 'date',
     label: '委案到期日',
-    prop: 'date'
+    prop: 'recoverDate'
   },
   {
     type: 'radio',
     label: '是否自动收回',
-    prop: 'isAuto',
+    prop: 'isAutoRecycle',
     radioList: [
-      {
-        label: '不自动收回'
-      },
-      { label: '自动收回' }
+      { name: '不自动收回', label: '0' },
+      { name: '自动收回', label: '1' }
     ]
   },
   {
     type: 'textarea',
     label: '委案备注',
-    prop: 'notes'
+    prop: 'remark'
   },
   {
     type: 'datetime',
     label: '执行时间',
-    prop: 'executeTime'
+    prop: 'execTime'
   },
-  {
-    type: 'checkbox',
-    label: '多选测试',
-    prop: 'checkTest',
-    checkList: [
-      {
-        label: '八宝粥',
-        value: '1'
-      },
-      {
-        label: '银耳汤',
-        value: '2'
-      }
-    ]
-  },
+  // {
+  //   type: 'checkbox',
+  //   label: '多选测试',
+  //   prop: 'checkTest',
+  //   checkList: [
+  //     {
+  //       label: '八宝粥',
+  //       value: '1'
+  //     },
+  //     {
+  //       label: '银耳汤',
+  //       value: '2'
+  //     }
+  //   ]
+  // },
   {
     type: 'upload',
     label: '上传委案文件',
-    prop: 'fileList',
+    prop: 'entrustFileUrl',
     limit: 1,
-    uploadTips: 'jpg/png files with a size less than 500KB.',
-    action: 'https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15'
+    headers: {},
+    accept: '.xls,.xlsx',
+    // uploadTips: 'jpg/png files with a size less than 500KB.',
+    action: ''
   }
 ]

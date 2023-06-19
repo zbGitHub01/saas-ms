@@ -128,7 +128,12 @@ export default {
         :filterable="item.filterable || false"
         :placeholder="item.placeholder"
       >
-        <el-option v-for="opts in item.options" :key="opts.value" :label="opts.label" :value="opts.value" />
+        <el-option
+          v-for="opts in item.options"
+          :key="opts.value"
+          :label="opts.label || opts[item.optionLabel]"
+          :value="opts.value || opts[item.optionValue]"
+        />
       </el-select>
       <!-- 需要地区级联选择再开启 -->
       <el-cascader
@@ -142,7 +147,7 @@ export default {
         v-if="item.type === 'date'"
         v-model="state.flatEntity[item.property]"
         type="date"
-        value-format="x"
+        value-format="YYYY-MM-DD"
         :placeholder="item.placeholder"
       />
       <el-date-picker
@@ -152,7 +157,7 @@ export default {
         start-placeholder="开始日期"
         end-placeholder="结束日期"
         :default-time="state.defaultTime"
-        value-format="x"
+        value-format="YYYY-MM-DD"
       />
       <el-input
         v-if="item.type === 'textarea'"
@@ -169,7 +174,8 @@ export default {
         :placeholder="item.placeholder"
       />
     </el-form-item>
-    <el-form-item v-if="props.asyncFields.length > 0">
+    <!--暂时不启用-->
+    <!-- <el-form-item v-if="props.asyncFields.length > 0">
       <el-popover placement="bottom" width="250" trigger="click" @before-enter="beforePopoverEnter">
         <template #reference>
           <el-button icon="Operation" circle></el-button>
@@ -189,7 +195,7 @@ export default {
           </el-scrollbar>
         </div>
       </el-popover>
-    </el-form-item>
+    </el-form-item> -->
     <!-- <el-form-item>
       <el-button type="primary" @click="handleSubmit">查询</el-button>
       <el-button @click="handleReset">重置</el-button>

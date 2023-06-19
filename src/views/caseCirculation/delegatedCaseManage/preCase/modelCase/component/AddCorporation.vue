@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onBeforeMount, onMounted } from 'vue'
+import { reactive, defineExpose } from 'vue'
 
 const props = defineProps({
   dialogVisible: {
@@ -15,44 +15,34 @@ const state = reactive({
   checkAll: false,
   orgList: [
     {
-      itemId: 1,
+      orgId: 1,
       itemText: '浙江中控集团',
       orgName: '浙江中控集团',
-      name: 'Tom',
-      entrustAmount: 8000,
-      address: 'No. 189, Grove St, Los Angeles'
+      adjustNum: 8000
     },
     {
-      itemId: 2,
+      orgId: 2,
       itemText: '浙江哇哈哈有限公司',
       orgName: '浙江哇哈哈有限公司',
-      name: 'Tom',
-      entrustAmount: 8000,
-      address: 'No. 189, Grove St, Los Angeles'
+      adjustNum: 8000
     },
     {
-      itemId: 3,
+      orgId: 3,
       itemText: '浙江三花集团',
       orgName: '浙江三花集团',
-      name: 'Tom',
-      entrustAmount: 8000,
-      address: 'No. 189, Grove St, Los Angeles'
+      adjustNum: 8000
     },
     {
-      itemId: 1,
+      orgId: 4,
       itemText: '杭州斯凯网络科技有限公司',
       orgName: '杭州斯凯网络科技有限公司',
-      name: 'Tom',
-      entrustAmount: 8000,
-      address: 'No. 189, Grove St, Los Angeles'
+      adjustNum: 8000
     },
     {
-      itemId: 2,
+      orgId: 5,
       itemText: '杭州融都科技有限公司',
       orgName: '杭州融都科技有限公司',
-      name: 'Tom',
-      entrustAmount: 8000,
-      address: 'No. 189, Grove St, Los Angeles'
+      adjustNum: 8000
     }
   ],
   rightCities: [],
@@ -61,7 +51,7 @@ const state = reactive({
 const handleCheckedCitiesChange = value => {
   let arr = []
   value.map(item => {
-    arr.push(item.itemId)
+    arr.push(item.orgId)
   })
   // this.form.orgIdList=arr
   state.rightCities = value
@@ -74,7 +64,7 @@ const handleCheckedCitiesChange = value => {
 const handleCheckAllChange = val => {
   let arr = []
   state.orgList.map(item => {
-    arr.push(item.itemId)
+    arr.push(item.orgId)
   })
   state.rightCities = val ? state.orgList : []
   state.isIndeterminate = false
@@ -88,12 +78,19 @@ const handleClose = () => {
 
 const handleSubmit = () => {
   emit('submit', state.rightCities)
+  // state.rightCities = []
+  // state.checkAll = false
+}
+
+//重置选择项
+const resetRightValue = () => {
   state.rightCities = []
   state.checkAll = false
 }
 
-onBeforeMount(() => {})
-onMounted(() => {})
+defineExpose({
+  resetRightValue
+})
 </script>
 
 <template>
@@ -110,7 +107,7 @@ onMounted(() => {})
         </el-checkbox>
         <div style="margin: 15px 0"></div>
         <el-checkbox-group v-model="state.rightCities" @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="item in state.orgList" :key="item.itemId" style="display: block" :label="item">
+          <el-checkbox v-for="item in state.orgList" :key="item.orgId" style="display: block" :label="item">
             {{ item.itemText }}
           </el-checkbox>
         </el-checkbox-group>
@@ -121,7 +118,7 @@ onMounted(() => {})
       <div class="checkbox-warp">
         <div style="margin: 15px 0"></div>
         <el-checkbox-group v-model="state.rightCities" @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="item in state.rightCities" :key="item.itemId" style="display: block" :label="item">
+          <el-checkbox v-for="item in state.rightCities" :key="item.orgId" style="display: block" :label="item">
             {{ item.itemText }}
           </el-checkbox>
         </el-checkbox-group>

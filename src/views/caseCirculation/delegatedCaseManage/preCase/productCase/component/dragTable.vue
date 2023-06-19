@@ -1,34 +1,70 @@
 <script setup>
-import { toRefs, reactive, onBeforeMount, onMounted, getCurrentInstance } from 'vue'
+import { toRefs, ref, reactive, defineExpose, watch } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 import { regionData } from 'element-china-area-data' //区域级联
 import { ElMessageBox } from 'element-plus'
 
 const props = defineProps({
-  currType: {
-    type: String,
-    default: null
-  },
   tableData: {
+    type: Array,
+    default: () => []
+  },
+  newTableData: {
     type: Array,
     default: () => []
   }
 })
 
+const emit = defineEmits(['delOrg'])
+
 const state = reactive({
-  dataArr: [],
   regionOptions: regionData
 })
 
-const { tableData } = toRefs(props)
-const instance = getCurrentInstance()?.proxy
+const dataArr = ref([])
 
-state.dataArr = instance?.$deepCopy(tableData.value, true)
+defineExpose({
+  dataArr
+})
 
-const handleDel = row => {
-  console.log(row)
+watch(
+  () => props.tableData,
+  // eslint-disable-next-line no-unused-vars
+  (newValue, _) => {
+    if (newValue) {
+      dataArr.value = newValue
+    }
+  },
+  { deep: true },
+  { immediate: true }
+)
+
+watch(
+  () => props.newTableData,
+  // eslint-disable-next-line no-unused-vars
+  (newValue, _) => {
+    if (newValue) {
+      dataArr.value = props.tableData.concat(props.newTableData)
+    }
+  },
+  { deep: true },
+  { immediate: true }
+)
+
+const { tableData, newTableData } = toRefs(props)
+// const instance = getCurrentInstance()?.proxy
+
+dataArr.value = tableData.value.concat(props.newTableData)
+
+const handleDel = val => {
   ElMessageBox.confirm('确定删除？').then(
-    () => true,
+    () => {
+      newTableData.value.map(item => {
+        //当前删除的机构是本地新添加的则可以删除
+        if (val.orgId === item.orgId) emit('delOrg', val)
+      })
+      true
+    },
     () => false
   )
 }
@@ -50,8 +86,6 @@ const onStart = () => {
 const onEnd = () => {
   console.log('结束拖拽')
 }
-onBeforeMount(() => {})
-onMounted(() => {})
 </script>
 
 <template>
@@ -79,7 +113,7 @@ onMounted(() => {})
     </div>
     <el-row :gutter="20">
       <el-col :span="2">
-        <div v-for="(item, index) in state.dataArr" :key="index" class="org_warp">
+        <div v-for="(item, index) in dataArr" :key="index" class="org_warp">
           <el-row class="show_wrap first-nth-show_wrap">
             <el-col :span="2">
               <span class="num">{{ index + 1 }}</span>
@@ -89,7 +123,7 @@ onMounted(() => {})
       </el-col>
       <el-col :span="22">
         <draggable
-          v-model="state.dataArr"
+          v-model="dataArr"
           chosen-class="chosen"
           ghost-class="ghost"
           force-fallback="true"
@@ -100,7 +134,7 @@ onMounted(() => {})
           @end="onEnd"
         >
           <transition-group>
-            <div v-for="(item, index) in state.dataArr" :key="index" class="org_warp">
+            <div v-for="(item, index) in dataArr" :key="index" class="org_warp">
               <el-row class="show_wrap">
                 <el-col :span="8" style="text-align: left">
                   <svg-icon name="list" class="mover" />
@@ -108,7 +142,7 @@ onMounted(() => {})
                 </el-col>
                 <el-col :span="10" style="text-align: center">
                   <el-cascader
-                    v-model="item.regions"
+                    v-model="item.area"
                     style="width: 98%"
                     size="small"
                     :props="optionsProp"
@@ -117,16 +151,10 @@ onMounted(() => {})
                 </el-col>
 
                 <el-col :span="4" style="text-align: center">
-                  <el-input-number
-                    v-model="item.entrustAmount"
-                    :min="0"
-                    size="mini"
-                    :controls="false"
-                    @input="handleInput(item)"
-                  ></el-input-number>
+                  <el-input-number v-model="item.adjustNum" :min="0" size="small" :controls="false"></el-input-number>
                 </el-col>
                 <el-col :span="2" style="text-align: center">
-                  <el-icon style="color: red; cursor: pointer" @click="handleDel"><DeleteFilled /></el-icon>
+                  <el-icon style="color: red; cursor: pointer" @click="handleDel(item)"><DeleteFilled /></el-icon>
                 </el-col>
               </el-row>
             </div>

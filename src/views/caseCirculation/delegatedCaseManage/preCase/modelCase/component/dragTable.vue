@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, toRefs, getCurrentInstance, onBeforeMount, onMounted } from 'vue'
+import { ref, toRefs, defineExpose, watch } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 import { ElMessageBox } from 'element-plus'
 
@@ -11,16 +11,48 @@ const props = defineProps({
   tableData: {
     type: Array,
     default: () => []
+  },
+  newTableData: {
+    type: Array,
+    default: () => []
   }
 })
 
-const { tableData } = toRefs(props)
-const instance = getCurrentInstance()?.proxy
+const emit = defineEmits(['delOrg'])
 
-const state = reactive({
-  dataArr: []
+const dataArr = ref([])
+
+const { tableData, newTableData } = toRefs(props)
+
+defineExpose({
+  dataArr
 })
-state.dataArr = instance?.$deepCopy(tableData.value, true)
+
+dataArr.value = tableData.value.concat(props.newTableData)
+
+watch(
+  () => props.tableData,
+  // eslint-disable-next-line no-unused-vars
+  (newValue, _) => {
+    if (newValue) {
+      dataArr.value = newValue
+    }
+  },
+  { deep: true },
+  { immediate: true }
+)
+
+watch(
+  () => props.newTableData,
+  // eslint-disable-next-line no-unused-vars
+  (newValue, _) => {
+    if (newValue) {
+      dataArr.value = props.tableData.concat(props.newTableData)
+    }
+  },
+  { deep: true },
+  { immediate: true }
+)
 
 const lastDropVisible = ref(false)
 const thirdDropVisible = ref(false)
@@ -32,10 +64,15 @@ const visibleChangeThird = value => {
   thirdDropVisible.value = value
 }
 
-const handleDel = row => {
-  console.log(row)
+const handleDel = val => {
   ElMessageBox.confirm('确定删除？').then(
-    () => true,
+    () => {
+      newTableData.value.map(item => {
+        //当前删除的机构是本地新添加的则可以删除
+        if (val.orgId === item.orgId) emit('delOrg', val)
+      })
+      true
+    },
     () => false
   )
 }
@@ -49,8 +86,6 @@ const onStart = () => {
 const onEnd = () => {
   console.log('结束拖拽')
 }
-onBeforeMount(() => {})
-onMounted(() => {})
 </script>
 
 <template>
@@ -109,7 +144,7 @@ onMounted(() => {})
     </div>
     <el-row :gutter="20">
       <el-col :span="2">
-        <div v-for="(item, index) in state.dataArr" :key="index" class="org_warp">
+        <div v-for="(item, index) in dataArr" :key="index" class="org_warp">
           <el-row class="show_wrap first-nth-show_wrap">
             <el-col :span="2">
               <span class="num">{{ index + 1 }}</span>
@@ -119,7 +154,7 @@ onMounted(() => {})
       </el-col>
       <el-col :span="22">
         <draggable
-          v-model="state.dataArr"
+          v-model="dataArr"
           chosen-class="chosen"
           ghost-class="ghost"
           force-fallback="true"
@@ -130,7 +165,7 @@ onMounted(() => {})
           @end="onEnd"
         >
           <transition-group>
-            <div v-for="(item, index) in state.dataArr" :key="index" class="org_warp">
+            <div v-for="(item, index) in dataArr" :key="index" class="org_warp">
               <el-row class="show_wrap">
                 <el-col :span="props.currType !== '分产品委案' ? 18 : 8" style="text-align: left">
                   <svg-icon name="list" class="mover" />
@@ -146,16 +181,10 @@ onMounted(() => {})
                 </el-col>
 
                 <el-col :span="4" style="text-align: center">
-                  <el-input-number
-                    v-model="item.entrustAmount"
-                    :min="0"
-                    size="mini"
-                    :controls="false"
-                    @input="handleInput(item)"
-                  ></el-input-number>
+                  <el-input-number v-model="item.adjustNum" :min="0" size="small" :controls="false"></el-input-number>
                 </el-col>
                 <el-col :span="2" style="text-align: center">
-                  <el-icon style="color: red; cursor: pointer" @click="handleDel"><DeleteFilled /></el-icon>
+                  <el-icon style="color: red; cursor: pointer" @click="handleDel(item)"><DeleteFilled /></el-icon>
                 </el-col>
               </el-row>
             </div>

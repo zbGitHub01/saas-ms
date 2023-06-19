@@ -1,52 +1,59 @@
 <script setup>
 import { ref, reactive } from 'vue'
+import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/caseRecord'
+import { downArrayBufferFile } from '@/api/arrayBuffer'
 import tableColumnList from './config/tableColumnList.js'
 import queryList from './config/queryList.js'
 
 const state = reactive({
   tableData: [],
-  pageTotal: 4,
+  pageTotal: 10,
+  page: 1,
+  pageSize: 10,
+  gridData: [], //实际委案量
+  currViewRow: {}, // 当前点击查看的row
   queryNewData: {},
+  currSelectArr: [],
   entrustRecordList: []
 })
 
 //获取列表数据
-const getOrderListAgain = async (pageSize, pageNum) => {
-  const pageInfo = {
-    ...state.queryNewData,
-    pageNum: pageNum ? pageNum : 1,
-    pageSize: pageSize ? pageSize : 10
+const getEntrustRecordList = async (page, pageSize) => {
+  try {
+    const pageInfo = {
+      ...state.queryNewData,
+      page: page ? page : state.page,
+      pageSize: pageSize ? pageSize : state.pageSize
+    }
+    const { data } = await Apis.getList(pageInfo)
+    state.tableData = data.data
+    state.pageTotal = data.total
+    state.page = data.page
+    state.pageSize = data.pageSize
+  } catch (error) {
+    console.log(error)
   }
-  const data = await Apis.getList(pageInfo)
-  state.tableData = data.data
-  state.pageTotal = data.total
 }
 
-getOrderListAgain()
+getEntrustRecordList()
 
 //formClass实例
 const formClass = ref()
 
+//批量操作类型： operateType 1-选中 2-查询
+const operationType = ref(1)
+
 //搜索操作
 const handleSearch = () => {
-  const queryData = formClass.value.getEntity()
-  state.queryNewData = Object.keys(queryData).includes('dateArray')
-    ? {
-        ...queryData,
-        submitStartDate: queryData.dateArray[0],
-        submitEndDate: queryData.dateArray[1]
-      }
-    : queryData
-  delete state.queryNewData.dateArray
-  getOrderListAgain()
-  console.log('aa', queryData)
+  state.queryNewData = formClass.value.getEntity()
+  getEntrustRecordList()
 }
 //重置操作
 const handleReset = () => {
   formClass.value.handleReset()
   state.queryNewData = {}
-  getOrderListAgain()
+  getEntrustRecordList()
 }
 
 const dialogVisible = ref(false)
@@ -56,10 +63,28 @@ const checkedEntrustRecord = ref([])
 
 //导出委案记录
 const handleExport = async () => {
-  const { data } = await Apis.getExportList()
-  state.entrustRecordList = data
-  console.log(state.entrustRecordList)
-  dialogVisible.value = true
+  if (state.currSelectArr.length < 1 && Number(operationType.value) === 1) {
+    ElMessage({ message: '请选择操作对象.', type: 'warning' })
+    return
+  }
+  let data = {}
+  if (Number(operationType.value) === 1) {
+    data['operateType'] = 1
+    data['entrustNoList'] = state.currSelectArr.map(item => item.entrustNo)
+  } else {
+    data = { ...formClass.value.getEntity() }
+    data['operateType'] = 2
+  }
+  try {
+    //下载文件流
+    await downArrayBufferFile('/api/caseCenter/case/entrust/entrustRecordExport', data)
+    ElMessage.success('导出成功')
+    // state.entrustRecordList = data
+    // console.log(state.entrustRecordList)
+    // dialogVisible.value = true
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const handleCheckAllChange = val => {
@@ -73,42 +98,28 @@ const handleCheckedCitiesChange = value => {
 }
 
 const popoverTableVisible = ref(false)
-const handleViewPopoverTable = value => {
+
+const handleViewPopoverTable = async rowObj => {
+  try {
+    const data = await Apis.getEntrustAmount({ entrustId: rowObj?.entrustId })
+    state.currViewRow = rowObj
+    state.gridData = data.data
+  } catch (error) {
+    console.log(error)
+  }
   popoverTableVisible.value = true
-  console.log(value)
 }
 
-const handleDel = (va, val) => {
+const handleDownload = (va, val) => {
+  if (!val.errorDataUrl) return
+  window.open(val.errorDataUrl)
   console.log(va, val)
 }
-const operation = ref(1)
 
-const selectChange = val => {
-  console.log(val)
+//table多选操作
+const selectChange = obj => {
+  state.currSelectArr = obj
 }
-
-const gridData = [
-  {
-    date: '2016-05-02',
-    name: 'Jack',
-    address: 'New York City'
-  },
-  {
-    date: '2016-05-04',
-    name: 'Jack',
-    address: 'New York City'
-  },
-  {
-    date: '2016-05-01',
-    name: 'Jack',
-    address: 'New York City'
-  },
-  {
-    date: '2016-05-03',
-    name: 'Jack',
-    address: 'New York City'
-  }
-]
 </script>
 
 <template>
@@ -119,7 +130,7 @@ const gridData = [
       </template>
     </FormWrap>
     <div class="mt20">
-      <OperationBar v-model:active="operation">
+      <OperationBar v-model:active="operationType">
         <template #default>
           <el-button type="primary" plain @click="handleExport">
             <svg-icon name="cloud-upload-fill" />
@@ -134,14 +145,24 @@ const gridData = [
         :is-order-number="true"
         :stripe="true"
         :is-selection="true"
+        :page="state.page"
+        :page-size="state.pageSize"
         @select-change="selectChange"
-        @query="getOrderListAgain"
+        @query="getEntrustRecordList"
         @popover-table="handleViewPopoverTable"
       >
         <template #operation>
-          <el-table-column fixed="right" align="center" label="操作" width="200">
+          <el-table-column align="center" label="操作" width="200">
             <template #default="scope">
-              <el-button type="primary" size="small" link @click="handleDel(scope.$index, scope.row)">下载</el-button>
+              <el-button
+                v-if="scope.row.errorDataUrl"
+                type="primary"
+                size="small"
+                link
+                @click="handleDownload(scope.$index, scope.row)"
+              >
+                下载
+              </el-button>
             </template>
           </el-table-column>
         </template>
@@ -153,31 +174,31 @@ const gridData = [
         <el-row>
           <el-col :span="24">
             <span>委案批次</span>
-            <span>20230427_666_10203</span>
+            <span>{{ state.currViewRow.entrustNo }}</span>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <span>委外分库</span>
-            <span>委外处置库</span>
+            <span>{{ state.currViewRow.storeName }}</span>
           </el-col>
           <el-col :span="12">
             <span>处置机构</span>
-            <span>江西正众企业管理有限公司</span>
+            <span>{{ state.currViewRow.orgName }}</span>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <span>委案类型</span>
-            <span>激励案件23-内部-28（2023年4月）</span>
+            <span>{{ state.currViewRow.entrustTypeName }}</span>
           </el-col>
         </el-row>
       </div>
-      <el-table :data="gridData">
-        <el-table-column width="200" property="date" label="产品" />
-        <el-table-column width="160" property="name" label="委案量" />
-        <el-table-column width="160" property="address" label="委案户数" />
-        <el-table-column width="180" property="address" label="委案金额" />
+      <el-table :data="state.gridData">
+        <el-table-column width="200" property="productName" label="产品" />
+        <el-table-column width="160" property="entrustCaseNum" label="委案量" />
+        <el-table-column width="160" property="entrustActualUserNum" label="委案户数" />
+        <el-table-column width="180" property="entrustActualAmount" label="委案金额" />
       </el-table>
     </el-dialog>
     <!--委案记录导出-->

@@ -1,23 +1,40 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import Api from '@/api/modules/casesManageable'
 import TagTipsHeader from './tagTipsHeader/index.vue'
 import componentsObj from './components/index.js'
 
-const messageData = {
-  isHistoryComplaint: 1,
-  caseTagAlertUserList: [
-    { tagAlertName: 'test1', markCount: 2 },
-    { tagAlertName: 'test2', markCount: 3 }
-  ],
-  caseUserComplaintPhoneInfoList: [
-    {
-      complaintPhone: '13732451480',
-      isPause: 1,
-      relateComplaintCount: 333,
-      badGradeText: '重大'
-    }
-  ]
+// const messageData = {
+//   isHistoryComplaint: 1,
+//   caseTagAlertUserList: [
+//     { tagAlertName: 'test1', markCount: 2 },
+//     { tagAlertName: 'test2', markCount: 3 }
+//   ],
+//   caseUserComplaintPhoneInfoList: [
+//     {
+//       complaintPhone: '13732451480',
+//       isPause: 1,
+//       relateComplaintCount: 333,
+//       badGradeText: '重大'
+//     }
+//   ]
+// }
+const state = reactive({
+  messageData: {}
+})
+
+const route = useRoute()
+
+const getCaseInfoData = async params => {
+  const { data } = await Api.getCaseInfoList({ caseId: params })
+  state.messageData = data
 }
+getCaseInfoData(route.query?.caseId)
+
+const isEmpty = computed(() => {
+  return Object.keys(state.messageData).length > 0
+})
 
 const activeNames = ref(['1', '2', '3', '4', '5'])
 
@@ -29,23 +46,23 @@ const handleChange = val => {
 <template>
   <div>
     <!--标签提示块-->
-    <TagTipsHeader :message-data="messageData" />
+    <TagTipsHeader :message-data="state.messageData" />
     <!--信息板块-->
     <el-collapse v-model="activeNames" @change="handleChange">
       <el-collapse-item title="基础信息" name="1">
-        <component :is="componentsObj['BasicInformation']"></component>
+        <component :is="componentsObj['BasicInformation']" v-if="isEmpty" :message-data="state.messageData"></component>
       </el-collapse-item>
       <el-collapse-item title="案人资料" name="2">
-        <component :is="componentsObj['CaseInformation']"></component>
+        <component :is="componentsObj['CaseInformation']" v-if="isEmpty" :message-data="state.messageData"></component>
       </el-collapse-item>
       <el-collapse-item title="联系方式" name="3">
         <component :is="componentsObj['ContactInformation']"></component>
       </el-collapse-item>
       <el-collapse-item title="借款/转让信息" name="4">
-        <component :is="componentsObj['LoanTransferInformation']"></component>
+        <component :is="componentsObj['LoanTransferInformation']" v-if="isEmpty" :message-data="state.messageData"></component>
       </el-collapse-item>
       <el-collapse-item title="处置金额/还款方式" name="5">
-        <component :is="componentsObj['DisposalRepayInformation']"></component>
+        <component :is="componentsObj['DisposalRepayInformation']" v-if="isEmpty" :message-data="state.messageData"></component>
       </el-collapse-item>
     </el-collapse>
   </div>
