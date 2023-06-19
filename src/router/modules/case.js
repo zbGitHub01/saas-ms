@@ -32,6 +32,7 @@ const caseRouter = [
       {
         path: '/caseManage/casesDetails',
         name: 'casesDetails',
+        hidden: true,
         meta: { title: '可管理案件', icon: '' },
         children: [
           {
