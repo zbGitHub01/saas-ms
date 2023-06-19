@@ -1,40 +1,24 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import useCaseStore from '@/store/modules/caseInfo.js'
 import Api from '@/api/modules/casesManageable'
 import TagTipsHeader from './tagTipsHeader/index.vue'
 import componentsObj from './components/index.js'
 
-// const messageData = {
-//   isHistoryComplaint: 1,
-//   caseTagAlertUserList: [
-//     { tagAlertName: 'test1', markCount: 2 },
-//     { tagAlertName: 'test2', markCount: 3 }
-//   ],
-//   caseUserComplaintPhoneInfoList: [
-//     {
-//       complaintPhone: '13732451480',
-//       isPause: 1,
-//       relateComplaintCount: 333,
-//       badGradeText: '重大'
-//     }
-//   ]
-// }
+const caseInfoStore = useCaseStore()
+
 const state = reactive({
   messageData: {}
 })
 
-const route = useRoute()
-
-const getCaseInfoData = async params => {
-  const { data } = await Api.getCaseInfoList({ caseId: params })
+const getCaseInfoData = async () => {
+  const { data } = await Api.getCaseInfoList({ caseId: caseInfoStore?.caseId })
   state.messageData = data
 }
-getCaseInfoData(route.query?.caseId)
+getCaseInfoData()
 
-const isEmpty = computed(() => {
-  return Object.keys(state.messageData).length > 0
-})
+//判断组件传值是否为空 解决异步传值组件渲染取不到props值的问题
+const isEmpty = computed(() => Object.keys(state.messageData).length > 0)
 
 const activeNames = ref(['1', '2', '3', '4', '5'])
 
@@ -53,7 +37,12 @@ const handleChange = val => {
         <component :is="componentsObj['BasicInformation']" v-if="isEmpty" :message-data="state.messageData"></component>
       </el-collapse-item>
       <el-collapse-item title="案人资料" name="2">
-        <component :is="componentsObj['CaseInformation']" v-if="isEmpty" :message-data="state.messageData"></component>
+        <component
+          :is="componentsObj['CaseInformation']"
+          v-if="isEmpty"
+          :message-data="state.messageData"
+          @get-case-info="getCaseInfoData"
+        ></component>
       </el-collapse-item>
       <el-collapse-item title="联系方式" name="3">
         <component :is="componentsObj['ContactInformation']"></component>

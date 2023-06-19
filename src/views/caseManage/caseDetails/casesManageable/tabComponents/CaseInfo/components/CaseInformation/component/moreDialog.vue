@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, toRefs, ref } from 'vue'
+import { reactive, toRefs, ref, defineExpose } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const props = defineProps({
@@ -11,13 +11,17 @@ const props = defineProps({
     type: String,
     default: null
   },
+  messageData: {
+    type: Object,
+    default: () => {}
+  },
   type: {
     type: Number,
     default: 1
   }
 })
 
-const emit = defineEmits(['update:dialogVisible'])
+const emit = defineEmits(['update:dialogVisible', 'updateCaseInfo'])
 
 const { dialogVisible, title, type } = toRefs(props)
 
@@ -60,8 +64,37 @@ const handleDel = row => {
 }
 
 const handleClick = () => {
-  console.log(props.title)
+  let data = {
+    caseId: props?.messageData?.caseId
+  }
+  switch (title.value) {
+    case 'qq':
+      data['qq'] = state.ruleForm.remark
+      break
+    case '邮箱':
+      data['mail'] = state.ruleForm.remark
+      break
+    case '单位名称':
+      data['companyName'] = state.ruleForm.remark
+      break
+    case '单位地址':
+      data['companyAddr'] = state.ruleForm.remark
+      break
+    case '家庭住址':
+      data['homeAddr'] = state.ruleForm.remark
+      break
+  }
+  emit('updateCaseInfo', data)
 }
+
+//重置表单
+const resetForm = () => {
+  ruleForm.value.resetFields()
+}
+
+defineExpose({
+  resetForm
+})
 
 //取消
 const cancel = () => {

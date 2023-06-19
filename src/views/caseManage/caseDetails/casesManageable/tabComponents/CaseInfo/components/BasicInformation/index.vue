@@ -12,25 +12,6 @@ const props = defineProps({
 
 const { messageData } = toRefs(props)
 
-// const messageData = {
-//   caseNo: 'BE-BQ-0001017',
-//   productName: '邦恩佰仟',
-//   originCreditor: '哇哈哈',
-//   creditorName: '测试债权方1',
-//   transTime: '2020-11-18',
-//   batchNo: '	丽水邦恩-邦恩佰仟20201118',
-//   caseStatusText: '	正常',
-//   ivrTag: '啦啦啦',
-//   robotTag: '啦啦啦',
-//   orgTitle: '公司名称T79',
-//   entrustTime: '2023-04-10 16:54:59',
-//   entrustTypeText: '	默认',
-//   cpeName: '花园宝宝',
-//   allotTime: '2023-1-1',
-//   remark: '无',
-//   caseLevel: 'A',
-//   caseStatus: 30
-// }
 const dialogVisible = ref(false)
 
 const onStopCase = () => (dialogVisible.value = true)

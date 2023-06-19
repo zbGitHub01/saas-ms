@@ -1,5 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
+import { useRoute } from 'vue-router'
+import useCaseStore from '@/store/modules/caseInfo.js'
 import ReductionDialog from './components/reductionDialog/index.vue'
 import tabComponentObj from './tabComponents/index.js'
 import operaBtnConfig from './config/operaBtnConfig.js'
@@ -21,6 +23,11 @@ const state = reactive({
     remark: null
   }
 })
+
+const caseInfoStore = useCaseStore()
+
+const route = useRoute()
+caseInfoStore.caseId = route.query?.caseId
 
 state.reductionTableData = [
   {
