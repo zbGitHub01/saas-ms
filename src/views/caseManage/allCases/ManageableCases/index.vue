@@ -557,8 +557,8 @@ const submitExport = async (paramsSub, type) => {
     data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
     console.log(type)
   } else if (type === 1) {
-    // const { data } = await followexport(params)
-    // data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
+    const { data } = await Apis.followExport(params)
+    data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
     console.log(type)
   }
   toggleSelection()

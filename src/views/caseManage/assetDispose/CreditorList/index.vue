@@ -7,11 +7,11 @@
     </OperationBar>
     <div class="mt20">
       <el-table :data="state.tableData" border>
-        <el-table-column label="公司ID" prop="creditorId" align="center" min-width="100"></el-table-column>
-        <el-table-column label="公司名称" prop="creditorName" align="center" min-width="150"></el-table-column>
-        <el-table-column label="是否启用" prop="creditorStatus" align="center" min-width="150">
+        <el-table-column label="公司ID" prop="tenantId" align="center" min-width="100"></el-table-column>
+        <el-table-column label="公司名称" prop="tenantName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="是否启用" prop="status" align="center" min-width="150">
           <template #default="scope">
-            <el-checkbox v-model="scope.row.creditorStatus" @change="changeCheckbox(scope.row)"></el-checkbox>
+            <el-checkbox v-model="scope.row.status" @change="changeCheckbox(scope.row)"></el-checkbox>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="140" align="center" fixed="right">
@@ -31,8 +31,11 @@
 import { Plus } from '@element-plus/icons-vue'
 import AddOrEditDialog from './components/AddOrEditDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { reactive, ref, onMounted } from 'vue'
-import Apis, { creditorDel } from '@/api/modules/caseManage'
+import { reactive, ref, onMounted, computed } from 'vue'
+import Apis from '@/api/modules/company'
+import { useGlobalStore } from '@/store/index'
+const globalStore = useGlobalStore()
+const tenantId = computed(() => globalStore.tenantId)
 // 页码
 const query = reactive({
   page: 1,
@@ -48,35 +51,10 @@ onMounted(() => {
 })
 const getTableData = async () => {
   console.log('债权方')
-  const { data } = await Apis.creditorPage({ ...query })
+  const { data } = await Apis.creditorPage({ ...query, tenantId: tenantId.value })
   state.tableData = data.data
-  // state.tableData = [
-  //   {
-  //     creditorId: 1,
-  //     creditorName: '“360”借条',
-  //     zhaiquanfangId: 1,
-  //     creditorStatus: 1,
-  //     code: 'code',
-  //     picture1: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
-  //     picture2: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
-  //     picture3: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
-  //     picture4: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
-  //     picture5: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
-  //     address: '齐贤镇曙光村',
-  //     addressSub: [636, 1188, 1218],
-  //     people: '李思',
-  //     caseId: '330621111111111111',
-  //     phone: '11111111111'
-  //   },
-  //   {
-  //     creditorId: 2,
-  //     creditorName: '我来带',
-  //     zhaiquanfangId: 2,
-  //     creditorStatus: 0
-  //   }
-  // ]
   state.tableData.forEach(item => {
-    item.creditorStatus = !!item.creditorStatus
+    item.status = !!item.status
   })
   state.total = data.total
 }
@@ -93,8 +71,8 @@ const toDelete = row => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(
-    async() => {
-      await creditorDel(row.creditorId)
+    async () => {
+      await Apis.creditorDelete({ id: row.id })
       ElMessage.success('删除成功！')
       getTableData()
     },
@@ -105,10 +83,16 @@ const toDelete = row => {
   )
 }
 // 是否启用
-const changeCheckbox = row => {
-  console.log(row.creditorStatus)
-  // 请求
-  // await xx(form)
+const changeCheckbox = async row => {
+  const { data } = await Apis.creditorDetail({ id: row.id })
+  const params = { ...data }
+  params.status = Number(row.status)
+  params.relationId = params.id
+  delete params.tenantId
+  delete params.id
+  await Apis.creditorEdit(params)
+  ElMessage.success('操作成功！')
+  getTableData()
 }
 </script>
 

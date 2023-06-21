@@ -21,7 +21,7 @@
           <el-switch v-model="form.isDeleteAllRelationTag"></el-switch>
         </el-form-item>
         <el-form-item v-if="typeSub === 3">
-          <UploadFile ref="uploadFileRef" accept-type="excel" :auto-upload="false" />
+          <UploadFile ref="uploadFileRef" accept-type="excel" v-model:file-list="fileList" />
         </el-form-item>
       </el-form>
     </span>
@@ -48,10 +48,12 @@ const state = reactive({
   params: {},
   tagList: [] //临时标签列表
 })
+const fileList = ref([])
 const typeSub = ref(1)
 const title = ref('')
 const isOrg = ref(false)
 const uploadFileRef = ref()
+const url = ref()
 const emits = defineEmits(['getTableData'])
 // 校验规则
 const ruleFormRef = ref()
@@ -69,6 +71,7 @@ const open = (type, params, isOrgSub) => {
     getSelecData()
   } else if (type === 3) {
     title.value = '导入批量添加标签'
+    getModel()
   }
   isOrg.value = isOrgSub
   state.params = params
@@ -92,8 +95,14 @@ const submitForm = formEl => {
         state.params.isDeleteAllRelationTag = form.isDeleteAllRelationTag === true ? 1 : 0
         isOrg.value ? await Apis.orgTagTempDelete(state.params) : await Apis.tagTempDelete(state.params)
       } else if (typeSub.value === 3) {
-        // 只要上传文件就好吗？
-        uploadFileRef.value.uploadSubmit()
+        if (!fileList.value[0]) {
+          return ElMessage.error('请上传文件！')
+        }
+        const params = {
+          importFileType: 201,
+          importUrl: fileList.value[0].url
+        }
+        await Apis.caseImport(params)
       }
       ElMessage.success('操作成功！')
       emits('getTableData')
@@ -113,8 +122,14 @@ const getSelecData = async () => {
 //点击下载模板
 const downloadHandle = () => {
   window.open(
-    'https://asfile.donganzichan.cn/assets/tmpl/%E4%B8%B4%E6%97%B6%E6%A0%87%E7%AD%BE%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx'
+    // 'https://asfile.donganzichan.cn/assets/tmpl/%E4%B8%B4%E6%97%B6%E6%A0%87%E7%AD%BE%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xlsx'
+    url.value
   )
+}
+// 获取下载模版
+const getModel = async() => {
+  const { data } = await Apis.importExcelPath()
+  url.value = data.tagTemplateUrl
 }
 </script>
   

@@ -9,7 +9,7 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <el-form ref="ruleFormRef">
+      <el-form ref="ruleFormRef" :model="form">
         <el-form-item label="导入文件:" label-width="100px" prop="upload">
           <UploadFile ref="uploadFileRef" v-model:file-list="fileList" accept-type="excel" />
         </el-form-item>
@@ -30,6 +30,7 @@ import { UploadFile } from '@/components/Upload'
 import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/caseManage'
 const fileList = ref([])
+const form = reactive({})
 const importFileType = ref()
 const title = ref('')
 const uploadFileRef = ref()

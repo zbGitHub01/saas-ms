@@ -39,8 +39,8 @@
       <label style="fontweight: 500" class="mr5">记录提交时间:</label>
       <el-date-picker
         v-model="state.date"
-        type="datetimerange"
-        value-format="YYYY-MM-DD HH:mm:ss"
+        type="daterange"
+        value-format="YYYY-MM-DD"
         range-separator="至"
         start-placeholder="开始日期"
         end-placeholder="结束日期"
@@ -80,10 +80,10 @@ defineExpose({
 const submitForm = () => {
   const params = {}
   params['exportField'] = state.exportField
-  params['exportType'] = 0 //导出类型：0-全部导出 1-部分字段导出
+  // params['exportType'] = 0 //导出类型：0-全部导出 1-部分字段导出
   if (typeSub.value === 1) {
-    params['createTimeStart'] = state.date[0]
-    params['createTimeEnd'] = state.date[1]
+    params['createTimeStart'] = state.date ? (state.date[0] ? state.date[0] + ' 00:00:00' : null) : null
+    params['createTimeEnd'] = state.date ? (state.date[1] ? state.date[1] + ' 23:59:59' : null) : null
     params['isExportExcel'] = disposalRecord.value
   }
   emits('submitExport', params, typeSub.value)

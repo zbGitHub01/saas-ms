@@ -21,10 +21,10 @@ const apiConfig = {
     batchInfoList: 'POST /caseCenter/batch/info/batchInfoList', //入库批次详情批量
     productIds: 'POST /caseCenter/batch/info/productIds', //通过产品Ids获取批次ID及批次号
     // 债权方
-    creditorPage: 'GET /caseCenter/creditor/page', //分页查询
-    creditorAdd: 'POST /caseCenter/creditor/add', //新增债权方
-    creditorEdit: 'PUT /caseCenter/creditor/edit', //修改债权方
-    creditorInfoByIdList: 'POST /caseCenter/creditor/info/creditorInfoByIdList', //债权方详情批量
+    // creditorPage: 'GET /caseCenter/creditor/page', //分页查询
+    // creditorAdd: 'POST /caseCenter/creditor/add', //新增债权方
+    // creditorEdit: 'PUT /caseCenter/creditor/edit', //修改债权方
+    // creditorInfoByIdList: 'POST /caseCenter/creditor/info/creditorInfoByIdList', //债权方详情批量
 
     // 资产委托
     proxyPage: 'GET /caseCenter/case/proxy/page', //分页查询
@@ -54,6 +54,7 @@ const apiConfig = {
     orgTagTempAdd: 'POST /caseCenter/case/orgTagTemp/add', //临时标签添加
     orgTagTempDelete: 'POST /caseCenter/case/orgTagTemp/delete', //删除标签添加
     orgTagTempList: 'GET /caseCenter/case/orgTagTemp/list', //临时标签列表
+    followExport: 'POST /caseCenter/follow/export', //导出处置记录
 
     // 委案管理
     entrustCaseList: 'POST /caseCenter/case/entrust/entrustCaseList', //实时委案案件列表
@@ -81,9 +82,9 @@ export const batchDel = id => {
     return http.delete(`/caseCenter/batch/${id}`)
 }
 // 删除债权方
-export const creditorDel = id => {
-    return http.delete(`/caseCenter/creditor/${id}`)
-}
+// export const creditorDel = id => {
+//     return http.delete(`/caseCenter/creditor/${id}`)
+// }
 // 终止委托
 export const proxyStop = batchId => {
     return http.post('/caseCenter/case/proxy/stop', `batchId=${batchId}`)

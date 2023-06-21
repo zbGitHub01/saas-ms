@@ -83,7 +83,7 @@
           min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
-        <el-table-column label="委案方" prop="weianfang" align="center" min-width="200"></el-table-column>
+        <el-table-column label="委案方" prop="entrustTenantName" align="center" min-width="200"></el-table-column>
         <el-table-column label="CPE" prop="cpeName" align="center" min-width="150"></el-table-column>
         <el-table-column label="分案时间" prop="allotTime" align="center" min-width="180"></el-table-column>
         <el-table-column
