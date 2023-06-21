@@ -19,8 +19,14 @@ const transferLogApi = {
   getTransferLogList: 'GET /caseCenter/case/transferLog/list' //案件流转记录
 }
 
+//案件流转记录Api
+const retentionApi = {
+  getRetainList: 'GET /caseCenter/case/retain/list' //留案记录
+}
+
 const apiConfig = {
   ...caseInfoApi,
+  ...retentionApi,
   ...debtNoticeApi,
   ...transferLogApi
 }
