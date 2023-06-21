@@ -77,7 +77,7 @@ const handleExport = async () => {
   }
   try {
     //下载文件流
-    await downArrayBufferFile('/api/caseCenter/case/entrust/entrustRecordExport', data)
+    downArrayBufferFile('/api/caseCenter/case/entrust/entrustRecordExport', data)
     ElMessage.success('导出成功')
     // state.entrustRecordList = data
     // console.log(state.entrustRecordList)

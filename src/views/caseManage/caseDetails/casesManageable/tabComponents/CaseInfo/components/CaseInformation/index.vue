@@ -1,9 +1,11 @@
 <script setup>
 import { reactive, ref, toRefs } from 'vue'
+import Api from '@/api/modules/casesManageable'
 import More from './component/more.vue'
 import MoreDialog from './component/moreDialog.vue'
 import TagDialog from './component/tagDialog.vue'
 import descriptionList from './config/descriptionList.js'
+import { ElMessage } from 'element-plus'
 
 const props = defineProps({
   messageData: {
@@ -11,6 +13,8 @@ const props = defineProps({
     default: () => {}
   }
 })
+
+const emit = defineEmits(['getCaseInfo'])
 
 const { messageData } = toRefs(props)
 
@@ -21,6 +25,7 @@ const state = reactive({
   labelShow: false
 })
 
+const moreDialog = ref(null)
 const dialogVisible = ref(false)
 const tagVisible = ref(false)
 
@@ -64,6 +69,18 @@ const open = (item, val) => {
     //   this.tagAlertlogList()
   }
 }
+
+const updateCaseInfo = async data => {
+  try {
+    await Api.updateCaseInfo(data)
+    ElMessage.success('更新成功')
+    moreDialog?.value.resetForm()
+    dialogVisible.value = false
+    emit('getCaseInfo')
+  } catch (error) {
+    console.log(error)
+  }
+}
 </script>
 
 <template>
@@ -94,7 +111,14 @@ const open = (item, val) => {
       </el-descriptions-item>
     </el-descriptions>
     <!--查看明细弹窗-->
-    <MoreDialog v-model:dialog-visible="dialogVisible" :title="state.title" :type="state.type" />
+    <MoreDialog
+      ref="moreDialog"
+      v-model:dialog-visible="dialogVisible"
+      :title="state.title"
+      :message-data="messageData"
+      :type="state.type"
+      @update-case-info="updateCaseInfo"
+    />
     <!--预警标签-->
     <TagDialog v-model:tag-visible="tagVisible" :type="state.type" />
   </div>

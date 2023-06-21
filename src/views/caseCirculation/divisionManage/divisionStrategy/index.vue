@@ -1,13 +1,13 @@
 <script setup>
-import { ref, reactive, getCurrentInstance } from 'vue'
+import { ref, reactive, getCurrentInstance, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import Apis from '@/api/modules/divisionStrategy'
+import Apis, { deleteOrgManage } from '@/api/modules/divisionStrategy'
 import dialogFormFields from './config/dialogFormFields.js'
 
 const defaultForm = {
-  orgName: null,
-  assignAdminName: null
+  orgId: null,
+  assignAdminId: null
 }
 
 const router = useRouter()
@@ -15,9 +15,10 @@ const router = useRouter()
 const state = reactive({
   tableData: [],
   dialogTitle: '',
+  addOrUpdate: 0, // 新增还是修改 默认新增
   dialogForm: {
-    orgName: null,
-    assignAdminName: null
+    orgId: null,
+    assignAdminId: null
   }
 })
 
@@ -31,27 +32,57 @@ getList()
 const dialogFormVisible = ref(false)
 const instance = getCurrentInstance()?.proxy
 
+const userData = [
+  {
+    isConnection: 0,
+    positionStatus: 1,
+    userId: 1,
+    userPhone: '17398042048',
+    userStatus: 1,
+    userName: '超级管理员'
+  },
+  {
+    isConnection: 0,
+    positionStatus: 1,
+    userId: 102,
+    userPhone: '15618930363',
+    userStatus: 1,
+    userName: '赵光明'
+  }
+]
+
+const orgData = [
+  {
+    itemId: 1,
+    itemText: '公司名称T79'
+  },
+  {
+    itemId: 136,
+    itemText: '测试机构136'
+  }
+]
+
+watch(
+  () => dialogFormVisible.value,
+  // eslint-disable-next-line no-unused-vars
+  (newVal, oldVal) => {
+    if (!newVal) dialogFormFields.map(item => (item.disabled = false))
+  }
+)
+
+dialogFormFields.map(item => {
+  if (item.prop === 'orgId') {
+    item.options = orgData
+  }
+  if (item.prop === 'assignAdminId') {
+    item.options = userData
+  }
+})
+
 const handleEdit = async (va, val) => {
-  const data = await Apis.getOrgNameList()
-  const assignData = await Apis.getAssignAdminNameList()
-  dialogFormFields.map(item => {
-    if (item.prop === 'orgName') {
-      item.options = data.data.map(cItem => {
-        let obj = {}
-        obj['value'] = cItem.id
-        obj['label'] = cItem.orgName
-        return obj
-      })
-    }
-    if (item.prop === 'assignAdminName') {
-      item.options = assignData.data.map(cItem => {
-        let obj = {}
-        obj['value'] = cItem.id
-        obj['label'] = cItem.assignAdminName
-        return obj
-      })
-    }
-  })
+  state.addOrUpdate = 0
+  // const data = await Apis.getOrgNameList()
+  // const assignData = await Apis.getAssignAdminNameList()
   //清空编辑操作赋的默认值
   Object.keys(state.dialogForm).forEach(key => (state.dialogForm[key] = null))
   state.dialogTitle = '编辑管理机构'
@@ -61,15 +92,23 @@ const handleEdit = async (va, val) => {
 
 //修改负责人
 const handleUpdate = obj => {
+  state.addOrUpdate = 1
   //编辑操作赋默认值
-  Object.keys(state.dialogForm).forEach(key => (state.dialogForm[key] = obj[key]))
+  // Object.keys(state.dialogForm).forEach(key => (state.dialogForm[key] = obj[key]))
+  console.log(obj)
+  state.dialogForm = obj
   dialogFormFields.map(item => {
-    if (item.prop === 'orgName') item['disabled'] = true
+    if (item.prop === 'orgId') item['disabled'] = true
   })
   state.dialogTitle = '修改负责人'
+  // state.currUpdateObj = obj
   dialogFormVisible.value = true
-  console.log(obj)
 }
+
+const rules = reactive({
+  assignAdminId: [{ required: true, message: '请选择机构负责人', trigger: 'change' }],
+  orgId: [{ required: true, message: '请选择管理机构', trigger: 'change' }]
+})
 
 //关闭弹窗
 const handleClose = () => {
@@ -82,7 +121,8 @@ const handleClose = () => {
 
 //实时分案
 const handleDivision = val => {
-  router.push({ name: 'divisionRealStrategy', query: { orgName: val.orgName } })
+  const { orgId, orgName } = val
+  router.push({ name: 'divisionRealStrategy', query: { orgId, orgName } })
 }
 
 //CPE持案情况查看
@@ -98,11 +138,17 @@ const handleRemove = row => {
     cancelButtonText: '取消',
     type: 'warning'
   })
-    .then(() => {
-      ElMessage({
-        type: 'success',
-        message: '移除成功'
-      })
+    .then(async () => {
+      try {
+        await deleteOrgManage(row.id)
+        ElMessage({
+          type: 'success',
+          message: '移除成功'
+        })
+        getList()
+      } catch (error) {
+        console.log(error)
+      }
     })
     .catch(() => {
       ElMessage({
@@ -111,6 +157,35 @@ const handleRemove = row => {
       })
     })
   console.log(row)
+}
+
+//新增机构提交
+const handleSubmit = async (data, formRef) => {
+  const dataObj = { ...data }
+  if (data.assignAdminId) dataObj['assignAdminName'] = userData.find(item => item.userId === data.assignAdminId).userName
+  if (data.orgId) dataObj['orgName'] = orgData.find(item => item.itemId === data.orgId).itemText
+  if (state.addOrUpdate === 0) {
+    try {
+      await Apis.addOrgManage(dataObj)
+      formRef.resetFields()
+      dialogFormVisible.value = false
+      getList()
+      ElMessage.success('新增成功')
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    try {
+      dataObj['id'] = data.id
+      await Apis.updateOrgManage(dataObj)
+      formRef.resetFields()
+      dialogFormVisible.value = false
+      getList()
+      ElMessage.success('修改成功')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 </script>
 
@@ -137,16 +212,16 @@ const handleRemove = row => {
                     <div>
                       <div class="title">载案金额</div>
                       <div class="num_wrap">
-                        <span>已分派：{{ item.assignCaseAmount }}</span>
-                        <span>未分派：{{ item.unAssignCaseAmount }}</span>
+                        <span>已分派：{{ item.existAllotAmount }}</span>
+                        <span>未分派：{{ item.unAllotAmount }}</span>
                       </div>
                     </div>
                     <div class="line"></div>
                     <div>
                       <div class="title">载案户数</div>
                       <div class="num_wrap">
-                        <span>已分派：{{ item.assignCaseNumber }}</span>
-                        <span>未分派：{{ item.unAssignCaseNumber }}</span>
+                        <span>已分派：{{ item.existAllotUserNum }}</span>
+                        <span>未分派：{{ item.unAllotUserNum }}</span>
                       </div>
                     </div>
                   </div>
@@ -169,7 +244,9 @@ const handleRemove = row => {
       :form-fields="dialogFormFields"
       :rule-form="state.dialogForm"
       :title="state.dialogTitle"
+      :rules="rules"
       width="30%"
+      @submit="handleSubmit"
       @close="handleClose"
     ></DialogForm>
   </div>

@@ -32,6 +32,7 @@ const caseRouter = [
       {
         path: '/caseManage/casesDetails',
         name: 'casesDetails',
+        hidden: true,
         meta: { title: '可管理案件', icon: '' },
         children: [
           {
@@ -221,23 +222,21 @@ const caseRouter = [
             path: '/caseCirculation/divisionManage/divisionStrategy',
             name: 'divisionStrategy',
             component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/index.vue'),
-            meta: { title: '机构策略分案', icon: '' },
-            children: [
-              {
-                path: '/caseCirculation/divisionManage/divisionStrategy/divisionRealStrategy',
-                name: 'divisionRealStrategy',
-                component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/divisionRealStrategy/index.vue'),
-                meta: { title: '策略实时分案', icon: '' },
-                hidden: true
-              },
-              {
-                path: '/caseCirculation/divisionManage/divisionStrategy/divisionSituation',
-                name: 'divisionSituation',
-                component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/divisionSituation/index.vue'),
-                meta: { title: 'CPE持案情况', icon: '' },
-                hidden: true
-              }
-            ]
+            meta: { title: '机构策略分案', icon: '' }
+          },
+          {
+            path: '/caseCirculation/divisionManage/divisionStrategy/divisionRealStrategy',
+            name: 'divisionRealStrategy',
+            component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/divisionRealStrategy/index.vue'),
+            meta: { title: '策略实时分案', icon: '' },
+            hidden: true
+          },
+          {
+            path: '/caseCirculation/divisionManage/divisionStrategy/divisionSituation',
+            name: 'divisionSituation',
+            component: () => import('@/views/caseCirculation/divisionManage/divisionStrategy/divisionSituation/index.vue'),
+            meta: { title: 'CPE持案情况', icon: '' },
+            hidden: true
           }
         ]
       }

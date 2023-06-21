@@ -53,6 +53,11 @@ export default {
       type: Array,
       default: () => []
     },
+    //列合并方法
+    spanMethod: {
+      type: Function,
+      default: null
+    },
     //单元格style样式方法
     cellStyle: {
       type: Function,
@@ -61,6 +66,16 @@ export default {
     total: {
       type: Number,
       default: 0
+    },
+    //是否显示合计行
+    showSummary: {
+      type: Boolean,
+      default: false
+    },
+    //自定义合计方法
+    summaryMethod: {
+      type: Function,
+      default: null
     },
     page: {
       type: Number,
@@ -248,8 +263,10 @@ export default {
       :data="tableData"
       :stripe="stripe"
       style="width: 100%"
-      :span-method="objectSpanMethod"
+      :span-method="props.spanMethod || objectSpanMethod"
       :cell-style="cellStyle"
+      :show-summary="props.showSummary"
+      :summary-method="props?.summaryMethod"
       @selection-change="handleSelectionChange"
     >
       <!-- 是否需要开启多选 -->
@@ -328,9 +345,12 @@ export default {
             </template>
           </el-table-column>
         </template>
-
         <!--如果不是多级表头-->
         <template v-if="!item.childColumn" #default="{ row }">
+          <!--如果是自定义table-column-->
+          <template v-if="item.prop === 'customColumn'">
+            <slot name="customColumn" :row="row" />
+          </template>
           <!--Popover提示弹出框-->
           <template v-if="item.isPopover">
             <el-popover :visible="false">
@@ -371,7 +391,16 @@ export default {
           <el-button v-if="item.operaBtn" link type="primary" @click="operaClick(row)">
             {{ item.operaBtnName }}
           </el-button>
-          <!-- 是否需要input-number编辑器，注：需要table数据中有id字段 -->
+          <!--是否需要el-input-number-->
+          <template v-if="item.inputNumber">
+            <el-input-number
+              v-model="row[item.prop]"
+              :min="0 || item.min"
+              :size="item.size"
+              :controls="item.controls"
+            ></el-input-number>
+          </template>
+          <!-- 是否需要带保存的input-number编辑器，注：需要table数据中有id字段 -->
           <template v-if="item.enableEdit">
             <template v-if="state.currEditObj.id === row.id && state.currEditObj.prop === item.prop">
               <el-input-number v-model="row[item.prop]" size="small" controls-position="right"></el-input-number>
