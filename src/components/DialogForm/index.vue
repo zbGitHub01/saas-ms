@@ -45,7 +45,7 @@ const props = defineProps({
   //form对象
   ruleForm: {
     type: Object,
-    required: true,
+    // required: true,
     default: () => {}
   },
   //form校验规则
@@ -304,6 +304,7 @@ const resetFunc = formEl => {
           :action="item.action"
           :accept="item.accept || ''"
           :limit="item.limit"
+          :data="item.data"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :on-success="uploadSuccess"

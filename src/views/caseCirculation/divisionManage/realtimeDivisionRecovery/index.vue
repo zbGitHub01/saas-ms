@@ -9,23 +9,30 @@ import labelList from './config/labelList.js'
 
 const state = reactive({
   tableData: [],
-  pageTotal: 4,
+  pageTotal: 10,
+  page: 1,
+  pageSize: 10,
   labelData: {},
   queryNewData: {},
   currSelectArr: []
 })
 
-const getOrderListAgain = (pageSize, pageNum) => {
-  const pageInfo = {
-    ...state.queryNewData,
-    pageNum,
-    pageSize
+//获取列表数据
+const getRecoverNowList = async (page, pageSize) => {
+  try {
+    const pageInfo = {
+      ...state.queryNewData,
+      page: page ? page : state.page,
+      pageSize: pageSize ? pageSize : state.pageSize
+    }
+    const { data } = await Apis.recoverNowSelect(pageInfo)
+    state.tableData = data.data
+    state.pageTotal = data.total
+    state.page = data.page
+    state.pageSize = data.pageSize
+  } catch (error) {
+    console.log(error)
   }
-  console.log(pageInfo)
-  // getOrderList(pageInfo).then(res => {
-  //   state.tableData = res.data.records
-  //   state.pageTotal = res.data.total
-  // })
 }
 
 //获取CPE机构列表
@@ -34,7 +41,7 @@ const getOrgData = async () => {
   state.depData = data.data
 }
 
-getOrderListAgain()
+getRecoverNowList()
 getOrgData()
 
 //formClass实例
@@ -51,14 +58,14 @@ const handleSearch = () => {
       }
     : queryData
   delete state.queryNewData.dateArray
-  getOrderListAgain()
+  getRecoverNowList()
   console.log('aa', queryData)
 }
 //重置操作
 const handleReset = () => {
   formClass.value.handleReset()
   state.queryNewData = {}
-  getOrderListAgain()
+  getRecoverNowList()
 }
 
 const dialogVisible = ref(false)
@@ -106,7 +113,7 @@ const operation = ref(1)
         :total="state.pageTotal"
         :stripe="true"
         :is-selection="true"
-        @query="getOrderListAgain"
+        @query="getRecoverNowList"
         @select-change="selectChange"
       />
     </div>

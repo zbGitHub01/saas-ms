@@ -8,9 +8,9 @@ export const downArrayBufferFile = (action, data) => {
     method: 'post',
     url: action,
     data: data,
-    params: {
-      isXlsx: false
-    },
+    // params: {
+    //   isXlsx: false
+    // },
     responseType: 'blob',
     headers: {
       accept: '*/*',

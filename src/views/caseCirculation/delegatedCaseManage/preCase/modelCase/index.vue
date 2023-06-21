@@ -223,6 +223,7 @@ const handleEdit = (index, row) => {
   }
   //处理文件回显
   state.dialogRuleForm = deepCopy(rowObj, true)
+  console.log(state.dialogRuleForm)
   state.dialogVisible = true
 }
 const handleSubmit = async (data, form1) => {

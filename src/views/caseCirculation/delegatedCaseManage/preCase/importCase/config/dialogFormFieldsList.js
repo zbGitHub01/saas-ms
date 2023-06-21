@@ -117,7 +117,7 @@ export default [
     prop: 'entrustFileUrl',
     limit: 1,
     headers: {},
-    accept: '.xls,.xlsx',
+    accept: '.xls,.xlsx,.csv',
     // uploadTips: 'jpg/png files with a size less than 500KB.',
     action: ''
   }

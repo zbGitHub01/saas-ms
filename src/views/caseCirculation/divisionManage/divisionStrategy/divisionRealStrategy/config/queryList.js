@@ -6,15 +6,17 @@ export default [
   {
     name: '委案类型',
     type: 'select',
-    property: 'caseType',
+    property: 'entrustType',
     placeholder: '请选择委案类型',
+    // optionLabel: 'storeName',
+    // optionValue: 'storeId',
     options: [
       {
-        value: '1100010001000',
+        value: '1',
         label: '哇哈哈'
       },
       {
-        value: '2100011001000',
+        value: '2',
         label: '货拉拉'
       }
     ]
@@ -22,15 +24,17 @@ export default [
   {
     name: '委案批次',
     type: 'select',
-    property: 'caseNo',
+    property: 'entrustNo',
     placeholder: '请选择委案批次',
+    // optionLabel: 'storeName',
+    // optionValue: 'storeId',
     options: [
       {
-        value: '1100010001000',
+        value: '1',
         label: '哇哈哈'
       },
       {
-        value: '2100011001000',
+        value: '2',
         label: '货拉拉'
       }
     ]
@@ -38,15 +42,17 @@ export default [
   {
     name: '产品',
     type: 'select',
-    property: 'product',
+    property: 'productId',
     placeholder: '请选择产品',
+    // optionLabel: 'storeName',
+    // optionValue: 'storeId',
     options: [
       {
-        value: '1100010001000',
+        value: '1',
         label: '哇哈哈'
       },
       {
-        value: '2100011001000',
+        value: '2',
         label: '货拉拉'
       }
     ]
@@ -54,6 +60,6 @@ export default [
   {
     name: '临时标签',
     type: 'input',
-    property: 'tag'
+    property: 'tagTempName'
   }
 ]
