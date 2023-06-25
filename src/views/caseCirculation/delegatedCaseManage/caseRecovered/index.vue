@@ -87,7 +87,7 @@ getList()
           <el-table-column align="center" fixed="right" label="失败数据" width="100">
             <template #default="scope">
               <el-button
-                v-if="!!scope.row.failData"
+                v-if="!!scope.row.errorDataUrl"
                 type="primary"
                 size="small"
                 link
