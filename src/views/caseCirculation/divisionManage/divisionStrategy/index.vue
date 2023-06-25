@@ -127,7 +127,8 @@ const handleDivision = val => {
 
 //CPE持案情况查看
 const handleViewSituation = val => {
-  router.push({ name: 'divisionSituation', query: { orgName: val.orgName } })
+  const { orgId, orgName } = val
+  router.push({ name: 'divisionSituation', query: { orgId, orgName } })
   console.log(val)
 }
 

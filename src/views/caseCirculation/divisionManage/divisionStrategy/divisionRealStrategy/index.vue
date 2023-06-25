@@ -2,7 +2,7 @@
 import { reactive, ref, computed } from 'vue'
 import { useGlobalStore } from '@/store'
 import { ElMessage } from 'element-plus'
-import Apis from '@/api/modules/realtimeDivision'
+import Apis, { strategyImport } from '@/api/modules/realtimeDivision'
 import { useRoute, useRouter } from 'vue-router'
 import { useTabsStore } from '@/store/modules/tabs'
 import { downArrayBufferFile } from '@/api/arrayBuffer'
@@ -59,9 +59,9 @@ const getDetail = async params => {
         cpeName: '栾合金', // CPE 姓名
         curCpeCaseAmount: 4800000, //当前CPE已经分派金额 持案概况 / 前面的值
         curMonthRepayRate: 0,
-        defaultAllotAmount: 0,
+        defaultAllotAmount: 3333333,
         isSubtract: 0,
-        lastMonthRepayRate: '0.671%', // 上月回款率
+        lastMonthRepayRate: 0.671, // 上月回款率
         referAmount: 8500000 //参考金额。持案概况 / 后面的值
       },
       {
@@ -71,9 +71,9 @@ const getDetail = async params => {
         cpeName: '周志全', // CPE 姓名
         curCpeCaseAmount: 4800000, //当前CPE已经分派金额 持案概况 / 前面的值
         curMonthRepayRate: 0,
-        defaultAllotAmount: 0,
+        defaultAllotAmount: 111111111,
         isSubtract: 0,
-        lastMonthRepayRate: '0.671%', // 上月回款率
+        lastMonthRepayRate: 0.671, // 上月回款率
         referAmount: 3500000 //参考金额。持案概况 / 后面的值
       }
     ]
@@ -103,7 +103,8 @@ const handleReset = () => {
 
 //清空操作
 const handleClear = () => {
-  getDetail()
+  if (state.tableData.length < 1) return
+  state.tableData.forEach(item => (item.allotAmount = 0))
 }
 
 //合计方法
@@ -163,20 +164,16 @@ const handleImport = () => {
 const handleDownload = async () => {
   const data = {
     orgId: route?.query?.orgId,
-    tagTempName: '11'
+    ...formClass.value.getEntity()
   }
-  try {
-    //下载文件流
-    downArrayBufferFile('/caseCenter/case/allot/strategy/export', data)
-    ElMessage.success('下载成功')
-  } catch (error) {
-    console.log(error)
-  }
+  //下载文件流
+  downArrayBufferFile('post', '/api/caseCenter/case/allot/strategy/export', data)
 }
 
 //自动分配金额
 const handleAutomatic = () => {
-  getDetail()
+  if (state.tableData.length < 1) return
+  state.tableData.forEach(item => (item.allotAmount = item.defaultAllotAmount))
 }
 
 //执行分案
@@ -199,19 +196,21 @@ const handleExecute = async () => {
 //   visible.value = true
 // }
 
-// eslint-disable-next-line no-unused-vars
-const handleSubmit = async (data, form1) => {
-  // console.log(data, form1)
-  const dataObj = {
-    excelDTOList: state.fileList.url,
-    orgId: 22
-  }
+//自定义上传
+const handleHttpRequest = async options => {
+  const formData = new FormData()
+  formData.append('file', options.file)
   try {
-    await Apis.strategyImport(dataObj)
+    await strategyImport(route?.query?.orgId, formData)
   } catch (error) {
     console.log(error)
   }
-  console.log(state.fileList)
+}
+
+// eslint-disable-next-line no-unused-vars
+const handleSubmit = async (data, form1) => {
+  form1.resetFields()
+  dialogFormVisible.value = false
 }
 
 const handleClose = () => {
@@ -317,6 +316,7 @@ const handleClose = () => {
       title="导入分案策略"
       width="30%"
       :form-fields="formFieldsList"
+      :http-request="handleHttpRequest"
       @file-list="fileListSave"
       @submit="handleSubmit"
       @close="handleClose"

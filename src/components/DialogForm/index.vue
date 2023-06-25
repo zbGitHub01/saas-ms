@@ -48,6 +48,11 @@ const props = defineProps({
     // required: true,
     default: () => {}
   },
+  //自定义upload事件
+  httpRequest: {
+    type: Function,
+    default: null
+  },
   //form校验规则
   rules: {
     type: Object,
@@ -125,7 +130,6 @@ const uploadSuccess = (response, uploadFile, _) => {
   fileObj['name'] = uploadFile?.name
   fileObj['url'] = response?.data?.url
   fileList.value.push(fileObj)
-  console.log(fileList.value)
   emit('fileList', fileList.value)
   // console.log('response, uploadFile, uploadFiles', response, uploadFile, uploadFiles)
 }
@@ -310,6 +314,7 @@ const resetFunc = formEl => {
           :on-success="uploadSuccess"
           :on-error="uploadError"
           :before-remove="beforeRemove"
+          :http-request="props.httpRequest"
           :on-exceed="handleExceed"
           :headers="item.headers"
           :multiple="item.multiple"

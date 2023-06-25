@@ -1,8 +1,7 @@
 import { generateApiFnc } from '@/api/helper/apiFncs'
 
 const apiConfig = {
-  getCPEList: 'POST /caseCenter/case/getCPEList',
-  caseUnassignedGatherList: 'POST /caseCenter/case/caseUnassignedGatherList'
+  getCPEList: 'GET /caseCenter/case/allot/stats/allotStats' //CPE持案情况(平台端使用)
 }
 
 const apis = generateApiFnc(apiConfig)
