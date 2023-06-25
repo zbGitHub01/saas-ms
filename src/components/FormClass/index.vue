@@ -147,7 +147,7 @@ export default {
         v-if="item.type === 'date'"
         v-model="state.flatEntity[item.property]"
         type="date"
-        value-format="YYYY-MM-DD"
+        :value-format="item.valueFormat || 'YYYY-MM-DD'"
         :placeholder="item.placeholder"
       />
       <el-date-picker

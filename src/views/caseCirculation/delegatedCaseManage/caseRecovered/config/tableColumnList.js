@@ -10,12 +10,12 @@ export default [
   },
   {
     label: '实际收回案量',
-    prop: 'recoverNum',
+    prop: 'actualRecoverCaseNum',
     isPopoverTable: true
   },
   {
     label: '实际收回户数',
-    prop: 'recoverNumber'
+    prop: 'actualRecoverUserNum'
   },
   {
     label: '实际收回金额',
@@ -23,19 +23,19 @@ export default [
   },
   {
     label: '开始时间',
-    prop: 'beginTimeStr'
+    prop: 'recoverTime'
   },
   {
     label: '完成时间',
-    prop: 'finishTimeStr'
+    prop: 'completeTime'
   },
   {
     label: '操作人',
-    prop: 'operaName'
+    prop: 'operatorName'
   },
   {
     label: '操作时间',
-    prop: 'operaTimeStr'
+    prop: 'recoverTime'
   },
   {
     label: '收回状态',

@@ -5,20 +5,21 @@
 export default [
   {
     type: 'date',
-    property: 'dateArray',
+    property: 'recoverStartTime',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss',
     placeholder: '请选择收回时间'
   },
   {
     type: 'select',
-    property: 'orderStatus',
+    property: 'operStoreId',
     placeholder: '请选择处置机构',
     options: [
       {
-        value: '1100010001000',
+        value: '1',
         label: '哇哈哈'
       },
       {
-        value: '2100011001000',
+        value: '2',
         label: '货拉拉'
       }
     ]

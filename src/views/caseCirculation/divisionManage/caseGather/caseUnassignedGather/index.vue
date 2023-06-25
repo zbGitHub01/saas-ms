@@ -9,14 +9,8 @@ const state = reactive({
   pageSize: 10
 })
 
-const caseUnassignedGatherList = async (pageSize, pageNum) => {
-  const pageInfo = {
-    ...state.queryNewData,
-    pageNum,
-    pageSize
-  }
-  console.log(pageInfo)
-  const data = await Apis.caseUnassignedGatherList()
+const caseUnassignedGatherList = async () => {
+  const data = await Apis.getOrgUnAllotStats()
   state.tableData = data.data
   console.log(data.data)
 }
@@ -27,75 +21,32 @@ caseUnassignedGatherList()
 <template>
   <div class="card-wrap">
     <el-table :data="state.tableData" style="width: 100%">
-      <el-table-column prop="caseType" label="委案类型" width="220" align="center" />
-      <el-table-column label="全部" prop="all" align="center">
-        <el-table-column prop="amount" label="金额" width="120" align="center" sortable>
-          <template #default="{ row }">
-            {{ row['all']['amount'] }}
-          </template>
+      <el-table-column prop="entrustTypeText" label="委案类型" width="150" align="center" />
+
+      <template v-if="state.tableData.length !== 0">
+        <el-table-column
+          v-for="(item, index) in state.tableData[0].products"
+          :key="index"
+          :label="item.productName"
+          align="center"
+        >
+          <el-table-column label="金额" align="center" prop="amount" sortable>
+            <template #default="{ row }">
+              <span>{{ row['products'][index]['amount'] }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="户数" align="center" prop="caseUserNum">
+            <template #default="{ row }">
+              <span>{{ row['products'][index]['caseUserNum'] }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="户均" align="center">
+            <template #default="{ row }">
+              <span>{{ row['products'][index]['caseUserAverage'] }}</span>
+            </template>
+          </el-table-column>
         </el-table-column>
-        <el-table-column prop="households" label="户数" width="120" align="center">
-          <template #default="{ row }">
-            {{ row['all']['households'] }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="perHouseholds" label="户均" width="120" align="center">
-          <template #default="{ row }">
-            {{ row['all']['perHouseholds'] }}
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="“360”借条" prop="loan" align="center">
-        <el-table-column prop="amount" label="金额" width="120" align="center" sortable>
-          <template #default="{ row }">
-            {{ row['loan']['amount'] }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="households" label="户数" width="120" align="center">
-          <template #default="{ row }">
-            {{ row['loan']['households'] }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="perHouseholds" label="户均" width="120" align="center">
-          <template #default="{ row }">
-            {{ row['loan']['perHouseholds'] }}
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="古京我来贷" prop="my" align="center">
-        <el-table-column prop="amount" label="金额" width="120" align="center" sortable>
-          <template #default="{ row }">
-            {{ row['my']['amount'] }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="households" label="户数" width="120" align="center">
-          <template #default="{ row }">
-            {{ row['my']['households'] }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="perHouseholds" label="户均" width="120" align="center">
-          <template #default="{ row }">
-            {{ row['my']['perHouseholds'] }}
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="捷信项目" prop="jieXin" align="center">
-        <el-table-column prop="amount" label="金额" width="120" align="center" sortable>
-          <template #default="{ row }">
-            {{ row['jieXin']['amount'] }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="households" label="户数" width="120" align="center">
-          <template #default="{ row }">
-            {{ row['jieXin']['households'] }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="perHouseholds" label="户均" width="120" align="center">
-          <template #default="{ row }">
-            {{ row['jieXin']['perHouseholds'] }}
-          </template>
-        </el-table-column>
-      </el-table-column>
+      </template>
     </el-table>
     <pagination
       v-model:page="state.page"

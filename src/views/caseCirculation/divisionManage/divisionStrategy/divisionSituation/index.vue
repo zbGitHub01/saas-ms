@@ -3,7 +3,7 @@ import { reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useTabsStore } from '@/store/modules/tabs'
 import { downArrayBufferFile } from '@/api/arrayBuffer'
-import Apis from '@/api/modules/caseGather'
+import Apis from '@/api/modules/divisionStrategy'
 // import tableColumn from './config/tableColumn.js'
 
 const state = reactive({
@@ -48,8 +48,7 @@ getCPEList()
       </div>
       <el-button type="primary" plain="" @click="handleExport">导出</el-button>
     </div>
-    <!-- <TableClass :table-data="state.tableData" :column-list="tableColumn" @change-status="handleChange"></TableClass> -->
-    <el-table :data="state.tableData" style="width: 100%" k>
+    <el-table :data="state.tableData" style="width: 100%">
       <el-table-column prop="cpeLevel" label="CPE分案等级" width="150" align="center" />
       <el-table-column prop="cpeId" label="CPE_ID" width="150" align="center" />
       <el-table-column prop="cpeName" label="CPE姓名" width="150" align="center" />

@@ -2,7 +2,7 @@
 import { reactive, ref, computed } from 'vue'
 import { useGlobalStore } from '@/store'
 import { ElMessage } from 'element-plus'
-import Apis, { strategyImport } from '@/api/modules/realtimeDivision'
+import Apis, { strategyImport } from '@/api/modules/divisionStrategy'
 import { useRoute, useRouter } from 'vue-router'
 import { useTabsStore } from '@/store/modules/tabs'
 import { downArrayBufferFile } from '@/api/arrayBuffer'

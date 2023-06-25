@@ -1,24 +1,28 @@
 <script setup>
-import { reactive, ref, onBeforeMount, onMounted } from 'vue'
+import { reactive, ref } from 'vue'
+import moment from 'moment'
 import Apis from '@/api/modules/caseRecovered'
 import tableColumnList from './config/tableColumnList.js'
 import queryList from './config/queryList.js'
 
 const state = reactive({
   tableData: [],
-  pageTotal: 0,
+  pageTotal: 10,
+  page: 1,
+  pageSize: 10,
   queryNewData: {},
   gridData: []
 })
 
-const getOrderListAgain = async (pageSize, pageNum) => {
+const getList = async (page, pageSize) => {
   const pageInfo = {
     ...state.queryNewData,
-    pageNum: pageNum ? pageNum : 1,
-    pageSize: pageSize ? pageSize : 10
+    recoverType: '2',
+    page: page ? page : state.page,
+    pageSize: pageSize ? pageSize : state.pageSize
   }
   const data = await Apis.getCaseRecoveredList(pageInfo)
-  state.tableData = data.data
+  state.tableData = data.data.data
   state.pageTotal = data.total
 }
 
@@ -27,48 +31,39 @@ const formClass = ref()
 
 //搜索操作
 const handleSearch = () => {
-  const queryData = formClass.value.getEntity()
-  state.queryNewData = Object.keys(queryData).includes('dateArray')
-    ? {
-        ...queryData,
-        submitStartDate: queryData.dateArray[0],
-        submitEndDate: queryData.dateArray[1]
-      }
-    : queryData
-  delete state.queryNewData.dateArray
-  getOrderListAgain()
-  console.log('aa', queryData)
+  state.queryNewData = {
+    ...formClass.value.getEntity(),
+    recoverEndTime: moment().endOf('month').format('YYYY-MM-DD HH:mm:ss')
+  }
+  getList()
 }
 //重置操作
 const handleReset = () => {
   formClass.value.handleReset()
   state.queryNewData = {}
-  getOrderListAgain()
+  getList()
 }
 
 const popoverTableVisible = ref(false)
 const currPopover = ref(null)
 //实际收回案量点击展示卡
 const handleViewPopoverTable = async val => {
+  const { recoverId } = val
   currPopover.value = val
-  const data = await Apis.getCaseRecoveredInfo()
+  const data = await Apis.getCaseRecoveredInfo({ recoverId })
   state.gridData = data.data
   popoverTableVisible.value = true
-  console.log(state.gridData)
 }
 
 //下载失败数据
 const handleDownload = (index, row) => {
-  let win = window.open()
+  let win = window.open(row.errorDataUrl)
   win.opener = null
   win.location = row.failData
   win.target = '_blank'
 }
 
-getOrderListAgain()
-
-onBeforeMount(() => {})
-onMounted(() => {})
+getList()
 </script>
 
 <template>
@@ -83,7 +78,9 @@ onMounted(() => {})
         :table-data="state.tableData"
         :column-list="tableColumnList"
         :total="state.pageTotal"
-        @query="getOrderListAgain"
+        :page="state.page"
+        :page-size="state.pageSize"
+        @query="getList"
         @popover-table="handleViewPopoverTable"
       >
         <template #operation>
@@ -115,10 +112,10 @@ onMounted(() => {})
       </div>
       <el-table :data="state.gridData">
         <el-table-column width="180" property="productName" label="产品" />
-        <el-table-column width="160" property="recoverNum" label="实际收回案量" />
-        <el-table-column width="160" property="recoverNumber" label="实际收回户数" />
+        <el-table-column width="160" property="caseNum" label="实际收回案量" />
+        <el-table-column width="160" property="userNum" label="实际收回户数" />
         <el-table-column width="160" property="recoverAmount" label="实际收回金额" />
-        <el-table-column width="180" property="case" label="留案案件" />
+        <el-table-column width="180" property="isRecoverStr" label="留案案件" />
       </el-table>
     </el-dialog>
   </div>

@@ -13,10 +13,10 @@ const tabActive = ref('1')
   <div class="card-wrap">
     <el-tabs v-model="tabActive" class="mb20" @tab-click="tabClick">
       <el-tab-pane label="CPE持案汇总" name="1">
-        <CaseCPEGather />
+        <CaseCPEGather v-if="Number(tabActive) === 1" />
       </el-tab-pane>
       <el-tab-pane label="未分派案件汇总" name="2">
-        <CaseUnassignedGather />
+        <CaseUnassignedGather v-if="Number(tabActive) === 2" />
       </el-tab-pane>
     </el-tabs>
   </div>

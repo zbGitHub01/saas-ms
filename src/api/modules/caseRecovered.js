@@ -1,8 +1,8 @@
 import { generateApiFnc } from '@/api/helper/apiFncs'
 
 const apiConfig = {
-  getCaseRecoveredList: 'POST /caseCenter/caseRecoveredList',
-  getCaseRecoveredInfo: 'GET /caseCenter/caseRecoveredInfo'
+  getCaseRecoveredList: 'POST /caseCenter/case/recover/recoverRecordList',
+  getCaseRecoveredInfo: 'GET /caseCenter/case/recover/recoverRecordDetail'
 }
 
 const apis = generateApiFnc(apiConfig)
