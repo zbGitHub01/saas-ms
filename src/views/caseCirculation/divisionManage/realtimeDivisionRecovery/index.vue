@@ -22,6 +22,8 @@ const getRecoverNowList = async (page, pageSize) => {
   try {
     const pageInfo = {
       ...state.queryNewData,
+      recoverType: 3,
+      operateType: 1,
       page: page ? page : state.page,
       pageSize: pageSize ? pageSize : state.pageSize
     }
@@ -50,15 +52,7 @@ const formClass = ref()
 //搜索操作
 const handleSearch = () => {
   const queryData = formClass.value.getEntity()
-  state.queryNewData = Object.keys(queryData).includes('dateArray')
-    ? {
-        ...queryData,
-        submitStartDate: queryData.dateArray[0],
-        submitEndDate: queryData.dateArray[1]
-      }
-    : queryData
-  delete state.queryNewData.dateArray
-  getRecoverNowList()
+  // getRecoverNowList()
   console.log('aa', queryData)
 }
 //重置操作

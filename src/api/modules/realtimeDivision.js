@@ -1,7 +1,11 @@
-import http from '../index'
 import { generateApiFnc } from '@/api/helper/apiFncs'
 
-const apiConfig = {}
+const apiConfig = {
+  getOrgList: 'GET /other/org/orgChart/list',
+  getUserList: 'GET /other/org/system/user/all',
+  caseAllotInfo: 'GET /caseCenter/case/allot/caseAllotNext',
+  recoverNowSelect: 'POST /caseCenter/case/recover/recoverNowSelect'
+}
 
 const apis = generateApiFnc(apiConfig)
 
