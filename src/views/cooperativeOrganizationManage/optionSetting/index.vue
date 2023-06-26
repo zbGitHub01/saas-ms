@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { onMounted, reactive } from 'vue'
 import optionSetting from '../components/optionSetting/index.vue'
 import Apis from '@/api/modules/cooperativeOrganization'

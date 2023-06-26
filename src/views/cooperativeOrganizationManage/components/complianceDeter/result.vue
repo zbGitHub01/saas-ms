@@ -4,7 +4,7 @@
       <span>处置经验判断：</span>
       <span style="font-weight: bold">{{ complianceInfo.companyTypeName }}</span>
     </div>
-    <div class="form-wrap" v-if="approveLogData.score > 0">
+    <div v-if="approveLogData.score > 0" class="form-wrap">
       <div class="form-list">
         <div
           v-for="(headItem, headIndex) in formHead"
@@ -62,20 +62,20 @@
           <div style="font-weight: bold; margin-top: 6px">准入结论：</div>
           <div>
             <div
-              class="score-standard actived-standard no-allow"
               v-if="approveLogData.accessType === 1"
+              class="score-standard actived-standard no-allow"
             >拒绝准入</div>
-            <div class="score-standard" v-if="approveLogData.accessType === 0">予以准入</div>
+            <div v-if="approveLogData.accessType === 0" class="score-standard">予以准入</div>
           </div>
         </div>
-        <div class="mt18" v-if="approveLogData.accessType === 0">
+        <div v-if="approveLogData.accessType === 0" class="mt18">
           <div style="display: flex; line-height: 20px">
             <div style="font-weight: bold; width: 122px">拒绝原因总结：</div>
             <div style="flex: 1; font-weight: bold; font-size: 16px">{{ approveLogData.reason }}</div>
           </div>
         </div>
       </div>
-      <div style="margin-top: 20px; display: flex; line-height: 20px" v-if="approveLogData.remark">
+      <div v-if="approveLogData.remark" style="margin-top: 20px; display: flex; line-height: 20px">
         <div style="font-weight: bold; width: 50px">备注：</div>
         <div style="flex: 1">{{ approveLogData.remark }}</div>
       </div>
@@ -84,7 +84,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref } from 'vue'
 import { QuestionFilled } from '@element-plus/icons-vue'
 import Apis from '@/api/modules/cooperativeOrganization'
@@ -121,7 +121,7 @@ const registerApproveLog = async () => {
   approveLogData.value = data ?? {}
   approveLogData.value.approveJson = JSON.parse(data.approveJson)
 }
-const handleData = (val: any) => {
+const handleData = val => {
   complianceInfo.value = val
   registerApproveLog()
 }

@@ -2,7 +2,7 @@
   <el-dialog v-model="dialogVisible" title="开启合作" width="450px" :before-close="handleClose">
     <div style="margin: 0 40px">
       <div class="ft-align text-weight mb12">确定开启合作吗？</div>
-      <div class="ft-align mb30" v-if="orgData.reasonContent || orgData.remark">上次终止合作的原因为：</div>
+      <div v-if="orgData.reasonContent || orgData.remark" class="ft-align mb30">上次终止合作的原因为：</div>
       <div class="ft-align">
         <div style="color: #f00; font-size: 20px" class="mb12">{{ orgData.reasonContent }}</div>
         <div>{{ orgData.remark }}</div>
@@ -17,7 +17,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
@@ -25,7 +25,7 @@ const dialogVisible = ref(false)
 const orgData = ref({})
 
 const emits = defineEmits(['getTableData'])
-const open = (row: any) => {
+const open = row => {
   orgData.value = row
   dialogVisible.value = true
 }

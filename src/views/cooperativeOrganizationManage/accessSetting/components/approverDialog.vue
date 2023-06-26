@@ -11,7 +11,7 @@
         status-icon
       >
         <el-form-item label="审批人：" prop="handlerId">
-          <el-select clearable v-model="form.handlerId" filterable placeholder="请选择审批人">
+          <el-select v-model="form.handlerId" clearable filterable placeholder="请选择审批人">
             <el-option v-for="item in userList" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -26,13 +26,12 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 
 const formSize = ref('default')
-const ruleFormRef = ref<FormInstance>()
+const ruleFormRef = ref()
 const dialogVisible = ref(false)
 const emits = defineEmits(['updateItem'])
 const userList = ref([])
@@ -40,16 +39,16 @@ const form = reactive({
   handlerId: ''
 })
 const defaultForm = JSON.parse(JSON.stringify(form))
-const rules = reactive<FormRules>({
+const rules = reactive({
   handlerId: [{ required: true, message: '请选择审批人', trigger: 'change' }]
 })
-const open = (item?: any) => {
+const open = item => {
   item?.id ? Object.assign(form, item) : Object.assign(form, defaultForm)
   employeeList()
   dialogVisible.value = true
 }
 const doSave = () => {
-  const temData = userList.value.filter((item: any) => item.id === form.handlerId)[0]
+  const temData = userList.value.filter(item => item.id === form.handlerId)[0]
   emits('updateItem', temData)
   handleClose()
 }
@@ -62,7 +61,7 @@ const employeeList = async () => {
   if (code !== 200) return
   userList.value = data
 }
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = async formEl => {
   if (!formEl) return
   await formEl.validate(valid => {
     if (valid) {

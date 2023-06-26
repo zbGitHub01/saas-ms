@@ -3,146 +3,648 @@
     "name": "首页",
     "code": "HOME",
     "icon": "home",
-    "path": "/home/index",
+    "webPath": "/home/index",
     "type": 1,
     "children": null
   },
   {
     "name": "案件管理",
     "code": "CASE_MANAGE",
-    "icon": "Coin",
-    "path": "/caseManage",
+    "icon": "case-manage",
+    "webPath": "/caseManage",
     "type": 1,
     "children": [
       {
         "name": "数据导入",
         "code": "CASE_IMPORT",
         "icon": "",
-        "path": "/caseManage/caseImport",
+        "webPath": "/caseManage/caseImport",
         "type": 1
       },
       {
         "name": "全部案件",
         "code": "CASE_ALL",
         "icon": "",
-        "path": "/caseManage/allCases",
-        "type": 1
+        "webPath": "/caseManage/allCases",
+        "type": 1,
+        "children": [
+          {
+            "name": "可管理案件",
+            "code": "MANAGE_CASE",
+            "icon": "",
+            "webPath": "",
+            "type": 2,
+            "children": [
+              {
+                "name": "关闭案件",
+                "code": "CLOSE_CASE",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "暂停案件",
+                "code": "SUSPEND_CASE",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "恢复案件",
+                "code": "REINSTATE_CASE",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "添加临时标签",
+                "code": "ADD_TEMPORARY_LABEL",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除临时标签",
+                "code": "DELETE_TEMPORARY_LABEL",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "导出案件",
+                "code": "EXPORT_CASE",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "导出处置记录",
+                "code": "EXPORT_DISPOSE_RECORD",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "生成结清证明",
+                "code": "GENERAL_SETTLEMENT_CERTIFY",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "已委托案件",
+            "code": "ENTRUST_CASE",
+            "icon": "",
+            "webPath": "",
+            "type": 2
+          },
+          {
+            "name": "委派处置案件",
+            "code": "APPOINT_DISPOSE_CASE",
+            "icon": "",
+            "webPath": "",
+            "type": 2,
+            "children": [
+              {
+                "name": "导出案件1",
+                "code": "EXPORT_CASE_1",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "导出案件2",
+                "code": "EXPORT_CASE_2",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "案件标色",
+                "code": "CASE_COLOR_LABEL",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "修改处置状态",
+                "code": "MODIFY_DISPOSE_STATUS",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "添加临时标签",
+                "code": "APPOINT_DISPOSE_CASE_ADD_TEMPORARY_LABEL",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除临时标签",
+                "code": "APPOINT_DISPOSE_CASE_DELETE_TEMPORARY_LABEL",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "创建诉讼批次",
+                "code": "GREAT_LISTING_BATCH",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "创建保单全批次",
+                "code": "GREAT_POLICY_BATCH",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          }
+        ]
       },
       {
         "name": "资产委托",
         "code": "ASSET_ENTRUST",
         "icon": "",
-        "path": "/caseManage/assetEntrust",
-        "type": 1
+        "webPath": "/caseManage/assetEntrust",
+        "type": 1,
+        "children": [
+          {
+            "name": "当前委托",
+            "code": "CURRENT_COMMITS",
+            "icon": "",
+            "webPath": "",
+            "type": 2,
+            "children": [
+              {
+                "name": "新增委托",
+                "code": "NEW_ENTRUST",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "终止合作",
+                "code": "TERM_IN_COOPER",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "委托历史",
+            "code": "ENTRUST_HISTORY",
+            "icon": "",
+            "webPath": "",
+            "type": 2
+          }
+        ]
       },
       {
         "name": "资产基础配置",
         "code": "ASSET_DISPOSE",
         "icon": "",
-        "path": "/caseManage/assetDispose",
-        "type": 1
+        "webPath": "/caseManage/assetDispose",
+        "type": 1,
+        "children": [
+          {
+            "name": "产品名录",
+            "code": "ASSET_DISPOSE_PRODUCT_LIST",
+            "icon": "",
+            "webPath": "",
+            "type": 2,
+            "children": [
+              {
+                "name": "新增",
+                "code": "ASSET_DISPOSE_PRODUCT_LIST_ADD",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "编辑",
+                "code": "ASSET_DISPOSE_PRODUCT_LIST_EDIT",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除",
+                "code": "ASSET_DISPOSE_PRODUCT_LIST_DELETE",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "入库批次",
+            "code": "ASSET_DISPOSE_STORAGE_BATCH",
+            "icon": "",
+            "webPath": "",
+            "type": 2,
+            "children": [
+              {
+                "name": "新增",
+                "code": "ASSET_DISPOSE_STORAGE_BATCH_ADD",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "编辑",
+                "code": "ASSET_DISPOSE_STORAGE_BATCH_EDIT",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除",
+                "code": "ASSET_DISPOSE_STORAGE_BATCH_DELETE",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "债权方",
+            "code": "ASSET_DISPOSE_CREDITOR",
+            "icon": "",
+            "webPath": "",
+            "type": 2,
+            "children": [
+              {
+                "name": "新增",
+                "code": "ASSET_DISPOSE_CREDITOR_ADD",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "编辑",
+                "code": "ASSET_DISPOSE_CREDITOR_EDIT",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除",
+                "code": "ASSET_DISPOSE_CREDITOR_DELETE",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          }
+        ]
       }
     ]
   },
   {
     "name": "外部案件管理",
     "code": "EXTERNAL_CASE",
-    "icon": "TakeawayBox",
-    "path": "/externalCase",
+    "icon": "extern-case",
+    "webPath": "/externalCase",
     "type": 1,
     "children": [
       {
         "name": "外部案件导入",
         "code": "EXTERNAL_CASE_IMPORT",
         "icon": "",
-        "path": "/externalCase/externalCaseImport",
+        "webPath": "/externalCase/externalCaseImport",
         "type": 1
       },
       {
         "name": "外部案件管理",
         "code": "EXTERNAL_CASE_MANAGE",
         "icon": "",
-        "path": "/externalCase/externalCaseManage",
-        "type": 1
+        "webPath": "/externalCase/externalCaseManage",
+        "type": 1,
+        "children": [
+          {
+            "name": "添加临时标签",
+            "code": "EXTERNAL_CASE_MANAGE_ADD_TEMPORARY_LABEL",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "删除临时标签",
+            "code": "EXTERNAL_CASE_MANAGE_DELETE_TEMPORARY_LABEL",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "导出案件",
+            "code": "EXTERNAL_CASE_MANAGE_EXPORT_CASE",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "锁定案件",
+            "code": "EXTERNAL_CASE_MANAGE_LOCK_CASE",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "取消锁定",
+            "code": "EXTERNAL_CASE_MANAGE_UNLOCK",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "删除案件",
+            "code": "EXTERNAL_CASE_MANAGE_DELETE_CASE",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "添加临时标签",
+            "code": "EXTERNAL_CASE_MANAGE_ADD_TEMPORARY_LABEL",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          }
+        ]
       },
       {
         "name": "外部案件委派",
         "code": "EXTERNAL_CASE_ASSIGNMENT",
         "icon": "",
-        "path": "/externalCase/externalCaseAssignment",
-        "type": 1
+        "webPath": "/externalCase/externalCaseAssignment",
+        "type": 1,
+        "children": [
+          {
+            "name": "实时委案",
+            "code": "EXTERNAL_CASE_ASSIGNMENT_REAL_TIM_CASE_REFER",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          }
+        ]
       },
       {
         "name": "外部案件收回",
         "code": "EXTERNAL_CASE_RECOVERY",
         "icon": "",
-        "path": "/externalCase/externalCaseRecovery",
-        "type": 1
+        "webPath": "/externalCase/externalCaseRecovery",
+        "type": 1,
+        "children": [
+          {
+            "name": "实时收回",
+            "code": "EXTERNAL_CASE_RECOVERY_REAL_TIM_RECOVERY",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "预收回并删除",
+            "code": "EXTERNAL_CASE_RECOVERY_PER_CAL_DELETE",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          }
+        ]
       },
       {
         "name": "外部资产基础配置",
         "code": "EXTERNAL_ASSET_DISPOSE",
         "icon": "",
-        "path": "/externalCase/externalAssetDispose",
-        "type": 1
+        "webPath": "/externalCase/externalAssetDispose",
+        "type": 1,
+        "children": [
+          {
+            "name": "产品名录",
+            "code": "EXTERNAL_ASSET_DISPOSE_PRODUCT_LIST",
+            "icon": "",
+            "webPath": "",
+            "type": 2,
+            "children": [
+              {
+                "name": "新增",
+                "code": "EXTERNAL_ASSET_DISPOSE_PRODUCT_LIST_ADD",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "编辑",
+                "code": "EXTERNAL_ASSET_DISPOSE_PRODUCT_LIST_EDIT",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除",
+                "code": "EXTERNAL_ASSET_DISPOSE_PRODUCT_LIST_DELETE",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "入库批次",
+            "code": "EXTERNAL_ASSET_DISPOSE_STORAGE_BATCH",
+            "icon": "",
+            "webPath": "",
+            "type": 2,
+            "children": [
+              {
+                "name": "新增",
+                "code": "EXTERNAL_ASSET_DISPOSE_STORAGE_BATCH_ADD",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "编辑",
+                "code": "EXTERNAL_ASSET_DISPOSE_STORAGE_BATCH_EDIT",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除",
+                "code": "EXTERNAL_ASSET_DISPOSE_STORAGE_BATCH_DELETE",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "债权方",
+            "code": "EXTERNAL_ASSET_DISPOSE_CREDITOR",
+            "icon": "",
+            "webPath": "",
+            "type": 2,
+            "children": [
+              {
+                "name": "新增",
+                "code": "EXTERNAL_ASSET_DISPOSE_CREDITOR_ADD",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "编辑",
+                "code": "EXTERNAL_ASSET_DISPOSE_CREDITOR_EDIT",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除",
+                "code": "EXTERNAL_ASSET_DISPOSE_CREDITOR_DELETE",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          }
+        ]
       },
       {
         "name": "回款登记",
         "code": "COLLECTION_REGISTER",
         "icon": "",
-        "path": "/externalCase/collectionRegister",
-        "type": 1
+        "webPath": "/externalCase/collectionRegister",
+        "type": 1,
+        "children": [
+          {
+            "name": "上传回款登记表",
+            "code": "COLLECTION_REGISTER_UPLOAD",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "下载回款登记表模板",
+            "code": "COLLECTION_REGISTER_DOWNLOAD_TEMPLATE",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "导出",
+            "code": "COLLECTION_REGISTER_EXPORT",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "下载失败记录",
+            "code": "COLLECTION_REGISTER_DOWNLOAD_FAILURE_RECORD",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          }
+        ]
       },
       {
         "name": "回款登记明细",
         "code": "COLLECTION_REGISTER_DETAIL",
         "icon": "",
-        "path": "/externalCase/collectionRegisterDetail",
-        "type": 1
+        "webPath": "/externalCase/collectionRegisterDetail",
+        "type": 1,
+        "children": [
+          {
+            "name": "导出",
+            "code": "COLLECTION_REGISTER_DETAIL_EXPORT",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          }
+        ]
       }
     ]
   },
   {
     "name": "案件流转",
     "code": "CASE_CIRCULATION",
-    "icon": "Guide",
-    "path": "/caseCirculation",
+    "icon": "case-transfer",
+    "webPath": "/caseCirculation",
     "type": 1,
     "children": [
       {
         "name": "分库管理",
         "code": "BANK_MANAGE",
         "icon": "",
-        "path": "/caseCirculation/bankManage",
+        "webPath": "/caseCirculation/bankManage",
         "type": 1,
         "children": [
           {
             "name": "案件分库",
             "code": "CASE_BANK",
             "icon": "",
-            "path": "/caseCirculation/bankManage/caseBank",
-            "type": 1
+            "webPath": "/caseCirculation/bankManage/caseBank",
+            "type": 1,
+            "children": [
+              {
+                "name": "添加临时标签",
+                "code": "CASE_BANK_ADD_TEMPORARY_LABEL",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除临时标签",
+                "code": "CASE_BANK_DELETE_TEMPORARY_LABEL",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "案件分库",
+                "code": "CASE_BANK_BANK",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
           },
           {
             "name": "分库记录",
             "code": "BANK_RECORD",
             "icon": "",
-            "path": "/caseCirculation/bankManage/bankRecord",
+            "webPath": "/caseCirculation/bankManage/bankRecord",
             "type": 1
           },
           {
             "name": "分库收回记录",
             "code": "BANK_RECOVER_RECORD",
             "icon": "",
-            "path": "/caseCirculation/bankManage/bankRecoverRecord",
+            "webPath": "/caseCirculation/bankManage/bankRecoverRecord",
             "type": 1
           },
           {
             "name": "分库名称设置",
             "code": "BANK_SET_NAME",
             "icon": "",
-            "path": "/caseCirculation/bankManage/bankSetName",
-            "type": 1
+            "webPath": "/caseCirculation/bankManage/bankSetName",
+            "type": 1,
+            "children": [
+              {
+                "name": "添加分库",
+                "code": "BANK_SET_NAME_ADD",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
           }
         ]
       },
@@ -150,29 +652,63 @@
         "name": "委案管理",
         "code": "DELEGATED_CASE_MANAGE",
         "icon": "",
-        "path": "/caseCirculation/delegatedCaseManage",
+        "webPath": "/caseCirculation/delegatedCaseManage",
         "type": 1,
         "children": [
           {
             "name": "实时委案",
             "code": "CASE_ASSIGNMENT",
             "icon": "",
-            "path": "/caseCirculation/delegatedCaseManage/caseAssignment",
-            "type": 1
+            "webPath": "/caseCirculation/delegatedCaseManage/caseAssignment",
+            "type": 1,
+            "children": [
+              {
+                "name": "实时委案",
+                "code": "CASE_ASSIGNMENT_ASSIGNMENT",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
           },
           {
             "name": "实时委案收回",
             "code": "CASE_ASSIGNMENT_RECOVER",
             "icon": "",
-            "path": "/caseCirculation/delegatedCaseManage/caseRecovery",
-            "type": 1
+            "webPath": "/caseCirculation/delegatedCaseManage/caseRecovery",
+            "type": 1,
+            "children": [
+              {
+                "name": "实时回收",
+                "code": "CASE_ASSIGNMENT_RECOVER_REAL_TIM_RECOVERY",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
           },
           {
             "name": "委案类型配置",
             "code": "CASE_TYPE_CONFIGURATION",
             "icon": "",
-            "path": "/caseCirculation/delegatedCaseManage/caseConfiguration",
-            "type": 1
+            "webPath": "/caseCirculation/delegatedCaseManage/caseConfiguration",
+            "type": 1,
+            "children": [
+              {
+                "name": "添加委案类型",
+                "code": "CASE_TYPE_CONFIGURATION_ADD",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "编辑",
+                "code": "CASE_TYPE_CONFIGURATION_EDIT",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
           }
         ]
       }
@@ -182,56 +718,118 @@
     "name": "合作机构管理",
     "code": "COOPER_ORGAN_MANAGE",
     "icon": "copper-organ",
-    "path": "/cooperativeOrganizationManage",
+    "webPath": "/cooperativeOrganizationManage",
     "type": 1,
     "children": [
       {
         "name": "合作机构名录",
         "code": "DIRECTORY",
         "icon": "",
-        "path": "/cooperativeOrganizationManage/directory",
-        "type": 1
+        "webPath": "/cooperativeOrganizationManage/directory",
+        "type": 1,
+        "children": [
+          {
+            "name": "生成邀请链接",
+            "code": "DIRECTORY_GENERAL_IN_IT_LINK",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          }
+        ]
       },
       {
         "name": "合作机构准入设置",
         "code": "ACCESS_SETTING",
         "icon": "",
-        "path": "/cooperativeOrganizationManage/accessSetting",
-        "type": 1
+        "webPath": "/cooperativeOrganizationManage/accessSetting",
+        "type": 1,
+        "children": [
+          {
+            "name": "准入审批流和时效配置",
+            "code": "ACCESS_SETTING_APPROX_FLOW_LIMIT",
+            "icon": "",
+            "webPath": "",
+            "type": 2
+          },
+          {
+            "name": "准入资料配置",
+            "code": "ACCESS_SETTING_ACCESS_DATA",
+            "icon": "",
+            "webPath": "",
+            "type": 2
+          },
+          {
+            "name": "拒绝原因和重新准入设置",
+            "code": "ACCESS_SETTING_REASON_REJECT_REENTRY",
+            "icon": "",
+            "webPath": "",
+            "type": 2
+          },
+          {
+            "name": "合规平分卡配置",
+            "code": "ACCESS_SETTING_EQUAL_DISTRIBUTE_COMPLIANCE",
+            "icon": "",
+            "webPath": "",
+            "type": 2
+          },
+          {
+            "name": "机构退出原因配置",
+            "code": "ACCESS_SETTING_REASON_WITHDRAW_INSTITUTE",
+            "icon": "",
+            "webPath": "",
+            "type": 2
+          }
+        ]
       },
       {
         "name": "所有准入审批工单",
         "code": "ALL_ACCESS",
         "icon": "",
-        "path": "/cooperativeOrganizationManage/allAccess",
+        "webPath": "/cooperativeOrganizationManage/allAccess",
         "type": 1
       },
       {
         "name": "准入审批",
         "code": "ACCESS_APPROVAL",
         "icon": "",
-        "path": "/cooperativeOrganizationManage/accessApproval",
+        "webPath": "/cooperativeOrganizationManage/accessApproval",
         "type": 1
       },
       {
         "name": "准入合规审批",
         "code": "COMPLIANCE_APPROVAL",
         "icon": "",
-        "path": "/cooperativeOrganizationManage/complianceApproval",
+        "webPath": "/cooperativeOrganizationManage/complianceApproval",
         "type": 1
       },
       {
         "name": "机构选项设置",
         "code": "OPTION_SETTING",
         "icon": "",
-        "path": "/cooperativeOrganizationManage/optionSetting",
-        "type": 1
+        "webPath": "/cooperativeOrganizationManage/optionSetting",
+        "type": 1,
+        "children": [
+          {
+            "name": "添加机构分类",
+            "code": "OPTION_SETTING_ADD_CEP_TYPE",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          },
+          {
+            "name": "添加作业模式",
+            "code": "OPTION_SETTING_ADD_OVER_MODE",
+            "icon": "",
+            "webPath": "",
+            "type": 3
+          }
+        ]
       },
       {
         "name": "上游合作邀请管理",
         "code": "INVITE_MANAGE",
         "icon": "",
-        "path": "/cooperativeOrganizationManage/inviteManage",
+        "webPath": "/cooperativeOrganizationManage/inviteManage",
         "type": 1
       }
     ]
@@ -240,35 +838,35 @@
     "name": "系统设置",
     "code": "SYSTEM",
     "icon": "system",
-    "path": "/systemSetting",
+    "webPath": "/systemSetting",
     "type": 1,
     "children": [
       {
         "name": "员工管理",
         "code": "EMPLOYEE_MANAGE",
         "icon": null,
-        "path": "/systemSetting/employeeManage",
+        "webPath": "/systemSetting/employeeManage",
         "type": 1,
         "children": [
           {
             "name": "所有员工",
             "code": "ALL_EMPLOYEE",
             "icon": null,
-            "path": "",
+            "webPath": "",
             "type": 2,
             "children": [
               {
-                "name": "添加员工",
+                "name": "邀请员工",
                 "code": "ALL_EMPLOYEE_ADD",
                 "icon": null,
-                "path": "",
+                "webPath": "",
                 "type": 3
               },
               {
                 "name": "批量导入",
                 "code": "ALL_EMPLOYEE_EXPORT",
                 "icon": null,
-                "path": "",
+                "webPath": "",
                 "type": 3
               }
             ]
@@ -277,21 +875,21 @@
             "name": "机构部门",
             "code": "ORG_DEPT",
             "icon": null,
-            "path": "",
+            "webPath": "",
             "type": 2
           },
           {
             "name": "机构职位",
             "code": "ORG_POSITION",
             "icon": null,
-            "path": "",
+            "webPath": "",
             "type": 2
           },
           {
             "name": "机构角色",
             "code": "ORG_ROLE",
             "icon": null,
-            "path": "",
+            "webPath": "",
             "type": 2
           }
         ]
@@ -300,28 +898,28 @@
         "name": "权限管理",
         "code": "AUTH_MANAGE",
         "icon": null,
-        "path": "/systemSetting/authManage",
+        "webPath": "/systemSetting/authManage",
         "type": 1,
         "children": [
           {
             "name": "部门权限",
             "code": "DEPT_AUTH",
             "icon": null,
-            "path": "",
+            "webPath": "",
             "type": 2
           },
           {
             "name": "角色权限",
             "code": "ROLE_AUTH",
             "icon": null,
-            "path": "",
+            "webPath": "",
             "type": 2
           },
           {
             "name": "员工最终权限",
             "code": "EMPLOYEE_AUTH",
             "icon": null,
-            "path": "",
+            "webPath": "",
             "type": 2
           }
         ]
@@ -330,7 +928,7 @@
         "name": "公司信息管理",
         "code": "COMPANY_INFO",
         "icon": "",
-        "path": "/systemSetting/companyInfo",
+        "webPath": "/systemSetting/companyInfo",
         "type": 1
       }
     ]

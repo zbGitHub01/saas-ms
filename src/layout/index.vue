@@ -50,6 +50,7 @@ watch(
 // 预加载字段数据
 const preloadingDict = () => {
   commonStore.fetchItemList()
+  commonStore.fetchRegion()
 }
 preloadingDict()
 // 刷新当前页面

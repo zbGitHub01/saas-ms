@@ -46,7 +46,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, toRefs } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import formDialog from './formDialog.vue'
@@ -54,16 +54,16 @@ import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 const emits = defineEmits(['getSelectList'])
 // 接收props数据
-const props = defineProps<{
+const props = defineProps({
   stateData: {
-    type: Object
+    type: Object,
     default: () => {}
   }
-}>()
+})
 const { head, data, detail } = toRefs(props.stateData)
 const formDialogRef = ref()
 // 更改状态
-const changeStatus = (row: any) => {
+const changeStatus = row => {
   const { id, name, isOpen, code } = row
   let params = {
     id,
@@ -74,14 +74,14 @@ const changeStatus = (row: any) => {
   updateSelect(params, '修改成功')
 }
 // 添加-更新下拉选项
-const updateSelect = async (params: any, msg: string) => {
+const updateSelect = async (params, msg) => {
   const { code } = await Apis.optionSave(params)
   if (code !== 200) return
   ElMessage.success(msg)
   emits('getSelectList')
 }
 // 新增/编辑
-const onFormDialog = (type: string, row?: any) => {
+const onFormDialog = (type, row) => {
   formDialogRef.value.open(props.stateData, type, row)
 }
 </script>

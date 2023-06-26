@@ -17,9 +17,9 @@
         </el-table-column>
       </el-table>
       <pagination
-        :total="state.total"
         v-model:page="queryParams.page"
         v-model:page-size="queryParams.pageSize"
+        :total="state.total"
         @pagination="getTableData"
       />
     </el-dialog>
@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { reactive, ref } from 'vue'
 import historyOrgDetail from './historyOrgDetail.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
@@ -48,13 +48,13 @@ const getTableData = async relationTenantId => {
   state.tableData = data
   state.total = data.total
 }
-const open = (relationTenantId: any) => {
+const open = relationTenantId => {
   tenantId.value = relationTenantId
   getTableData(relationTenantId)
   dialogVisible.value = true
 }
 const historyOrgDetailRef = ref()
-const onDetail = (logId: any) => {
+const onDetail = logId => {
   const params = {
     logId,
     relationTenantId: tenantId

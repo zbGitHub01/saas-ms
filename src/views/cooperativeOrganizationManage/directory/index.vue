@@ -1,6 +1,6 @@
 <template>
   <div class="card-wrap">
-    <el-button type="primary" :icon="Plus" @click="onInviteLink" class="mb20">生成邀请链接</el-button>
+    <el-button type="primary" :icon="Plus" class="mb20" @click="onInviteLink">生成邀请链接</el-button>
     <FormWrap @search="onSearch" @reset="onReset">
       <template #default>
         <el-form inline :model="form">
@@ -82,16 +82,16 @@
     <el-table :data="state.tableData">
       <el-table-column label="机构名称" prop="companyName" width="210" align="center">
         <template #default="scope">
-          <div style="display:flex;align-items:center;justify-content: center;">
+          <div style="display: flex; align-items: center; justify-content: center">
             <el-tooltip
+              v-if="scope.row.companyName.length > 10"
               effect="dark"
-              v-if="scope.row.companyName.length>10"
               :content="scope.row.companyName"
               placement="top"
             >
-              <div>{{scope.row.companyName.substring(0,10)+'...'}}</div>
+              <div>{{ scope.row.companyName.substring(0, 10) + '...' }}</div>
             </el-tooltip>
-            <div v-else>{{scope.row.companyName}}</div>
+            <div v-else>{{ scope.row.companyName }}</div>
             <svg-icon
               v-if="scope.row.isRisk === 1"
               class="risk-icon"
@@ -142,34 +142,34 @@
         <template #default="scope">
           <el-button type="primary" link @click="onOrgDetail(scope.row.relationTenantId)">查看/编辑</el-button>
           <el-button
-            type="danger"
             v-if="scope.row.accessStatus !== 4"
+            type="danger"
             link
             @click="onStopComDialog(scope.row)"
           >终止合作</el-button>
           <!-- TODO：缺少reasonContent、remark字段，后期加入 -->
           <el-button
-            type="success"
             v-if="scope.row.accessStatus === 4"
+            type="success"
             link
             @click="onOpenComDialog(scope.row)"
           >开启合作</el-button>
           <el-button
             type="warning"
             link
-            @click="onReadmissionDialog(scope.row)"
             :disabled="scope.row.accessStatus === 3"
+            @click="onReadmissionDialog(scope.row)"
           >重新准入</el-button>
           <el-button
-            type="danger"
             v-if="scope.row.isStopJob === 0"
+            type="danger"
             :disabled="scope.row.accessStatus === 4"
             link
             @click="onSuspendOperationDialog(scope.row.relationTenantId, 'suspend')"
           >暂停作业</el-button>
           <el-button
-            type="warning"
             v-if="scope.row.isStopJob === 1"
+            type="warning"
             link
             @click="onSuspendOperationDialog(scope.row.relationTenantId, 'restore')"
           >恢复作业</el-button>
@@ -178,9 +178,9 @@
       </el-table-column>
     </el-table>
     <pagination
-      :total="state.total"
       v-model:page="queryParams.page"
       v-model:page-size="queryParams.pageSize"
+      :total="state.total"
       @pagination="getTableData"
     />
     <org-detail-drawer ref="orgDetailDrawerRef" @getTableData="getTableData"></org-detail-drawer>
@@ -196,7 +196,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { useConfirm } from '@/hooks/useConfirm'
@@ -214,7 +214,7 @@ import riskDialog from '../components/riskDialog.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { useCommonStore } from '@/store/modules/common'
 const commonStore = useCommonStore()
-const accessOptions = computed(() => commonStore.dropdownList.COOPERATION_STATUS)
+const accessOptions = computed(() => commonStore.dropdownList.GLE_UPMS_COOPERATION_STATUS)
 const optionData = reactive({
   orgTypeList: [],
   orgModelList: []
@@ -261,7 +261,7 @@ const handleForm = () => {
   return form
 }
 const accessStatusText = val => {
-  return accessOptions.find(item => item.itemValue === val)?.itemText
+  return accessOptions.value.find(item => item.itemValue === val)?.itemText
 }
 const onSearch = () => {
   getTableData()
@@ -275,7 +275,7 @@ const onReset = () => {
 }
 
 const orgDetailDrawerRef = ref()
-const onOrgDetail = (relationTenantId: number) => {
+const onOrgDetail = relationTenantId => {
   orgDetailDrawerRef.value.open(relationTenantId)
 }
 const inviteLinkDialogRef = ref()
@@ -283,19 +283,19 @@ const onInviteLink = () => {
   inviteLinkDialogRef.value.open()
 }
 const userNumDrawerRef = ref()
-const onUserNumDrawer = (relationTenantId: number) => {
+const onUserNumDrawer = relationTenantId => {
   userNumDrawerRef.value.open(relationTenantId)
 }
 const orgStructureDrawerRef = ref()
-const onOrgStructureDrawer = (relationTenantId: number) => {
+const onOrgStructureDrawer = relationTenantId => {
   orgStructureDrawerRef.value.open(relationTenantId)
 }
 const roleSettingDrawerRef = ref()
-const onRoleSettingDrawer = (relationTenantId: number) => {
+const onRoleSettingDrawer = relationTenantId => {
   roleSettingDrawerRef.value.open(relationTenantId)
 }
 const readmissionDialogRef = ref()
-const onReadmissionDialog = (row: any) => {
+const onReadmissionDialog = row => {
   // if (row.username) {
   //   readmissionDialogRef.value.open(row)
   // } else {
@@ -308,15 +308,15 @@ const onReadmissionDialog = (row: any) => {
   readmissionDialogRef.value.open(row)
 }
 const suspendOperationDialogRef = ref()
-const onSuspendOperationDialog = (relationTenantId: number, type: string) => {
+const onSuspendOperationDialog = (relationTenantId, type) => {
   suspendOperationDialogRef.value.open(relationTenantId, type)
 }
 const openComDialogRef = ref()
-const onOpenComDialog = (row: any) => {
+const onOpenComDialog = row => {
   openComDialogRef.value.open(row)
 }
 const stopComDialogRef = ref()
-const onStopComDialog = async (row: any) => {
+const onStopComDialog = async row => {
   const params = {
     relationTenantId: row.relationTenantId
   }

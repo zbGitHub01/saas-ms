@@ -3,8 +3,8 @@
     <div style="margin: 0 40px">
       <div class="ft-align text-weight mb12">确认与该处置机构终止合作吗？</div>
       <div
+        v-if="orgDetail.orgNum > 0"
         class="ft-align mb30"
-        v-if="orgDetail.orgNum >0"
       >终止合作后该公司账号下的个{{ orgDetail.orgNum }}案件将被收回至平台委外处置库。</div>
       <el-form
         ref="ruleFormRef"
@@ -61,17 +61,16 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
-import type { FormInstance, FormRules } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 const formSize = ref('default')
-const ruleFormRef = ref<FormInstance>()
+const ruleFormRef = ref()
 const dialogVisible = ref(false)
 const orgDetail = ref({})
-const reasonList = ref<any[]>([])
-const sensitiveOptions = ref<any[]>([
+const reasonList = ref([])
+const sensitiveOptions = ref([
   {
     id: 8,
     name: '统一社会信用代码',
@@ -117,13 +116,13 @@ const form = reactive({
   riskTypes: [8, 0],
   state: 0
 })
-const rules = reactive<FormRules>({
+const rules = reactive({
   reasonId: [{ required: true, message: '请选择退出原因', trigger: 'change' }],
   state: [{ required: true, message: '请选择', trigger: 'change' }],
   riskTypes: [{ required: true, message: '请选择敏感信息', trigger: 'change' }]
 })
 const emits = defineEmits(['getTableData'])
-const open = (row: any) => {
+const open = row => {
   orgDetail.value = row
   dialogVisible.value = true
   nextTick(() => {
@@ -135,7 +134,7 @@ const doSave = async () => {
     relationTenantId: orgDetail.value.relationTenantId,
     ...form
   }
-  params.reasonContent = reasonList.value.filter((item: any) => item.id === params.reasonId)[0].name
+  params.reasonContent = reasonList.value.filter(item => item.id === params.reasonId)[0].name
   const { code, data } = await Apis.clientOrgTerminateCooperation(params)
   if (code !== 200) return
   emits('getTableData')
@@ -150,7 +149,7 @@ const handleClose = () => {
   ruleFormRef.value?.resetFields()
   dialogVisible.value = false
 }
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = async formEl => {
   if (!formEl) return
   await formEl.validate(valid => {
     if (valid) {

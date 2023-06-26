@@ -3,19 +3,19 @@
     <div v-for="(item, index) in detailInfoProp" :key="index">
       <div class="item-wrap">
         <div
-          class="item-name"
           v-if="item.prop === 'noCriminal' ? props.jobName === 'legal_person' || props.jobName === 'control_person' : true"
+          class="item-name"
         >
           {{ item.name }}
           <!--TODO:zqg 判断身份证命中黑名单  -->
           <span
-            class="error-tips"
             v-if="item.prop === 'idNumber' && !!isShowBlacklist(props.infoData[item.prop]).length"
+            class="error-tips"
           >
             <span
-              style="margin-left: 6px"
               v-for="(item, index) in isShowBlacklist(props.infoData[item.prop])"
               :key="index"
+              style="margin-left: 6px"
             >{{ item.hitTypeName }}</span>
           </span>
         </div>
@@ -222,30 +222,33 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { computed } from 'vue'
 import ErrorTooltip from '../ErrorTooltip.vue'
 import { downloadFile } from '@/utils'
 // 接收props数据
-const props = defineProps<{
+const props = defineProps({
   tabActive: {
-    type: number
-  }
+    type: Number,
+    default: 0
+  },
   infoData: {
-    type: Object
+    type: Object,
     default: () => {}
-  }
+  },
   detailData: {
-    type: Object
+    type: Object,
     default: () => {}
-  }
+  },
   jobName: {
-    type: String
-  }
+    type: String,
+    default: ''
+  },
   hitList: {
-    type: []
+    type: Array,
+    default: () => []
   }
-}>()
+})
 // sensitivityCode 字段为敏感库类型
 const infoMap = new Map([
   [
@@ -506,7 +509,7 @@ const infoMap = new Map([
     ]
   ]
 ])
-const onExport = (url: string) => {
+const onExport = url => {
   downloadFile(url)
 }
 const isSensitiveInfo = (type, value) => {
@@ -520,21 +523,21 @@ const isSensitiveInfo = (type, value) => {
   }
   return !!sensitiveOrgHitList.find(item => item.hitType === type)
 }
-const isShowBlacklist = (idNo: number) => {
+const isShowBlacklist = idNo => {
   if (!props.hitList || !props.hitList.length) {
     return []
   }
-  return props.hitList.filter((item: any) => item.idNo === idNo + '')
+  return props.hitList.filter(item => item.idNo === idNo + '')
 }
 const detailInfoProp = computed(() => infoMap.get(Number(props.tabActive)))
 const monitorInfoText = computed(() => {
-  return (val: any) => {
+  return val => {
     const monitorInfo = props.infoData.monitorInfo ? eval('(' + props.infoData.monitorInfo + ')') : {}
     return val === 'keepTime' || val === 'monitorRemark' ? monitorInfo[val] : monitorInfo[val] === 0 ? '否' : '是'
   }
 })
 const jsonArrayText = computed(() => {
-  return (val: any) => {
+  return val => {
     return props.infoData[val]
       ? Array.isArray(props.infoData[val])
         ? props.infoData[val]
@@ -543,12 +546,12 @@ const jsonArrayText = computed(() => {
   }
 })
 const previewList = computed(() => {
-  return (val: any) => {
+  return val => {
     return Array.from(val, ({ url }) => url)
   }
 })
 const timetrans = computed(() => {
-  return (val: any) => {
+  return val => {
     let date = new Date(props.infoData[val]) //如果date为13位不需要乘1000
     let Y = date.getFullYear() + '-'
     let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'

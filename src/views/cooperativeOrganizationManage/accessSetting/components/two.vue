@@ -40,13 +40,16 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { reactive } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { ElMessage } from 'element-plus'
-const props = defineProps<{
-  categoryId: string
-}>()
+const props = defineProps({
+  categoryId: {
+    type: String,
+    default: ''
+  }
+})
 const state = reactive({
   tableData: []
 })
@@ -55,7 +58,7 @@ const onSave = async () => {
   const temChildren = Array.from(state.tableData, ({ sysFieldDetails }) => sysFieldDetails)
   const temData = [].concat(...temChildren)
   let params = []
-  temData.forEach((item: any) => {
+  temData.forEach(item => {
     const temItem = {
       id: item.id,
       isOpen: item.isOpen,
@@ -70,7 +73,7 @@ const onSave = async () => {
   getConfigList()
 }
 // 不展示时不必填
-const changeIsOpen = (row: any) => {
+const changeIsOpen = row => {
   row.isOpen === 0 && (row.isSure = 0)
   state.tableData = JSON.parse(JSON.stringify(state.tableData))
 }
@@ -81,7 +84,7 @@ const getConfigList = async () => {
   }
   const { code, data } = await Apis.configFieldList(param)
   if (code !== 200) return
-  data.forEach((item: any, index: number) => {
+  data.forEach((item, index) => {
     item.fieldName = item.typeName
     item.id = item.typeName + index
   })
@@ -94,10 +97,10 @@ defineExpose({
 
 <style scoped lang="scss">
 .two-page-wrap {
-  height: 100%;
+  height: calc(100% - 20px);
   overflow-y: auto;
 }
-::v-deep .two-custom-table.el-table {
+:deep(.two-custom-table.el-table) {
   .el-table__row--level-0 {
     .table-field {
       font-weight: bold;

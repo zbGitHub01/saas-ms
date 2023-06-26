@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import piniaPersistConfig from '@/utils/piniaPersist'
 import router from '@/router'
 import { filterMenu, filterAuth } from '@/utils/tree'
-import menuData from '../menu.json'
 import permissionData from '../permissionData.json'
 
 export const useAuthStore = defineStore('authStore', {

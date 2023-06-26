@@ -27,7 +27,7 @@ import OrgRole from './OrgRole/index.vue'
 
 const authStore = useAuthStore()
 
-const tabActive = ref(authStore.tabPage.tabActive)
+const tabActive = ref(authStore.tabPage.tabActive || '')
 </script>
 
 <style lang="scss" scoped></style>
