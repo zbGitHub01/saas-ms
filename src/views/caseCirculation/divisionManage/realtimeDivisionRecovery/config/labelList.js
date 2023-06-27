@@ -9,30 +9,34 @@
 export default [
   {
     customizeIcon: 'caselist',
-    eplusIcon: '',
+    // eplusIcon: '',
     labelTitle: '案件数量',
     isHaveRmbSign: false,
+    prop: 'pageTotal',
     value: null
   },
   {
     customizeIcon: 'peoplenum',
-    eplusIcon: '',
+    // eplusIcon: '',
     labelTitle: '案人人数',
     isHaveRmbSign: false,
+    prop: 'caseUserCount',
     value: null
   },
   {
     customizeIcon: 'moneynum',
-    eplusIcon: '',
+    // eplusIcon: '',
     labelTitle: '委案金额',
     isHaveRmbSign: false,
+    prop: 'sumEntrustAmount',
     value: null
   },
   {
     customizeIcon: 'moneing',
-    eplusIcon: '',
+    // eplusIcon: '',
     labelTitle: '待还金额',
     isHaveRmbSign: false,
+    prop: 'sumResidueAmount',
     value: null
   }
 ]

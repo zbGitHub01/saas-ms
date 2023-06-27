@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onBeforeMount, onMounted, defineExpose } from 'vue'
+import { reactive, computed, toRefs } from 'vue'
 import labelList from './labelList.js'
 
 const props = defineProps({
@@ -32,12 +32,13 @@ const emit = defineEmits([
 const state = reactive({
   defaultProps: {
     children: 'children',
-    label: 'departmentName'
+    label: 'itemText'
   },
   selectData: [],
   peopleType: 1,
   caseType: 0,
   moneyType: 0,
+  labelList: labelList,
   active: 1,
   last: false,
   getRowKeys(row) {
@@ -45,14 +46,26 @@ const state = reactive({
   }
 })
 
+const { depData } = toRefs(props)
+
 defineExpose({
-  setLast: val => (state.last = val)
+  setLast: val => (state.last = val),
+  state
 })
 
 const activeStyle = {
   background: '#007aff',
   color: '#fff'
 }
+
+const newLabelList = computed(() => {
+  state.labelList.forEach(item => {
+    if (item['labelTitle'] === '待分派案件数量') item['value'] = props.labelData['caseNum']
+    if (item['labelTitle'] === '待分派案人数') item['value'] = props.labelData['personNum']
+    if (item['labelTitle'] === '待分派金额') item['value'] = props.labelData['totalAmount']
+  })
+  return state.labelList
+})
 
 //选择CPE
 const handleSelectionChange = val => {
@@ -62,11 +75,8 @@ const handleSelectionChange = val => {
 //下一步操作
 const handleLast = () => {
   let arr = []
-  state.selectData.forEach(item => arr.push(item.userId))
+  state.selectData.forEach(item => arr.push(item.itemId))
   emit('caseAllotNext', arr)
-}
-const click = () => {
-  console.log('childLast', state.last)
 }
 
 //已案人人数分
@@ -93,17 +103,17 @@ const handleByMoney = () => {
 
 //调值案人
 const handLeadJustNum = val => {
-  this.$emit('caseAllotAdjust', props.labelData.allotInfo)
+  emit('caseAllotAdjust', props.labelData.allotInfo)
   console.log(val)
 }
 //调值案件
 const handleCaseNum = val => {
-  this.$emit('caseAllotAdjust', props.labelData.allotInfo)
+  emit('caseAllotAdjust', props.labelData.allotInfo)
   console.log(val)
 }
 //调值总数
 const handleAllotAmount = val => {
-  this.$emit('caseAllotAdjust', props.labelData.allotInfo)
+  emit('caseAllotAdjust', props.labelData.allotInfo)
   console.log(val)
 }
 
@@ -120,8 +130,11 @@ const getSummaries = param => {
     if (!values.every(value => isNaN(value))) {
       sums[index] = values.reduce((prev, curr) => {
         const value = Number(curr)
-        if (!isNaN(value)) prev + curr
-        else prev
+        if (!isNaN(value)) {
+          return prev + curr
+        } else {
+          return prev
+        }
       }, 0)
       sums[index] = Math.round((sums[index] * 1000) / 10) / 100
     } else sums[index] = ''
@@ -152,30 +165,27 @@ const handleClick = () => {
 
 //选择CPE
 const handleNodeClick = data => {
-  let departmentId = data.departmentId
-  emit('getUserList', departmentId)
+  let itemId = data.itemId
+  emit('getUserList', itemId)
 }
 
 const handleClose = () => {
   emit('update:dialogVisible', false)
 }
-
-onBeforeMount(() => {})
-onMounted(() => {})
 </script>
 
 <template>
   <el-dialog :model-value="props.dialogVisible" title="案件分派" width="60%" :before-close="handleClose">
-    <div>
-      <LabelClass :label-data="labelList" :is-bkg-color="false" />
+    <div style="padding-left: 70px">
+      <LabelClass :label-data="newLabelList" :is-bkg-color="false" />
     </div>
     <template v-if="!state.last">
       <div class="table">
         <div class="table-warp">
-          <div class="title" @click="click">选择CPE</div>
+          <div class="title">选择CPE</div>
           <div class="dep-warp">
             <div class="item item1">
-              <el-tree :data="props.depData" :props="state.defaultProps" @node-click="handleNodeClick"></el-tree>
+              <el-tree :data="depData" :props="state.defaultProps" @node-click="handleNodeClick"></el-tree>
             </div>
             <div class="item">
               <el-table
@@ -188,7 +198,7 @@ onMounted(() => {})
                 @selection-change="handleSelectionChange"
               >
                 <el-table-column type="selection" :reserve-selection="true" align="center" width="50"></el-table-column>
-                <el-table-column prop="username" align="center" label="CPE"></el-table-column>
+                <el-table-column prop="itemText" align="center" label="CPE"></el-table-column>
               </el-table>
             </div>
           </div>
@@ -198,14 +208,14 @@ onMounted(() => {})
           <div class="item">
             <el-table :data="state.selectData" height="369px" border style="width: 100%">
               <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
-              <el-table-column prop="username" align="center" label="CPE"></el-table-column>
+              <el-table-column prop="itemText" align="center" label="CPE"></el-table-column>
             </el-table>
             <div class="line"></div>
           </div>
         </div>
       </div>
       <div class="dialog-footer">
-        <el-button>取 消</el-button>
+        <el-button @click="handleCancel">取 消</el-button>
         <el-button type="primary" @click="handleLast">下一步</el-button>
       </div>
     </template>

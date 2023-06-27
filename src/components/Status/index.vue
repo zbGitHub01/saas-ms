@@ -61,7 +61,7 @@
     </span>
   </span>
 </template>
-    
+
 <script setup>
 import { reactive, ref, onMounted, computed } from 'vue'
 import dayjs from 'dayjs'
@@ -132,8 +132,8 @@ const calcStyleClass = key => {
 const goDetail = () => {
   if (!props.row.caseId) return
   router.push({
-    name: 'caseImport',
-    query: { caseNo: props.row.caseNo }
+    path: '/caseManage/casesDetails/casesManageable',
+    query: { caseNo: props.row.caseNo, caseId: props.row.caseId }
   })
 }
 //查看结清证明
@@ -180,7 +180,7 @@ const hasdata = data => {
   }
 }
 </script>
-    
+
 <style lang="scss" scoped>
 .blue-bg {
   background-color: #09f;

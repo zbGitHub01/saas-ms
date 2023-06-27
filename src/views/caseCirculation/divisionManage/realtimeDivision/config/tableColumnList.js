@@ -1,63 +1,68 @@
 export default [
   {
-    label: '账单ID',
-    prop: 'orderNo'
+    label: '案件ID',
+    prop: 'customColumn'
   },
   {
     label: '产品',
-    prop: 'orderNo'
+    prop: 'productName'
   },
   {
     label: '姓名',
-    prop: 'orderNo'
+    prop: 'userName'
   },
   {
     label: '证件号',
-    prop: 'orderNo'
+    prop: 'idno'
   },
   {
     label: '手机号',
-    prop: 'orderNo'
+    prop: 'userPhone'
   },
   {
     label: '委案类型',
-    prop: 'orderNo'
+    prop: 'entrustType'
   },
   {
     label: '委案金额',
-    prop: 'orderNo'
+    prop: 'entrustAmount'
     // formatter({ amount }) {
     //   return Format.AmountFormat(amount)
     // }
   },
   {
     label: '剩余待还金额',
-    prop: 'orderNo'
+    prop: 'entrustResidueAmount'
+
     // formatter({ premium }) {
     //   return Format.AmountFormat(premium)
     // }
   },
   {
     label: '临时标签',
-    prop: 'orderNo'
+    prop: 'orgTagTempList',
+    popoverProp: 'tagName',
+    isSplitJoint: true
     // formatter({ createTime }) {
     //   return Format.DateFormat(createTime)
     // }
   },
   {
     label: '预警标签',
-    prop: 'orderNo'
+    prop: 'tagAlterName',
+    popoverProp: 'tagName',
+    isSplitJoint: true
   },
   {
     label: '跟进结果',
-    prop: 'orderNo'
+    prop: 'entrustContactResultText'
   },
   {
     label: '处置状态',
-    prop: 'orderNo'
+    prop: 'followStatusText'
   },
   {
     label: '案件状态',
-    prop: 'orderNo'
+    prop: 'caseStatusText'
   }
 ]

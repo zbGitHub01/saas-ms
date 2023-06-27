@@ -25,6 +25,8 @@ const props = defineProps({
   // }
 })
 
+console.log(props.labelData)
+
 const { isSpaceAround, isBkgColor } = toRefs(props)
 
 const itemStyle = computed(() => {

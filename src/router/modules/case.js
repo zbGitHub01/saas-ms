@@ -37,6 +37,7 @@ const caseRouter = [
         children: [
           {
             path: '/caseManage/casesDetails/casesManageable',
+            props: true,
             name: 'casesManageable',
             component: () => import('@/views/caseManage/caseDetails/casesManageable/index.vue'),
             meta: { title: '可管理案件', icon: '' }

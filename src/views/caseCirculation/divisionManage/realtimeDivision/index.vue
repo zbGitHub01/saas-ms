@@ -11,41 +11,71 @@ import labelList from './config/labelList.js'
 
 const state = reactive({
   tableData: [],
-  pageTotal: 4,
-  depData: [],
+  pageTotal: 0,
+  page: 1,
+  pageSize: 10,
   cpeData: [],
+  depData: [],
   labelData: {},
+  caseIdList: [],
   queryNewData: {},
-  currSelectArr: []
+  labelList: labelList,
+  currSelectArr: [],
+  templateUrl: '', //指定分案模板url
+  taskId: '',
+  labelDialogData: {}
 })
 
-const getOrderListAgain = (pageSize, pageNum) => {
-  const pageInfo = {
-    ...state.queryNewData,
-    pageNum,
-    pageSize
+//获取列表数据
+const getRecordList = async (page, pageSize) => {
+  try {
+    const pageInfo = {
+      ...state.queryNewData,
+      recoverType: 3,
+      page: page ? page : state.page,
+      pageSize: pageSize ? pageSize : state.pageSize
+    }
+    const { data } = await Apis.recordList(pageInfo)
+    getLabelList({ ...state.queryNewData, recoverType: 3 })
+    state.tableData = data.data
+    state.pageTotal = data.total
+    state.page = data.page
+    state.pageSize = data.pageSize
+  } catch (error) {
+    console.log(error)
   }
-  console.log(pageInfo)
-  // getOrderList(pageInfo).then(res => {
-  //   state.tableData = res.data.records
-  //   state.pageTotal = res.data.total
-  // })
+}
+
+//获取label显示数据
+const getLabelList = async datas => {
+  const { data } = await Apis.getLabelStats(datas)
+  state.labelData = { ...data, pageTotal: state.pageTotal }
+  state.labelList.forEach(item => {
+    if (state.pageTotal === 0) {
+      if (item['labelTitle'] === '待分派案件数量') item['value'] = state.labelData['caseNum']
+      if (item['labelTitle'] === '待分派案人数') item['value'] = state.labelData['personNum']
+      if (item['labelTitle'] === '待分派金额') item['value'] = state.labelData['totalAmount']
+    } else {
+      if (item['labelTitle'] === '待分派案件数量') item['value'] = state.pageTotal
+      if (item['labelTitle'] === '待分派案人数') item['value'] = state.labelData['caseUserCount']
+      if (item['labelTitle'] === '待分派金额') item['value'] = state.labelData['sumResidueAmount']
+    }
+  })
 }
 
 //获取CPE机构列表
-const getOrgData = async () => {
-  const data = await Apis.getOrgList()
-  state.depData = data.data
+const getDepList = async () => {
+  const { data } = await Apis.getUserTreeList({ codes: 'DEPT_TREE' })
+  state.depData = data.DEPT_TREE
 }
 //获取员工不分页
-const getUserList = async () => {
-  const data = await Apis.getUserList()
-  console.log(1111)
+const getUserList = async deptId => {
+  const data = await Apis.getUserList({ deptId })
   state.cpeData = data.data
 }
 
-getOrderListAgain()
-getOrgData()
+getRecordList()
+getDepList()
 
 //formClass实例
 const formClass = ref()
@@ -61,21 +91,18 @@ const handleSearch = () => {
       }
     : queryData
   delete state.queryNewData.dateArray
-  getOrderListAgain()
-  console.log('aa', queryData)
+  getRecordList()
 }
 //重置操作
 const handleReset = () => {
   formClass.value.handleReset()
   state.queryNewData = {}
-  getOrderListAgain()
+  getRecordList()
 }
 
 const caseUploadVisible = ref(false)
 const dialogVisible = ref(false)
 const dialogForm = ref(null)
-
-state.tableData = [{ orderNo: 'test' }, { orderNo: '111' }, { orderNo: 'te222st' }, { orderNo: 't3333est' }]
 
 const selectChange = obj => {
   state.currSelectArr = obj
@@ -83,30 +110,101 @@ const selectChange = obj => {
 
 //获取选取CPE相关信息
 const caseAllotNext = async value => {
-  const data = await Apis.caseAllotInfo()
-  state.labelData = Object.assign({}, data.data)
+  const params = {
+    cpeIdList: value,
+    taskId: state.taskId
+  }
+  try {
+    const { data } = await Apis.caseAllotNext(params)
+    data.allotInfo = JSON.parse(data.allotInfo)
+    state.labelDialogData = data
+    dialogForm.value.setLast(true)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+//调值
+const caseAllotAdjust = async obj => {
+  let params = {
+    allotInfo: JSON.stringify(obj),
+    taskId: state.taskId,
+    adjustType: dialogForm.value.state.active
+  }
+  await Apis.caseAllotAdjust(params)
+  obj.allotInfo = JSON.parse(obj.allotInfo)
+  state.labelDialogData = obj
   dialogForm.value.setLast(true)
-  console.log(value)
+}
+
+//重新分配
+const caseAllotRefresh = async val => {
+  let params = {
+    adjustType: val,
+    taskId: state.taskId
+  }
+  const { data } = await Apis.caseAllotRefresh(params)
+  data.allotInfo = JSON.parse(data.allotInfo)
+  state.labelDialogData = data
+  dialogForm.value.setLast(true)
 }
 
 //实时分案保存
-const caseAllotSave = val => {
-  console.log(val)
+const caseAllotSave = async val => {
+  let params = {
+    allotInfo: JSON.stringify(val.allotInfo),
+    taskId: state.taskId
+  }
+  await Apis.caseAllotSave(params)
+
+  ElMessage.success('保存成功')
   dialogVisible.value = false
+  getRecordList()
+  // getDepList()
 }
 
 //导入分案
-const handleUpload = () => {
+const handleUpload = async () => {
+  const { data } = await Apis.getTemplateUrl()
+  state.templateUrl = data.customAllotTemplateUrl
   caseUploadVisible.value = true
 }
 
 //实时分案
-const handleCase = () => {
+const handleCase = async () => {
   if (state.currSelectArr.length < 1) {
     ElMessage({ message: '请选择操作对象.', type: 'warning' })
     return
   }
-  dialogVisible.value = true
+  state.caseIdList = state.currSelectArr.map(item => item.caseId)
+  try {
+    const dataParams = {
+      operateType: 1,
+      caseIdList: state.caseIdList
+    }
+    const { data } = await Apis.caseAllotSelect(dataParams)
+    state.taskId = data.taskId
+    state.labelDialogData = data
+    dialogVisible.value = true
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+//导入分案模板
+const handleHttpRequest = async options => {
+  const formData = new FormData()
+  formData.append('file', options.file)
+  try {
+    await Apis.caseImportAllot(formData)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+//下载导入分案模板
+const downloadUrl = () => {
+  window.open(state?.templateUrl)
 }
 
 const operation = ref(1)
@@ -119,7 +217,7 @@ const operation = ref(1)
         <FormClass ref="formClass" label-width="102px" :fields="queryList" />
       </template>
     </FormWrap>
-    <LabelClass style="margin-top: -20px" :label-data="labelList" />
+    <LabelClass style="margin-top: -20px" :label-data="state.labelList" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -137,9 +235,15 @@ const operation = ref(1)
         :total="state.pageTotal"
         :stripe="true"
         :is-selection="true"
-        @query="getOrderListAgain"
+        @query="getRecordList"
         @select-change="selectChange"
-      />
+      >
+        <template #customColumn="{ row }">
+          <div>
+            <status :row="row" />
+          </div>
+        </template>
+      </TableClass>
     </div>
     <!--导入分案-->
     <el-dialog v-model="caseUploadVisible" title="导入分案" width="30%" :before-close="handleClose">
@@ -151,34 +255,38 @@ const operation = ref(1)
           action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
+          :http-request="handleHttpRequest"
           :before-remove="beforeRemove"
           :on-exceed="handleExceed"
           :limit="1"
         >
           <el-button type="primary">选择文件</el-button>
           <template #tip>
-            <div class="el-upload__tip">jpg/png files with a size less than 500KB.</div>
+            <div class="el-upload__tip">只能上传excel文件</div>
           </template>
         </el-upload>
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button type="primary" style="float: left" link>下载导入分案模板</el-button>
+          <el-button type="primary" style="float: left" link @click="downloadUrl">下载导入分案模板</el-button>
           <el-button @click="caseUploadVisible = false">取消</el-button>
-          <el-button type="primary" @click="caseUploadVisible = false">确认分案</el-button>
+          <el-button type="primary" @click="caseUploadVisible = false">确定</el-button>
         </span>
       </template>
     </el-dialog>
     <!--案件分派-->
     <Dialog
+      v-if="dialogVisible"
       ref="dialogForm"
       v-model:dialog-visible="dialogVisible"
       :dep-data="state.depData"
       :cpe-data="state.cpeData"
-      :label-data="state.labelData"
+      :label-data="state.labelDialogData"
       @get-user-list="getUserList"
       @case-allot-save="caseAllotSave"
       @case-allot-next="caseAllotNext"
+      @case-allot-adjust="caseAllotAdjust"
+      @case-allot-refresh="caseAllotRefresh"
     />
   </div>
 </template>

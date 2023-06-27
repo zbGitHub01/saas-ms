@@ -206,7 +206,8 @@ export default {
 
     //table单元格数组转字符串
     const getCellString = (arr, key) => {
-      if (arr.length < 0) return
+      if (!arr) return
+      if (arr.length < 1) return
       let str = ''
       arr.map((item, index) => {
         if (!item[key]) return
@@ -347,6 +348,10 @@ export default {
         </template>
         <!--如果不是多级表头-->
         <template v-if="!item.childColumn" #default="{ row }">
+          <!--如果需要拼接显示字符串 popoverProp:显示String拼接的key-->
+          <template v-if="item.isSplitJoint">
+            <div>{{ getCellString(row[item.prop], item.popoverProp) }}</div>
+          </template>
           <!--如果是自定义table-column-->
           <template v-if="item.prop === 'customColumn'">
             <slot name="customColumn" :row="row" />
