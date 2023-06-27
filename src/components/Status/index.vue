@@ -76,7 +76,6 @@ const statusMap = Object.freeze(
   ])
 )
 const router = useRouter()
-// 接收props数据
 const props = defineProps({
   row: {
     type: Object,

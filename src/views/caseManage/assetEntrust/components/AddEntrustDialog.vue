@@ -29,7 +29,7 @@
         </el-form-item>
         <el-form-item label="受托方：" prop="trusteeId">
           <el-select v-model="form.trusteeId" placeholder="请选择受托方" clearable filterable>
-            <el-option v-for="(item, index) in selectData.orgList" :key="index" :label="item.text" :value="item.id"></el-option>
+            <el-option v-for="(item, index) in selectData.trustList" :key="index" :label="item.itemText" :value="item.itemId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="委托时效：" prop="proxyEndTime" class="timeRadio">
@@ -78,13 +78,6 @@ const form = reactive({
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const time = ref('')
-// 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     productAndCreList: any[]
-//     orgList: any[]
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,

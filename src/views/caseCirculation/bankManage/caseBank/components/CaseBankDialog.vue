@@ -42,7 +42,6 @@ const form = reactive({
   targetStoreId: null
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-// 接收props数据
 const props = defineProps({
   distInfo: {
     type: Object,

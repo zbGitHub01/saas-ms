@@ -16,8 +16,11 @@
         </el-table-column>
         <el-table-column label="操作" width="140" align="center" fixed="right">
           <template #default="scope">
-            <el-button link type="primary" @click="addOrEdit(scope.row, 2)">编辑</el-button>
+            <div v-if="scope.row.isEntrustParty === 0">
+              <el-button link type="primary" @click="addOrEdit(scope.row, 2)">编辑</el-button>
             <el-button link type="danger" @click="toDelete(scope.row)">删除</el-button>
+            </div>
+            <div v-if="scope.row.isEntrustParty === 1" style="background-color: #67c23a">委托方</div>
           </template>
         </el-table-column>
       </el-table>

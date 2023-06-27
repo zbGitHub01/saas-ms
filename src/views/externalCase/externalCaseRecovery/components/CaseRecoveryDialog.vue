@@ -107,7 +107,6 @@ const state = reactive({
   bankSelectList: [], //分库列表
   bankList: [] //选择的分库集合
 })
-// 接收props数据
 const props = defineProps({
   caseInfo: {
     type: Object,

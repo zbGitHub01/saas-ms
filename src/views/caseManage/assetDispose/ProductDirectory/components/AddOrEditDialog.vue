@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item label="债权方：" prop="creditorId">
           <el-select v-model="form.creditorId" placeholder="请选择债权方" clearable filterable>
-            <el-option v-for="(item, index) in selectData.orgList" :key="index" :label="item.text" :value="item.id"></el-option>
+            <el-option v-for="(item, index) in selectData.creditorList" :key="index" :label="item.itemText" :value="item.itemId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="SPV公司：" prop="spvCompanyName">
@@ -61,13 +61,6 @@ const form = reactive({
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const title = ref('')
-// 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     productList: any[]
-//     orgList: any[]
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,

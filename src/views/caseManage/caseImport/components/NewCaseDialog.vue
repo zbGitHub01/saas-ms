@@ -13,10 +13,10 @@
         <el-form-item label="产品:" label-width="125px" prop="productId">
           <el-select clearable v-model="form.productId" filterable placeholder="请选择产品" style="width: 300px">
             <el-option
-              v-for="item in selectData.productList"
-              :key="item.itemId"
-              :label="item.itemText"
-              :value="item.itemId"
+              v-for="(item, index) in selectData.productAndCreList"
+              :key="index"
+              :label="item.productName"
+              :value="item.productId"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -51,13 +51,14 @@
           <UploadFile ref="uploadFileRef" v-model:file-list="fileList" accept-type="excel" />
         </el-form-item>
         <el-divider></el-divider>
-        <el-form-item
-          label="委托起始日期："
-          label-width="125px"
-          prop="proxyStartTime"
-          v-if="importCaseType === 2"
-        >
-          <el-date-picker v-model="form.proxyStartTime" type="date" placeholder="请选择委托起始日期" value-format="YYYY-MM-DD" :disabled-date="disabledDate"/>
+        <el-form-item label="委托起始日期：" label-width="125px" prop="proxyStartTime" v-if="importCaseType === 2">
+          <el-date-picker
+            v-model="form.proxyStartTime"
+            type="date"
+            placeholder="请选择委托起始日期"
+            value-format="YYYY-MM-DD"
+            :disabled-date="disabledDate"
+          />
         </el-form-item>
         <el-form-item label="委托时效：" label-width="125px" prop="proxyEndTime" class="timeRadio" v-if="importCaseType === 2">
           <el-radio-group v-model="form.proxyEndTime">
@@ -193,7 +194,7 @@ const changeCreditor = val => {
 const changeDate = val => {
   form.proxyEndTime = val
 }
-const disabledDate = (time) => {
+const disabledDate = time => {
   return time.getTime() > Date.now()
 }
 </script>

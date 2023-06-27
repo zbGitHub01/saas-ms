@@ -109,7 +109,7 @@ onMounted(() => {
 })
 const getTableData = async () => {
   // 请求得到数据
-  const params = { ...dynamoSearchFormRef.value.getParams(), ...query }
+  const params = { ...dynamoSearchFormRef.value.getParams(), ...query, recoverType: 2 }
   const { data } = await Apis.recoverCaseList(params)
   state.tableData = data.data
   // state.tableData = [

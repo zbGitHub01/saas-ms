@@ -15,7 +15,7 @@
         <el-form-item label="关联产品：" prop="productId">
           <el-select v-model="form.productId" placeholder="请选择关联产品" clearable filterable>
             <el-option
-              v-for="(item, index) in selectData.productList"
+              v-for="(item, index) in selectData.productAndCreList"
               :key="index"
               :label="item.productName"
               :value="item.productId"
@@ -74,7 +74,6 @@ const form = reactive({
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const title = ref('')
-// 接收props数据
 const props = defineProps({
   selectData: {
     type: Object,

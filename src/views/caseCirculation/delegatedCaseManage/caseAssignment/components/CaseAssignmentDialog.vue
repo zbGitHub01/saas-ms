@@ -29,13 +29,11 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="目标机构：" prop="orgId">
-          <el-select clearable v-model="form.orgId" filterable placeholder="请选择目标机构" style="width: 300px">
-            <el-option
-              v-for="item in selectData.orgList"
-              :key="item.iitemIdd"
-              :label="item.itemText"
-              :value="item.itemId"
-            ></el-option>
+          <el-select clearable v-model="categoryId" filterable placeholder="机构分类" @change="changeCategory">
+            <el-option v-for="item in selectData.categoryData" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+          <el-select clearable v-model="form.orgId" filterable placeholder="请选择目标机构">
+            <el-option v-for="item in state.orgList" :key="item.itemId" :label="item.itemText" :value="item.itemId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="委案类型：" prop="entrustType">
@@ -145,10 +143,13 @@
   
 <script setup>
 import { ElMessage } from 'element-plus'
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import moment from 'moment'
 import Apis from '@/api/modules/caseManage'
 import CaseLabelData3 from '@/constants/CaseLabelData3' //查询数据
+import { useGlobalStore } from '@/store/index'
+const globalStore = useGlobalStore()
+const tenantId = computed(() => globalStore.tenantId)
 const form = reactive({
   entrustStrategy: 1,
   // batchId: null,
@@ -164,12 +165,14 @@ const originFormData = JSON.parse(JSON.stringify(form))
 const state = reactive({
   lastData: {},
   paramsSub: {}, //操作项参数
-  labelData: [] //查询统计数据
+  labelData: [], //查询统计数据
+  orgList: [] //机构下拉
 })
 const adjustNum = ref(0)
 const adjustType = ref(1)
 const remark = ref('')
 const last = ref(false)
+const categoryId = ref()
 // 接收props数据
 const props = defineProps({
   selectData: {
@@ -273,7 +276,23 @@ const submitForm = async () => {
 // 取消
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
+  state.orgList = []
+  categoryId.value = null
   dialogVisible.value = false
+}
+const changeCategory = async val => {
+  console.log(val)
+  if (val) {
+    const params = {
+      categoryId: val,
+      tenantId: tenantId.value
+    }
+    const { data } = await Apis.relationOrgList(params)
+    state.orgList = data
+  }else{
+    form.orgId = null
+    state.orgList = []
+  }
 }
 </script>
   

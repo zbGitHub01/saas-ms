@@ -44,14 +44,6 @@ import LegalDialog from './LegalDialog.vue'
 //   Authorization: globalState.token
 // })
 // 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     batchList: any[] //入库批次
-//     creditorList: any[] //债权方
-//     productList: any[] //产品
-//     downData: any //下载模版
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,

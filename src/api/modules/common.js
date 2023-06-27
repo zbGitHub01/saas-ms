@@ -6,6 +6,8 @@ const apiConfig = {
   findItemList: `GET /upms/client/dict/item/list`, // 查询字典项
   // 省市区
   areaTree: `GET /upms/client/dict/area/tree`,
+  //获取单项值
+  findSingleInfo: `GET /upms/client/dict/single/info`,
 }
 
 const apis = generateApiFnc(apiConfig)

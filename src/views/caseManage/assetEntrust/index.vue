@@ -70,13 +70,14 @@ import AddEntrustDialog from './components/AddEntrustDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import Apis, { proxyStop } from '@/api/modules/caseManage'
+import Apis2 from '@/api/modules/common'
 import { Plus } from '@element-plus/icons-vue'
 const form = reactive({
   state: null //null当前委托 4历史委托
 })
 const selectData = reactive({
   productAndCreList: [], //产品列表
-  orgList: [] //机构列表
+  trustList: [] //机构列表
 })
 // 页码
 const query = reactive({
@@ -140,44 +141,20 @@ const getTableData = async () => {
 }
 const getSelecData = async () => {
   // 请求得到数据
-  const { data } = await Apis.productList({ isProxy: 0 }) //productStatus 1已启用 0不启用，没传
+  const { data } = await Apis.productList({ isProxy: 0, productStatus: 1 })
   selectData.productAndCreList = data
-  selectData.productAndCreList = [
-    {
-      creditorId: 1,
-      creditorName: '债权方1',
-      productId: 1,
-      productName: '产品1'
-    },
-    {
-      creditorId: 2,
-      creditorName: '债权方2',
-      productId: 2,
-      productName: '产品2'
-    },
-    {
-      creditorId: 3,
-      creditorName: '债权方3',
-      productId: 3,
-      productName: '产品3'
-    },
-    {
-      creditorId: 4,
-      creditorName: '债权方4',
-      productId: 4,
-      productName: '产品4'
-    }
-  ]
-  selectData.orgList = [
-    {
-      id: 1,
-      text: '小丽水海树信用管理有限公司花袋'
-    },
-    {
-      id: 2,
-      text: '浙江东岸科技有限公司'
-    }
-  ]
+  const { data: data1} = await Apis2.findItemList({ codes: 'NORMAL_TENANT_LIST'})
+  // selectData.trustList = [
+  //   {
+  //     id: 1,
+  //     text: '小丽水海树信用管理有限公司花袋'
+  //   },
+  //   {
+  //     id: 2,
+  //     text: '浙江东岸科技有限公司'
+  //   }
+  // ]
+  selectData.trustList = data1['NORMAL_TENANT_LIST']
 }
 
 // 切换tab

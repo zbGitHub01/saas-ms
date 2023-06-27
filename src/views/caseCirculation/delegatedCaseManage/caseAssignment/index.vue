@@ -14,10 +14,6 @@
           </div>
         </template>
       </OperationBar>
-      <!-- <div class="mb10">
-        <span>选中项：{{ state.selectData.length }}</span>
-        <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
-      </div> -->
       <el-table
         :data="state.tableData"
         border
@@ -58,7 +54,6 @@
         <el-table-column label="入库批次号" prop="batchNo" align="center" min-width="250"></el-table-column>
         <el-table-column label="债权方" prop="creditorName" align="center" min-width="180"></el-table-column>
         <el-table-column label="所属分库" prop="storeName" align="center" min-width="150"></el-table-column>
-        <!-- 无 -->
         <el-table-column label="分库时间" prop="distTime" align="center" min-width="180"></el-table-column>
         <el-table-column label="处置机构" prop="orgTitle" align="center" min-width="150"></el-table-column>
         <el-table-column label="委案时间" prop="entrustTime" align="center" min-width="180"></el-table-column>
@@ -86,11 +81,12 @@ import CaseAssignmentDialog from './components/CaseAssignmentDialog.vue'
 import CaseStatistics from '@/constants/CaseStatistics' //统计数据
 import DynamoSearchForm from '@/components/DynamoSearchForm/index.vue'
 import Apis from '@/api/modules/caseManage'
+import Apis2 from '@/api/modules/cooperativeOrganization'
 const multipleTable = ref(null)
 const dynamoSearchFormRef = ref()
 const selectData = reactive({
   caseTypeList: [], //委案类型列表
-  orgList: [], //机构列表
+  categoryData: [], //机构分类
   defalutType: null, //批次为普通批次的id
   bankList: [] //案件分库列表
 })
@@ -103,7 +99,7 @@ const state = reactive({
   tableData: [],
   total: 0,
   CaseStatistics: [], //统计数据
-  selectData: [], //选中项
+  selectedData: [], //选中项
   handleparams: {} //操作的参数
 })
 const operation = ref(1)
@@ -309,7 +305,6 @@ const getSelecData = async () => {
     orgCategoryId: 0
   }
   // const { code, data, msg } = await selectList(params)
-  // selectData.orgList = data.DUTY_ORG_LIST
   // selectData.caseTypeList = data.ENTRUST_TYPE
   // selectData.defalutType = data.batchTypeList.map(item => {
   //   if (item.itemText === '普通批次') {
@@ -326,14 +321,12 @@ const getSelecData = async () => {
       itemText: '综合案件-温泽（2022年9月）'
     }
   ]
-  selectData.orgList = [
+  const { data: data2 } = await Apis2.optionList({ codes: 'ORG_CATEGORY' })
+  selectData.categoryData = data2?.ORG_CATEGORY ?? []
+  selectData.categoryData = [
     {
-      itemId: 1,
-      itemText: '小丽水海树信用管理有限公司花袋'
-    },
-    {
-      itemId: 2,
-      itemText: '浙江东岸科技有限公司'
+      id: 1,
+      name: '机构1'
     }
   ]
   selectData.defalutType = 92
@@ -362,19 +355,19 @@ const handleSelectionChange = val => {
   val.map(item => {
     arr.push(item.caseId)
   })
-  state.selectData = arr
+  state.selectedData = arr
   operation.value = 1
   state.handleparams = {
-    caseIdList: state.selectData,
+    caseIdList: state.selectedData,
     operateType: 1
   }
-  console.log(state.selectData, state.handleparams, operation.value)
+  console.log(state.selectedData, state.handleparams, operation.value)
 }
 //取消选择
 const toggleSelection = () => {
-  state.selectData = []
+  state.selectedData = []
   multipleTable.value.clearSelection()
-  console.log(state.selectData)
+  console.log(state.selectedData)
 }
 //跨页选择
 const getRowKeys = row => {
@@ -382,7 +375,7 @@ const getRowKeys = row => {
 }
 //通过此函数整体过滤事件
 const handleClick = item => {
-  if (state.selectData.length === 0 && operation.value === 1) {
+  if (state.selectedData.length === 0 && operation.value === 1) {
     ElMessage.warning('请先选择操作对象!')
   } else {
     switch (item) {

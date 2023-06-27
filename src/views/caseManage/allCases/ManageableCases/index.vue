@@ -110,6 +110,7 @@ import DynamoSearchForm from '@/components/DynamoSearchForm/index.vue'
 import HandleCaseDialog from './components/HandleCaseDialog.vue'
 import ExportDialog from './components/ExportDialog.vue'
 import Apis from '@/api/modules/caseManage'
+import Apis2 from '@/api/modules/common'
 import CaseStatistics from '@/constants/CaseStatistics' //统计数据
 const dynamoSearchFormRef = ref()
 const multipleTable = ref(null)
@@ -464,81 +465,12 @@ const submitCaseForm = async paramsSub => {
 }
 // 0导出案件/1导出处置记录
 const exportModel = async (code, type) => {
+  const codes = type === 0 ? 'EXPORT_CASE_FIELD' : 'EXPORT_FOLLOW_FIELD'
   let params = {
-    codes: code
+    codes
   }
-  // const { data } = await xx(params)
-  // state.exportData = data[code]
-  state.exportData = {
-    amountTime: {
-      loanPactAmount: '合同金额',
-      loanArrivalAmount: '到账金额',
-      loanBorrRate: '借款费率',
-      loanServeRate: '服务费率',
-      loanPeriod: '借款周期',
-      transBeforeRefundAmount: '转让前已还金额',
-      transAmount: '转让金额',
-      transPrincipal: '转让本金',
-      transFee: '转让利息',
-      loanTime: '借款时间',
-      loanStartTime: '借款起算时间',
-      loanEndTime: '借款到期时间',
-      loanExpireTime: '最后还款日',
-      transTime: '转让日期',
-      creditAmount: '征信金额'
-    },
-    baseInfo: {
-      caseNo: '案件ID',
-      productName: '产品',
-      batchNo: '入库批次号',
-      creditorName: '债权方',
-      loanPactNo: '订单合同号',
-      loanPlatformUserId: '平台用户ID',
-      originCreditor: '原债权公司',
-      userName: '姓名',
-      idno: '证件号',
-      userPhone: '手机号',
-      sosPhone: '紧急联系人',
-      sex: '性别',
-      marital: '婚姻状况',
-      qq: 'QQ',
-      mail: '邮箱',
-      regAddrRange: '户籍区域',
-      regAddr: '户籍地址',
-      homeAddr: '家庭地址',
-      homePhone: '家庭电话',
-      companyName: '单位名称',
-      companyAddr: '单位地址',
-      companyPhone: '单位电话',
-      investorName: '出资方',
-      receiptBank: '收款银行',
-      receiptBankCode: '收款银行卡号',
-      refundBank: '还款银行',
-      refundBankCode: '还款银行卡号',
-      caseStatusRemark: '特殊备注',
-      ethnicity: '民族'
-    },
-    handleRelevant: {
-      storeName: '所属分库',
-      orgTitle: '处置机构',
-      cpeName: 'CPE',
-      handleAmount: '处置金额',
-      totalRefundAmount: '还款入账金额',
-      totalReductionAmount: '减免金额',
-      residueAmount: '剩余待还金额',
-      intermediateCourtName: '中级法院',
-      grassRootCourtName: '基层法院',
-      caseStatusText: '案件状态',
-      entrustTypeText: '委案类型'
-    },
-    followFile: {
-      callRecording: '通话录音',
-      letter: '信函',
-      smsRecord: '短信联系记录',
-      wechatRecord: '微信联系记录',
-      qqRecord: 'QQ联系记录'
-    }
-  }
+  const { data } = await Apis2.findSingleInfo(params)
+  state.exportData = data[codes]
   exportDialog.value.open(state.exportData, type)
 }
 // 确认导出案件/导出处置记录

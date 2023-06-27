@@ -45,12 +45,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import Apis, { productDel } from '@/api/modules/caseManage'
 // 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     productList: any[]
-//     orgList: any[]
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,

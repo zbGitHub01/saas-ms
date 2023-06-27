@@ -22,20 +22,20 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="法人证照：" prop="businessLicense">
-          <!-- 营业执照 -->
           <SingleImageUploader
             v-model="form.businessLicense"
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
+            placeholder="营业执照"
           />
-          <!-- 法人公章 -->
           <SingleImageUploader
             v-model="form.legalPersonSeal"
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
-            class="ml19"
+            class="ml19" 
+            placeholder="法人公章"
           />
         </el-form-item>
         <el-form-item label="经营地址：" prop="addressSub">
@@ -72,28 +72,28 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="法人代表证照：" prop="legalPersonFrontUrl">
-          <!-- 正面 -->
           <SingleImageUploader
             v-model="form.legalPersonFrontUrl"
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
+            placeholder="身份证正面"
           />
-          <!-- 反面 -->
           <SingleImageUploader
             v-model="form.legalPersonBackUrl"
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
             class="ml19"
+            placeholder="身份证反面"
           />
-          <!-- 证明 -->
           <SingleImageUploader
             v-model="form.legalPersonIdCert"
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
             class="ml19"
+            placeholder="身份证明"
           />
         </el-form-item>
         <el-form-item label="是否启用：" prop="status">
