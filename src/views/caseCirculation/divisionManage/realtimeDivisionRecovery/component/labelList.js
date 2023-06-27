@@ -10,22 +10,25 @@ export default [
   {
     customizeIcon: 'caselist',
     eplusIcon: '',
-    labelTitle: '待分派案件数量',
+    labelTitle: '选中案件数',
     isHaveRmbSign: false,
+    property: 'caseNum',
     value: null
   },
   {
     customizeIcon: 'peoplenum',
     eplusIcon: '',
-    labelTitle: '待分派案人数',
+    labelTitle: '选中案件人数',
     isHaveRmbSign: false,
+    property: 'personNum',
     value: null
   },
   {
     customizeIcon: 'moneynum',
     eplusIcon: '',
-    labelTitle: '待分派金额',
+    labelTitle: '预计分库金额',
     isHaveRmbSign: false,
+    property: 'totalAmount',
     value: null
   }
 ]

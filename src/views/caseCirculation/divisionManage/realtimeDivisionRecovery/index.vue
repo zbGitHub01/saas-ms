@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import Dialog from './component/dialog.vue'
 import Apis from '@/api/modules/realtimeDivisionRecovery'
 import { ElMessage } from 'element-plus'
@@ -12,16 +12,19 @@ const state = reactive({
   pageTotal: 10,
   page: 1,
   pageSize: 10,
-  labelData: {},
+  labelObjData: {},
+  labelList,
+  taskId: '',
   queryNewData: {},
-  currSelectArr: []
+  currSelectArr: [],
+  labelDialogData: {}
 })
 
 //formClass实例
 const formClass = ref()
 
 //获取列表数据
-const getRecoverNowList = async (page, pageSize) => {
+const getRecoverList = async (page, pageSize) => {
   try {
     const pageInfo = {
       ...state.queryNewData,
@@ -30,6 +33,7 @@ const getRecoverNowList = async (page, pageSize) => {
       pageSize: pageSize ? pageSize : state.pageSize
     }
     const { data } = await Apis.recoverRecordList(pageInfo)
+    getLabelList()
     state.tableData = data.data
     state.pageTotal = data.total
     state.page = data.page
@@ -39,24 +43,10 @@ const getRecoverNowList = async (page, pageSize) => {
   }
 }
 
-onMounted(() => {
-  getLabelList()
-})
-
-const labelComputed = computed(() => {
-  labelList.forEach(item => {
-    if (item['labelTitle'] === '案件数量') item['value'] = state.labelData['pageTotal']
-    if (item['labelTitle'] === '案人人数') item['value'] = state.labelData['caseUserCount']
-    if (item['labelTitle'] === '委案金额') item['value'] = state.labelData['sumEntrustAmount']
-    if (item['labelTitle'] === '待还金额') item['value'] = state.labelData['sumResidueAmount']
-  })
-  return labelList
-})
-
 //获取label显示数据
 const getLabelList = async () => {
   const { data } = await Apis.getLabelStats({ ...formClass.value.getEntity(), recoverType: 3 })
-  state.labelData = { ...data, pageTotal: state.pageTotal }
+  state.labelObjData = { ...data, pageTotal: state.pageTotal }
 }
 
 //获取CPE机构列表
@@ -65,21 +55,20 @@ const getLabelList = async () => {
 //   state.depData = data.data
 // }
 
-getRecoverNowList()
-// getLabelList()
+getRecoverList()
 // getOrgData()
 
 //搜索操作
 const handleSearch = () => {
   const queryData = formClass.value.getEntity()
-  // getRecoverNowList()
+  // getRecoverList()
   console.log('aa', queryData)
 }
 //重置操作
 const handleReset = () => {
   formClass.value.handleReset()
   state.queryNewData = {}
-  getRecoverNowList()
+  getRecoverList()
 }
 
 const dialogVisible = ref(false)
@@ -90,15 +79,66 @@ const selectChange = obj => {
 }
 
 //实时分案
-const handleCase = () => {
-  if (state.currSelectArr.length < 1) {
+const handleCase = async () => {
+  if (state.currSelectArr.length < 1 && Number(operationType.value) === 1) {
     ElMessage({ message: '请选择操作对象.', type: 'warning' })
     return
   }
-  dialogVisible.value = true
+  state.caseIdList = state.currSelectArr.map(item => item.caseId)
+  let dataParams = {}
+  if (Number(operationType.value) === 1) {
+    dataParams = {
+      operateType: operationType.value,
+      caseIdList: state.caseIdList,
+      recoverType: 3
+    }
+  } else {
+    dataParams = {
+      ...formClass.value.getEntity(),
+      operateType: operationType.value,
+      recoverType: 3
+    }
+  }
+  try {
+    const { data } = await Apis.recoverNowSelect(dataParams)
+    state.labelDialogData = data
+    state.taskId = data.taskId
+    dialogVisible.value = true
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-const operation = ref(1)
+//收回保存发布
+const handleSubmit = async obj => {
+  let params = {}
+  if (Number(operationType.value) === 1)
+    params = {
+      caseIdList: state.caseIdList,
+      operateType: operationType.value,
+      taskId: state.taskId,
+      ...obj
+    }
+  else
+    params = {
+      caseIdList: state.caseIdList,
+      operateType: operationType.value,
+      taskId: state.taskId,
+      ...formClass.value.getEntity(),
+      ...obj
+    }
+  try {
+    await Apis.recoverNowSave(params)
+    ElMessage.success('操作成功')
+    dialogVisible.value = false
+    getRecoverList()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+//批量操作类型： operateType 1-选中 2-查询
+const operationType = ref(1)
 </script>
 
 <template>
@@ -108,10 +148,10 @@ const operation = ref(1)
         <FormClass ref="formClass" label-width="102px" :fields="queryList" />
       </template>
     </FormWrap>
-    <LabelClass style="margin-top: -20px" :label-data="labelComputed" />
+    <LabelClass style="margin-top: -20px" :label-obj="state.labelObjData" :label-data="state.labelList" />
     <div class="spacing"></div>
     <div class="mt20">
-      <OperationBar v-model:active="operation">
+      <OperationBar v-model:active="operationType">
         <template #default>
           <el-button type="primary" plain @click="handleCase">
             <svg-icon name="cloud-upload-fill" />
@@ -127,12 +167,19 @@ const operation = ref(1)
         :page-size="state.pageSize"
         :stripe="true"
         :is-selection="true"
-        @query="getRecoverNowList"
+        @query="getRecoverList"
         @select-change="selectChange"
       />
     </div>
     <!--实时收回-->
-    <Dialog ref="dialogForm" v-model:dialog-visible="dialogVisible" :label-data="state.labelData" />
+    <Dialog
+      v-if="dialogVisible"
+      ref="dialogForm"
+      v-model:dialog-visible="dialogVisible"
+      title="实时收回"
+      :label-data="state.labelDialogData"
+      @submit="handleSubmit"
+    />
   </div>
 </template>
 

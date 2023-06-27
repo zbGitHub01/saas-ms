@@ -13,6 +13,11 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
+  //label数据对象，可根据labelItem的property取值
+  labelObj: {
+    type: Object,
+    default: () => {}
+  },
   //是否需要背景色，默认开启
   isBkgColor: {
     type: Boolean,
@@ -24,8 +29,6 @@ const props = defineProps({
   //   default: '19%'
   // }
 })
-
-console.log(props.labelData)
 
 const { isSpaceAround, isBkgColor } = toRefs(props)
 
@@ -72,7 +75,10 @@ onMounted(() => {
         <div class="title_warp">
           <div class="items">{{ item.labelTitle }}</div>
           <div class="item items1">
-            {{ item.isHaveRmbSign ? '￥' : '' }}{{ item.isAmountFormat ? amountFormat(item.value) : item.value || 0 }}
+            {{ item.isHaveRmbSign ? '￥' : ''
+            }}{{
+              item.isAmountFormat ? amountFormat(item.value) : item.property ? props.labelObj[item.property] : item.value || 0
+            }}
           </div>
         </div>
       </div>

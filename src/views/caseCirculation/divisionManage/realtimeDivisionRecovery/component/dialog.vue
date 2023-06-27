@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onBeforeMount, onMounted } from 'vue'
+import { reactive, ref } from 'vue'
 import labelList from './labelList.js'
 
 const props = defineProps({
@@ -12,50 +12,50 @@ const props = defineProps({
     default: () => {}
   }
 })
-const emit = defineEmits(['update:dialogVisible'])
+const emit = defineEmits(['update:dialogVisible', 'submit'])
 
 const state = reactive({
   form: {
-    resource: '',
-    notes: ''
+    isRecoverRetain: '',
+    remark: ''
   }
 })
 
-//取消
-const handleCancel = () => {
-  emit('update:dialogVisible', false)
-}
+const form1 = ref(null)
 
+//取消
 const handleClose = () => {
   emit('update:dialogVisible', false)
 }
 
-onBeforeMount(() => {})
-onMounted(() => {})
+//确认
+const handleConfirm = () => {
+  emit('submit', state.form)
+}
 </script>
 
 <template>
-  <el-dialog :model-value="props.dialogVisible" title="案件分派" width="60%" :before-close="handleClose">
+  <el-dialog :model-value="props.dialogVisible" title="案件分派" width="40%" :before-close="handleClose">
     <div>
       <div class="label_class">
-        <LabelClass :label-data="labelList" :is-bkg-color="false" />
+        <LabelClass :label-data="labelList" :label-obj="props.labelData" :is-bkg-color="false" />
       </div>
-      <el-form :model="form" label-position="top">
+      <el-form ref="form1" :model="state.form" label-position="top">
         <el-form-item label="普通留案案件">
-          <el-radio-group v-model="state.form.resource">
-            <el-radio label="不收回留案案件" />
-            <el-radio label="强制收回留案案件" />
+          <el-radio-group v-model="state.form.isRecoverRetain">
+            <el-radio :label="0">不收回留案案件</el-radio>
+            <el-radio :label="1">强制收回留案案件</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="收回备注">
-          <el-input v-model="state.form.notes" type="textarea" />
+          <el-input v-model="state.form.remark" type="textarea" />
         </el-form-item>
       </el-form>
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="handleCancel">Cancel</el-button>
-        <el-button type="primary" @click="handleCancel">Confirm</el-button>
+        <el-button @click="handleClose">取消</el-button>
+        <el-button type="primary" @click="handleConfirm">确定</el-button>
       </span>
     </template>
   </el-dialog>

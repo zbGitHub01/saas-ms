@@ -12,7 +12,7 @@ export default [
     // eplusIcon: '',
     labelTitle: '案件数量',
     isHaveRmbSign: false,
-    prop: 'pageTotal',
+    property: 'pageTotal',
     value: null
   },
   {
@@ -20,7 +20,7 @@ export default [
     // eplusIcon: '',
     labelTitle: '案人人数',
     isHaveRmbSign: false,
-    prop: 'caseUserCount',
+    property: 'caseUserCount',
     value: null
   },
   {
@@ -28,7 +28,7 @@ export default [
     // eplusIcon: '',
     labelTitle: '委案金额',
     isHaveRmbSign: false,
-    prop: 'sumEntrustAmount',
+    property: 'sumEntrustAmount',
     value: null
   },
   {
@@ -36,7 +36,7 @@ export default [
     // eplusIcon: '',
     labelTitle: '待还金额',
     isHaveRmbSign: false,
-    prop: 'sumResidueAmount',
+    property: 'sumResidueAmount',
     value: null
   }
 ]

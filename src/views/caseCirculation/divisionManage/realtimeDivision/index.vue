@@ -172,16 +172,24 @@ const handleUpload = async () => {
 
 //实时分案
 const handleCase = async () => {
-  if (state.currSelectArr.length < 1) {
+  if (state.currSelectArr.length < 1 && Number(operationType.value) === 1) {
     ElMessage({ message: '请选择操作对象.', type: 'warning' })
     return
   }
   state.caseIdList = state.currSelectArr.map(item => item.caseId)
-  try {
-    const dataParams = {
-      operateType: 1,
+  let dataParams = {}
+  if (Number(operationType.value) === 1) {
+    dataParams = {
+      operateType: operationType.value,
       caseIdList: state.caseIdList
     }
+  } else {
+    dataParams = {
+      ...formClass.value.getEntity(),
+      operateType: operationType.value
+    }
+  }
+  try {
     const { data } = await Apis.caseAllotSelect(dataParams)
     state.taskId = data.taskId
     state.labelDialogData = data
@@ -207,7 +215,8 @@ const downloadUrl = () => {
   window.open(state?.templateUrl)
 }
 
-const operation = ref(1)
+//批量操作类型： operateType 1-选中 2-查询
+const operationType = ref(1)
 </script>
 
 <template>
@@ -220,7 +229,7 @@ const operation = ref(1)
     <LabelClass style="margin-top: -20px" :label-data="state.labelList" />
     <div class="spacing"></div>
     <div class="mt20">
-      <OperationBar v-model:active="operation">
+      <OperationBar v-model:active="operationType">
         <template #default>
           <el-button type="primary" plain @click="handleCase">
             <svg-icon name="cloud-upload-fill" />
