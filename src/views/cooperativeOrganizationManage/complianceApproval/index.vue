@@ -1,6 +1,6 @@
 <template>
   <div class="card-wrap">
-    <el-tabs class="mb12" v-model="approveType" @tab-click="onSearch">
+    <el-tabs v-model="approveType" class="mb12" @tab-click="onSearch">
       <el-tab-pane
         v-for="item in tabPaneData"
         :key="item.name"
@@ -46,7 +46,7 @@
           <el-form-item label="委外经理">
             <el-input v-model="form.entrustStaffName" placeholder="请输入委外经理"></el-input>
           </el-form-item>
-          <el-form-item label="合规审批提交时间" v-if="approveType !== '0'">
+          <el-form-item v-if="approveType !== '0'" label="合规审批提交时间">
             <el-date-picker
               v-model="state.submitTime"
               type="daterange"
@@ -63,16 +63,16 @@
       <el-table-column label="机构注册ID" prop="logId" min-width="150" align="center"></el-table-column>
       <el-table-column label="机构名称" prop="companyName" width="210" align="center">
         <template #default="scope">
-          <div style="display:flex;align-items:center;justify-content: center;">
+          <div style="display: flex; align-items: center; justify-content: center">
             <el-tooltip
+              v-if="scope.row.companyName.length > 10"
               effect="dark"
-              v-if="scope.row.companyName.length>10"
               :content="scope.row.companyName"
               placement="top"
             >
-              <div>{{scope.row.companyName.substring(0,10)+'...'}}</div>
+              <div>{{ scope.row.companyName.substring(0, 10) + '...' }}</div>
             </el-tooltip>
-            <div v-else>{{scope.row.companyName}}</div>
+            <div v-else>{{ scope.row.companyName }}</div>
             <svg-icon
               v-if="scope.row.isRisk === 1"
               class="risk-icon"
@@ -90,10 +90,10 @@
       <el-table-column label="邀请人" prop="inviteName" min-width="150" align="center"></el-table-column>
       <el-table-column label="委外经理" prop="entrustStaffName" min-width="150" align="center"></el-table-column>
       <el-table-column
+        v-if="approveType !== '0'"
         label="合规审批提交时间"
         prop="submitTime"
         min-width="180"
-        v-if="approveType !== '0'"
         align="center"
       ></el-table-column>
       <el-table-column label="审批进度" prop="name" width="110" fixed="right" align="center">
@@ -112,9 +112,9 @@
       </el-table-column>
     </el-table>
     <pagination
-      :total="state.total"
       v-model:page="queryParams.page"
       v-model:page-size="queryParams.pageSize"
+      :total="state.total"
       @pagination="getTableData"
     />
     <approval-progress-dialog ref="approvalProgressDialogRef"></approval-progress-dialog>
@@ -123,7 +123,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import approvalProgressDialog from '../components/approvalProgressDialog.vue'
@@ -201,7 +201,7 @@ const onReset = () => {
   getTableData()
 }
 const approvalProgressDialogRef = ref()
-const onProgress = (id: number, type: string) => {
+const onProgress = (id, type) => {
   approvalProgressDialogRef.value.open(id, type)
 }
 const detailDrawerRef = ref()

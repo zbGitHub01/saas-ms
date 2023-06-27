@@ -6,7 +6,7 @@
           <el-cascader
             v-model="form.deptId"
             :options="deptTree"
-            :props="{ checkStrictly: true, label: 'name', value: 'id' }"
+            :props="{ checkStrictly: true, label: 'itemText', value: 'itemId' }"
             clearable
             placeholder="请选择所属部门"
           />
@@ -241,7 +241,7 @@ import { useCommonStore } from '@/store/modules/common'
 import { UploadImg, UploadFile, UploadImgs } from '@/components/Upload'
 
 const commonStore = useCommonStore()
-const deptTree = computed(() => commonStore.dropdownList.DEPT)
+const deptTree = computed(() => commonStore.dropdownList.DEPT_TREE)
 
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])

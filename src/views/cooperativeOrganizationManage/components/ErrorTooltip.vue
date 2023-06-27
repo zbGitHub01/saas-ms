@@ -11,14 +11,14 @@
   </el-tooltip>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { WarningFilled } from '@element-plus/icons-vue'
-const props = defineProps<{
+const props = defineProps({
   text: {
-    type: String
+    type: String,
     default: ''
   }
-}>()
+})
 </script>
 
 <style lang="scss" scoped>

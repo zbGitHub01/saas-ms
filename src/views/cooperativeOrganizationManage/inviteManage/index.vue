@@ -5,8 +5,8 @@
       <div v-if="inviteData.length === 0" class="empty-text">暂无合作邀请</div>
       <div v-for="(item, index) in inviteData" :key="index" class="flx-justify-between pb40 mb40">
         <div>
-          <div class="tip-text" v-if="item.submitDate">
-            <div class="mr40" v-if="item.inviteDate">准入邀请时间：{{ item.inviteDate }}</div>
+          <div v-if="item.submitDate" class="tip-text">
+            <div v-if="item.inviteDate" class="mr40">准入邀请时间：{{ item.inviteDate }}</div>
             <div v-if="item.submitDate">准入提交时间：{{ item.submitDate }}</div>
           </div>
           <div v-else class="tip-text">
@@ -26,13 +26,13 @@
               :style="{ color: statusData(item.inviteStatus, 'color') }"
             >{{ statusData(item.inviteStatus, 'text') }}</div>
             <div
-              class="tip-text"
               v-if="item.inviteStatus === 5"
+              class="tip-text"
               :style="{ color: statusData(item.inviteStatus, 'color') }"
             >准入通过时间：{{ item.accessTime }}</div>
             <div
-              class="tip-text"
               v-if="item.inviteStatus === 6"
+              class="tip-text"
               :style="{ color: statusData(item.inviteStatus, 'color') }"
             >准入拒绝时间：{{ item.approveRejectTime }}</div>
             <div
@@ -41,12 +41,12 @@
               :style="{ color: statusData(item.inviteStatus, 'color') }"
             >{{ item.failureReason }}</div>
             <div
-              v-if="[1,2,3,4].includes(item.inviteStatus)"
+              v-if="[1, 2, 3, 4].includes(item.inviteStatus)"
               class="tip-text"
               :style="{ color: statusData(item.inviteStatus, 'color') }"
             >{{ statusData(item.inviteStatus, 'tip') }}</div>
           </div>
-          <div class="tip-text ml4" style="font-size: 24px" v-if="item.inviteStatus === 1">
+          <div v-if="item.inviteStatus === 1" class="tip-text ml4" style="font-size: 24px">
             <el-icon>
               <ArrowRightBold />
             </el-icon>
@@ -57,7 +57,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref, computed, onMounted } from 'vue'
 import { ArrowRightBold } from '@element-plus/icons-vue'
 import Apis from '@/api/modules/cooperativeOrganization'
@@ -68,7 +68,7 @@ const jump = item => {
   }
 }
 const statusData = computed(() => {
-  return (val: number, type: string) => {
+  return (val, type) => {
     const statusMap = new Map([
       [1, { text: '待提交准入资料', color: '#1FD881' }],
       [2, { text: '审核中-待邀请人审核', color: '#FFBE29', tip: '准入资料提交成功，请等待审核结果' }],

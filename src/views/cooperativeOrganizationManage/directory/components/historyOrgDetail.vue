@@ -24,18 +24,18 @@
       </div>
       <div style="height: calc(100% - 20px)">
         <access-data
-          :scrollTop="220"
-          accessId="history-personal-info"
-          :accessDetail="detailData"
           ref="accessDataRef"
+          :scroll-top="220"
+          access-id="history-personal-info"
+          :access-detail="detailData"
         ></access-data>
       </div>
     </div>
   </el-dialog>
 </template>
 
-<script setup lang="ts">
-import { ref, reactive } from 'vue'
+<script setup>
+import { ref } from 'vue'
 import accessData from './../../components/accessData/index.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 const dialogVisible = ref(false)
@@ -43,7 +43,7 @@ const detailData = ref({})
 const accessDataRef = ref()
 const hitList = ref([])
 
-const open = (data: any) => {
+const open = data => {
   getOrgHistoryDetail(data)
   dialogVisible.value = true
 }

@@ -23,16 +23,16 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
 const dialogVisible = ref(false)
-const stopRelationTenantId = ref<number>()
-const jobType = ref<string>()
+const stopRelationTenantId = ref()
+const jobType = ref()
 
 const emits = defineEmits(['getTableData'])
-const open = (relationTenantId: number, type: string) => {
+const open = (relationTenantId, type) => {
   stopRelationTenantId.value = relationTenantId
   jobType.value = type
   dialogVisible.value = true

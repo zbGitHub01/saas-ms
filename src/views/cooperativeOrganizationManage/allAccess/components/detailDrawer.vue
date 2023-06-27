@@ -12,8 +12,8 @@
         <div style="width: 670px">
           <h4>机构详情</h4>
           <div
-            class="approval-type"
             v-if="props.approveType !== 'all' && props.approveType !== '0'"
+            class="approval-type"
           >
             <img
               :src="`/src/assets/images/approval-${Number(props.approveType)}.png`"
@@ -36,10 +36,10 @@
           </div>
           <div style="height: calc(100% - 66px)">
             <access-data
-              :scrollTop="260"
-              accessId="compliance-personal-info"
-              :accessDetail="detailData"
               ref="accessDataRef"
+              :scroll-top="260"
+              access-id="compliance-personal-info"
+              :access-detail="detailData"
             ></access-data>
           </div>
         </div>
@@ -54,15 +54,18 @@
   </el-drawer>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, nextTick } from 'vue'
 import accessData from './../../components/accessData/index.vue'
 import complianceResult from './../../components/complianceDeter/result.vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 const emits = defineEmits(['getTableData'])
-const props = defineProps<{
-  approveType: string
-}>()
+const props = defineProps({
+  approveType: {
+    type: String,
+    default: ''
+  }
+})
 const drawer = ref(false)
 const direction = ref('rtl')
 const logId = ref()
@@ -74,7 +77,7 @@ const hitList = ref([])
 const handleClose = () => {
   drawer.value = false
 }
-const open = (id: any) => {
+const open = id => {
   logId.value = id
   drawer.value = true
   nextTick(() => {
@@ -99,7 +102,7 @@ const approveJumpDetail = async orgCategoryId => {
   complianceData.value = { ...data, orgCategoryId, logId: logId.value }
   complianceResultRef.value.handleData(complianceData.value)
 }
-const fetchOrgBlacklistHit = (id: number) => {
+const fetchOrgBlacklistHit = id => {
   // const { code, data } = Apis.findRegisterOrgBlacklistHit({ registerId: id })
   // if (code !== 200) return
   // hitList.value = data

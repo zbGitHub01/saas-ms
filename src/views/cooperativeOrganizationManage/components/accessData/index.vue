@@ -1,6 +1,6 @@
 <template>
   <div style="height: 100%">
-    <el-tabs class="mb12" v-model="tabActive" @tab-click="onTab">
+    <el-tabs v-model="tabActive" class="mb12" @tab-click="onTab">
       <el-tab-pane
         v-for="item in tabPaneData"
         :key="item.type"
@@ -11,17 +11,17 @@
     <div v-if="tabActive === '2'" id="tabbar-history" style="height: calc(100% - 40px)">
       <el-radio-group v-model="userTabActive" @change="onUserTab">
         <el-radio-button
-          size="small"
           v-for="(userItem, userIndex) in userTabPaneData"
           :key="userIndex"
+          size="small"
           :label="userItem.field"
         >{{ userItem.fieldName }}</el-radio-button>
       </el-radio-group>
       <div :id="props.accessId" style="height: calc(100% - 50px); overflow-y: auto">
         <div
           v-for="infoItem in userTabPaneData"
-          :key="infoItem.field"
           :id="`${props.accessId}${infoItem.field}`"
+          :key="infoItem.field"
           class="mt20"
         >
           <div style="font-weight: bold">{{ infoItem.fieldName }}</div>
@@ -30,7 +30,7 @@
             :info-data="infoItem.info"
             :detail-data="detailData"
             :hit-list="hitList"
-            :jobName="infoItem.field"
+            :job-name="infoItem.field"
           ></detail-content>
         </div>
       </div>
@@ -46,7 +46,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref, onMounted, onUpdated, onUnmounted } from 'vue'
 import detailContent from './detailContent.vue'
 const listBoxStateHis = ref(true) // 点击导航栏时，暂时停止监听页面滚动
@@ -359,17 +359,20 @@ const hitList = ref([])
 const itemInfo = ref({})
 const detailJsonMapData = ref({})
 // 接收props数据
-const props = defineProps<{
+const props = defineProps({
   scrollTop: {
-    type: number
-  }
+    type: Number,
+    default: 0
+  },
   accessId: {
-    type: string
-  }
+    type: String,
+    default: ''
+  },
   accessDetail: {
-    type: any
+    type: Object,
+    default: () => {}
   }
-}>()
+})
 // 点击导航菜单，页面滚动到指定位置
 const onUserTab = () => {
   listBoxStateHis.value = false
@@ -393,7 +396,7 @@ const scrollChange = () => {
   // dom滚动位置
   const scrollTop = document.getElementById(props.accessId)?.scrollTop ?? 0
 
-  if (listBoxStateHis) {
+  if (listBoxStateHis.value) {
     // 作用是点击导航栏时，延迟这里执行。
     userTabPaneData.value.map(item => {
       const temId = `${props.accessId}${item.field}`
@@ -413,14 +416,14 @@ const scrollChange = () => {
 }
 // 字段详情
 const sysFieldList = async () => {
-  userTabPaneData.value = tabPaneData.value.filter((item: any) => item.type === 2)[0].sysFieldDetails
+  userTabPaneData.value = tabPaneData.value.filter(item => item.type === 2)[0].sysFieldDetails
   userTabActive.value = userTabPaneData.value[0].field
 }
-const onTab = (e?: any) => {
+const onTab = e => {
   tabActive.value = e.props.name
   tabActive.value !== '2' && (itemInfo.value = detailJsonMapData.value[tabActive.value])
 }
-const handleData = (info: any, list: []) => {
+const handleData = (info, list) => {
   detailData.value = info
   hitList.value = list
   tabActive.value = '1'
@@ -438,7 +441,7 @@ const handleData = (info: any, list: []) => {
   itemInfo.value = detailJsonMapData.value[tabActive.value]
 }
 // 处理营业执照信息
-const handleBusinessLicense = (data: any) => {
+const handleBusinessLicense = data => {
   const temBusinessLicense = data?.businessLicense ? JSON.parse(JSON.stringify(data.businessLicense)) : []
   let temInfo = []
   if (Array.isArray(temBusinessLicense)) {
@@ -456,15 +459,15 @@ const handleBusinessLicense = (data: any) => {
   }
 }
 // 处理主要人员信息数据
-const handleJobInfo = (data: any) => {
+const handleJobInfo = data => {
   const jobData = JSON.parse(data)
-  userTabPaneData.value.forEach((item: any, index: number) => {
+  userTabPaneData.value.forEach((item, index) => {
     item.info = jobData.length > 0 ? jobData[index] : []
   })
   return jobData
 }
 // 处理监控设备信息
-const handleMonitorInfo = (data: any) => {
+const handleMonitorInfo = data => {
   const temInfo = data.monitorInfo ? eval('(' + data.monitorInfo + ')') : {}
   let temMonitorInfo = {}
   if (JSON.stringify(temInfo === '{}')) {

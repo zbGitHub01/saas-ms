@@ -1,44 +1,49 @@
 <template>
-  <div class="three-wrap">
-    <div class="title-wrap">判定标签</div>
-    <el-button type="primary" size="small" @click="onFormDialog" :icon="Plus" class="mt16 mb16">添加标签</el-button>
-    <el-table ref="multipleTable" :data="tableData" style="width: 601px" border>
-      <el-table-column
-        property="name"
-        label="标签名称"
-        width="400"
-        :show-overflow-tooltip="true"
-        align="center"
-      />
-      <el-table-column property="operate" label="操作" width="200" align="center">
-        <template #default="scope">
-          <el-button type="text" style="margin-right: 12px" @click="onFormDialog(scope.row)">编辑</el-button>
-          <el-button type="primary" link @click="onDelete(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+  <div class="three-wrap pt14">
+    <div class="title-wrap pb14 pl20 pr20" style="border-bottom: 1px solid #f0f2f5">判定标签</div>
+    <div class="pl20 pr20">
+      <el-button type="primary" :icon="Plus" class="mt16 mb16" @click="onFormDialog">添加标签</el-button>
+      <el-table ref="multipleTable" :data="tableData" style="width: 601px" border>
+        <el-table-column
+          property="name"
+          label="标签名称"
+          width="400"
+          :show-overflow-tooltip="true"
+          align="center"
+        />
+        <el-table-column property="operate" label="操作" width="200" align="center">
+          <template #default="scope">
+            <el-button type="text" style="margin-right: 12px" @click="onFormDialog(scope.row)">编辑</el-button>
+            <el-button type="primary" link @click="onDelete(scope.row.id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
     <form-dialog ref="formDialogRef" @get-table-data="getTableData"></form-dialog>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import formDialog from './formDialog.vue'
 import { Plus } from '@element-plus/icons-vue'
 import Apis from '@/api/modules/cooperativeOrganization'
 import { useConfirm } from '@/hooks/useConfirm'
 const formDialogRef = ref()
-const props = defineProps<{
-  optionIds: string
-}>()
+const props = defineProps({
+  optionIds: {
+    type: String,
+    default: ''
+  }
+})
 const tableData = ref([])
 // 删除标签
-const onDelete = async (id: number) => {
+const onDelete = async id => {
   await useConfirm('删除', Apis.configDelete, { id })
   getTableData()
 }
 // 新增编辑
-const onFormDialog = (row: any) => {
+const onFormDialog = row => {
   formDialogRef.value.open(props.optionIds, row)
 }
 // 获取判定标签
@@ -62,7 +67,7 @@ defineExpose({
   padding-bottom: 20px;
   .title-wrap {
     font-weight: bold;
-    margin-top: 40px;
+    font-size: 18px;
   }
 }
 </style>

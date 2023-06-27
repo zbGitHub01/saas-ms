@@ -29,8 +29,8 @@
           <div :style="{ width: formHead[1].width }">
             <el-form-item label :prop="`scoreList.${scoreIndex}.score`" :rules="rules.scoreItem">
               <el-input
-                style="width: 120px"
                 v-model="scoreItem.score"
+                style="width: 120px"
                 placeholder="请输入分数"
                 @change="changeScore(scoreItem, scoreIndex)"
               ></el-input>
@@ -55,7 +55,7 @@
           </div>
           <div :style="{ width: formHead[3].width }">
             <el-form-item label prop="remark">
-              <el-input style="width: 140px" placeholder="请输入备注" v-model="scoreItem.remark"></el-input>
+              <el-input v-model="scoreItem.remark" style="width: 140px" placeholder="请输入备注"></el-input>
             </el-form-item>
           </div>
         </div>
@@ -69,9 +69,9 @@
           <el-form-item label="判定标签：" label-width="94px" prop="tagId" size="small">
             <el-radio-group v-model="form.tagId">
               <el-radio
-                size="small"
                 v-for="(tagItem, tagIndex) in tagList"
                 :key="tagIndex"
+                size="small"
                 :label="tagItem.id"
                 border
               >{{ tagItem.name }}</el-radio>
@@ -95,12 +95,12 @@
         <div v-if="form.accessType === 1">
           <el-form-item label="拒绝原因总结：" label-width="122px" prop="reasonId">
             <el-select
+              v-model="form.reasonId"
               clearable
               style="width: 330px"
-              v-model="form.reasonId"
               filterable
-              @change="changeReasonId"
               placeholder="请选择拒绝原因"
+              @change="changeReasonId"
             >
               <el-option
                 v-for="item in refuseReasonList"
@@ -120,11 +120,11 @@
       <div class="mt20">
         <el-form-item label="备注：" label-width="54px" prop="remark">
           <el-input
+            v-model="form.remark"
             style="width: 400px"
             type="textarea"
             :autosize="{ minRows: 3, maxRows: 6 }"
             placeholder="请输入备注"
-            v-model="form.remark"
           ></el-input>
         </el-form-item>
       </div>
@@ -136,9 +136,8 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref, reactive } from 'vue'
-import type { FormInstance, FormRules } from 'element-plus'
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/cooperativeOrganization'
@@ -150,7 +149,7 @@ const props = defineProps({
   }
 })
 const formSize = ref('default')
-const ruleFormRef = ref<FormInstance>()
+const ruleFormRef = ref()
 const tagList = ref([])
 const refuseReasonList = ref([])
 const complianceInfo = ref({})
@@ -182,7 +181,7 @@ const form = reactive({
   day: ''
 })
 const defaultForm = JSON.parse(JSON.stringify(form))
-const rules = reactive<FormRules>({
+const rules = reactive({
   scoreItem: [{ required: true, message: '请输入分数', trigger: 'blur' }],
   tagId: [{ required: true, message: '请选择判定标签', trigger: 'change' }],
   reasonId: [{ required: true, message: '请选择拒绝原因', trigger: 'change' }]
@@ -192,7 +191,7 @@ const changeReasonId = () => {
   form.day = form.reasonId ? refuseReasonList.value.filter(item => item.id == form.reasonId)[0].day : ''
 }
 // 计算总得分
-const changeScore = (scoreItem: any, scoreIndex: number) => {
+const changeScore = (scoreItem, scoreIndex) => {
   form.score = 0
   const temArray = form.scoreList.filter((item, index) => scoreIndex !== index)
   const temScoreArr = Array.from(temArray, ({ score }) => score)
@@ -230,14 +229,14 @@ const doSave = () => {
   registerApprove(params)
 }
 // 合规审批
-const registerApprove = async (params: any) => {
+const registerApprove = async params => {
   const { code, data } = await Apis.registerAuditComplianceApprove(params)
   if (code !== 200) return
   emits('getList')
   ElMessage.success('操作成功')
   onClose()
 }
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = async formEl => {
   if (!formEl) return
   await formEl.validate(valid => {
     if (valid) {
@@ -245,7 +244,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     }
   })
 }
-const handleData = (val: any) => {
+const handleData = val => {
   complianceInfo.value = val
   getInfoData()
 }
@@ -254,9 +253,9 @@ const getInfoData = async () => {
   const data3 = await ApisCommon.findConfigList({ type: 3, orgCategoryId: complianceInfo.value.orgCategoryId })
   if (data3.code !== 200) return
   const temData = data3.data || []
-  temData.forEach((item: any) => {
+  temData.forEach(item => {
     item.json = JSON.parse(item.json)
-    item.json = item.json.filter((child: any) => child.scoreValue)
+    item.json = item.json.filter(child => child.scoreValue)
     item.remark = ''
   })
   form.scoreList = JSON.parse(JSON.stringify(temData))

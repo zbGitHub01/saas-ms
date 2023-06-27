@@ -21,27 +21,23 @@
           <el-cascader
             v-model="form.deptId"
             :options="deptTree"
-            :props="{ label: 'name', value: 'id', checkStrictly: true }"
+            :props="{ label: 'itemText', value: 'itemId', checkStrictly: true }"
             clearable
             placeholder="请选择入职部门"
           />
         </el-form-item>
         <el-form-item label="任职职位" prop="positionId">
           <el-select v-model="form.positionId" placeholder="请选择任职职位">
-            <el-option v-for="item in positionList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            <el-option v-for="item in positionList" :key="item.itemId" :label="item.itemText" :value="item.itemId"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <div v-else class="success-wrap">
-        <el-result
-            icon="success"
-            title="邀请成功"
-            sub-title="邀请链接已生成，链接地址："
-        >
+        <el-result icon="success" title="邀请成功" sub-title="邀请链接已生成，链接地址：">
           <template #extra>
             <a class="link" :href="link" target="_blank">{{ link }}</a>
             <div class="btn">
-              <el-button type="primary" v-copy="link">复制链接</el-button>
+              <el-button v-copy="link" type="primary">复制链接</el-button>
             </div>
           </template>
         </el-result>
@@ -49,15 +45,15 @@
     </template>
     <template v-if="!link" #footer>
       <el-button @click="beforeClose">取 消</el-button>
-      <el-button type="primary" @click="onSubmit" :loading="loading">生成邀请链接</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit">生成邀请链接</el-button>
     </template>
   </el-dialog>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
-import { phoneReg } from '@/utils/validate'
-import { useCommonStore } from '@/store/modules/common'
+import {computed, reactive, ref} from 'vue'
+import {phoneReg} from '@/utils/validate'
+import {useCommonStore} from '@/store/modules/common'
 import Apis from '@/api/modules/systemSetting'
 
 const props = defineProps({
@@ -70,8 +66,8 @@ const emit = defineEmits(['update:dialogVisible'])
 
 const commonStore = useCommonStore()
 const formRef = ref()
-const deptTree = computed(() => commonStore.dropdownList.DEPT)
-const positionList = computed(() => commonStore.dropdownList.POSITION)
+const deptTree = computed(() => commonStore.dropdownList.DEPT_TREE)
+const positionList = computed(() => commonStore.dropdownList.POSITION_LIST)
 const form = reactive({
   name: '',
   phone: '',
@@ -97,7 +93,7 @@ const loading = ref(false)
 const link = ref('')
 
 const fetchOptions = () => {
-  commonStore.fetchItemList('DEPT,POSITION')
+  commonStore.fetchItemList('DEPT_LIST,DEPT_TREE,POSITION_LIST')
 }
 const handleOpen = () => {
   fetchOptions()
@@ -108,8 +104,7 @@ const beforeClose = () => {
 }
 const successMounted = code => {
   const { origin, pathname } = window.location
-  const inviteUrl = `${origin + pathname}#/loginInvite?code=${code}`
-  link.value = inviteUrl
+  link.value = `${origin + pathname}#/loginInvite?code=${code}`
 }
 const onSubmit = async () => {
   const isValidate = await formRef.value.validate().catch(() => {})

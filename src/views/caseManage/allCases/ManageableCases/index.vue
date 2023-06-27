@@ -1,14 +1,7 @@
 <template>
   <div>
-    <FormWrap @search="getTableData" @reset="reset">
-      <template #default>
-        <el-form inline :model="form">
-          <el-form-item label="案件ID">
-            <el-input v-model="form.caseId" placeholder="请输入案件ID" clearable></el-input>
-          </el-form-item>
-        </el-form>
-      </template>
-    </FormWrap>
+    <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" />
+    <div class="spacing"></div>
     <!-- <LabelData :labelData="state.labelData" /> -->
     <LabelClass :labelData="state.labelData" />
     <div class="spacing"></div>
@@ -210,9 +203,12 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Close, VideoPause, VideoPlay, CirclePlus, Delete, Download, Document } from '@element-plus/icons-vue'
+import DynamoSearchForm from '@/components/DynamoSearchForm/index.vue'
 import AddOrRemoveTagDialog from './components/AddOrRemoveTagDialog.vue'
 import HandleCaseDialog from './components/HandleCaseDialog.vue'
 import ExportDialog from './components/ExportDialog.vue'
+
+const dynamoSearchFormRef = ref()
 const multipleTable = ref(null)
 const form = reactive({
   caseId: ''
@@ -512,12 +508,6 @@ const getTableData = async () => {
   state.labelData.forEach(item => {
     item.value = labelData2[item.key]
   })
-}
-// 重置
-const reset = () => {
-  console.log('重置')
-  Object.assign(form, originFormData)
-  getTableData()
 }
 //表格选择
 const handleSelectionChange = val => {

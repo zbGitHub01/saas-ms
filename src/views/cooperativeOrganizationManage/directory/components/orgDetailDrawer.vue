@@ -85,10 +85,10 @@
         </div>
         <div style="height: calc(100% - 220px)">
           <access-data
-            :scrollTop="420"
-            accessId="org-personal-info"
-            :accessDetail="detailData"
             ref="accessDataRef"
+            :scroll-top="420"
+            access-id="org-personal-info"
+            :access-detail="detailData"
           ></access-data>
         </div>
       </template>
@@ -98,7 +98,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import basicInfoDialog from './basicInfoDialog.vue'
 import historyEdition from './historyEdition.vue'
@@ -113,7 +113,7 @@ const hitList = ref([])
 const handleClose = () => {
   drawer.value = false
 }
-const open = (relationTenantId: number) => {
+const open = relationTenantId => {
   orgTenantId.value = relationTenantId
   getOrgDetail()
   drawer.value = true

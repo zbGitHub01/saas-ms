@@ -1,25 +1,24 @@
 <template>
-  <div class="card-wrap" style="display: flex; height: 100%">
-    <div style="width: 18%; border-right: 1px solid #efefef" class="pr20">
-      <div class="card-title mb30">机构类型</div>
-      <el-tabs tab-position="right" class="custom-tabs" v-model="categoryId" @tab-click="onTypeTab">
+  <div class="card-wrap" style="display: flex; height: 100%; padding: 0">
+    <div style="width: 18%" class="pt22">
+      <div class="card-title mb10 pl20">机构类型</div>
+      <el-tabs v-model="categoryId" tab-position="right" class="custom-tabs" @tab-click="onTypeTab">
         <el-tab-pane
-          :name="String(item.id)"
-          :label="item.name"
           v-for="item in categoryData"
           :key="item.id"
+          :name="String(item.id)"
+          :label="item.name"
           lazy
         ></el-tab-pane>
       </el-tabs>
     </div>
-    <div style="width: 82%; height: 100%">
-      <div class="pl20 mb20">准入策略配置</div>
-      <el-tabs class="pl20" v-model="pageTabName" @tab-click="onPageTab">
+    <div style="width: 82%; height: 100%; border-left: 12px solid #f0f2f5">
+      <el-tabs v-model="pageTabName" class="pl20 custom-title-tabs" @tab-click="onPageTab">
         <el-tab-pane
-          :name="item.value"
-          :label="item.label"
           v-for="item in pageTabData"
           :key="item.label"
+          :name="item.value"
+          :label="item.label"
         ></el-tab-pane>
       </el-tabs>
       <div class="content-wrap">
@@ -29,7 +28,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, reactive, computed, nextTick, onMounted } from 'vue'
 import one from './components/one.vue'
 import two from './components/two.vue'
@@ -63,12 +62,12 @@ const pageTabData = reactive([
     value: 'five'
   }
 ])
-const onTypeTab = (e: any) => {
+const onTypeTab = e => {
   pageTabName.value = 'one'
   categoryId.value = e.props.name
   getTableData()
 }
-const onPageTab = (e?: any) => {
+const onPageTab = e => {
   pageTabName.value = e.props.name
   getTableData()
 }
@@ -109,14 +108,21 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
-::v-deep .custom-tabs {
+:deep(.custom-title-tabs .el-tabs__item) {
+  height: 52px;
+}
+:deep(.custom-tabs) {
   overflow-y: auto;
-  height: calc(100% - 52px);
+  height: calc(100% - 32px);
   .el-tabs__header.is-right {
     float: initial !important;
+    margin-left: 1px !important;
   }
   .el-tabs__nav-wrap.is-right.is-scrollable {
     padding: 0 !important;
+  }
+  .el-tabs__nav {
+    width: 100% !important;
   }
   .el-tabs__nav-prev,
   .el-tabs__nav-next {
@@ -125,20 +131,19 @@ onMounted(async () => {
   .el-tabs__nav-scroll {
     overflow-y: auto !important;
   }
-  .el-tabs__item {
-    border-bottom: 1px solid #efefef;
+  .el-tabs__item.is-active {
+    background: #f5f9ff;
   }
   .el-tabs__nav-wrap.is-right::after {
     width: 0px !important;
   }
 }
-::v-deep .el-tabs__header {
+:deep(.el-tabs__header) {
   margin-bottom: 0px !important;
 }
 .content-wrap {
-  height: calc(100% - 82px);
+  height: calc(100% - 52px);
   overflow-x: auto;
-  border-top: 10px solid #efefef;
-  border-left: 10px solid #efefef;
+  border-top: 12px solid #f0f2f5;
 }
 </style>

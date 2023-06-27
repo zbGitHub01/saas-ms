@@ -6,7 +6,7 @@
     </el-tabs>
     <OperationBar>
       <template #default>
-        <el-button type="primary" icon="Plus" @click="addEntrust" v-if="tabActive === '1'">新增委托</el-button>
+        <el-button type="primary" :icon="Plus" @click="addEntrust" v-if="tabActive === '1'">新增委托</el-button>
       </template>
     </OperationBar>
     <div class="mt20">
@@ -65,10 +65,11 @@
 </template>
 
 <script setup>
-import { Plus } from '@element-plus/icons-vue'
+console.log(333)
 import AddEntrustDialog from './components/AddEntrustDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
+import { Plus } from '@element-plus/icons-vue'
 const form = reactive({
   positionStatus: 1 //1当前委托 2历史委托
 })
