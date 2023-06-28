@@ -6,7 +6,7 @@ const globalState = useGlobalStore()
 
 export const downArrayBufferFile = (method, action, data) => {
   axios({
-    method: method,
+    method: method ? method : 'get',
     url: action,
     data: data,
     // params: {

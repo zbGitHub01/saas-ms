@@ -1,5 +1,7 @@
 <script setup>
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, reactive } from 'vue'
+import More from './component/more.vue'
+import MoreDialog from './component/moreDialog.vue'
 import StopInfoDialog from './component/stopInfoDialog.vue'
 import descriptionList from './config/descriptionList.js'
 
@@ -10,11 +12,25 @@ const props = defineProps({
   }
 })
 
+const state = reactive({
+  type: 1,
+  title: '',
+  key: ''
+})
+
 const { messageData } = toRefs(props)
 
+const dialogMoreVisible = ref(false)
 const dialogVisible = ref(false)
 
 const onStopCase = () => (dialogVisible.value = true)
+
+const open = () => {
+  // getCaseRecordList()
+  state.title = '案件评语'
+  state.key = '案件评语'
+  dialogMoreVisible.value = true
+}
 </script>
 
 <template>
@@ -43,8 +59,19 @@ const onStopCase = () => (dialogVisible.value = true)
             <el-icon><QuestionFilled /></el-icon>
           </template>
         </el-popover>
+        <!--更多-->
+        <More v-if="item.more" ref="more" :type="item.moreType" @open="open" />
       </el-descriptions-item>
     </el-descriptions>
+    <!--查看历史记录-->
+    <MoreDialog
+      ref="moreDialog"
+      v-model:dialog-visible="dialogMoreVisible"
+      :title="state.title"
+      :message-data="messageData"
+      :type="state.type"
+      @update-case-info="updateCaseInfo"
+    />
     <!--查看明细弹窗-->
     <StopInfoDialog v-model:dialog-visible="dialogVisible" />
   </div>

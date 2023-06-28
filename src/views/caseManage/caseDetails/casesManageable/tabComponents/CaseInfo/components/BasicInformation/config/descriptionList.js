@@ -62,4 +62,11 @@ export default [
     label: '特殊备注',
     prop: 'remark'
   }
+  //暂时不需要
+  // {
+  //   label: '案件评语',
+  //   prop: 'comment',
+  //   moreType: 1,
+  //   more: true
+  // }
 ]

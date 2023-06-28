@@ -3,10 +3,13 @@
  */
 import { generateApiFnc } from '@/api/helper/apiFncs'
 
-//案件详情APi
+//案件信息APi
 const caseInfoApi = {
   getCaseInfoList: 'GET /caseCenter/case/info', //案件详情列表
-  updateCaseInfo: 'POST /caseCenter/case/info/update' //更新案件资料
+  updateCaseInfo: 'POST /caseCenter/case/info/update', //更新案件资料
+  repayInfo: 'POST /caseCenter/case/cseInfo/repayInfo', //获取案件还款信息
+  caseExtLog: 'GET caseCenter/case/caseExtLog/list', //案人资料历史记录
+  contactsInfo: 'GET /caseCenter/case/user/phone/getByCaseId' //联系方式
 }
 
 //债转通知记录Api

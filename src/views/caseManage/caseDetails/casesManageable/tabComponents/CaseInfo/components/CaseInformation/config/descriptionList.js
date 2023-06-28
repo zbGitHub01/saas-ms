@@ -33,25 +33,25 @@ export default [
   {
     label: 'QQ',
     prop: 'qq',
-    more: true,
+    // more: true,
     moreType: 2
   },
   {
     label: '邮箱',
     prop: 'mail',
-    more: true,
+    // more: true,
     moreType: 3
   },
   {
     label: '单位名称',
     prop: 'companyName',
-    more: true,
+    // more: true,
     moreType: 4
   },
   {
     label: '单位地址',
     prop: 'companyAddr',
-    more: true,
+    // more: true,
     moreType: 5
   },
   {
@@ -61,7 +61,7 @@ export default [
   {
     label: '家庭住址',
     prop: 'homeAddr',
-    more: true,
+    // more: true,
     moreType: 6
   },
   {

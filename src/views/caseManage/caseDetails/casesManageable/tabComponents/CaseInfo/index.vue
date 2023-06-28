@@ -8,14 +8,25 @@ import componentsObj from './components/index.js'
 const caseInfoStore = useCaseStore()
 
 const state = reactive({
-  messageData: {}
+  messageData: {},
+  contactData: []
 })
 
+//获取案件详情信息
 const getCaseInfoData = async () => {
   const { data } = await Api.getCaseInfoList({ caseId: caseInfoStore?.caseId })
   state.messageData = data
 }
+
+//获取联系人信息
+const getContactsInfo = async () => {
+  const { data } = await Api.contactsInfo({ caseId: caseInfoStore?.caseId })
+  state.contactData = data?.selfPhone?.concat(data?.otherPhone)
+  console.log(state.contactData)
+}
+
 getCaseInfoData()
+getContactsInfo()
 
 //判断组件传值是否为空 解决异步传值组件渲染取不到props值的问题
 const isEmpty = computed(() => Object.keys(state.messageData).length > 0)
@@ -45,7 +56,7 @@ const handleChange = val => {
         ></component>
       </el-collapse-item>
       <el-collapse-item title="联系方式" name="3">
-        <component :is="componentsObj['ContactInformation']"></component>
+        <component :is="componentsObj['ContactInformation']" :contact-data="state.contactData"></component>
       </el-collapse-item>
       <el-collapse-item title="借款/转让信息" name="4">
         <component :is="componentsObj['LoanTransferInformation']" v-if="isEmpty" :message-data="state.messageData"></component>

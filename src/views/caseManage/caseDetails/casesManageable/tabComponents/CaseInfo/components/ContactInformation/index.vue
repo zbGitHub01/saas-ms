@@ -1,41 +1,15 @@
 <script setup>
-import { reactive } from 'vue'
+import { toRefs } from 'vue'
 import { ordinaryColumnList } from './config/tableColumnList.js'
 
-const state = reactive({
-  tableData: [
-    {
-      name: 'xxxx',
-      relation: 'xx',
-      typeText: '贷款',
-      statusText: 'ddd',
-      phone: '250250250',
-      lastCallResult: 'ccc',
-      createName: '111',
-      createTime: ''
-    },
-    {
-      name: '白菜',
-      relation: 'xxx',
-      typeText: '贷款',
-      statusText: 'xxx',
-      phone: '250250250',
-      lastCallResult: 'ccc',
-      createName: '111',
-      createTime: ''
-    },
-    {
-      name: '洗衣机',
-      relation: 'xxx',
-      typeText: '贷款',
-      statusText: 'xxx',
-      phone: '250250250',
-      lastCallResult: 'aaa',
-      createName: '111',
-      createTime: ''
-    }
-  ]
+const props = defineProps({
+  contactData: {
+    type: Array,
+    default: () => []
+  }
 })
+
+const { contactData } = toRefs(props)
 </script>
 
 <template>
@@ -43,7 +17,7 @@ const state = reactive({
     <!--普通-->
     <TableClass
       ref="ordinaryTable"
-      :table-data="state.tableData"
+      :table-data="contactData"
       :column-list="ordinaryColumnList"
       :pagination="false"
       :stripe="true"

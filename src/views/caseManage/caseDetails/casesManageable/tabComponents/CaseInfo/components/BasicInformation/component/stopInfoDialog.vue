@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, computed } from 'vue'
+import { downArrayBufferFile } from '@/api/arrayBuffer'
 
 const props = defineProps({
   dialogVisible: {
@@ -46,7 +47,7 @@ const handleOpen = () => {
 }
 
 const onDownload = url => {
-  console.log(url)
+  downArrayBufferFile(url)
 }
 
 const close = () => {
