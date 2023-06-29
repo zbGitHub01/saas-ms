@@ -24,7 +24,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:tagVisible', 'tagAlertLogList'])
+const emit = defineEmits(['update:tagVisible', 'tagAlertLogList', 'changeShare', 'commit'])
 
 const { sysAlertTagList, customAlertTagList, historyData, tagVisible, type } = toRefs(props)
 
@@ -53,8 +53,17 @@ const tableColumnList = [
   { label: '标记标签', prop: 'tagAlertName', width: 250 }
 ]
 
+//是否共享
+const handleChange = val => {
+  emit('changeShare', val)
+}
+
 const tagAlertLogList = (page, pageSize) => {
   emit('tagAlertLogList', page, pageSize)
+}
+
+const clickOk = () => {
+  emit('commit', sysAlertTagList, customAlertTagList)
 }
 
 const close = () => {
@@ -67,7 +76,7 @@ const close = () => {
     <template v-if="type === 1">
       <p>预警标签选项：</p>
       <el-table :border="true" :data="sysAlertTagList">
-        <el-table-column type="index" label="序号" align="center" width="50"></el-table-column>
+        <el-table-column type="index" label="序号" align="center" width="80"></el-table-column>
         <el-table-column property="tagAlertName" align="center" label="预警标签"></el-table-column>
         <el-table-column property="markCount" align="center" label="标记次数"></el-table-column>
         <el-table-column property="isShare" align="center" label="机构共享">
@@ -78,7 +87,7 @@ const close = () => {
       </el-table>
       <p>自定义预警标签：</p>
       <el-table :border="true" :data="customAlertTagList">
-        <el-table-column type="index" label="序号" align="center" width="50"></el-table-column>
+        <el-table-column type="index" label="序号" align="center" width="80"></el-table-column>
         <el-table-column property="tagAlertName" align="center" label="预警标签"></el-table-column>
         <el-table-column property="markCount" align="center" label="标记次数"></el-table-column>
         <el-table-column property="isShare" align="center" label="机构共享">
