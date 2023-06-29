@@ -9,7 +9,7 @@ import labelList from './config/labelList.js'
 
 const state = reactive({
   tableData: [],
-  pageTotal: 10,
+  pageTotal: 0,
   page: 1,
   pageSize: 10,
   labelObjData: {},

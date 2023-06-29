@@ -47,7 +47,7 @@ const { aPayData } = toRefs(props)
 }
 .detail_newTable th {
   text-align: center;
-  background: #f6f8ff;
+  background: #f5f7fa;
   min-height: 48px;
 }
 </style>

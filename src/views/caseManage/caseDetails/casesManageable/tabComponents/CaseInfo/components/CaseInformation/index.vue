@@ -22,10 +22,12 @@ const state = reactive({
   type: 1,
   title: '',
   key: '',
-  labelShow: false
+  labelShow: false,
+  historyData: []
 })
 
 const moreDialog = ref(null)
+const tagDialog = ref(null)
 const dialogVisible = ref(false)
 const tagVisible = ref(false)
 
@@ -33,29 +35,28 @@ const open = (item, val) => {
   state.type = item
   if (val !== 7) dialogVisible.value = true
   switch (val) {
-    case 2:
-      state.title = 'qq'
-      state.key = 'qq'
-      break
-    case 3:
-      state.title = '邮箱'
-      state.key = 'mail'
-      break
-    case 4:
-      state.title = '单位名称'
-      state.key = 'company_name'
-      break
-    case 5:
-      state.title = '单位地址'
-      state.key = 'company_addr'
-      break
-    case 6:
-      state.title = '家庭住址'
-      state.key = 'home_addr'
-      break
+    // case 2:
+    //   state.title = 'qq'
+    //   state.key = 'qq'
+    //   break
+    // case 3:
+    //   state.title = '邮箱'
+    //   state.key = 'mail'
+    //   break
+    // case 4:
+    //   state.title = '单位名称'
+    //   state.key = 'company_name'
+    //   break
+    // case 5:
+    //   state.title = '单位地址'
+    //   state.key = 'company_addr'
+    //   break
+    // case 6:
+    //   state.title = '家庭住址'
+    //   state.key = 'home_addr'
+    //   break
     case 7:
       tagVisible.value = true
-      console.log(tagVisible.value)
       break
     default:
       break
@@ -65,8 +66,8 @@ const open = (item, val) => {
     //   this.getCaseRecordList()
     // } else if (item === 1 && val === 7) {
     //   this.tagAlertList()
-    // } else if (item === 2 && val === 7) {
-    //   this.tagAlertlogList()
+  } else if (item === 2 && val === 7) {
+    tagAlertLogList()
   }
 }
 
@@ -80,6 +81,20 @@ const updateCaseInfo = async data => {
   } catch (error) {
     console.log(error)
   }
+}
+
+//历史记录分页切换
+const tagAlertLogList = async (page, pageSize) => {
+  const pageInfo = {
+    page: page ? page : 1,
+    pageSize: pageSize ? pageSize : 10,
+    caseUserId: messageData.value.caseUserId
+  }
+  const data = await Api.caseExtLog(pageInfo)
+  state.historyData = data.data
+  tagDialog.value.setPage(data.page)
+  tagDialog.value.setPageSize(data.pageSize)
+  tagDialog.value.setPageTotal(data.total)
 }
 </script>
 
@@ -120,7 +135,13 @@ const updateCaseInfo = async data => {
       @update-case-info="updateCaseInfo"
     />
     <!--预警标签-->
-    <TagDialog v-model:tag-visible="tagVisible" :type="state.type" />
+    <TagDialog
+      ref="tagDialog"
+      v-model:tag-visible="tagVisible"
+      :history-data="historyData"
+      :type="state.type"
+      @tag-alert-log-list="tagAlertLogList"
+    />
   </div>
 </template>
 <style scoped lang="scss">

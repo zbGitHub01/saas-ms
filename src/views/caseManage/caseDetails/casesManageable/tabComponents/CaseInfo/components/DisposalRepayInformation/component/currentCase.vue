@@ -164,6 +164,6 @@ console.log(messageData)
 }
 
 .newTable th {
-  background-color: #f6f8ff;
+  background-color: #f5f7fa;
 }
 </style>

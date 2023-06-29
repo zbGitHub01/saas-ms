@@ -1,5 +1,5 @@
 <script setup>
-import { toRefs } from 'vue'
+import { toRefs, reactive } from 'vue'
 
 const props = defineProps({
   tagVisible: {
@@ -24,9 +24,38 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['update:tagVisible'])
+const emit = defineEmits(['update:tagVisible', 'tagAlertLogList'])
 
 const { sysAlertTagList, customAlertTagList, historyData, tagVisible, type } = toRefs(props)
+
+const state = reactive({
+  pageTotal: 0,
+  page: 1,
+  pageSize: 10
+})
+
+defineExpose({
+  setPage: val => {
+    state.page = val
+  },
+  setPageSize: val => {
+    state.pageSize = val
+  },
+  setPageTotal: val => {
+    state.pageTotal = val
+  }
+})
+
+const tableColumnList = [
+  { label: '标记时间', prop: 'createTime' },
+  { label: '处置机构', prop: 'orgTitle', width: 250 },
+  { label: 'cpe', prop: 'createName', width: 250 },
+  { label: '标记标签', prop: 'tagAlertName', width: 250 }
+]
+
+const tagAlertLogList = (page, pageSize) => {
+  emit('tagAlertLogList', page, pageSize)
+}
 
 const close = () => {
   emit('update:tagVisible', false)
@@ -60,17 +89,14 @@ const close = () => {
       </el-table>
     </template>
     <template v-else>
-      <el-table :border="true" :data="historyData">
-        <el-table-column property="createTime" align="center" label="标记时间"></el-table-column>
-        <el-table-column property="orgTitle" align="center" label="处置机构"></el-table-column>
-        <el-table-column property="createName" align="center" label="cpe"></el-table-column>
-        <el-table-column property="tagAlertName" align="center" label="标记标签"></el-table-column>
-      </el-table>
-      <pagination
-        v-model:page="searchParams.page"
-        v-model:limit="searchParams.pageSize"
-        :total="searchParams.total"
-        @pagination="tagAlertLogList"
+      <TableClass
+        :table-data="historyData"
+        :column-list="tableColumnList"
+        :stripe="true"
+        :total="state.pageTotal"
+        :page="state.page"
+        :page-size="state.pageSize"
+        @query="tagAlertLogList"
       />
     </template>
     <template v-if="type === 1" #footer>

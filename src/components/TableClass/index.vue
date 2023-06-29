@@ -77,6 +77,11 @@ export default {
       type: Function,
       default: null
     },
+    //是否有纵向边框
+    border: {
+      type: Boolean,
+      default: false
+    },
     page: {
       type: Number,
       default: 1
@@ -263,6 +268,7 @@ export default {
       ref="multipleTableRef"
       :data="tableData"
       :stripe="stripe"
+      :border="border"
       style="width: 100%"
       :span-method="props.spanMethod || objectSpanMethod"
       :cell-style="cellStyle"
