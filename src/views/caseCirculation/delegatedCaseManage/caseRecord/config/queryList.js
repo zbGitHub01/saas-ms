@@ -9,18 +9,9 @@ export default [
     property: 'storeId',
     clearable: true,
     placeholder: '请选择委案分库',
-    optionLabel: 'storeName',
-    optionValue: 'storeId',
-    options: [
-      {
-        storeId: '1',
-        storeName: '大额处置库'
-      },
-      {
-        storeId: '2',
-        storeName: 'test临时造的库'
-      }
-    ]
+    optionLabel: 'itemText',
+    optionValue: 'itemId',
+    options: []
   },
   {
     name: '',
@@ -32,7 +23,7 @@ export default [
     name: '',
     type: 'input',
     property: 'entrustNo',
-    placeholder: '请选择委案批次'
+    placeholder: '请输入委案批次'
   },
   {
     name: '',
@@ -41,15 +32,6 @@ export default [
     placeholder: '请选择处置机构',
     optionLabel: 'itemText',
     optionValue: 'itemId',
-    options: [
-      {
-        itemId: '111',
-        itemText: 'test机构111'
-      },
-      {
-        itemId: '222',
-        itemText: 'test机构222'
-      }
-    ]
+    options: []
   }
 ]

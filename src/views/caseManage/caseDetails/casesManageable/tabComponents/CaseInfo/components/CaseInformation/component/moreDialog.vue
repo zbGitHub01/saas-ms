@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, toRefs, ref, defineExpose } from 'vue'
+import { reactive, toRefs, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const props = defineProps({

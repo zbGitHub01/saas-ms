@@ -2,6 +2,7 @@
 import { reactive, ref, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import Api, { entrustPub, delEntrust } from '@/api/modules/preCase.js'
+import { useCommonStore } from '@/store/modules/common'
 import deepCopy from '@/utils/deepCopy.js'
 import moment from 'moment'
 import DrawerForm from './component/DrawerForm.vue'
@@ -12,7 +13,7 @@ const defaultRuleForm = {
   operStoreId: '', //分库Id
   entrustStrategy: '', //操作维度 委案操作维度 1：案人 2: 案件 3: 剩余案人
   productId: '', //委案产品
-  entrustType: 1, //委案类型
+  entrustType: '', //委案类型
   isHideHisFollowRecord: '1', //历史处置记录
   recoverDate: moment().endOf('month').format('YYYY-MM-DD'), //委案到期日
   isAutoRecycle: '0', //是否自动收回
@@ -20,8 +21,11 @@ const defaultRuleForm = {
   execTime: '' //执行时间
 }
 
+const commonStore = useCommonStore()
+
 const state = reactive({
   tableData: [],
+  orgList: [],
   queryNewData: {},
   dialogVisible: false,
   drawerVisible: false,
@@ -42,38 +46,72 @@ const getEntrustList = async () => {
   state.tableData = data
 }
 
+//获取机构下拉
+const getOrgList = async () => {
+  const { data } = await Api.getOrgList()
+  state.orgList = data
+  //假数据
+  state.orgList = [
+    {
+      orgId: 1,
+      itemText: '浙江中控集团',
+      orgName: '浙江中控集团',
+      adjustNum: 8000,
+      area: []
+    },
+    {
+      orgId: 2,
+      itemText: '浙江哇哈哈有限公司',
+      orgName: '浙江哇哈哈有限公司',
+      adjustNum: 8000,
+      area: []
+    },
+    {
+      orgId: 3,
+      itemText: '浙江三花集团',
+      orgName: '浙江三花集团',
+      adjustNum: 8000,
+      area: []
+    },
+    {
+      orgId: 4,
+      itemText: '杭州斯凯网络科技有限公司',
+      orgName: '杭州斯凯网络科技有限公司',
+      adjustNum: 8000,
+      area: []
+    },
+    {
+      orgId: 5,
+      itemText: '杭州融都科技有限公司',
+      orgName: '杭州融都科技有限公司',
+      adjustNum: 8000,
+      area: []
+    }
+  ]
+}
+
 //机构数组
-const orgList = [
-  {
-    orgName: '杭州温泽企业管理有限公司贵阳分公司',
-    orgId: 22,
-    adjustNum: 8000,
-    area: []
-  },
-  {
-    orgName: '前海中英投（深圳）投资有限公司',
-    orgId: 11,
-    adjustNum: 8000,
-    area: []
-  }
-]
+// const orgList = [
+//   {
+//     orgName: '杭州温泽企业管理有限公司贵阳分公司',
+//     orgId: 22,
+//     adjustNum: 8000,
+//     area: []
+//   },
+//   {
+//     orgName: '前海中英投（深圳）投资有限公司',
+//     orgId: 11,
+//     adjustNum: 8000,
+//     area: []
+//   }
+// ]
 
 const formFieldsList = computed(() => {
   dialogFormFieldsList.forEach(item => {
-    if (item.prop === 'operStoreId')
-      item.options = deepCopy(
-        [
-          {
-            label: 'red',
-            value: 1
-          },
-          {
-            label: 'blue',
-            value: 2
-          }
-        ],
-        true
-      )
+    if (item.prop === 'operStoreId') item.options = commonStore.dropdownList.DIST_LIST
+    if (item.prop === 'entrustType') item.options = commonStore.dropdownList.ENTRUST_TYPE
+    const entrustItem = commonStore.dropdownList.ENTRUST_TYPE.find(item => item.itemText === '默认')
+    if (entrustItem) state.dialogRuleForm.entrustType = entrustItem.itemId
   })
   return dialogFormFieldsList
 })
@@ -89,6 +127,7 @@ const rules = reactive({
 })
 
 getEntrustList()
+getOrgList()
 
 const tableClass = ref(null)
 const tipDialogVisible = ref(false)
@@ -321,7 +360,7 @@ const operaClick = async data => {
     <!--配置drawerForm-->
     <DrawerForm
       v-model:drawer-form-visible="state.drawerVisible"
-      :table-data="orgList"
+      :org-list="state.orgList"
       :size-form="state.currEntrustInfo"
       @case-cfg-save="saveCaseCfgSave"
     />

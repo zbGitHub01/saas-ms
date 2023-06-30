@@ -1,10 +1,14 @@
 <script setup>
-import { reactive, defineExpose } from 'vue'
+import { reactive } from 'vue'
 
 const props = defineProps({
   dialogVisible: {
     type: Boolean,
     default: false
+  },
+  orgList: {
+    type: Array,
+    default: () => []
   }
 })
 

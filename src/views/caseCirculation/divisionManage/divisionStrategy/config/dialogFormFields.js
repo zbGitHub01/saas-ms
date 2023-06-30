@@ -22,8 +22,8 @@ export default [
     disabled: false,
     clearable: true,
     placeholder: '请选择负责人',
-    optionLabel: 'userName',
-    optionValue: 'userId',
+    optionLabel: 'itemText',
+    optionValue: 'itemId',
     options: []
   }
 ]

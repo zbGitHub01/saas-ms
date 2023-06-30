@@ -1,5 +1,5 @@
 <script setup>
-import { ref, toRefs, defineExpose, watch } from 'vue'
+import { ref, toRefs, watch } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 import { ElMessageBox } from 'element-plus'
 

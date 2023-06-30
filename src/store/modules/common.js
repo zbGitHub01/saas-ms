@@ -7,7 +7,9 @@ export const useCommonStore = defineStore('commonStore', {
       GLE_UPMS_COOPERATION_STATUS: [], // 机构合作状态
       ROLE_LIST: [], // 角色列表
       DEPT_LIST: [], // 部门列表
+      DIST_LIST: [], // 分库列表
       DEPT_TREE: [], // 部门树
+      ENTRUST_TYPE: [], // 委案类型
       POSITION_LIST: [], // 职位列表
       EMPLOYEE_LIST: [], // 员工列表
       TENANT_LIST: [], // 租户列表

@@ -1,5 +1,5 @@
 <script setup>
-import { toRefs, ref, reactive, defineExpose, watch } from 'vue'
+import { toRefs, ref, reactive, watch } from 'vue'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
 import { regionData } from 'element-china-area-data' //区域级联
 import { ElMessageBox } from 'element-plus'

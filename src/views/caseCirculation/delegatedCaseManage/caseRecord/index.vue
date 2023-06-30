@@ -1,13 +1,17 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import Apis from '@/api/modules/caseRecord'
+import { useCommonStore } from '@/store/modules/common'
 import { downArrayBufferFile } from '@/api/arrayBuffer'
 import tableColumnList from './config/tableColumnList.js'
 import queryList from './config/queryList.js'
 
+const commonStore = useCommonStore()
+
 const state = reactive({
   tableData: [],
+  orgList: [],
   pageTotal: 10,
   page: 1,
   pageSize: 10,
@@ -36,7 +40,22 @@ const getEntrustRecordList = async (page, pageSize) => {
   }
 }
 
+//获取机构下拉
+const getOrgList = async () => {
+  const { data } = await Apis.getOrgList()
+  state.orgList = data
+}
+
 getEntrustRecordList()
+getOrgList()
+
+const queryNewList = computed(() => {
+  queryList.forEach(item => {
+    if (item.property === 'storeId') item.options = commonStore.dropdownList.DIST_LIST
+    if (item.property === 'orgId') item.options = state.orgList
+  })
+  return queryList
+})
 
 //formClass实例
 const formClass = ref()
@@ -126,7 +145,7 @@ const selectChange = obj => {
   <div class="card-wrap">
     <FormWrap @search="handleSearch" @reset="handleReset">
       <template #default>
-        <FormClass ref="formClass" label-width="102px" :fields="queryList" />
+        <FormClass ref="formClass" label-width="102px" :fields="queryNewList" />
       </template>
     </FormWrap>
     <div class="mt20">

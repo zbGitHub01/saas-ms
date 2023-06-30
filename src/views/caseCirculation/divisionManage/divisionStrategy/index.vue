@@ -14,6 +14,8 @@ const router = useRouter()
 
 const state = reactive({
   tableData: [],
+  orgList: [],
+  userData: [],
   dialogTitle: '',
   addOrUpdate: 0, // 新增还是修改 默认新增
   dialogForm: {
@@ -23,33 +25,49 @@ const state = reactive({
 })
 
 const getList = async () => {
-  const { data } = await Apis.divisionStrategyList()
-  state.tableData = data
+  // eslint-disable-next-line no-unused-vars, no-async-promise-executor
+  return new Promise(async (resolve, _) => {
+    const { data } = await Apis.divisionStrategyList()
+    resolve(data)
+  }).catch(error => {
+    console.log(error)
+  })
 }
 
-getList()
+//获取机构下拉
+const getOrgList = async () => {
+  // eslint-disable-next-line no-unused-vars, no-async-promise-executor
+  return new Promise(async (resolve, _) => {
+    const { data } = await Apis.getOrgList()
+    resolve(data)
+  }).catch(error => {
+    console.log(error)
+  })
+}
+
+//获取负责人下拉
+const getUerList = async () => {
+  // eslint-disable-next-line no-unused-vars, no-async-promise-executor
+  return new Promise(async (resolve, _) => {
+    const { data } = await Apis.getUserList()
+    resolve(data)
+  }).catch(error => {
+    console.log(error)
+  })
+}
+
+Promise.all([getList(), getOrgList(), getUerList()]).then(res => {
+  state.tableData = res[0]
+  state.orgList = res[1]
+  state.userData = res[2]
+  dialogFormFields.map(item => {
+    if (item.prop === 'orgId') item.options = state.orgList
+    if (item.prop === 'assignAdminId') item.options = state.userData
+  })
+})
 
 const dialogFormVisible = ref(false)
 const instance = getCurrentInstance()?.proxy
-
-const userData = [
-  {
-    isConnection: 0,
-    positionStatus: 1,
-    userId: 1,
-    userPhone: '17398042048',
-    userStatus: 1,
-    userName: '超级管理员'
-  },
-  {
-    isConnection: 0,
-    positionStatus: 1,
-    userId: 102,
-    userPhone: '15618930363',
-    userStatus: 1,
-    userName: '赵光明'
-  }
-]
 
 const orgData = [
   {
@@ -69,15 +87,6 @@ watch(
     if (!newVal) dialogFormFields.map(item => (item.disabled = false))
   }
 )
-
-dialogFormFields.map(item => {
-  if (item.prop === 'orgId') {
-    item.options = orgData
-  }
-  if (item.prop === 'assignAdminId') {
-    item.options = userData
-  }
-})
 
 const handleEdit = async (va, val) => {
   state.addOrUpdate = 0
@@ -163,7 +172,7 @@ const handleRemove = row => {
 //新增机构提交
 const handleSubmit = async (data, formRef) => {
   const dataObj = { ...data }
-  if (data.assignAdminId) dataObj['assignAdminName'] = userData.find(item => item.userId === data.assignAdminId).userName
+  if (data.assignAdminId) dataObj['assignAdminName'] = state.userData.find(item => item.userId === data.assignAdminId).userName
   if (data.orgId) dataObj['orgName'] = orgData.find(item => item.itemId === data.orgId).itemText
   if (state.addOrUpdate === 0) {
     try {

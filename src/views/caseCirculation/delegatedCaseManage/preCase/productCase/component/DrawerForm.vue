@@ -17,7 +17,12 @@ const props = defineProps({
     type: Object,
     default: () => {}
   },
-  //机构数组
+  //机构字典
+  orgList: {
+    type: Array,
+    default: () => []
+  },
+  //后台返回的已有机构数组
   tableData: {
     type: Array,
     default: () => []
@@ -147,7 +152,7 @@ const handleSubmit = arr => {
     </el-form>
   </el-drawer>
   <!--添加机构弹窗-->
-  <AddCorporation ref="addCorporation" v-model:dialog-visible="dialogVisible" @submit="handleSubmit" />
+  <AddCorporation ref="addCorporation" v-model:dialog-visible="dialogVisible" :org-list="props.orgList" @submit="handleSubmit" />
 </template>
 
 <style lang="scss" scoped>

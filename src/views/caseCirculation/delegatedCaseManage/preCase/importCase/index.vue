@@ -1,21 +1,23 @@
 <script setup>
 import { reactive, ref, computed } from 'vue'
-import moment from 'moment'
+import Api, { entrustPub, delEntrust } from '@/api/modules/preCase.js'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { useCommonStore } from '@/store/modules/common'
 import { useGlobalStore } from '@/store'
 import deepCopy from '@/utils/deepCopy.js'
-import Api, { entrustPub, delEntrust } from '@/api/modules/preCase.js'
 import tableColumnList from './config/tableColumnList.js'
 import dialogFormFieldsList from './config/dialogFormFieldsList.js'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import moment from 'moment'
 
 const globalState = useGlobalStore()
+const commonStore = useCommonStore()
 
 const defaultRuleForm = {
   operStoreId: '', //分库Id
   entrustStrategy: '', //操作维度 委案操作维度 1：案人 2: 案件 3: 剩余案人
   // categoryCompany: '',
   orgId: '', //目标机构
-  entrustType: 1, //委案类型
+  entrustType: '', //委案类型
   isHideHisFollowRecord: '1', //历史处置记录
   recoverDate: moment().endOf('month').format('YYYY-MM-DD'), //委案到期日
   isAutoRecycle: '0', //是否自动收回
@@ -27,6 +29,7 @@ const defaultRuleForm = {
 const state = reactive({
   tableData: [],
   pageTotal: 4,
+  orgList: [],
   dialogVisible: false,
   dialogRuleForm: {},
   entrustIds: [], //委案方案发布id集合
@@ -44,17 +47,21 @@ const getEntrustList = async () => {
   state.tableData = data
 }
 
+//获取机构下拉
+const getOrgList = async () => {
+  const { data } = await Api.getOrgList()
+  state.orgList = data
+}
+
 const formFieldsList = computed(() => {
   dialogFormFieldsList.forEach(item => {
-    if (item.prop === 'operStoreId')
-      item.options = deepCopy(
-        [
-          { label: '大额处置库', value: 1 },
-          { label: '委外处置库', value: 2 }
-        ],
-        true
-      )
-    // if (item.type === 'pairSelect') {
+    if (item.prop === 'operStoreId') item.options = commonStore.dropdownList.DIST_LIST
+    if (item.prop === 'entrustType') item.options = commonStore.dropdownList.ENTRUST_TYPE
+    if (item.prop === 'orgId') item.options = state.orgList
+    const entrustItem = commonStore.dropdownList.ENTRUST_TYPE.find(item => item.itemText === '默认')
+    if (entrustItem) state.dialogRuleForm.entrustType = entrustItem.itemId
+    // {
+    //   /*   if (item.type === 'pairSelect') {
     //   item.childItem.filter(cItem => {
     //     if (cItem.prop === 'orgId')
     //       cItem.options = deepCopy([
@@ -62,6 +69,7 @@ const formFieldsList = computed(() => {
     //         { label: 'blue', value: 2 }
     //       ])
     //   })
+    // } */
     // }
     if (item.prop === 'entrustFileUrl') {
       item.headers = { Authorization: globalState.token }
@@ -87,6 +95,7 @@ const rules = reactive({
 })
 
 getEntrustList()
+getOrgList()
 
 const tableClass = ref(null)
 const tipDialogVisible = ref(false)

@@ -1,55 +1,24 @@
 <script setup>
-import { reactive, defineExpose } from 'vue'
+import { reactive, toRefs } from 'vue'
 
 const props = defineProps({
   dialogVisible: {
     type: Boolean,
     default: false
+  },
+  orgList: {
+    type: Array,
+    default: () => []
   }
 })
+
+const { orgList } = toRefs(props)
 
 const emit = defineEmits(['update:dialogVisible', 'submit'])
 
 const state = reactive({
   orgValue: '',
   checkAll: false,
-  orgList: [
-    {
-      orgId: 1,
-      itemText: '浙江中控集团',
-      orgName: '浙江中控集团',
-      adjustNum: 8000,
-      area: []
-    },
-    {
-      orgId: 2,
-      itemText: '浙江哇哈哈有限公司',
-      orgName: '浙江哇哈哈有限公司',
-      adjustNum: 8000,
-      area: []
-    },
-    {
-      orgId: 3,
-      itemText: '浙江三花集团',
-      orgName: '浙江三花集团',
-      adjustNum: 8000,
-      area: []
-    },
-    {
-      orgId: 4,
-      itemText: '杭州斯凯网络科技有限公司',
-      orgName: '杭州斯凯网络科技有限公司',
-      adjustNum: 8000,
-      area: []
-    },
-    {
-      orgId: 5,
-      itemText: '杭州融都科技有限公司',
-      orgName: '杭州融都科技有限公司',
-      adjustNum: 8000,
-      area: []
-    }
-  ],
   rightCities: [],
   isIndeterminate: false
 })
@@ -68,10 +37,10 @@ const handleCheckedCitiesChange = value => {
 //全选
 const handleCheckAllChange = val => {
   let arr = []
-  state.orgList.map(item => {
+  orgList.value.map(item => {
     arr.push(item.orgId)
   })
-  state.rightCities = val ? state.orgList : []
+  state.rightCities = val ? orgList.value : []
   state.isIndeterminate = false
 }
 
@@ -112,7 +81,7 @@ defineExpose({
         </el-checkbox>
         <div style="margin: 15px 0"></div>
         <el-checkbox-group v-model="state.rightCities" @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="item in state.orgList" :key="item.orgId" style="display: block" :label="item">
+          <el-checkbox v-for="item in orgList" :key="item.orgId" style="display: block" :label="item">
             {{ item.itemText }}
           </el-checkbox>
         </el-checkbox-group>

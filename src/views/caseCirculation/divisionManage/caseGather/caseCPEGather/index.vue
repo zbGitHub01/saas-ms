@@ -1,37 +1,56 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
+import { useCommonStore } from '@/store/modules/common'
 import Apis from '@/api/modules/caseGather'
 import queryList from './config/queryList.js'
 
+const commonStore = useCommonStore()
+
 const state = reactive({
   tableData: [],
+  cpeList: [],
   queryNewData: {},
   pageTotal: 4,
   page: 1,
   pageSize: 10
 })
 
-const getCPEList = async () => {
-  const data = await Apis.getCPEList({ ...state.queryNewData })
+const getList = async () => {
+  const data = await Apis.getList({ ...state.queryNewData })
   state.tableData = data.data
   // state.pageTotal = state.tableData[0].products.length
+}
+
+//获取cpe下拉
+const getCPEList = async () => {
+  const { data } = await Apis.getCPEList()
+  state.cpeList = data
 }
 
 //formClass实例
 const formClass = ref()
 
+const queryNewList = computed(() => {
+  queryList.forEach(item => {
+    if (item.property === 'deptId') item.options = commonStore.dropdownList.DEPT_LIST
+    if (item.property === 'cpeId') item.options = state.cpeList
+  })
+  return queryList
+})
+
 //搜索操作
 const handleSearch = () => {
   state.queryNewData = formClass.value.getEntity()
-  getCPEList()
+  getList()
 }
 //重置操作
 const handleReset = () => {
   formClass.value.handleReset()
   state.queryNewData = {}
-  getCPEList()
+  getList()
 }
 
+getList()
 getCPEList()
 </script>
 
@@ -39,7 +58,7 @@ getCPEList()
   <div class="card-wrap">
     <FormWrap @search="handleSearch" @reset="handleReset">
       <template #default>
-        <FormClass ref="formClass" label-width="102px" :fields="queryList" />
+        <FormClass ref="formClass" label-width="102px" :fields="queryNewList" />
       </template>
     </FormWrap>
     <el-table :data="state.tableData" style="width: 100%">
@@ -71,7 +90,7 @@ getCPEList()
         </el-table-column>
       </template>
     </el-table>
-    <pagination v-model:page="state.page" v-model:page-size="state.pageSize" :total="state.total" @pagination="getCPEList" />
+    <pagination v-model:page="state.page" v-model:page-size="state.pageSize" :total="state.total" @pagination="getList" />
   </div>
 </template>
 

@@ -3,6 +3,8 @@ export default [
     type: 'select',
     label: '案件分库',
     prop: 'operStoreId',
+    optionLabel: 'itemText',
+    optionValue: 'itemId',
     options: []
   },
   {
@@ -45,23 +47,17 @@ export default [
     type: 'select',
     label: '目标机构',
     prop: 'orgId',
-    options: [
-      {
-        label: '默认',
-        value: 1
-      }
-    ]
+    optionLabel: 'itemText',
+    optionValue: 'itemId',
+    options: []
   },
   {
     type: 'select',
     label: '委案类型',
     prop: 'entrustType',
-    options: [
-      {
-        label: '默认',
-        value: 1
-      }
-    ]
+    optionLabel: 'itemText',
+    optionValue: 'itemId',
+    options: []
   },
   {
     type: 'radio',

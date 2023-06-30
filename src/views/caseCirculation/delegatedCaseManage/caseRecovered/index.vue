@@ -26,6 +26,12 @@ const getList = async (page, pageSize) => {
   state.pageTotal = data.total
 }
 
+//获取机构下拉
+const getOrgList = async () => {
+  const { data } = await Apis.getOrgList()
+  state.orgList = data
+}
+
 //formClass实例
 const formClass = ref()
 
@@ -64,6 +70,7 @@ const handleDownload = (index, row) => {
 }
 
 getList()
+getOrgList()
 </script>
 
 <template>

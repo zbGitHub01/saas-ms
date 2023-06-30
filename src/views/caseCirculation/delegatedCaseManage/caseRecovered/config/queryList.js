@@ -13,15 +13,8 @@ export default [
     type: 'select',
     property: 'operStoreId',
     placeholder: '请选择处置机构',
-    options: [
-      {
-        value: '1',
-        label: '哇哈哈'
-      },
-      {
-        value: '2',
-        label: '货拉拉'
-      }
-    ]
+    optionLabel: 'itemText',
+    optionValue: 'itemId',
+    options: []
   }
 ]

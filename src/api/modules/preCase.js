@@ -6,6 +6,7 @@ import { generateApiFnc } from '@/api/helper/apiFncs'
 
 //entrustBusType: 业务类型（1-实时委案；2-预预案; 3-导入委案; 4-模型委案;）
 const apiConfig = {
+  getOrgList: 'GET /upms/client/dict/relationOrg/list', //获取机构下拉
   entrustList: 'GET /caseCenter/case/entrust/entrustPlanList', //获取委案列表
   entrustSave: 'POST /caseCenter/case/entrust/caseImportEntrustSave', //导入委案保存
   proEntrustSave: 'POST /caseCenter/case/entrust/casePreEntrustSave', //产品委案保存

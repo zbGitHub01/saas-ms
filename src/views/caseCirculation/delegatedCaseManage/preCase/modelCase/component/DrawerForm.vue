@@ -17,7 +17,12 @@ const props = defineProps({
     type: Object,
     default: () => {}
   },
-  //机构数组
+  //机构字典
+  orgList: {
+    type: Array,
+    default: () => []
+  },
+  //后台返回的已有机构数组
   tableData: {
     type: Array,
     default: () => []
@@ -112,7 +117,7 @@ const handleChange = () => {
         委案配置
       </h4>
     </template>
-    <el-form ref="form" style="width: 90%" label-width="auto" :label-position="labelPosition" :size="size">
+    <el-form ref="form" style="width: 100%" label-width="auto" :label-position="labelPosition" :size="size">
       <el-form-item label="案件分库">
         <div>{{ state.sizeForm.storeName || '' }}</div>
       </el-form-item>
@@ -191,7 +196,7 @@ const handleChange = () => {
     </el-form>
   </el-drawer>
   <!--添加机构弹窗-->
-  <AddCorporation ref="addCorporation" v-model:dialog-visible="dialogVisible" @submit="handleSubmit" />
+  <AddCorporation ref="addCorporation" v-model:dialog-visible="dialogVisible" :org-list="props.orgList" @submit="handleSubmit" />
 </template>
 
 <style lang="scss" scoped>
