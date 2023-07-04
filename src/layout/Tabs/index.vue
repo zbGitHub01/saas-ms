@@ -43,12 +43,15 @@ const router = useRouter()
 // 监听路由的变化（防止浏览器后退/前进不变化 tabsMenuValue）
 watch(
   () => route.path,
-  () => {
+  async () => {
     let params = {
       title: route.meta.title,
       path: route.path,
       icon: route.meta.icon,
-      close: true
+      close: true,
+      query: {
+        ...route.query
+      }
     }
     tabStore.addTabs(params)
     // setTimeout(() => {
@@ -62,7 +65,8 @@ watch(
 
 const tabClick = tabItem => {
   let path = tabItem.props.name
-  router.push(path)
+  const afterTabItem = tabsMenuList.value.find(item => item.path === path)
+  router.push({ path, query: afterTabItem.query ? afterTabItem.query : {} })
 }
 const removeTab = activeTabPath => {
   tabStore.removeTabs(activeTabPath)

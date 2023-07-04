@@ -38,6 +38,7 @@ const caseRouter = [
           {
             path: '/caseManage/casesDetails/casesManageable',
             props: true,
+            hidden: true,
             name: 'casesManageable',
             component: () => import('@/views/caseManage/caseDetails/casesManageable/index.vue'),
             meta: { title: '可管理案件', icon: '' }
@@ -45,6 +46,7 @@ const caseRouter = [
           {
             path: '/caseManage/casesDetails/casesEntrusted',
             name: 'casesEntrusted',
+            hidden: true,
             component: () => import('@/views/caseManage/caseDetails/casesEntrusted/index.vue'),
             meta: { title: '受委托案件', icon: '' }
           }
