@@ -84,6 +84,7 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import Apis from '@/api/modules/caseManage'
+import Apis2 from '@/api/modules/common'
 import CaseLabelData4 from '@/constants/CaseLabelData4' //收回查询数据
 const isWithProductPublicDebt = ref(1)
 const isRecoverRetain = ref(0)
@@ -103,21 +104,8 @@ const emits = defineEmits(['getTableData', 'toggleSelection'])
 const dialogVisible = ref(false)
 const open = async paramsSub => {
   state.paramsSub = { ...paramsSub }
-  // await xx(params)
-  state.bankSelectList = [
-    {
-      itemId: 1,
-      itemText: '委外处置库'
-    },
-    {
-      itemId: 2,
-      itemText: '法诉处置库'
-    },
-    {
-      itemId: 3,
-      itemText: '大额处置库'
-    }
-  ]
+  const { data } = await Apis2.findItemList({ codes: 'DIST_LIST' })
+  state.bankSelectList = data.DIST_LIST
   dialogVisible.value = true
 }
 defineExpose({

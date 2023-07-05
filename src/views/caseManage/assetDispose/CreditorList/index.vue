@@ -2,7 +2,7 @@
   <div>
     <OperationBar>
       <template #default>
-        <el-button type="primary" icon="Plus" @click="addOrEdit(undefined, 1)">新增</el-button>
+        <el-button type="primary" icon="Plus" @click="addOrEdit(undefined, 1)" v-auth="'ASSET_DISPOSE_CREDITOR_ADD'">新增</el-button>
       </template>
     </OperationBar>
     <div class="mt20">
@@ -17,8 +17,8 @@
         <el-table-column label="操作" width="140" align="center" fixed="right">
           <template #default="scope">
             <div v-if="scope.row.isEntrustParty === 0">
-              <el-button link type="primary" @click="addOrEdit(scope.row, 2)">编辑</el-button>
-            <el-button link type="danger" @click="toDelete(scope.row)">删除</el-button>
+              <el-button link type="primary" @click="addOrEdit(scope.row, 2)" v-auth="'ASSET_DISPOSE_CREDITOR_EDIT'">编辑</el-button>
+            <el-button link type="danger" @click="toDelete(scope.row)" v-auth="'ASSET_DISPOSE_CREDITOR_DELETE'">删除</el-button>
             </div>
             <div v-if="scope.row.isEntrustParty === 1" style="background-color: #67c23a">委托方</div>
           </template>

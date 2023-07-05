@@ -12,24 +12,19 @@
         <template #default>
           <div v-for="(item, index) in operationList" :key="index">
             <el-button
-              v-if="
-                item.isShow && (item.type === 1 || (item.type === 2 && tabActive === 0) || (item.type === 3 && tabActive !== 0))
-              "
+              v-if="item.type === 1 || (item.type === 2 && tabActive === 1) || (item.type === 3 && tabActive !== 1)"
               type="primary"
               :icon="item.icon"
               plain
               class="mr10"
               @click="handleClick(item.title)"
+              v-auth="item.code"
             >
               {{ item.title }}
             </el-button>
           </div>
         </template>
       </OperationBar>
-      <!-- <div class="mb10">
-        <span>选中项：{{ state.selectData.length }}</span>
-        <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
-      </div> -->
       <el-table
         ref="multipleTable"
         :data="state.tableData"
@@ -86,14 +81,15 @@
       :distInfo="state.distInfo"
       :taskId="state.taskId"
       :sourceStoreId="tabActive"
+      :resouerdistList="state.tabListSub"
       @get-table-data="getTableData"
       @toggleSelection="toggleSelection"
       @fetchCaseDistSelect="fetchCaseDistSelect"
     />
     <CaseRecoveryDialog
       ref="caseRecoveryDialog"
-      :task-id="state.taskId"
-      :case-info="state.distInfo"
+      :taskId="state.taskId"
+      :caseInfo="state.distInfo"
       @get-table-data="getTableData"
       @toggleSelection="toggleSelection"
       @fetchCaseDistSelect="fetchCaseDistSelect"
@@ -115,7 +111,7 @@ import CaseLabelData2 from '@/constants/CaseLabelData2' //收回查询数据
 import DynamoSearchForm from '@/components/DynamoSearchForm/index.vue'
 const multipleTable = ref(null)
 const dynamoSearchFormRef = ref()
-const tabActive = ref(0)
+const tabActive = ref(1)
 const temporaryLabel = ref()
 const caseBankDialog = ref()
 const caseRecoveryDialog = ref()
@@ -140,29 +136,25 @@ const operationList = reactive([
   {
     title: '添加临时标签',
     icon: 'CirclePlus',
-    isShow: true, //权限
-    // isShow: this.hasPerm("disposal_case_addlabel"),
+    code: 'CASE_BANK_ADD_TEMPORARY_LABEL',
     type: 1
   },
   {
     title: '删除临时标签',
     icon: 'Delete',
-    isShow: true,
-    // isShow: this.hasPerm("disposal_case_dellabel"),
+    code: 'CASE_BANK_DELETE_TEMPORARY_LABEL',
     type: 1
   },
   {
     title: '案件分库',
     icon: 'Folder',
-    isShow: true,
-    // isShow: this.hasPerm("disposal_case_qing"),
+    code: 'CASE_BANK_BANK',
     type: 2
   },
   {
     title: '案件收回',
     icon: 'Folder',
-    isShow: true,
-    // isShow: this.hasPerm("disposal_case_qing"),
+    code: 'CASE_BANK_RECOVERY',
     type: 3
   }
 ])
@@ -175,7 +167,7 @@ const getTableData = async () => {
   // 请求得到数据
   const params = { ...dynamoSearchFormRef.value.getParams(), ...query, storeId: tabActive.value }
   // 待分配库和已分配库分开的接口
-  const { data } = tabActive.value === 0 ? await Apis.waitDistCaseList(params) : await Apis.doneDistCaseList(params)
+  const { data } = tabActive.value === 1 ? await Apis.waitDistCaseList(params) : await Apis.doneDistCaseList(params)
   state.tableData = data.data
   // state.tableData = [
   //   {
@@ -346,7 +338,7 @@ const getTableData = async () => {
   state.total = data.total
   // 得到labelData数据
   const { data: data1 } =
-    tabActive.value === 0 ? await Apis.waitDistCaseListStats(params) : await Apis.doneDistCaseListStats(params)
+    tabActive.value === 1 ? await Apis.waitDistCaseListStats(params) : await Apis.doneDistCaseListStats(params)
   // const labelData2 = data1
   // const labelData2 = {
   //   totalCase: 23,
@@ -363,27 +355,14 @@ const getTableData = async () => {
 // 获取分库数据
 const getTabList = async () => {
   // 请求得到数据
-  // const { data } = await Apis2.findItemList({ codes: 'DIST_LIST' })
-  // state.tabList = data.DIST_LIST
-  state.tabList = [
-    {
-      itemText: '待分库案件',
-      itemId: 0
-    },
-    {
-      itemText: '委外处置库',
-      itemId: 1
-    },
-    {
-      itemText: '智能处置库',
-      itemId: 2
-    },
-    {
-      itemText: '勾销处置库',
-      itemId: 3
+  const { data } = await Apis2.findItemList({ codes: 'DIST_LIST' })
+  state.tabList = data.DIST_LIST
+  //去掉待分库配这个选项
+  state.tabListSub = state.tabList.filter(item => {
+    if (item.itemText !== '待分配库') {
+      return true
     }
-  ]
-  state.tabListSub = state.tabList.slice(1) //去掉待分库配这个选项
+  })
 }
 //表格选择
 const handleSelectionChange = val => {
@@ -465,7 +444,7 @@ const fetchCaseDistSelect = async (type, isWithProductPublicDebt = true) => {
   }
   console.log('委案数据参数：', params)
   // 请求得到数据
-  const { data } = type === 1?await Apis.caseDistSelect(params):await Apis.recoverNowSelect(params)
+  const { data } = type === 1 ? await Apis.caseDistSelect(params) : await Apis.recoverNowSelect(params)
   state.taskId = data.taskId
   // state.taskId = 2323
   state.distInfo = data

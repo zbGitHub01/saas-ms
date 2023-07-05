@@ -8,16 +8,12 @@
       <OperationBar v-model:active="operation">
         <template #default>
           <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow" type="primary" :icon="item.icon" @click="handleClick(item.title)" plain>
+            <el-button v-auth="item.code" type="primary" :icon="item.icon" @click="handleClick(item.title)" plain>
               {{ item.title }}
             </el-button>
           </div>
         </template>
       </OperationBar>
-      <!-- <div class="mb10">
-        <span>选中项：{{ state.selectData.length }}</span>
-        <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
-      </div> -->
       <el-table
         :data="state.tableData"
         border
@@ -100,8 +96,7 @@ const operationList = reactive([
   {
     title: '实时收回',
     icon: 'Folder',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_close"),
+    code: 'CASE_ASSIGNMENT_RECOVER_REAL_TIM_RECOVERY'
   }
 ])
 onMounted(() => {

@@ -1,12 +1,12 @@
 <template>
   <div class="card-wrap">
     <el-tabs class="mb16" v-model="tabActive" @tab-change="handleClick">
-      <el-tab-pane label="当前委托" name="1"></el-tab-pane>
-      <el-tab-pane label="委托历史" name="2"></el-tab-pane>
+      <el-tab-pane v-if="authStore.tabVisible('CURRENT_COMMITS')" label="当前委托" name="CURRENT_COMMITS"></el-tab-pane>
+      <el-tab-pane v-if="authStore.tabVisible('ENTRUST_HISTORY')" label="委托历史" name="ENTRUST_HISTORY"></el-tab-pane>
     </el-tabs>
     <OperationBar>
       <template #default>
-        <el-button type="primary" :icon="Plus" @click="addEntrust" v-if="tabActive === '1'">新增委托</el-button>
+        <el-button type="primary" :icon="Plus" @click="addEntrust" v-if="tabActive === 'CURRENT_COMMITS'" v-auth="'NEW_ENTRUST'">新增委托</el-button>
       </template>
     </OperationBar>
     <div class="mt20">
@@ -22,14 +22,14 @@
           prop="proxyEndTime"
           align="center"
           min-width="200"
-          v-if="tabActive === '2'"
+          v-if="tabActive === 'ENTRUST_HISTORY'"
         ></el-table-column>
         <el-table-column
           label="委托截止时间"
           prop="proxyEndTime"
           align="center"
           min-width="200"
-          v-if="tabActive === '1'"
+          v-if="tabActive === 'CURRENT_COMMITS'"
         ></el-table-column>
         <el-table-column label="委托协议" prop="proxyAgreement" align="center" min-width="150">
           <template #default="scope">
@@ -43,18 +43,18 @@
           prop="actualEndTime"
           align="center"
           min-width="200"
-          v-if="tabActive === '2'"
+          v-if="tabActive === 'ENTRUST_HISTORY'"
         ></el-table-column>
         <el-table-column
           label="终止操作人"
           prop="operatorName"
           align="center"
           min-width="150"
-          v-if="tabActive === '2'"
+          v-if="tabActive === 'ENTRUST_HISTORY'"
         ></el-table-column>
-        <el-table-column label="操作" width="140" align="center" fixed="right" v-if="tabActive === '1'">
+        <el-table-column label="操作" width="140" align="center" fixed="right" v-if="tabActive === 'CURRENT_COMMITS'">
           <template #default="scope">
-            <el-button link type="danger" @click="toStop(scope.row)">终止合作</el-button>
+            <el-button link type="danger" @click="toStop(scope.row)" v-auth="'TERM_IN_COOPER'">终止合作</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -72,6 +72,9 @@ import { reactive, ref, onMounted } from 'vue'
 import Apis, { proxyStop } from '@/api/modules/caseManage'
 import Apis2 from '@/api/modules/common'
 import { Plus } from '@element-plus/icons-vue'
+import { useAuthStore } from '@/store/modules/auth'
+const authStore = useAuthStore()
+const tabActive = ref(authStore.tabPage.tabActive || '')
 const form = reactive({
   state: null //null当前委托 4历史委托
 })
@@ -89,7 +92,6 @@ const state = reactive({
   total: 0
 })
 const addEntrustDialog = ref()
-const tabActive = ref('1')
 onMounted(() => {
   getTableData()
   getSelecData()

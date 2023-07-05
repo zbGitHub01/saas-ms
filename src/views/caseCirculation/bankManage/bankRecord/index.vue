@@ -19,9 +19,9 @@
             <el-select v-model="form.operUserId" placeholder="请选择操作人" filterable clearable>
               <el-option
                 v-for="item in selectData.peopleList"
-                :key="item.userId"
-                :label="item.username"
-                :value="item.userId"
+                :key="item.itemId"
+                :label="item.itemText"
+                :value="item.itemId"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -76,10 +76,13 @@
 
 <script setup>
 import { ElMessage } from 'element-plus'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { beformonth } from '@/utils/formatedate'
 import Apis from '@/api/modules/caseManage'
 import Apis2 from '@/api/modules/common'
+import { useGlobalStore } from '@/store/index'
+const globalStore = useGlobalStore()
+const tenantInfo = computed(() => globalStore.tenantInfo)
 const selectData = reactive({
   peopleList: [], //人员列表
   bankList: [] //分库列表
@@ -153,37 +156,13 @@ const getTableData = async () => {
 }
 const getSelecData = async () => {
   // 请求得到数据
-  // const { data } = await xx(params)
-  selectData.peopleList = [
-    {
-      userId: 1,
-      username: '里斯'
-    },
-    {
-      userId: 2,
-      username: '啊三'
-    }
-  ]
-  // const { data } = await Apis2.findItemList({ codes: 'DIST_LIST' })
-  // state.bankList = data.DIST_LIST
-  state.bankList = [
-    {
-      itemText: '待分库案件',
-      itemId: 0
-    },
-    {
-      itemText: '委外处置库',
-      itemId: 1
-    },
-    {
-      itemText: '智能处置库',
-      itemId: 2
-    },
-    {
-      itemText: '勾销处置库',
-      itemId: 3
-    }
-  ]
+  const { data } = await Apis.empolyeeList({
+    tenantId: tenantInfo.value.tenantId,
+    deptId: tenantInfo.value.deptId
+  })
+  selectData.peopleList = data
+  const { data: data2 } = await Apis2.findItemList({ codes: 'DIST_LIST' })
+  selectData.bankList = data2.DIST_LIST
 }
 // 重置
 const reset = () => {

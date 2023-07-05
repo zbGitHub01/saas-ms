@@ -31,6 +31,7 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref } from 'vue'
 import Apis from '@/api/modules/caseManage'
+import Apis1 from '@/api/modules/common'
 const form = reactive({
   followStatusId: null, //处置状态
   isSyncDebt: true //是否同步至同产品共债案件
@@ -75,21 +76,8 @@ const cancelSubmit = () => {
 }
 const getSelecData = async () => {
   // 请求得到数据
-  // const { data } = await xx()
-  selectData.statusList = [
-    {
-      itemId: 201,
-      itemText: '后续再跟进'
-    },
-    {
-      itemId: 202,
-      itemText: '初步沟通，后续再跟进'
-    },
-    {
-      itemId: 203,
-      itemText: '约定承诺还款'
-    }
-  ]
+  const { data } = await Apis1.findItemList({ codes: 'DISPOSAL_STATUS'})
+  selectData.statusList = data.DISPOSAL_STATUS
 }
 </script>
   

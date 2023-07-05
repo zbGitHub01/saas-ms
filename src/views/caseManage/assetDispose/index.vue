@@ -1,13 +1,13 @@
 <template>
   <div class="card-wrap">
     <el-tabs class="mb16" v-model="tabActive">
-      <el-tab-pane label="产品名录" name="1">
+      <el-tab-pane v-if="authStore.tabVisible('ASSET_DISPOSE_PRODUCT_LIST')" label="产品名录" name="ASSET_DISPOSE_PRODUCT_LIST">
         <ProductDirectory :selectData="selectData" />
       </el-tab-pane>
-      <el-tab-pane label="入库批次" name="2">
+      <el-tab-pane v-if="authStore.tabVisible('ASSET_DISPOSE_STORAGE_BATCH')" label="入库批次" name="ASSET_DISPOSE_STORAGE_BATCH">
         <ReceiptBatch :selectData="selectData" />
       </el-tab-pane>
-      <el-tab-pane label="债权方" name="3">
+      <el-tab-pane v-if="authStore.tabVisible('ASSET_DISPOSE_CREDITOR')" label="债权方" name="ASSET_DISPOSE_CREDITOR">
         <CreditorList />
       </el-tab-pane>
     </el-tabs>
@@ -21,6 +21,9 @@ import ReceiptBatch from './ReceiptBatch/index.vue'
 import CreditorList from './CreditorList/index.vue'
 import Apis from '@/api/modules/caseManage'
 import { useGlobalStore } from '@/store/index'
+import { useAuthStore } from '@/store/modules/auth'
+const authStore = useAuthStore()
+const tabActive = ref(authStore.tabPage.tabActive || '')
 const globalStore = useGlobalStore()
 const tenantInfo = computed(() => globalStore.tenantInfo)
 const selectData = reactive({
@@ -28,7 +31,6 @@ const selectData = reactive({
   creditorList: [], //债权方列表
   packageList: [] //资产包类型
 })
-const tabActive = ref('1')
 onMounted(() => {
   getSelecData()
 })

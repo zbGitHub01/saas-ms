@@ -24,9 +24,9 @@
           <el-select clearable v-model="form.batchId" filterable placeholder="请选择入库批次" style="width: 300px">
             <el-option
               v-for="item in selectData.batchList"
-              :key="item.itemId"
-              :label="item.itemText"
-              :value="item.itemId"
+              :key="item.batchId"
+              :label="item.batchNo"
+              :value="item.batchId"
             ></el-option>
           </el-select>
         </el-form-item>

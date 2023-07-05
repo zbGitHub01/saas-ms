@@ -8,7 +8,7 @@
       <OperationBar v-model:active="operation">
         <template #default>
           <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow" plain type="primary" :icon="item.icon" @click="handleClick(item.title)">
+            <el-button v-auth="item.code" plain type="primary" :icon="item.icon" @click="handleClick(item.title)">
               {{ item.title }}
             </el-button>
           </div>
@@ -135,50 +135,42 @@ const operationList = reactive([
   {
     title: '关闭案件',
     icon: 'Close',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_close"),
+    code: 'CLOSE_CASE',
   },
   {
     title: '暂停案件',
     icon: 'VideoPause',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_stop"),
+    code: 'SUSPEND_CASE',
   },
   {
     title: '恢复案件',
     icon: 'VideoPlay',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_ref"),
+    code: 'REINSTATE_CASE',
   },
   {
     title: '添加临时标签',
     icon: 'CirclePlus',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_addlabel"),
+    code: 'ADD_TEMPORARY_LABEL',
   },
   {
     title: '删除临时标签',
     icon: 'Delete',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_dellabel"),
+    code: 'DELETE_TEMPORARY_LABEL',
   },
   {
     title: '导出案件',
     icon: 'Download',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_excase"),
+    code: 'EXPORT_CASE',
   },
   {
     title: '导出处置记录',
     icon: 'Download',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_exrecord"),
+    code: 'EXPORT_DISPOSE_RECORD',
   },
   {
     title: '生成结清证明',
     icon: 'Document',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_qing"),
+    code: 'GENERAL_SETTLEMENT_CERTIFY',
   }
 ])
 onMounted(() => {

@@ -8,7 +8,7 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <el-form :model="form" ref="ruleFormRef" :rules="rules" label-width="110px" label-position="right">
+      <el-form :model="form" ref="ruleFormRef" :rules="rules" label-width="120px" label-position="right">
         <el-form-item v-if="typeSub === 1" label="关闭原因:" prop="caseStatus">
           <el-select clearable v-model="form.caseStatus" placeholder="请选择关闭原因">
             <el-option v-for="(item, index) in closeReason" :key="index" :label="item.label" :value="item.value" />
@@ -20,13 +20,13 @@
         <div v-if="typeSub === 2">
           <el-form-item label="暂停原因:" prop="reasonId">
             <el-select clearable v-model="form.reasonId" placeholder="请选择暂停原因" @change="changeStopReasonId">
-              <el-option v-for="(item, index) in selectData.StopReasonList" :key="index" :label="item.reason" :value="item.id" />
+              <el-option v-for="(item, index) in selectData.StopReasonList" :key="index" :label="item.label" :value="item.value" />
             </el-select>
-            <div style="color: #999; font-size: 14px; line-height: 20px">
+            <!-- <div style="color: #999; font-size: 14px; line-height: 20px">
               已选暂停原因最多可暂停
               <span style="color: #ff9921">{{ StopFormData.pauseDay }}</span>
               日
-            </div>
+            </div> -->
           </el-form-item>
           <el-form-item label="暂停至" v-if="form.reasonId !== 25" prop="pauseEndTime">
             <el-date-picker
@@ -40,7 +40,7 @@
           <el-form-item label="暂停备注" prop="caseStatusRemark">
             <el-input clearable v-model="form.caseStatusRemark" type="textarea" placeholder="请输入备注" style="width: 220px" />
           </el-form-item>
-          <el-form-item label="凭证附件" v-if="form.reasonId !== 25" :prop="StopFormData.isMust ? 'pauseUrl' : ''">
+          <el-form-item label="凭证附件" v-if="form.reasonId !== 25" prop="pauseUrl">
             <UploadFile ref="uploadFileRef" v-model:file-list="form.pauseUrl" :limit="100" />
             <div>请上传相关凭证或附件文档</div>
           </el-form-item>
@@ -98,9 +98,9 @@ const rules = reactive({
   reasonId: [{ required: true, message: '请选择暂停原因', trigger: 'change' }],
   pauseEndTime: [
     { required: true, message: '请选择暂停截至时间', trigger: 'change' },
-    { validator: validaterPauseEndTime, trigger: 'change' }
+    // { validator: validaterPauseEndTime, trigger: 'change' }
   ],
-  pauseUrl: [{ required: true, message: '请上传凭证附件', trigger: 'change' }]
+  // pauseUrl: [{ required: true, message: '请上传凭证附件', trigger: 'change' }]
 })
 const closeReason = [
   {
@@ -181,87 +181,26 @@ const cancelSubmit = () => {
   dialogVisible.value = false
 }
 const getSelecData = async () => {
-  // 请求得到数据
-  let params = {
-    page: 1,
-    pageSize: 10000
-  }
-  // const { data } = await caseStatePauseConfigList(params)
   // let temData = JSON.parse(JSON.stringify(data.data));
   // temData = temData.filter((item) => item.state === 0);
   // temData = temData.filter((item) => item.id !== 20 && item.id !== 30);
   // selectData.StopReasonList = JSON.parse(JSON.stringify(temData));
   selectData.StopReasonList = [
     {
-      id: 25,
-      isMust: 1,
-      parentId: 0,
-      pauseDay: 0,
-      reason: '暂停|特殊原因',
-      remark: null,
-      state: 0
+      label: '暂停|投诉',
+      value: 20
     },
     {
-      id: 31,
-      isMust: 1,
-      parentId: 30,
-      pauseDay: 12,
-      reason: '暂停0020',
-      remark: '最大12天',
-      state: 0
-    },
-    {
-      id: 32,
-      isMust: 0,
-      parentId: 30,
-      pauseDay: 30,
-      reason: '暂停0030',
-      remark: '最大30天',
-      state: 0
-    },
-    {
-      id: 33,
-      isMust: 1,
-      parentId: 30,
-      pauseDay: 10,
-      reason: '投诉使用十天内',
-      remark: '3级一下投诉',
-      state: 0
-    },
-    {
-      id: 34,
-      isMust: 0,
-      parentId: 30,
-      pauseDay: 365,
-      reason: '重大投诉-1年内',
-      remark: '2级以上的投诉',
-      state: 0
-    },
-    {
-      id: 35,
-      isMust: 0,
-      parentId: 30,
-      pauseDay: 2,
-      reason: 'test',
-      remark: '222',
-      state: 0
-    },
-    {
-      id: 36,
-      isMust: 0,
-      parentId: 30,
-      pauseDay: 33,
-      reason: 'tetttt',
-      remark: '333',
-      state: 0
+      label: '暂停|特殊原因',
+      value: 25
     }
   ]
 }
 const changeStopReasonId = () => {
   if (form.reasonId) {
     const temItemData = selectData.StopReasonList.filter(item => item.id === form.reasonId)[0]
-    StopFormData.pauseDay = temItemData.pauseDay
-    StopFormData.isMust = temItemData.isMust === 0
+    // StopFormData.pauseDay = temItemData.pauseDay
+    // StopFormData.isMust = temItemData.isMust === 0
     form.caseStatus = form.reasonId === 25 ? 25 : 30
   } else {
     Object.assign(StopFormData, originStopFormData)

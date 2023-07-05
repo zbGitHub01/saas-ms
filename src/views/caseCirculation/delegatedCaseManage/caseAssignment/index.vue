@@ -8,7 +8,7 @@
       <OperationBar v-model:active="operation">
         <template #default>
           <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow" type="primary" :icon="item.icon" @click="handleClick(item.title)" plain>
+            <el-button v-auth="item.code" type="primary" :icon="item.icon" @click="handleClick(item.title)" plain>
               {{ item.title }}
             </el-button>
           </div>
@@ -82,6 +82,7 @@ import CaseStatistics from '@/constants/CaseStatistics' //统计数据
 import DynamoSearchForm from '@/components/DynamoSearchForm/index.vue'
 import Apis from '@/api/modules/caseManage'
 import Apis2 from '@/api/modules/cooperativeOrganization'
+import Apis3 from '@/api/modules/common'
 const multipleTable = ref(null)
 const dynamoSearchFormRef = ref()
 const selectData = reactive({
@@ -108,8 +109,7 @@ const operationList = reactive([
   {
     title: '实时委案',
     icon: 'Folder',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_close"),
+    code: 'CASE_ASSIGNMENT_ASSIGNMENT',
   }
 ])
 onMounted(() => {
@@ -330,24 +330,8 @@ const getSelecData = async () => {
     }
   ]
   selectData.defalutType = 92
-  selectData.bankList = [
-    {
-      itemText: '待分库案件',
-      itemId: 1
-    },
-    {
-      itemText: '委外处置库',
-      itemId: 2
-    },
-    {
-      itemText: '智能处置库',
-      itemId: 3
-    },
-    {
-      itemText: '勾销处置库',
-      itemId: 4
-    }
-  ]
+  const { data: data3 } = await Apis3.findItemList({ codes: 'DIST_LIST' })
+  selectData.bankList = data3.DIST_LIST
 }
 //表格选择
 const handleSelectionChange = val => {

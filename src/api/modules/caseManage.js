@@ -18,7 +18,8 @@ const apiConfig = {
     batchEdit: 'PUT /caseCenter/batch/edit', //修改入库批次
     batchInfoList: 'POST /caseCenter/batch/info/batchInfoList', //入库批次详情批量
     productIds: 'POST /caseCenter/batch/info/productIds', //通过产品Ids获取批次ID及批次号
-
+    batchList: 'GET /caseCenter/batch/list', //入库批次下拉
+    
     // 资产委托
     proxyPage: 'GET /caseCenter/case/proxy/page', //分页查询
     proxyCreate: 'POST /caseCenter/case/proxy/create', //新增委托
@@ -67,6 +68,8 @@ const apiConfig = {
     dictCreditorList: 'GET /upms/client/dict/creditor/list', 
     // 获取租户合作机构
     relationOrgList: 'GET /upms/client/dict/relationOrg/list',  
+    // 获取租户-部门下员工列表
+    empolyeeList: 'GET /upms/client/dict/empolyee/list',
 }
 
 // 删除产品名录

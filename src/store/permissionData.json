@@ -613,6 +613,13 @@
                 "icon": "",
                 "webPath": "",
                 "type": 3
+              },
+              {
+                "name": "案件收回",
+                "code": "CASE_BANK_RECOVERY",
+                "icon": "",
+                "webPath": "",
+                "type": 3
               }
             ]
           },
@@ -640,6 +647,13 @@
               {
                 "name": "添加分库",
                 "code": "BANK_SET_NAME_ADD",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "编辑",
+                "code": "BANK_SET_NAME_EDIT",
                 "icon": "",
                 "webPath": "",
                 "type": 3

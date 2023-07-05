@@ -40,21 +40,8 @@ const importExcelPath = async () => {
 // 获取下拉
 const getSelecData = async () => {
   // 请求得到数据
-  // let params = {
-  //   codes: 'IVR_TAG,ROBOT_TAG,PRODUCT_LIST,BATCH_LIST,CREDITOR_LIST'
-  // }
-  // const { data } = await xx(params)
-  //selectData.batchLis = data.BATCH_LIST;
-  selectData.batchList = [
-    {
-      itemId: 1,
-      itemText: '万腾浩达资产-手机贷20190326'
-    },
-    {
-      itemId: 36,
-      itemText: '万腾浩达资产-我来贷20190911'
-    }
-  ]
+  const { data } = await Apis.batchList()
+  selectData.batchList = data
   const { data: data2 } = await Apis.dictCreditorList()
   data2.forEach(item => {
     item.importCaseType = 2 //1为非自身租户

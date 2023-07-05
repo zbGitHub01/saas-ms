@@ -8,10 +8,10 @@
       <OperationBar v-model:active="operation">
         <template #default>
           <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow && !item.dropdown" plain type="primary" :icon="item.icon" @click="handleClick(item)">
+            <el-button v-auth="item.code" v-if="!item.dropdown" plain type="primary" :icon="item.icon" @click="handleClick(item)">
               {{ item.title }}
             </el-button>
-            <el-dropdown v-if="item.isShow && item.dropdown">
+            <el-dropdown v-auth="item.code" v-if="item.dropdown">
               <el-button type="primary" plain :icon="item.icon">
                 {{ item.title }}
                 <el-icon class="el-icon--right"><arrow-down /></el-icon>
@@ -149,32 +149,27 @@ const operationList = reactive([
   {
     title: '导出案件1',
     icon: 'Download',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_close"),
+    code: 'EXPORT_CASE_1'
   },
   {
     title: '导出案件2',
     icon: 'Download',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_stop"),
+    code: 'EXPORT_CASE_2'
   },
   {
     title: '案件标色',
     icon: 'BrushFilled',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_ref"),
+    code: 'CASE_COLOR_LABEL'
   },
   {
     title: '修改处置状态',
     icon: 'EditPen',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_addlabel"),
+    code: 'MODIFY_DISPOSE_STATUS'
   },
   {
     title: '添加临时标签',
     icon: 'CirclePlus',
-    isShow: true,
-    // isShow: this.hasPerm("disposal_case_dellabel"),
+    code: 'APPOINT_DISPOSE_CASE_ADD_TEMPORARY_LABEL',
     dropdown: [
       //按钮下拉
       {
@@ -182,21 +177,19 @@ const operationList = reactive([
       },
       {
         title: '导入批量添加标签',
-        notCheck: true //是否需要跳过校验选中项
+        notCheck: true
       }
     ]
   },
   {
     title: '删除临时标签',
     icon: 'Delete',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_dellabel"),
+    code: 'APPOINT_DISPOSE_CASE_DELETE_TEMPORARY_LABEL'
   }
   // {
   //   title: '创建诉讼批次',
   //   icon: 'CirclePlus',
-  //   isShow: true,
-  //   // isShow: this.hasPerm("disposal_case_excase"),
+  //   code: 'GREAT_LISTING_BATCH',
   //   dropdown: [
   //     {
   //       title: '以案件筛选结果创建诉讼批次',
@@ -211,8 +204,7 @@ const operationList = reactive([
   // {
   //   title: '创建单保全批次',
   //   icon: 'CirclePlus',
-  //   isShow: true,
-  //   // isShow: this.hasPerm("disposal_case_exrecord"),
+  //   code: 'GREAT_POLICY_BATCH',
   //   dropdown: [
   //     {
   //       title: '以案件筛选结果创建单保全批次',

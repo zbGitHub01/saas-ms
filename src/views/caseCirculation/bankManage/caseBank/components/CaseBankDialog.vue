@@ -19,7 +19,7 @@
         </el-form-item>
         <el-form-item label="目标案件库">
           <el-select clearable v-model="form.targetStoreId" placeholder="请选择目标案件库">
-            <el-option v-for="item in resouerdistList" :key="item.itemId" :label="item.itemText" :value="item.itemId"></el-option>
+            <el-option v-for="item in props.resouerdistList" :key="item.itemId" :label="item.itemText" :value="item.itemId"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
