@@ -49,13 +49,6 @@
 import { ref, reactive } from 'vue'
 import Apis from '@/api/modules/company'
 import { ElMessage } from 'element-plus'
-// 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     peopleList: any[]
-//     roleList: any[]
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,

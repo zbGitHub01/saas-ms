@@ -84,13 +84,6 @@ const title = ref('')
 //     },
 //   },
 
-// 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     productList: any[]
-//     packageList: any[]
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,

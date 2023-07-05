@@ -2,22 +2,25 @@
   <div>
     <OperationBar>
       <template #default>
-        <el-button type="primary" icon="Plus" @click="addOrEdit(undefined, 1)">新增</el-button>
+        <el-button type="primary" icon="Plus" @click="addOrEdit(undefined, 1)" v-auth="'ASSET_DISPOSE_STORAGE_BATCH_ADD'">新增</el-button>
       </template>
     </OperationBar>
     <div class="mt20">
       <el-table :data="state.tableData" border>
         <el-table-column label="序" type="index" align="center" width="50" />
-        <el-table-column label="批次号" prop="picihao" align="center" min-width="150"></el-table-column>
+        <el-table-column label="批次号" prop="batchNo" align="center" min-width="150"></el-table-column>
         <el-table-column label="关联产品" prop="productName" align="center" min-width="150"></el-table-column>
-        <el-table-column label="资产包类型" prop="packageType" align="center" min-width="150"></el-table-column>
-        <el-table-column label="购入日期" prop="date" align="center" min-width="150"></el-table-column>
-        <el-table-column label="交割日期" prop="date2" align="center" min-width="150"></el-table-column>
-        <el-table-column label="备注" prop="note" align="center" min-width="150"></el-table-column>
+        <el-table-column label="资产包类型" prop="packageTypeName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="购入日期" prop="buyTime" align="center" min-width="150"></el-table-column>
+        <el-table-column label="交割日期" prop="deliveryDay" align="center" min-width="150"></el-table-column>
+        <el-table-column label="备注" prop="remark" align="center" min-width="150"></el-table-column>
         <el-table-column label="操作" width="140" align="center" fixed="right">
           <template #default="scope">
-            <el-button link type="primary" @click="addOrEdit(scope.row, 2)">编辑</el-button>
-            <el-button link type="danger" @click="toDelete(scope.row)">删除</el-button>
+            <div v-if="scope.row.isProxy === 0">
+              <el-button link type="primary" @click="addOrEdit(scope.row, 2)" v-auth="'ASSET_DISPOSE_STORAGE_BATCH_EDIT'">编辑</el-button>
+              <el-button link type="danger" @click="toDelete(scope.row)" v-auth="'ASSET_DISPOSE_STORAGE_BATCH_DELETE'">删除</el-button>
+            </div>
+            <div v-if="scope.row.isProxy === 1" style="background-color: #67c23a">委托方批次</div>
           </template>
         </el-table-column>
       </el-table>
@@ -32,20 +35,14 @@ import { Plus } from '@element-plus/icons-vue'
 import AddOrEditDialog from './components/AddOrEditDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
+import Apis, { batchDel } from '@/api/modules/caseManage'
 // 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     productList: any[]
-//     packageList: any[]
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,
     default: () => ({})
   }
 })
-const form = reactive({})
 // 页码
 const query = reactive({
   page: 1,
@@ -61,33 +58,37 @@ onMounted(() => {
 })
 const getTableData = async () => {
   console.log('入库批次')
-  // 请求得到数据
-  // const { data } = await xx(form)
-  const tableDataSub = [
+  const { data } = await Apis.batchPage({ ...query })
+  state.tableData = data?.data
+  state.tableData = [
     {
       productName: '“360”借条',
       productId: 1,
-      picihao: '丽水海量-时光分期-202010',
-      date: '2019-03-26',
-      date2: '2019-03-26',
-      packageType: '消费金融资产包',
+      batchId: 1,
+      batchNo: '丽水海量-时光分期-202010',
+      buyTime: '2019-03-26',
+      deliveryDay: '2019-03-26',
+      packageTypeId: 1,
+      packageTypeName: '资产包1',
       packageId: 1,
-      note: '逾期天数＜300天'
+      remark: '逾期天数＜300天',
+      isProxy: 1
     },
     {
       productName: '我来带',
       productId: 2,
-      picihao: '丽水海量-时光分期-202010',
-      date: '2019-03-25',
-      date2: '2019-03-26',
-      packageType: '现金贷资产包',
+      batchId: 2,
+      batchNo: '丽水海量-时光分期-202010',
+      buyTime: '2019-03-25',
+      deliveryDay: '2019-03-26',
+      packageTypeId: 2,
+      packageTypeName: '资产包2',
       packageId: 2,
-      note: '逾期天数＜300天'
+      remark: '逾期天数＜300天',
+      isProxy: 0
     }
   ]
-  state.tableData = tableDataSub
-  query.page = 1
-  state.total = 12
+  state.total = data?.total
 }
 
 // 新增/编辑
@@ -102,9 +103,8 @@ const toDelete = row => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(
-    () => {
-      // 请求
-      // await xx(params)
+    async () => {
+      await batchDel(row.batchId)
       ElMessage.success('删除成功！')
       getTableData()
     },

@@ -41,10 +41,10 @@
           </div>
         </template>
       </OperationBar>
-      <div class="mb10">
+      <!-- <div class="mb10">
         <span>选中项：{{ state.selectedData.length }}</span>
         <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
-      </div>
+      </div> -->
       <el-table
         :data="state.tableData"
         border
@@ -53,74 +53,19 @@
         :row-key="getRowKeys"
       >
         <el-table-column type="selection" fixed align="center" width="55" :reserve-selection="true"></el-table-column>
-        <el-table-column
-          label="回款登记批次号"
-          prop="batchNO"
-          align="center"
-          min-width="150"
-          fixed="left"
-          :show-overflow-tooltip="true"
-        >
+        <el-table-column label="回款登记批次号" prop="batchNO" align="center" min-width="250" fixed="left">
           <template #default="scope">
             <el-button link type="primary" @click="goToDetail(scope.row)">{{ scope.row.batchNO }}</el-button>
           </template>
         </el-table-column>
-        <el-table-column
-          label="上传时间"
-          prop="allotTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="回款登记笔数"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="回款总金额"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="回款总案件数"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="不予受理"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="上传机构"
-          prop="creditorName"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="上传人"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="导入成功数"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="上传时间" prop="allotTime" align="center" min-width="180"></el-table-column>
+        <el-table-column label="回款登记笔数" prop="entrustAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="回款总金额" prop="entrustAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="回款总案件数" prop="entrustAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="不予受理" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="上传机构" prop="creditorName" align="center" min-width="180"></el-table-column>
+        <el-table-column label="上传人" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="导入成功数" prop="entrustAmount" align="center" min-width="150"></el-table-column>
         <el-table-column label="操作" width="140" align="center" fixed="right">
           <template #default="scope">
             <el-button link type="primary" @click="downloadFailureRecord(scope.row)" :disabled="scope.row.disabled">
@@ -313,7 +258,7 @@ const exportFile = () => {
   const params =
     operation.value === 1
       ? Object.assign({}, state.handleparams)
-      : { operateType: 2, companyCaseSearchParam: Object.assign({}, form) }
+      : { operateType: 2, companyCaseSearchParam: Object.assign({}, form) } //注意caseSearchParam
   console.log(params)
   //  const {data} =  await xx({ key: 'xx' })
   //  exportMethod(data)

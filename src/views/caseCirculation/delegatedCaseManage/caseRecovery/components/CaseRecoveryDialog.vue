@@ -8,35 +8,20 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <!-- <div class="flx-justify-between allTab">
-        <div class="flx-justify-between tab">
-          <el-icon class="icon"><Memo /></el-icon>
-          <div>
-            <div class="title">选中案件数</div>
-            <div class="money">{{ props.caseInfo.caseNum }}</div>
-          </div>
-        </div>
-        <div class="flx-justify-between tab">
-          <el-icon class="icon"><UserFilled /></el-icon>
-          <div>
-            <div class="title">选中案件人数</div>
-            <div class="money">{{ props.caseInfo.personNum }}</div>
-          </div>
-        </div>
-        <div class="flx-justify-between tab">
-          <el-icon class="icon"><Money /></el-icon>
-          <div>
-            <div class="title">预计操作金额</div>
-            <div class="money">{{ props.caseInfo.totalAmount }}</div>
-          </div>
-        </div>
-      </div> -->
-      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
+      <LabelClass :labelData="state.caseInfo" :isSpaceAround="true" :isBkgColor="false" />
       <el-form ref="ruleFormRef" class="backform" label-position="top" label-width="90px">
         <el-form-item label="案件分库">
-          <el-checkbox-group v-model="state.bankList">
-            <el-checkbox v-for="item in state.bankSelectList" :key="item.id" :label="item.id">{{ item.label }}</el-checkbox>
-          </el-checkbox-group>
+          <!-- <el-checkbox-group v-model="state.bankList">
+            <el-checkbox v-for="item in state.bankSelectList" :key="item.itemId" :label="item.itemId">{{ item.itemText }}</el-checkbox>
+          </el-checkbox-group> -->
+          <el-select clearable v-model="storeId" filterable placeholder="请选择案件分库" @change="changeBank">
+            <el-option
+              v-for="item in state.bankSelectList"
+              :key="item.itemId"
+              :label="item.itemText"
+              :value="item.itemId"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="操作维度">
           <el-radio-group v-model="isWithProductPublicDebt" @change="radioChange">
@@ -98,45 +83,29 @@
 <script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
+import Apis from '@/api/modules/caseManage'
+import Apis2 from '@/api/modules/common'
+import CaseLabelData4 from '@/constants/CaseLabelData4' //收回查询数据
 const isWithProductPublicDebt = ref(1)
 const isRecoverRetain = ref(0)
 const stagingPlan = ref(0)
 const retainStagingPlan = ref(0)
 const radio = ref(0)
+const storeId = ref()
 const state = reactive({
   bankSelectList: [], //分库列表
-  bankList: [] //选择的分库集合
+  // bankList: [], //选择的分库集合
+  caseInfo: {}, //统计数据
+  paramsSub: {},
+  taskId: null
 })
-// 接收props数据
-const props = defineProps({
-  caseInfo: {
-    type: Object,
-    default: () => ({})
-  },
-  taskId: {
-    type: Number,
-    default: null
-  }
-})
-const emits = defineEmits(['getTableData', 'fetchRecoverNowSelect', 'toggleSelection'])
+const emits = defineEmits(['getTableData', 'toggleSelection'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = async () => {
-  // await xx(params)
-  state.bankSelectList = [
-    {
-      id: 1,
-      label: '委外处置库'
-    },
-    {
-      id: 2,
-      label: '法诉处置库'
-    },
-    {
-      id: 3,
-      label: '大额处置库'
-    }
-  ]
+const open = async paramsSub => {
+  state.paramsSub = { ...paramsSub }
+  const { data } = await Apis2.findItemList({ codes: 'DIST_LIST' })
+  state.bankSelectList = data.DIST_LIST
   dialogVisible.value = true
 }
 defineExpose({
@@ -149,18 +118,18 @@ const submitForm = () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(
-    () => {
+    async () => {
       const params = {
         isRecoverRetain: isRecoverRetain.value,
-        taskId: props.taskId,
+        taskId: state.taskId,
         stagingPlan: stagingPlan.value,
         retainStagingPlan:
           retainStagingPlan.value === 0 ? retainStagingPlan.value : parseInt(retainStagingPlan.value) + parseInt(radio.value),
         recoverType: 2,
-        bankList: state.bankList
+        // bankList: state.bankList
+        storeId: storeId.value
       }
-      // 请求
-      // await xx(params)
+      await Apis.recoverNowSave(params)
       console.log(params)
       ElMessage.success('操作成功！')
       emits('getTableData')
@@ -180,36 +149,44 @@ const cancelSubmit = () => {
   stagingPlan.value = 0
   retainStagingPlan.value = 0
   radio.value = 0
-  state.bankList = []
+  // state.bankList = []
+  storeId.value = null
   dialogVisible.value = false
 }
 const radioChange = val => {
-  emits('fetchRecoverNowSelect', !!val)
+  isWithProductPublicDebt.value = val
+  fetchRecoverNowSelect()
+}
+const changeBank = val => {
+  storeId.value = val
+  fetchRecoverNowSelect()
+}
+const fetchRecoverNowSelect = async () => {
+  const params = {
+    ...state.paramsSub,
+    isWithProductPublicDebt: !!isWithProductPublicDebt.value,
+    storeId: storeId.value,
+    recoverType: 2
+  }
+  console.log(params)
+  const { data } = await Apis.recoverNowSelect(params)
+  state.taskId = data.taskId
+  state.caseInfo = data
+  // state.taskId = 1
+  // state.caseInfo = {
+  //   caseNum: 730330,
+  //   personNum: 350085,
+  //   taskId: 2210,
+  //   totalAmount: 1815372575.82
+  // }
+  CaseLabelData4.forEach(item => {
+    item.value = state.caseInfo[item.key]
+  })
+  state.caseInfo = CaseLabelData4
 }
 </script>
   
 <style lang="scss" scoped>
-// .allTab {
-//   height: 40px;
-//   margin-bottom: 40px;
-//   .tab {
-//     width: 33%;
-//     height: 40px;
-//     border-radius: 2px;
-//     padding: 5px;
-//     justify-content: flex-start;
-//     .icon {
-//       font-size: 35px;
-//       margin-right: 4px;
-//     }
-//     .title {
-//       color: #cccccc;
-//     }
-//     .money {
-//       font-weight: 500;
-//     }
-//   }
-// }
 .warning_warp {
   margin: -12px 0 14px 0;
   padding: 10px;

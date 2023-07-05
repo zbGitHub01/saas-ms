@@ -12,81 +12,92 @@
         <el-form-item label="公司名称：" prop="name">
           <el-input v-model="form.name" placeholder="请输入公司名称" clearable style="width: 300px"></el-input>
         </el-form-item>
-        <el-form-item label="社会信用码：" prop="code">
-          <el-input v-model="form.code" placeholder="请输入社会信用码" clearable style="width: 300px"></el-input>
+        <el-form-item label="社会信用码：" prop="socialCreditCode">
+          <el-input
+            v-model="form.socialCreditCode"
+            placeholder="请输入社会信用码"
+            clearable
+            style="width: 300px"
+            maxlength="18"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="法人证照：" prop="picture">
+        <el-form-item label="法人证照：" prop="businessLicense">
           <SingleImageUploader
-            v-model="form.picture1"
+            v-model="form.businessLicense"
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
+            placeholder="营业执照"
           />
           <SingleImageUploader
-            v-model="form.picture2"
+            v-model="form.legalPersonSeal"
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
-            class="ml19"
+            class="ml19" 
+            placeholder="法人公章"
           />
         </el-form-item>
         <el-form-item label="经营地址：" prop="addressSub">
           <el-cascader
-            v-model="form.addressSub"
-            :options="selectData.areaList"
+            v-model="state.addressSub"
+            :options="state.areaList"
             placeholder="请选择区域"
             clearable
-            :props="selectData.optionsProps"
+            :props="state.optionsProps"
           ></el-cascader>
         </el-form-item>
         <el-form-item label="详细地址：" prop="address">
           <el-input v-model="form.address" placeholder="请输入详细地址" clearable style="width: 300px"></el-input>
         </el-form-item>
-        <el-form-item label="法定代表人：" prop="people">
-          <el-input v-model="form.people" placeholder="请输入法定代表人" clearable style="width: 300px"></el-input>
+        <el-form-item label="法定代表人：" prop="legalPerson">
+          <el-input v-model="form.legalPerson" placeholder="请输入法定代表人" clearable style="width: 300px"></el-input>
         </el-form-item>
-        <el-form-item label="法人代表证件号：" prop="caseId">
+        <el-form-item label="法人代表证件号：" prop="legalPersonIdNo">
           <el-input
-            v-model="form.caseId"
+            v-model="form.legalPersonIdNo"
             placeholder="请输入法人代表证件号"
             clearable
             style="width: 300px"
             maxlength="18"
           ></el-input>
         </el-form-item>
-        <el-form-item label="法人代表手机号：" prop="phone">
+        <el-form-item label="法人代表手机号：" prop="legalPersonPhone">
           <el-input
-            v-model="form.phone"
+            v-model="form.legalPersonPhone"
             placeholder="请输入法人代表手机号"
             clearable
             style="width: 300px"
             maxlength="11"
           ></el-input>
         </el-form-item>
-        <el-form-item label="法人代表证照：" prop="picture">
+        <el-form-item label="法人代表证照：" prop="legalPersonFrontUrl">
           <SingleImageUploader
-            v-model="form.picture3"
+            v-model="form.legalPersonFrontUrl"
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
+            placeholder="身份证正面"
           />
           <SingleImageUploader
-            v-model="form.picture4"
+            v-model="form.legalPersonBackUrl"
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
             class="ml19"
+            placeholder="身份证反面"
           />
           <SingleImageUploader
-            v-model="form.picture5"
+            v-model="form.legalPersonIdCert"
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
             class="ml19"
+            placeholder="身份证明"
           />
         </el-form-item>
-        <el-form-item label="是否启用：" prop="isUse">
-          <el-radio-group v-model="form.isUse">
+        <el-form-item label="是否启用：" prop="status">
+          <el-radio-group v-model="form.status">
             <el-radio :label="1">启用</el-radio>
             <el-radio :label="0">不启用</el-radio>
           </el-radio-group>
@@ -105,29 +116,38 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
-import Apis from '@/api/modules/common'
+import Apis from '@/api/modules/company'
 import SingleImageUploader from '@/components/UploadFile/SingleImageUploader.vue'
+import { useCommonStore } from '@/store/modules/common'
+import { traverseDown } from '@/utils/traverse'
+const commonStore = useCommonStore()
 const form = reactive({
+  relationId: null,
   name: '', //公司名称
-  zhaiquanfangId: null,
-  code: '', //社会信用码
-  picture1: '', //营业执照
-  picture2: '', //法人公章
-  picture3: '', //身份证正面
-  picture4: '', //身份证反面
-  picture5: '', //身份证明
+  socialCreditCode: '', //社会信用码
+  businessLicense: '', //营业执照
+  legalPersonSeal: '', //法人公章
+  legalPersonFrontUrl: '', //身份证正面
+  legalPersonBackUrl: '', //身份证反面
+  legalPersonIdCert: '', //身份证明
   address: '', //详细地址
-  addressSub: [], //省市区
-  people: '', //法定代表人
-  caseId: '', //法人代表证件号
-  phone: '', //法人代表手机号
-  isUse: null //是否启用
+  legalPerson: '', //法定代表人
+  legalPersonIdNo: '', //法人代表证件号
+  legalPersonPhone: '', //法人代表手机号
+  status: null, //是否启用
+  provinceId: null, //省
+  provinceName: '',
+  cityId: null, //市
+  cityName: '',
+  areaId: null, //区
+  address: ''
 })
 const originFormData = JSON.parse(JSON.stringify(form))
-const selectData = reactive({
-  areaList: [], //省市区
+const state = reactive({
+  areaList: [], //省市区下拉
+  addressSub: [], //选择的省市区
   optionsProps: {
-    value: 'id',
+    value: 'pin',
     label: 'name',
     children: 'children',
     checkStrictly: true,
@@ -144,26 +164,21 @@ const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
 const open = async (row, type) => {
-  const { data } = await Apis.areaTree()
-  selectData.areaList = data
+  getArea()
   if (type === 1) {
     title.value = '新增购包主体'
   } else if (type === 2) {
     title.value = '编辑购包主体'
-    form.zhaiquanfangId = row.zhaiquanfangId
-    form.name = row.zhaiquanfang
-    form.code = row.code
-    form.picture1 = row.picture1
-    form.picture2 = row.picture2
-    form.picture3 = row.picture3
-    form.picture4 = row.picture4
-    form.picture5 = row.picture5
-    form.address = row.address
-    form.addressSub = row.addressSub
-    form.people = row.people
-    form.caseId = row.caseId
-    form.phone = row.phone
-    form.isUse = Number(row.isUse)
+    const { data } = await Apis.creditorDetail({ id: row.id })
+    Object.assign(form, data)
+    state.addressSub = [
+      (form.provinceId || '') + ',' + (form.provinceName || ''),
+      (form.cityId || '') + ',' + (form.cityName || '')
+    ]
+    form.areaId ? state.addressSub.push((form.areaId || '') + ',' + (form.areaName || '')) : null
+    form.relationId = form.id
+    delete form.tenantId
+    delete form.id
   }
   dialogVisible.value = true
 }
@@ -175,9 +190,17 @@ const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      console.log(form)
+      const params = { ...form }
+      state.addressSub = state.addressSub ? state.addressSub : []
+      params.provinceId = Number((state.addressSub[0] || '').split(',')[0]) || null
+      params.provinceName = state.addressSub[0]?.split(',')[1] || undefined
+      params.cityId = Number((state.addressSub[1] || '').split(',')[0]) || null
+      params.cityName = state.addressSub[1]?.split(',')[1] || undefined
+      params.areaId = Number((state.addressSub[2] || '').split(',')[0]) || null
+      params.areaName = state.addressSub[2]?.split(',')[1] || undefined
+      console.log(params)
       // 请求得到数据
-      // const { data } = await xx(form)
+      title.value === '新增购包主体' ? await Apis.creditorAdd(params) : await Apis.creditorEdit(params)
       ElMessage.success('操作成功！')
       emits('getTableData')
       formEl.resetFields()
@@ -189,7 +212,20 @@ const submitForm = formEl => {
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
   Object.assign(form, originFormData)
+  state.addressSub = []
   dialogVisible.value = false
+}
+// 获取省市区
+const getArea = () => {
+  const regionData = JSON.parse(JSON.stringify(commonStore.regionData))
+  traverseDown(
+    regionData,
+    node => {
+      node.pin = node.id + ',' + node.name
+    },
+    null
+  )
+  state.areaList = regionData
 }
 </script>
   

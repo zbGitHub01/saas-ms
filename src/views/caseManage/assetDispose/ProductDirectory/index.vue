@@ -2,30 +2,33 @@
   <div>
     <OperationBar>
       <template #default>
-        <el-button type="primary" icon="Plus" @click="addOrEdit(undefined, 1)">新增</el-button>
+        <el-button type="primary" icon="Plus" @click="addOrEdit(undefined, 1)" v-auth="'ASSET_DISPOSE_PRODUCT_LIST_ADD'">新增</el-button>
       </template>
     </OperationBar>
     <div class="mt20">
       <el-table :data="state.tableData" border>
         <el-table-column label="序" type="index" align="center" width="50" />
         <el-table-column label="产品" prop="productName" align="center" min-width="150"></el-table-column>
-        <el-table-column label="债权方" prop="zhaiquanfang" align="center" min-width="200"></el-table-column>
-        <el-table-column label="SPV公司" prop="SPV" align="center" min-width="200"></el-table-column>
-        <el-table-column label="官方咨询电话" prop="phone" align="center" min-width="150"></el-table-column>
-        <el-table-column label="产品资料" prop="ziliao" align="center" min-width="150">
+        <el-table-column label="债权方" prop="creditorName" align="center" min-width="200"></el-table-column>
+        <el-table-column label="SPV公司" prop="spvCompanyName" align="center" min-width="200"></el-table-column>
+        <el-table-column label="官方咨询电话" prop="contactPhone" align="center" min-width="150"></el-table-column>
+        <el-table-column label="产品资料" prop="dataUrl" align="center" min-width="150">
           <template #default="scope">
             <el-button link type="primary" @click="lookAgreement(scope.row)">查看</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="是否启用" prop="isUse" align="center" min-width="150">
+        <el-table-column label="是否启用" prop="productStatus" align="center" min-width="150">
           <template #default="scope">
-            <el-switch v-model="scope.row.isUse" @change="changSwitch(scope.row)" />
+            <el-switch v-model="scope.row.productStatus" @change="changSwitch(scope.row)" :disabled="scope.row.isProxy === 1" />
           </template>
         </el-table-column>
         <el-table-column label="操作" width="140" align="center" fixed="right">
           <template #default="scope">
-            <el-button link type="primary" @click="addOrEdit(scope.row, 2)">编辑</el-button>
-            <el-button link type="danger" @click="toDelete(scope.row)">删除</el-button>
+            <div v-if="scope.row.isProxy === 0">
+              <el-button link type="primary" @click="addOrEdit(scope.row, 2)" v-auth="'ASSET_DISPOSE_PRODUCT_LIST_EDIT'">编辑</el-button>
+              <el-button link type="danger" @click="toDelete(scope.row)" v-auth="'ASSET_DISPOSE_PRODUCT_LIST_DELETE'">删除</el-button>
+            </div>
+            <div v-if="scope.row.isProxy === 1" style="background-color: #67c23a">委托方产品</div>
           </template>
         </el-table-column>
       </el-table>
@@ -40,20 +43,14 @@ import { Plus } from '@element-plus/icons-vue'
 import AddOrEditDialog from './components/AddOrEditDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
+import Apis, { productDel } from '@/api/modules/caseManage'
 // 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     productList: any[]
-//     orgList: any[]
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,
     default: () => ({})
   }
 })
-const form = reactive({})
 // 页码
 const query = reactive({
   page: 1,
@@ -69,33 +66,36 @@ onMounted(() => {
 })
 const getTableData = async () => {
   console.log('产品名录')
-  // 请求得到数据
-  // const { data } = await xx(form)
-  const tableDataSub = [
-    {
-      productName: '“360”借条',
-      productId: 1,
-      zhaiquanfang: '丽水海树信用管理有限公司',
-      zhaiquanfangId: 1,
-      SPV: '丽水海树信用管理有限公司',
-      phone: '12345678',
-      ziliao: '',
-      isUse: true
-    },
-    {
-      productName: '我来带',
-      productId: 2,
-      zhaiquanfang: '丽水海树信用管理有限公司',
-      zhaiquanfangId: 2,
-      SPV: '丽水海树信用管理有限公司',
-      phone: '12345678',
-      ziliao: '',
-      isUse: false
-    }
-  ]
-  state.tableData = tableDataSub
-  query.page = 1
-  state.total = 12
+  const { data } = await Apis.productPage({ ...query })
+  state.tableData = data.data
+  // state.tableData = [
+  //   {
+  //     productName: '“360”借条',
+  //     productId: 1,
+  //     creditorName: '丽水海树信用管理有限公司',
+  //     creditorId: 1,
+  //     spvCompanyName: '丽水海树信用管理有限公司',
+  //     contactPhone: '12345678',
+  //     dataUrl: '//asfile.donganzichan.cn/bb99ad393bc74e9c83a031f9288bb58b.xlsx',
+  //     productStatus: 1,
+  //     isProxy: 1
+  //   },
+  //   {
+  //     productName: '我来带',
+  //     productId: 2,
+  //     creditorName: '丽水海树信用管理有限公司',
+  //     creditorId: 2,
+  //     spvCompanyName: '丽水海树信用管理有限公司',
+  //     contactPhone: '12345678',
+  //     dataUrl: '//asfile.donganzichan.cn/bb99ad393bc74e9c83a031f9288bb58b.xlsx',
+  //     productStatus: 0,
+  //     isProxy: 0
+  //   }
+  // ]
+  state.tableData.forEach(item => {
+    item.productStatus = !!item.productStatus
+  })
+  state.total = data.total
 }
 
 // 新增/编辑
@@ -110,9 +110,8 @@ const toDelete = row => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(
-    () => {
-      // 请求
-      // await xx(params)
+    async () => {
+      await productDel(row.productId)
       ElMessage.success('删除成功！')
       getTableData()
     },
@@ -124,13 +123,15 @@ const toDelete = row => {
 }
 // 查看产品资料
 const lookAgreement = row => {
-  window.open(row.url)
+  window.open(row.dataUrl)
 }
 // 是否启用
-const changSwitch = row => {
-  console.log(row.isUse)
-  // 请求
-  // await xx(form)
+const changSwitch = async row => {
+  const params = { ...row }
+  params.productStatus = Number(params.productStatus)
+  await Apis.productEdit(params)
+  ElMessage.success('保存成功！')
+  getTableData()
 }
 </script>
 

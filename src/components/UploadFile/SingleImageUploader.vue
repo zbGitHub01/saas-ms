@@ -18,20 +18,22 @@
         class="preview"
         :style="{
           backgroundImage: `url('${modelValue}')`,
-          backgroundSize: fillMode,
+          backgroundSize: fillMode
         }"
       >
-        <el-icon @click.stop="clearFiles" class="image-delete-icon" :style="{ height: height, width: width }">
+        <el-icon class="image-delete-icon" :style="{ height: height, width: width }" @click.stop="clearFiles">
           <Delete />
         </el-icon>
       </div>
-      <el-icon v-else class="image-uploader-icon" :style="{ height: height, width: width }"><Plus /></el-icon>
+      <el-icon v-else class="image-uploader-icon" :style="{ height: height, width: width }">
+        <Plus />
+        <div v-if="placeholder" class="image-uploader-placeholder">{{ placeholder }}</div>
+      </el-icon>
     </div>
   </el-upload>
 </template>
 
-<script lang="ts" setup>
-import type { UploadProps, UploadInstance, UploadRawFile } from 'element-plus'
+<script setup>
 import { genFileId, ElMessage } from 'element-plus'
 import { computed, ref } from 'vue'
 import { useGlobalStore } from '@/store'
@@ -43,32 +45,65 @@ const headers = computed(() => {
     Authorization: globalState.token
   }
 })
-type ImageFormat = 'GIF' | 'JPEG' | 'PNG'
-interface Props {
-  modelValue?: string | null
-  action?: string
-  types?: Array<ImageFormat>
-  width?: String
-  height?: String
-  actionSub?: string
-  data?: Object
-  fillMode?: string;
-}
+// interface Props {
+//   modelValue?: string | null
+//   action?: string
+//   types?: Array<ImageFormat>
+//   width?: String
+//   height?: String
+//   actionSub?: string
+//   data?: Object
+//   fillMode?: string;
+//   placeholder?: string;
+// }
 
-const imageFormatMap: Record<ImageFormat, string> = {
+const imageFormatMap = {
   GIF: 'image/gif',
   JPEG: 'image/jpeg',
   PNG: 'image/png'
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  action: '/other/file/upload',
-  types: () => ['GIF', 'JPEG', 'PNG'],
-  fillMode: 'contain',
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: null
+  },
+  action: {
+    type: String,
+    default: 'other/file/upload'
+  },
+  types: {
+    type: Array,
+    default: () => ['GIF', 'JPEG', 'PNG']
+  },
+  width: {
+    type: String,
+    default: '80px'
+  },
+  height: {
+    type: String,
+    default: '80px'
+  },
+  actionSub: {
+    type: String,
+    default: ''
+  },
+  data: {
+    type: Object,
+    default: () => ({})
+  },
+  fillMode: {
+    type: String,
+    default: 'contain'
+  },
+  placeholder: {
+    type: String,
+    default: ''
+  }
 })
 const emits = defineEmits(['update:modelValue'])
 
-const upload = ref<UploadInstance>()
+const upload = ref()
 const uploadAction = computed(() => {
   // const baseUrl = (import.meta.env.VITE_BASE_URL || '').replace(/\/+$/, '')
   // return `${baseUrl}${((props.action || '') + '/').replace(/\/{2,}/g, '/')}`
@@ -85,32 +120,32 @@ const allowedTypes = computed(() => {
  * 处理上传成功
  * @param response
  */
-const handleSuccess: UploadProps['onSuccess'] = response => {
+const handleSuccess = response => {
   emits('update:modelValue', response.data.url) //展示需带前缀
 }
 
 /**
  * 处理文件的删除
  */
-const handleRemove: UploadProps['onRemove'] = () => {
+const handleRemove = () => {
   emits('update:modelValue', '')
 }
 /**
  * 处理超出限制
  * @param files
  */
-const handleOnExceed: UploadProps['onExceed'] = (files: File[], ufs) => {
-  upload.value!.clearFiles()
-  const file = files[0] as UploadRawFile
+const handleOnExceed = files => {
+  upload.value.clearFiles()
+  const file = files[0]
   file.uid = genFileId()
-  upload.value!.handleStart(file)
+  upload.value.handleStart(file)
 }
 
 /**
  * 在上传之前校验
  * @param rawFile
  */
-const beforeUpload: UploadProps['beforeUpload'] = rawFile => {
+const beforeUpload = rawFile => {
   if (!allowedTypes.value.includes(rawFile.type)) {
     ElMessage.error(`仅支持${props.types.join('、')}格式图片!`)
     return false
@@ -151,6 +186,15 @@ function clearFiles() {
     background-position: center;
   }
 
+  .upload-previewer,
+  .el-upload.el-upload--text {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .el-icon.image-uploader-icon,
   .el-icon.image-delete-icon {
     font-size: 28px;
@@ -158,6 +202,15 @@ function clearFiles() {
     // width: 80px;
     // height: 80px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &-placeholder {
+    font-size: 12px;
+    color: #8c939d;
+    margin-top: 10px;
   }
 
   // 删除按钮， hover 时显示

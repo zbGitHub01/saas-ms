@@ -271,8 +271,9 @@ import ChangeAdministratorsDialog from './components/ChangeAdministratorsDialog.
 import SingleImageUploader from '@/components/UploadFile/SingleImageUploader.vue'
 import { useGlobalStore } from '@/store'
 import Apis1, { adminTenant } from '@/api/modules/company'
-import Apis2 from '@/api/modules/common'
 import { traverseDown } from '@/utils/traverse'
+import { useCommonStore } from '@/store/modules/common'
+const commonStore = useCommonStore()
 const globalStore = useGlobalStore()
 const isEditing = ref(false)
 const changeAdministratorsDialog = ref()
@@ -305,9 +306,11 @@ const getTableData = async () => {
   // 处理地址（省市区和详细地址）
   state.tenantInfo.addressSub1 = [
     (state.tenantInfo.provinceId || '') + ',' + (state.tenantInfo.provinceName || ''),
-    (state.tenantInfo.cityId || '') + ',' + (state.tenantInfo.cityName || ''),
-    (state.tenantInfo.areaId || '') + ',' + (state.tenantInfo.areaName || '')
+    (state.tenantInfo.cityId || '') + ',' + (state.tenantInfo.cityName || '')
   ]
+  state.tenantInfo.areaId
+    ? state.tenantInfo.addressSub1.push((state.tenantInfo.areaId || '') + ',' + (state.tenantInfo.areaName || ''))
+    : null
   state.tenantInfo.addressSub2 = [state.tenantInfo.provinceName, state.tenantInfo.cityName, state.tenantInfo.areaName]
     .filter(el => !!el)
     .join('/')
@@ -324,19 +327,18 @@ const getSelecData = async () => {
     }
   })
   // 获取角色
-  const { data: data2 } = await Apis2.dictDropdownList({ code: 'ROLE_LIST' })
-  selectData.roleList = data2.ROLE_LIST
+  selectData.roleList = commonStore.dropdownList.ROLE_LIST_LIST
 
   // 获取省市区
-  const { data: data3 } = await Apis2.areaTree()
+  const regionData = JSON.parse(JSON.stringify(commonStore.regionData))
   traverseDown(
-    data3,
+    regionData,
     node => {
       node.pin = node.id + ',' + node.name
     },
     null
   )
-  selectData.areaList = data3
+  selectData.areaList = regionData
 }
 // 编辑基础信息
 const editInfo = async () => {
