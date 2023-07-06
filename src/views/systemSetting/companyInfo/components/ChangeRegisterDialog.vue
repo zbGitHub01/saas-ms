@@ -100,7 +100,6 @@ const getSmsCode = async type => {
       phone: form.oldPhone,
       tenantId: form.tenantId
     }
-    // 发送请求
     await Apis.sendSms(params)
     ElMessage.success('验证码已发送，请留意接收验证码的手机号【' + form.oldPhone + '】')
     disabled.value = true
@@ -123,7 +122,6 @@ const getSmsCode = async type => {
       phone: form.newPhone,
       tenantId: form.tenantId
     }
-    // 发送请求
     await Apis.sendSms(params)
     ElMessage.success('验证码已发送，请留意接收验证码的手机号【' + form.newPhone + '】')
     disabledSub.value = true
@@ -144,7 +142,6 @@ const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      // 发送请求
       await Apis.updateRegister(form)
       emits('getTableData')
       formEl.resetFields()

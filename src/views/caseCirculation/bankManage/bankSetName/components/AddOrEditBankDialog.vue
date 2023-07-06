@@ -13,9 +13,9 @@
           <el-input v-model="form.itemText" placeholder="请输入分库名称" clearable style="width: 300px"></el-input>
         </el-form-item>
         <el-form-item label="是否启用：" prop="status">
-          <el-radio-group v-model="form.status" :disabled="operateStatus === 1">
-            <el-radio :label="true">是</el-radio>
-            <el-radio :label="false">否</el-radio>
+          <el-radio-group v-model="form.status">
+            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -32,12 +32,15 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
+import Apis from '@/api/modules/common'
 const form = reactive({
-  itemId: null,
+  id: null,
+  dictCode: 'DIST_LIST',
   itemText: '',
-  status: null
+  operateStatus: 2,
+  status: 1
 })
-const operateStatus = ref(0)
+const originFormData = JSON.parse(JSON.stringify(form))
 const title = ref('')
 // 校验规则
 const ruleFormRef = ref()
@@ -48,15 +51,15 @@ const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
 const open = (row, type) => {
+  Object.assign(form, originFormData)
   if (type === 1) {
     title.value = '添加分库'
-    operateStatus.value = 0
   } else if (type === 2) {
     title.value = '编辑分库'
-    form.itemId = row.itemId
+    form.id = row.id
     form.itemText = row.itemText
-    form.status = row.status
-    operateStatus.value = row.operateStatus
+    form.status = row.status ? 1 : 0
+    form.operateStatus = row.operateStatus
   }
   dialogVisible.value = true
 }
@@ -68,8 +71,7 @@ const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      console.log(form)
-      // await xx(form)
+      await Apis.dictManageSave(form)
       ElMessage.success('操作成功！')
       emits('getTableData')
       formEl.resetFields()

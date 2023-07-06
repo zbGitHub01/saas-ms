@@ -34,7 +34,7 @@
             :actionSub="'/upms/client/sys-file/upload'"
             :width="'140px'"
             :height="'140px'"
-            class="ml19" 
+            class="ml19"
             placeholder="法人公章"
           />
         </el-form-item>
@@ -198,8 +198,6 @@ const submitForm = formEl => {
       params.cityName = state.addressSub[1]?.split(',')[1] || undefined
       params.areaId = Number((state.addressSub[2] || '').split(',')[0]) || null
       params.areaName = state.addressSub[2]?.split(',')[1] || undefined
-      console.log(params)
-      // 请求得到数据
       title.value === '新增购包主体' ? await Apis.creditorAdd(params) : await Apis.creditorEdit(params)
       ElMessage.success('操作成功！')
       emits('getTableData')

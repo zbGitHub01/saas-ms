@@ -8,6 +8,12 @@ const apiConfig = {
   areaTree: `GET /upms/client/dict/area/tree`,
   //获取单项值
   findSingleInfo: `GET /upms/client/dict/single/info`,
+  // 字典列表接口
+  dictManageList: `GET /upms/client/dict/manage/list`,
+  // 字典新增/修改接口
+  dictManageSave: 'POST /upms/client/dict/manage/save',
+  // 字典删除接口
+  dictManageDel: `DELETE /upms/client/dict/manage/delete`,
 }
 
 const apis = generateApiFnc(apiConfig)

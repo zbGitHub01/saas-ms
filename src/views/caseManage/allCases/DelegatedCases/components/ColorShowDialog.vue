@@ -42,7 +42,6 @@ const submitForm = async () => {
     color: colorShow.value.radio,
     ...state.paramsSub
   }
-  console.log('案件标色：', params)
   await Apis.updateColor(params)
   ElMessage.success('标色成功！')
   emits('getTableData')

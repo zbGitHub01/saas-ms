@@ -164,7 +164,6 @@ onMounted(() => {
 })
 // 获取表格数据
 const getTableData = async () => {
-  // 请求得到数据
   const params = { ...dynamoSearchFormRef.value.getParams(), ...query, storeId: tabActive.value }
   // 待分配库和已分配库分开的接口
   const { data } = tabActive.value === 1 ? await Apis.waitDistCaseList(params) : await Apis.doneDistCaseList(params)
@@ -354,7 +353,6 @@ const getTableData = async () => {
 }
 // 获取分库数据
 const getTabList = async () => {
-  // 请求得到数据
   const { data } = await Apis2.findItemList({ codes: 'DIST_LIST' })
   state.tabList = data.DIST_LIST
   //去掉待分库配这个选项
@@ -376,13 +374,11 @@ const handleSelectionChange = val => {
     caseIdList: state.selectData,
     operateType: 1
   }
-  console.log(state.selectData, state.handleparams, operation.value)
 }
 //取消选择
 const toggleSelection = () => {
   state.selectData = []
   multipleTable.value.clearSelection()
-  console.log(state.selectData)
 }
 //跨页选择
 const getRowKeys = row => {
@@ -442,8 +438,6 @@ const fetchCaseDistSelect = async (type, isWithProductPublicDebt = true) => {
   if (type === 2) {
     params['recoverType'] = 1
   }
-  console.log('委案数据参数：', params)
-  // 请求得到数据
   const { data } = type === 1 ? await Apis.caseDistSelect(params) : await Apis.recoverNowSelect(params)
   state.taskId = data.taskId
   // state.taskId = 2323

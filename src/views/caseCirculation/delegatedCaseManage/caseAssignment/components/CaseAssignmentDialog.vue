@@ -215,8 +215,6 @@ const nextStep = formEl => {
     if (valid) {
       let params = Object.assign({}, form, state.paramsSub)
       // params['batchId'] = props.selectData.defalutType
-      console.log('下一步参数：', params)
-      // 请求得到数据
       const { data } = await Apis.caseEntrustSelect(params)
       state.lastData = data
       // state.lastData = {
@@ -251,8 +249,6 @@ const handleChange = async () => {
     adjustNum: adjustNum.value,
     taskId: state.lastData.taskId
   }
-  console.log('刷新委案数据参数：', params)
-  // 请求得到数据
   const { data } = await Apis.caseAllotRefresh(params)
   state.lastData.orgInfo = JSON.parse(data.orgInfo)
   // state.lastData.orgInfo = JSON.parse('{"totalAmount":2308,"orgName":"公司名称T79","caseNum":2,"personNum":4,"orgId":101}')
@@ -265,8 +261,6 @@ const submitForm = async () => {
     remark: remark.value,
     taskId: state.lastData.taskId
   }
-  console.log(params)
-  // 请求
   await Apis.caseEntrustSave(params)
   ElMessage.success('委派成功！')
   emits('toggleSelection')
@@ -281,7 +275,6 @@ const cancelSubmit = () => {
   dialogVisible.value = false
 }
 const changeCategory = async val => {
-  console.log(val)
   if (val) {
     const params = {
       categoryId: val,
@@ -289,7 +282,7 @@ const changeCategory = async val => {
     }
     const { data } = await Apis.relationOrgList(params)
     state.orgList = data
-  }else{
+  } else {
     form.orgId = null
     state.orgList = []
   }

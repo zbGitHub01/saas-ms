@@ -20,7 +20,12 @@
         <div v-if="typeSub === 2">
           <el-form-item label="暂停原因:" prop="reasonId">
             <el-select clearable v-model="form.reasonId" placeholder="请选择暂停原因" @change="changeStopReasonId">
-              <el-option v-for="(item, index) in selectData.StopReasonList" :key="index" :label="item.label" :value="item.value" />
+              <el-option
+                v-for="(item, index) in selectData.StopReasonList"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+              />
             </el-select>
             <!-- <div style="color: #999; font-size: 14px; line-height: 20px">
               已选暂停原因最多可暂停
@@ -97,9 +102,9 @@ const rules = reactive({
   caseStatusRemark: [{ required: true, message: '请输入备注', trigger: 'blur' }],
   reasonId: [{ required: true, message: '请选择暂停原因', trigger: 'change' }],
   pauseEndTime: [
-    { required: true, message: '请选择暂停截至时间', trigger: 'change' },
+    { required: true, message: '请选择暂停截至时间', trigger: 'change' }
     // { validator: validaterPauseEndTime, trigger: 'change' }
-  ],
+  ]
   // pauseUrl: [{ required: true, message: '请上传凭证附件', trigger: 'change' }]
 })
 const closeReason = [
@@ -181,10 +186,6 @@ const cancelSubmit = () => {
   dialogVisible.value = false
 }
 const getSelecData = async () => {
-  // let temData = JSON.parse(JSON.stringify(data.data));
-  // temData = temData.filter((item) => item.state === 0);
-  // temData = temData.filter((item) => item.id !== 20 && item.id !== 30);
-  // selectData.StopReasonList = JSON.parse(JSON.stringify(temData));
   selectData.StopReasonList = [
     {
       label: '暂停|投诉',

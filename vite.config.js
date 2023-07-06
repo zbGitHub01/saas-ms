@@ -22,7 +22,6 @@ export default defineConfig(({ mode }) => {
       proxy: {
         [VITE_BASE_URL]: {
           // target: 'http://192.168.10.74:9999',
-          // target: 'https://test-mng.donganzichan.cn/',
           target: 'https://operation-test.dongancloud.com',
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, '')

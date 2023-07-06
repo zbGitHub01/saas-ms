@@ -45,23 +45,23 @@ const getSelecData = async () => {
   })
   const { data: data3 } = await Apis.packagetypeList({ packageTypeStatus: 1 })
   selectData.packageList = data3
-  selectData.packageList = [
-    {
-      packageTypeId: 1,
-      packageTypeName: '资产包1',
-      packageTypeStatus: 1
-    },
-    {
-      packageTypeId: 2,
-      packageTypeName: '资产包2',
-      packageTypeStatus: 1
-    },
-    {
-      packageTypeId: 3,
-      packageTypeName: '资产包3',
-      packageTypeStatus: 1
-    }
-  ]
+  // selectData.packageList = [
+  //   {
+  //     packageTypeId: 1,
+  //     packageTypeName: '资产包1',
+  //     packageTypeStatus: 1
+  //   },
+  //   {
+  //     packageTypeId: 2,
+  //     packageTypeName: '资产包2',
+  //     packageTypeStatus: 1
+  //   },
+  //   {
+  //     packageTypeId: 3,
+  //     packageTypeName: '资产包3',
+  //     packageTypeStatus: 1
+  //   }
+  // ]
 }
 </script>
 

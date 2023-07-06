@@ -110,7 +110,6 @@ const getSmsCode = async () => {
     phone: form.adminPhone,
     tenantId: form.tenantId
   }
-  // 发送请求
   await Apis.sendSms(params)
   ElMessage.success('验证码已发送，请留意接收验证码的手机号【' + form.adminPhone + '】')
   disabled.value = true
@@ -130,7 +129,6 @@ const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      // 发送请求
       await Apis.updateAdmin(form)
       emits('getTableData')
       formEl.resetFields()

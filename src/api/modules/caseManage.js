@@ -49,6 +49,7 @@ const apiConfig = {
     orgTagTempDelete: 'POST /caseCenter/case/orgTagTemp/delete', //删除标签添加
     orgTagTempList: 'GET /caseCenter/case/orgTagTemp/list', //临时标签列表
     followExport: 'POST /caseCenter/follow/export', //导出处置记录
+    companyCaseExport: 'POST /caseCenter/org/companyCase/export', //委派处置-导出案件
 
     // 委案管理
     entrustCaseList: 'POST /caseCenter/case/entrust/entrustCaseList', //实时委案案件列表

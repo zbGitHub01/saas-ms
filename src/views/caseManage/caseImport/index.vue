@@ -23,34 +23,24 @@ onMounted(() => {
   importExcelPath()
   getSelecData()
 })
-// watch: {
-//   $route: {
-//     handler: function(route) {
-//       this.redirect = route.query && route.query.redirect
-//     },
-//     immediate: true
-//   }
-// }
 // 获取下载模版
 const importExcelPath = async () => {
-  // 请求得到下载模版地址
   const { data } = await Apis.importExcelPath()
   selectData.downData = data
 }
 // 获取下拉
 const getSelecData = async () => {
-  // 请求得到数据
   const { data } = await Apis.batchList()
   selectData.batchList = data
   const { data: data2 } = await Apis.dictCreditorList()
   data2.forEach(item => {
     item.importCaseType = 2 //1为非自身租户
-  });
+  })
   selectData.creditorList = data2
   selectData.creditorList.push({
     itemId: tenantInfo.value.tenantId,
     itemText: tenantInfo.value.tenantName,
-    importCaseType: 1, //2为自身租户
+    importCaseType: 1 //2为自身租户
   })
   const { data: data3 } = await Apis.productList({ productStatus: 1 })
   selectData.productAndCreList = data3

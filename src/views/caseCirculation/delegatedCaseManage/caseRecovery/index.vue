@@ -103,7 +103,6 @@ onMounted(() => {
   getTableData()
 })
 const getTableData = async () => {
-  // 请求得到数据
   const params = { ...dynamoSearchFormRef.value.getParams(), ...query, recoverType: 2 }
   const { data } = await Apis.recoverCaseList(params)
   state.tableData = data.data
@@ -301,7 +300,6 @@ const handleSelectionChange = val => {
 const toggleSelection = () => {
   state.selectData = []
   multipleTable.value.clearSelection()
-  console.log(state.selectData)
 }
 //跨页选择
 const getRowKeys = row => {

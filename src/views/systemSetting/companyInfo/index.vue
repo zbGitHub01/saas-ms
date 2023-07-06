@@ -355,7 +355,6 @@ const submit = async () => {
   if (!changeIdNo(state.tenantInfo.legalPersonIdNo)) {
     return
   }
-  // 请求
   const params = {
     admin: state.tenantInfo.admin,
     adminId: state.tenantInfo.adminId,
