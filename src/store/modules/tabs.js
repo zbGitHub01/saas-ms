@@ -21,7 +21,10 @@ export const useTabsStore = defineStore('tabsState', {
         title: tabItem.title,
         path: tabItem.path,
         icon: tabItem.icon,
-        close: tabItem.close
+        close: tabItem.close,
+        query: {
+          ...tabItem.query
+        }
       }
       if (this.tabsMenuList.every(item => item.path !== tabItem.path)) {
         this.tabsMenuList.push(tabInfo)

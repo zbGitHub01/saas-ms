@@ -1,11 +1,11 @@
 /**
- * 可管理案件
+ * 受委托案件
  */
 import { generateApiFnc } from '@/api/helper/apiFncs'
 
 //案件信息APi
 const caseInfoApi = {
-  getCaseInfoList: 'GET /caseCenter/case/info', //案件详情列表
+  getCaseInfoList: 'GET /caseCenter/org/companyCase/new/info', //案件详情列表
   getTagAlert: 'GET /caseCenter/case/tagAlert/list', //获取预警标签列表
   updateCaseInfo: 'POST /caseCenter/case/info/update', //更新案件资料
   updateTagAlert: 'POST /caseCenter/case/tagAlert/share', //设置是否共享

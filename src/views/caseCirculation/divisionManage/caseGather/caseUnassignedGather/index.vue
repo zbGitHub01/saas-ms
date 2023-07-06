@@ -1,10 +1,10 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import Apis from '@/api/modules/caseGather'
 
 const state = reactive({
   tableData: [],
-  pageTotal: 4,
+  pageTotal: 0,
   page: 1,
   pageSize: 10
 })
@@ -12,7 +12,22 @@ const state = reactive({
 const caseUnassignedGatherList = async () => {
   const data = await Apis.getOrgUnAllotStats()
   state.tableData = data.data
-  console.log(data.data)
+  state.pageTotal = state.tableData[0].products.length
+}
+
+const productsDataArr = computed(() => state.tableData[0].products.slice(0, state.pageSize))
+
+//升序
+const descClick = index => {
+  if (state.tableData.length < 1) return
+  state.tableData = state.tableData.sort((a, b) => a['products'][index]['amount'] - b['products'][index]['amount'])
+  console.log(index)
+}
+
+//降序
+const ascClick = index => {
+  if (state.tableData.length < 1) return
+  state.tableData = state.tableData.sort((a, b) => b['products'][index]['amount'] - a['products'][index]['amount'])
 }
 
 caseUnassignedGatherList()
@@ -24,13 +39,15 @@ caseUnassignedGatherList()
       <el-table-column prop="entrustTypeText" label="委案类型" width="150" align="center" />
 
       <template v-if="state.tableData.length !== 0">
-        <el-table-column
-          v-for="(item, index) in state.tableData[0].products"
-          :key="index"
-          :label="item.productName"
-          align="center"
-        >
-          <el-table-column label="金额" align="center" prop="amount" sortable>
+        <el-table-column v-for="(item, index) in productsDataArr" :key="index" :label="item.productName" align="center">
+          <el-table-column align="center" prop="amount">
+            <template #header>
+              金额
+              <span class="sort_icon">
+                <el-icon @click="descClick(index)"><CaretTop /></el-icon>
+                <el-icon @click="ascClick(index)"><CaretBottom /></el-icon>
+              </span>
+            </template>
             <template #default="{ row }">
               <span>{{ row['products'][index]['amount'] }}</span>
             </template>
@@ -48,12 +65,7 @@ caseUnassignedGatherList()
         </el-table-column>
       </template>
     </el-table>
-    <pagination
-      v-model:page="state.page"
-      v-model:page-size="state.pageSize"
-      :total="state.total"
-      @pagination="caseUnassignedGatherList"
-    />
+    <pagination v-model:page="state.page" v-model:page-size="state.pageSize" layout="total, sizes" :total="state.pageTotal" />
   </div>
 </template>
 
@@ -62,5 +74,19 @@ caseUnassignedGatherList()
   height: 10px;
   margin: 0 -20px 0;
   background-color: var(--color-main-bg);
+}
+.sort_icon {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  height: 14px;
+  width: 24px;
+  vertical-align: middle;
+  cursor: pointer;
+  overflow: initial;
+  position: relative;
+  &:last-child {
+    top: -8px;
+  }
 }
 </style>

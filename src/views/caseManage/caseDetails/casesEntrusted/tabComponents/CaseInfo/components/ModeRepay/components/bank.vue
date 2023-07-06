@@ -3,8 +3,8 @@ import { toRefs } from 'vue'
 
 const props = defineProps({
   aPayData: {
-    type: Object,
-    default: () => {}
+    type: Array,
+    default: () => []
   }
 })
 
@@ -13,22 +13,26 @@ const { aPayData } = toRefs(props)
 
 <template>
   <div>
-    <table style="width: 100%" class="detail_newTable">
+    <table v-for="item in aPayData" :key="item.accountNum" style="width: 100%" class="detail_newTable">
       <tr>
-        <th>债权方</th>
-        <td>{{ aPayData.creditorName }}</td>
+        <th>开户行</th>
+        <td>{{ item.bankOfDeposit }}</td>
       </tr>
       <tr>
-        <th>支付宝账号</th>
-        <td>{{ aPayData.accountNum }}</td>
+        <th>开户名</th>
+        <td>{{ item.accountName }}</td>
+      </tr>
+      <tr>
+        <th>账户</th>
+        <td>{{ item.accountNum }}</td>
       </tr>
       <tr>
         <th>还款备注</th>
-        <td>{{ aPayData.repayNote }}</td>
+        <td>{{ item.repayNote }}</td>
       </tr>
       <tr>
         <th>结清金额</th>
-        <td>{{ aPayData.repayPrice }}</td>
+        <td>{{ item.repayPrice }}</td>
       </tr>
     </table>
   </div>

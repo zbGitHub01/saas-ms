@@ -1,9 +1,12 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
+import Api from '@/api/modules/casesManageable'
+import { ElMessage } from 'element-plus'
 import useCaseStore from '@/store/modules/caseInfo.js'
 import ReductionDialog from './components/reductionDialog/index.vue'
 import tabComponentObj from './tabComponents/index.js'
+import { CapitalDialog } from './config/dialogBtnConfig.js'
 import operaBtnConfig from './config/operaBtnConfig.js'
 import tabList from './config/tabList.js'
 
@@ -21,6 +24,13 @@ const state = reactive({
     refundPhone: null,
     relation: null,
     remark: null
+  },
+  dialogBtnJson: {
+    dialogBtnTitle: '',
+    formFieldsList: [],
+    dialogRuleForm: {},
+    width: '',
+    rules: {}
   }
 })
 
@@ -42,9 +52,29 @@ state.reductionTableData = [
 
 const tabActive = ref(0)
 const reductionDialogVisible = ref(false)
+const dialogFormVisible = ref(false)
 
 const handleClick = item => {
   if (item.btnText === '申请减免') reductionDialogVisible.value = true
+  if (item.btnText === '录入资方信息') {
+    state.dialogBtnJson = CapitalDialog
+    console.log(state.dialogBtnJson)
+    dialogFormVisible.value = true
+  }
+}
+
+const handleSubmit = async obj => {
+  const params = {
+    ...obj,
+    caseId: route.query?.caseId
+  }
+  try {
+    await Api.investorName(params)
+    ElMessage.success('成功录入资方信息!')
+    dialogFormVisible.value = false
+  } catch (error) {
+    console.log(error)
+  }
 }
 </script>
 
@@ -73,7 +103,17 @@ const handleClick = item => {
       </el-tab-pane>
     </el-tabs>
     <!--申请减免dialog-->
-    <ReductionDialog v-model:reductionDialogVisible="reductionDialogVisible" />
+    <ReductionDialog v-model:reduction-dialog-visible="reductionDialogVisible" />
+    <!--各类操作按钮弹窗-->
+    <DialogForm
+      v-model:dialog-form-visible="dialogFormVisible"
+      :width="state.dialogBtnJson.width"
+      :rule-form="state.dialogBtnJson.dialogRuleForm"
+      :title="state.dialogBtnJson.dialogBtnTitle"
+      :rules="state.dialogBtnJson.rules"
+      :form-fields="state.dialogBtnJson.formFieldsList"
+      @submit="handleSubmit"
+    />
   </div>
 </template>
 <style scoped lang="scss">
