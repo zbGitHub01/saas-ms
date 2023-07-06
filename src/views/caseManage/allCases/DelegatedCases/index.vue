@@ -27,10 +27,6 @@
           </div>
         </template>
       </OperationBar>
-      <!-- <div class="mb10">
-        <span>选中项：{{ state.selectData.length }}</span>
-        <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
-      </div> -->
       <el-table
         :data="state.tableData"
         border
@@ -147,14 +143,9 @@ const state = reactive({
 const operation = ref(1)
 const operationList = reactive([
   {
-    title: '导出案件1',
+    title: '导出案件',
     icon: 'Download',
-    code: 'EXPORT_CASE_1'
-  },
-  {
-    title: '导出案件2',
-    icon: 'Download',
-    code: 'EXPORT_CASE_2'
+    code: 'EXPORT_CASE_ENTRUST'
   },
   {
     title: '案件标色',
@@ -434,15 +425,8 @@ const handleClick = item => {
     ElMessage.warning('请先选择操作对象!')
   } else {
     switch (item.title) {
-      case '导出案件1':
-        exportModel('EXPORT_CASE_FIELD', 0)
-        break
-      case '导出案件2':
-        exportModel('EXPORT_CASE_FIELD', 0)
-        break
-      case '导出处置记录':
-        // this.form.caseStatus = 25;
-        exportModel('EXPORT_FOLLOW_FIELD', 1)
+      case '导出案件':
+        exportModel('xxxx')
         break
       case '案件标色':
         colorShow()
@@ -500,8 +484,8 @@ const handlesort = val => {
 const editStatus = () => {
   editStatusDialog.value.open(getParams())
 }
-// 0导出案件1和导出案件2， 1导出处置记录
-const exportModel = async (code, type) => {
+// 导出案件
+const exportModel = async code => {
   let params = {
     codes: code
   }
@@ -577,10 +561,10 @@ const exportModel = async (code, type) => {
       qqRecord: 'QQ联系记录'
     }
   }
-  exportDialog.value.open(state.exportData, type)
+  exportDialog.value.open(state.exportData)
 }
-// 确认导出案件1和导出案件2/导出处置记录
-const submitExport = async (paramsSub, type) => {
+// 确认导出案件
+const submitExport = async paramsSub => {
   let params = getParams()
   Object.assign(params, paramsSub)
   //此处做判断是为了判断是否是委外库
@@ -590,15 +574,8 @@ const submitExport = async (paramsSub, type) => {
   // }
   // 发送处理案件接口
   console.log('导出：', params)
-  if (type === 0) {
-    // const { data } = await caseexport(params)
-    // data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
-    console.log(type)
-  } else if (type === 1) {
-    // const { data } = await followexport(params)
-    // data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
-    console.log(type)
-  }
+  // const { data } = await caseexport(params)
+  // data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
   ElMessage.success('操作成功！')
   toggleSelection()
 }

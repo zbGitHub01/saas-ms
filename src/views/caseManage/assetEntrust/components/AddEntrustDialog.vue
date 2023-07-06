@@ -8,7 +8,7 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="right" label-width="120px">
+      <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="right" label-width="130px">
         <el-form-item label="委托产品：" prop="productId">
           <el-select v-model="form.productId" placeholder="请选择委托产品" clearable filterable @change="changeProduct">
             <el-option
@@ -31,6 +31,15 @@
           <el-select v-model="form.trusteeId" placeholder="请选择受托方" clearable filterable>
             <el-option v-for="(item, index) in selectData.trustList" :key="index" :label="item.itemText" :value="item.itemId"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="委托起始日期：" prop="proxyStartTime">
+          <el-date-picker
+            v-model="form.proxyStartTime"
+            type="date"
+            placeholder="请选择委托起始日期"
+            value-format="YYYY-MM-DD"
+            :disabled-date="disabledDate"
+          />
         </el-form-item>
         <el-form-item label="委托时效：" prop="proxyEndTime" class="timeRadio">
           <el-radio-group v-model="form.proxyEndTime">
@@ -73,6 +82,7 @@ const form = reactive({
   creditorId: null,
   tenantId: null,
   trusteeId: null,
+  proxyStartTime: '',
   proxyEndTime: '',
   fileList: []
 })
@@ -90,8 +100,9 @@ const rules = reactive({
   productId: [{ required: true, trigger: 'change', message: '委托产品不能为空' }],
   creditorId: [{ required: true, trigger: 'change', message: '债权方不能为空' }],
   trusteeId: [{ required: true, trigger: 'change', message: '受托方不能为空' }],
+  proxyStartTime: [{ required: true, trigger: 'change', message: '委托起始时间不能为空' }],
   proxyEndTime: [{ required: true, trigger: 'change', message: '委托时效不能为空' }],
-  fileList: [{ required: true, trigger: 'change', message: '委托协议不能为空' }]
+  fileList: [{ required: true, trigger: 'change', message: '委托协议不能为空' }],
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
@@ -117,7 +128,7 @@ const submitForm = formEl => {
       delete params.fileList
       if (params.proxyEndTime === '永久') {
         params.proxyDurationType = 1
-        params.proxyEndTime = null
+        delete params.proxyEndTime
       } else {
         params.proxyDurationType = 2
       }
@@ -144,6 +155,9 @@ const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
   time.value = ''
   dialogVisible.value = false
+}
+const disabledDate = time => {
+  return time.getTime() > Date.now()
 }
 </script>
 

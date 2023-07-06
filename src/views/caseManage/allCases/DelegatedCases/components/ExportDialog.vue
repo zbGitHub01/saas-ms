@@ -7,7 +7,7 @@
     :close-on-press-escape="false"
     :before-close="cancelSubmit"
   >
-    <div v-if="typeSub === 0">
+    <div>
       <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange(0)">全选</el-checkbox>
       <el-checkbox-group v-model="state.exportField" @change="checked(0)">
         <el-divider content-position="left">基本信息</el-divider>
@@ -24,27 +24,6 @@
         </el-checkbox> -->
       </el-checkbox-group>
     </div>
-    <template v-if="typeSub === 1">
-      <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange(1)">全选</el-checkbox>
-      <el-checkbox-group v-model="state.exportField" @change="checked(1)">
-        <el-divider content-position="left">附件资料</el-divider>
-        <el-checkbox v-for="(item, index) in state.exportData.followFile" :label="index" :key="index" style="width: 12%">
-          {{ item }}
-        </el-checkbox>
-      </el-checkbox-group>
-      <el-divider content-position="left">处置记录</el-divider>
-      <el-checkbox v-model="disposalRecord">处置记录表</el-checkbox>
-      <el-divider content-position="left">记录筛选</el-divider>
-      <label style="fontweight: 500" class="mr5">记录提交时间:</label>
-      <el-date-picker
-        v-model="state.date"
-        type="datetimerange"
-        value-format="YYYY-MM-DD HH:mm:ss"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-      ></el-date-picker>
-    </template>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="cancelSubmit">取消</el-button>
@@ -55,7 +34,6 @@
 </template>
 <script setup>
 import { reactive, ref } from 'vue'
-const typeSub = ref(0)
 const isIndeterminate = ref(false)
 const checkAll = ref(false)
 const disposalRecord = ref(false)
@@ -67,9 +45,8 @@ const state = reactive({
 })
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = (data, type) => {
+const open = data => {
   state.exportData = data
-  typeSub.value = type
   dialogVisible.value = true
 }
 defineExpose({
@@ -80,12 +57,7 @@ const submitForm = () => {
   const params = {}
   params['exportField'] = state.exportField
   params['exportType'] = 0
-  if (typeSub.value === 1) {
-    params['createTimeStart'] = state.date[0]
-    params['createTimeEnd'] = state.date[1]
-    params['isExportExcel'] = disposalRecord.value
-  }
-  emits('submitExport', params, typeSub.value)
+  emits('submitExport', params)
   cancelSubmit()
 }
 // 取消

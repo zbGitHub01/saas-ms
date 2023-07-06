@@ -162,7 +162,7 @@ const getSelecData = async () => {
 // 切换tab
 const handleClick = tab => {
   // 整理form参数
-  tab === '1' ? (form.state = null) : (form.state = 4)
+  tab === 'CURRENT_COMMITS' ? (form.state = null) : (form.state = 4)
   query.page = 1
   query.pageSize = 10
   getTableData()
