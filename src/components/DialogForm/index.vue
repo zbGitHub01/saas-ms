@@ -79,10 +79,6 @@ const emit = defineEmits([
   'btnClick'
 ])
 
-const closeClick = ruleFormRef => {
-  resetFunc(ruleFormRef)
-}
-
 watch(
   () => ruleForm.value,
   // eslint-disable-next-line no-unused-vars
@@ -161,10 +157,9 @@ const submitForm = async formEl => {
     }
   })
 }
-const resetForm = formEl => {
-  if (!formEl) return
-  //假如有传默认重置对象，则深拷贝进行重置
-  resetFunc(formEl)
+
+const closeClick = ruleFormRef => {
+  resetFunc(ruleFormRef)
 }
 
 //表单按钮
@@ -237,8 +232,8 @@ const resetFunc = formEl => {
           <el-option
             v-for="(opts, index) in item.options"
             :key="index"
-            :label="opts.label || opts[item.optionLabel]"
-            :value="opts.value || opts[item.optionValue]"
+            :label="opts.label || opts[item.optionLabel] || opts"
+            :value="opts.value || opts[item.optionValue] || opts"
           />
         </el-select>
         <!--checkbox多选框-->
@@ -330,7 +325,7 @@ const resetFunc = formEl => {
     <slot name="default" />
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="resetForm(ruleFormRef)">取消</el-button>
+        <el-button @click="closeClick(ruleFormRef)">取消</el-button>
         <el-button type="primary" @click="submitForm(ruleFormRef)">确认</el-button>
       </span>
     </template>

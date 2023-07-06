@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, toRefs, watch } from 'vue'
 import { reductionDialogFormFields } from './config/dialogFormFields.js'
 import tableHead from './config/tableHead.js'
 
@@ -9,6 +9,8 @@ const props = defineProps({
     default: false
   }
 })
+
+const { reductionDialogVisible } = toRefs(props)
 
 const state = reactive({
   reductionTableData: [],
@@ -26,6 +28,8 @@ const state = reactive({
     remark: null
   }
 })
+
+const emit = defineEmits(['handleClose', 'update:reductionDialogVisible'])
 
 state.reductionTableData = [
   {
@@ -64,7 +68,7 @@ const rules = reactive({
 })
 
 const innerVisible = ref(false)
-const reductionDialogVisible = ref(false)
+const dialogFormVisible = ref(false)
 
 const reliefCaseList = computed(() => {
   console.log(state.reductionRuleForm.caseNoList.join('、'))
@@ -84,9 +88,31 @@ const handleReductionSubmit = data => {
   console.log('formData', data.case)
 }
 
-const handleReductionClose = () => {
-  reductionDialogVisible.value = false
-}
+watch(
+  () => dialogFormVisible.value,
+  // eslint-disable-next-line no-unused-vars
+  (newVal, _) => {
+    if (newVal) return
+    emit('update:reductionDialogVisible', false)
+  },
+  {
+    immediate: true
+  }
+)
+watch(
+  () => reductionDialogVisible.value,
+  // eslint-disable-next-line no-unused-vars
+  (newVal, _) => {
+    dialogFormVisible.value = newVal
+  },
+  {
+    immediate: true
+  }
+)
+
+// const handleReductionClose = () => {
+//   emit('handleClose', reductionDialogVisible.value)
+// }
 
 const selectable = row => {
   return row.residueAmount > 0
@@ -109,7 +135,7 @@ const reductionConfirm = () => {
 
 <template>
   <DialogForm
-    :model-value="props.reductionDialogVisible"
+    v-model:dialogFormVisible="dialogFormVisible"
     :form-fields="reductionDialogFormFields"
     :rule-form="state.reductionRuleForm"
     :rules="rules"
@@ -117,7 +143,6 @@ const reductionConfirm = () => {
     watch-item="reductionType"
     title="申请减免"
     width="40%"
-    @close="handleReductionClose"
     @submit="handleReductionSubmit"
     @watch-change="watchChange"
   >

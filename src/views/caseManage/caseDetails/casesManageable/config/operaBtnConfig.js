@@ -30,7 +30,7 @@ export default [
   },
   {
     type: 'primary',
-    btnText: '申请进入调解',
+    btnText: '录入资方信息',
     isCustomize: true,
     iconName: 'reduce',
     plain: true

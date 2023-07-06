@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, toRefs } from 'vue'
 // import Api from '@/api/modules/casesManageable'
-import Tags from './component/Tags.vue'
+// import Tags from './component/Tags.vue'
 import descriptionList from './config/descriptionList.js'
 // import { ElMessage } from 'element-plus'
 
@@ -15,7 +15,7 @@ const props = defineProps({
 // const emit = defineEmits(['getCaseInfo'])
 
 const { messageData } = toRefs(props)
-
+console.log(messageData)
 const state = reactive({
   type: 1,
   title: '',
@@ -72,7 +72,7 @@ const open = (item, val) => {
 <template>
   <div>
     <!--预警标签-->
-    <Tags class="tags_style" :case-info="caseInfo" @refresh="fetchNewCaseDetail" />
+    <!-- <Tags class="tags_style" :case-info="caseInfo" @refresh="fetchNewCaseDetail" /> -->
     <el-descriptions class="margin-top" :column="3" size="default" border>
       <el-descriptions-item v-for="(item, index) in descriptionList" :key="index" align="center">
         <template #label>
