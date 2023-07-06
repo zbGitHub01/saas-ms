@@ -111,7 +111,6 @@ const submitForm = () => {
         // retainStagingPlan: retainStagingPlan.value === 0 ? retainStagingPlan.value : parseInt(retainStagingPlan.value) + parseInt(radio.value),
         recoverType: 1
       }
-      console.log(params)
       await Apis.recoverNowSave(params)
       ElMessage.success('操作成功！')
       emits('getTableData')
@@ -120,7 +119,6 @@ const submitForm = () => {
     },
     res => {
       ElMessage.info('已取消')
-      console.log(res)
     }
   )
 }

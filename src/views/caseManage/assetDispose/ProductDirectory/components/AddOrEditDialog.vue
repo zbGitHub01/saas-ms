@@ -14,7 +14,12 @@
         </el-form-item>
         <el-form-item label="债权方：" prop="creditorId">
           <el-select v-model="form.creditorId" placeholder="请选择债权方" clearable filterable>
-            <el-option v-for="(item, index) in selectData.creditorList" :key="index" :label="item.itemText" :value="item.itemId"></el-option>
+            <el-option
+              v-for="(item, index) in selectData.creditorList"
+              :key="index"
+              :label="item.itemText"
+              :value="item.itemId"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="SPV公司：" prop="spvCompanyName">
@@ -47,9 +52,6 @@
 import { ElMessage } from 'element-plus'
 import { reactive, ref, computed } from 'vue'
 import Apis from '@/api/modules/caseManage'
-// import { useGlobalStore } from '@/store/index'
-// const globalStore = useGlobalStore()
-// const tenantId = computed(() => globalStore.tenantId)
 const form = reactive({
   productId: null,
   productName: '',
@@ -100,10 +102,8 @@ const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      // 请求得到数据
       const params = { ...form }
       // params.tenantId = tenantId.value
-      console.log(params)
       if (title.value === '添加') {
         await Apis.productAdd(params)
       } else if ((title.value = '编辑')) {

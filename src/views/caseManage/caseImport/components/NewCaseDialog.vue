@@ -162,7 +162,6 @@ const submitForm = formEl => {
           params.proxyDurationType = 2
         }
       }
-      console.log(params)
       await Apis.caseImport(params)
       ElMessage.success('导入成功！')
       cancelSubmit()

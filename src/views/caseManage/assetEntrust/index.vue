@@ -6,7 +6,9 @@
     </el-tabs>
     <OperationBar>
       <template #default>
-        <el-button type="primary" :icon="Plus" @click="addEntrust" v-if="tabActive === 'CURRENT_COMMITS'" v-auth="'NEW_ENTRUST'">新增委托</el-button>
+        <el-button type="primary" :icon="Plus" @click="addEntrust" v-if="tabActive === 'CURRENT_COMMITS'" v-auth="'NEW_ENTRUST'">
+          新增委托
+        </el-button>
       </template>
     </OperationBar>
     <div class="mt20">
@@ -65,7 +67,6 @@
 </template>
 
 <script setup>
-console.log(333)
 import AddEntrustDialog from './components/AddEntrustDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
@@ -97,12 +98,10 @@ onMounted(() => {
   getSelecData()
 })
 const getTableData = async () => {
-  // 请求得到数据
   const params = {
     ...query,
     ...form
   }
-  console.log('查询', params)
   const { data } = await Apis.proxyPage(params)
   state.tableData = data.data
   // state.tableData = [
@@ -142,10 +141,9 @@ const getTableData = async () => {
   state.total = data.total
 }
 const getSelecData = async () => {
-  // 请求得到数据
   const { data } = await Apis.productList({ isProxy: 0, productStatus: 1 })
   selectData.productAndCreList = data
-  const { data: data1} = await Apis2.findItemList({ codes: 'NORMAL_TENANT_LIST'})
+  const { data: data1 } = await Apis2.findItemList({ codes: 'NORMAL_TENANT_LIST' })
   // selectData.trustList = [
   //   {
   //     id: 1,
@@ -181,14 +179,12 @@ const toStop = row => {
     type: 'warning'
   }).then(
     async () => {
-      // 请求
       await proxyStop(row.proxyId)
       ElMessage.success('终止合作成功！')
       getTableData()
     },
     res => {
       ElMessage.info('已取消')
-      console.log(res)
     }
   )
 }

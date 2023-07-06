@@ -21,7 +21,12 @@
         </el-form-item>
         <el-form-item label="债权方：" prop="creditorId">
           <el-select v-model="form.creditorId" placeholder="请选择债权方" clearable filterable :disabled="true">
-            <el-option v-for="(item, index) in selectData.productAndCreList" :key="index" :label="item.creditorName" :value="item.creditorId"></el-option>
+            <el-option
+              v-for="(item, index) in selectData.productAndCreList"
+              :key="index"
+              :label="item.creditorName"
+              :value="item.creditorId"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="委托方：" prop="tenantId">
@@ -29,7 +34,12 @@
         </el-form-item>
         <el-form-item label="受托方：" prop="trusteeId">
           <el-select v-model="form.trusteeId" placeholder="请选择受托方" clearable filterable>
-            <el-option v-for="(item, index) in selectData.trustList" :key="index" :label="item.itemText" :value="item.itemId"></el-option>
+            <el-option
+              v-for="(item, index) in selectData.trustList"
+              :key="index"
+              :label="item.itemText"
+              :value="item.itemId"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="委托起始日期：" prop="proxyStartTime">
@@ -46,7 +56,7 @@
             <el-radio :label="'永久'">永久</el-radio>
             <el-radio :label="time">截止时间</el-radio>
           </el-radio-group>
-          <el-date-picker 
+          <el-date-picker
             v-model="time"
             type="date"
             placeholder="请选择截止时间"
@@ -102,7 +112,7 @@ const rules = reactive({
   trusteeId: [{ required: true, trigger: 'change', message: '受托方不能为空' }],
   proxyStartTime: [{ required: true, trigger: 'change', message: '委托起始时间不能为空' }],
   proxyEndTime: [{ required: true, trigger: 'change', message: '委托时效不能为空' }],
-  fileList: [{ required: true, trigger: 'change', message: '委托协议不能为空' }],
+  fileList: [{ required: true, trigger: 'change', message: '委托协议不能为空' }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
@@ -120,7 +130,6 @@ const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      // 请求得到数据
       const params = {
         ...form,
         proxyAgreement: form.fileList[0].url
@@ -144,8 +153,8 @@ const changeDate = val => {
 }
 // 根据选择的产品，匹配对应的债权方
 const changeProduct = productId => {
-  props.selectData.productAndCreList.forEach(item=>{
-    if(item.productId === productId){
+  props.selectData.productAndCreList.forEach(item => {
+    if (item.productId === productId) {
       form.creditorId = item.creditorId
     }
   })

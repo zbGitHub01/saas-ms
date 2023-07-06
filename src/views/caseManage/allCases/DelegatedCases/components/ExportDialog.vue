@@ -98,7 +98,6 @@ const checked = type => {
   } else if (type === 1) {
     var length = Object.keys(state.exportData.followFile).length
   }
-  console.log(length, state.exportField.length)
   if (state.exportField.length !== length && state.exportField.length !== 0) {
     isIndeterminate.value = true
   } else {

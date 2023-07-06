@@ -130,7 +130,6 @@ const submitForm = () => {
         storeId: storeId.value
       }
       await Apis.recoverNowSave(params)
-      console.log(params)
       ElMessage.success('操作成功！')
       emits('getTableData')
       emits('toggleSelection')
@@ -138,7 +137,6 @@ const submitForm = () => {
     },
     res => {
       ElMessage.info('已取消')
-      console.log(res)
     }
   )
 }
@@ -168,7 +166,6 @@ const fetchRecoverNowSelect = async () => {
     storeId: storeId.value,
     recoverType: 2
   }
-  console.log(params)
   const { data } = await Apis.recoverNowSelect(params)
   state.taskId = data.taskId
   state.caseInfo = data

@@ -81,7 +81,6 @@ defineExpose({
   open
 })
 const fetchCaseLevel = () => {
-  // 请求得到数据
   // const { data } = await xx({ codes: 'ENTRUST_TYPE_ALL' })
   state.caseLevelList = ['A', 'B', 'C', 'D', 'E', '其他']
 }

@@ -54,7 +54,6 @@ onMounted(() => {
   getTableDataBank()
 })
 const getTableDataBank = async () => {
-  // 请求得到数
   const { data } = await Apis.dictManageList({ codes: 'DIST_LIST' })
   state.tableDataBank = data.DIST_LIST
 }
@@ -72,7 +71,6 @@ const changeStatusBank = async row => {
     operateStatus: row.operateStatus,
     status: row.status ? 1 : 0
   }
-  // 请求
   await Apis.dictManageSave(params)
   ElMessage.success('操作成功！')
   getTableDataBank()

@@ -33,6 +33,16 @@
             >
               编辑
             </el-button>
+            <!-- 删除功能不展示，权限以及operateStatus再定 -->
+            <!-- <el-button
+              link
+              type="primary"
+              @click="delCase(scope.row)"
+              v-auth="'CASE_TYPE_CONFIGURATION_EDIT'"
+              :disabled="scope.row.operateStatus !== 2 && scope.row.operateStatus !== 3"
+            >
+              删除
+            </el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -42,7 +52,7 @@
 </template>
 
 <script setup>
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import AddOrEditCaseDialog from './components/AddOrEditCaseDialog.vue'
@@ -55,7 +65,6 @@ onMounted(() => {
   getTableDataCase()
 })
 const getTableDataCase = async () => {
-  // 请求得到数据
   const { data } = await Apis.dictManageList({ codes: 'ENTRUST_TYPE' })
   const tableDataSub = data.ENTRUST_TYPE
   state.tableDataCase = tableDataSub.map(item => {
@@ -81,10 +90,26 @@ const changeStatusCase = async row => {
       caseLevel: [...row.itemValue.caseLevel]
     }
   }
-  // 请求
   await Apis.dictManageSave(params)
   ElMessage.success('操作成功！')
   getTableDataCase()
+}
+// 删除委案类型
+const delCase = async row => {
+  ElMessageBox.confirm('是否确认删除?', '温馨提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(
+    async () => {
+      await Apis.dictManageDel({ id: row.id })
+      ElMessage.success('删除成功！')
+      getTableDataCase()
+    },
+    res => {
+      ElMessage.info('已取消')
+    }
+  )
 }
 </script>
 

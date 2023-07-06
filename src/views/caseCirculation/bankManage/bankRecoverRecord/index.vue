@@ -88,7 +88,6 @@ const selectData = reactive({
   bankList: [] //分库列表
 })
 const form = reactive({
-  // operDateDuration: null, //时间，开始和结束用～拼接
   recoverStartTime: null,
   recoverEndTime: null,
   operUserId: null,
@@ -113,13 +112,11 @@ onMounted(() => {
 })
 // 获取表格数据
 const getTableData = async () => {
-  console.log('案件分库')
   const params = {
     recoverType: 1,
     ...form,
     ...query
   }
-  // 请求得到数据
   const { data } = await Apis.recoverRecordList(params)
   state.tableData = data.data
   // state.tableData = [
@@ -165,7 +162,6 @@ const getTableData = async () => {
   state.total = data.total
 }
 const getSelecData = async () => {
-  // 请求得到数据
   const { data } = await Apis.empolyeeList({
     tenantId: tenantInfo.value.tenantId,
     deptId: tenantInfo.value.deptId
@@ -176,18 +172,15 @@ const getSelecData = async () => {
 }
 // 重置
 const reset = () => {
-  console.log('重置')
   date.value = []
   Object.assign(form, originFormData)
   getTableData()
 }
 const changeDate = val => {
   if (val) {
-    // form.operDateDuration = val[0] + '~' + val[1]
     form.recoverStartTime = val[0] + ' 00:00:00'
     form.recoverEndTime = val[1] + ' 23:59:59'
   } else {
-    // form.operDateDuration = null
     form.recoverStartTime = null
     form.recoverEndTime = null
   }
