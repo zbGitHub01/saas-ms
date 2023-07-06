@@ -74,7 +74,7 @@
   </div>
   <InviteEmployeesDialog v-model:dialog-visible="inviteEmployeesShow" />
   <BatchImportDialog v-model:dialog-visible="batchImportVisible" />
-  <EditEmployeeDialog v-model:drawer-visible="editEmployeeVisible" />
+  <EditEmployeeDialog v-model:drawer-visible="editEmployeeVisible" :row="currItem" />
 </template>
 
 <script setup>
@@ -99,6 +99,7 @@ const searchForm = reactive({
 const total = ref(0)
 const page = ref(1)
 const pageSize = ref(10)
+const currItem = ref({})
 
 const onReset = () => {}
 const employeeList = ref([])
@@ -142,7 +143,7 @@ const setDimission = async row => {
   await fetchAllEmployees()
 }
 const editEmployee = row => {
-  console.log(row)
+  currItem.value = row
   editEmployeeVisible.value = true
 }
 fetchAllEmployees()
