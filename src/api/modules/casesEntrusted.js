@@ -6,6 +6,7 @@ import { generateApiFnc } from '@/api/helper/apiFncs'
 //案件信息APi
 const caseInfoApi = {
   getCaseInfoList: 'GET /caseCenter/org/companyCase/new/info', //案件详情列表
+  getExtInfo: 'GET /caseCenter/org/companyCase/ext/info', //获取额外信息
   getTagAlert: 'GET /caseCenter/case/tagAlert/list', //获取预警标签列表
   updateCaseInfo: 'POST /caseCenter/case/info/update', //更新案件资料
   updateTagAlert: 'POST /caseCenter/case/tagAlert/share', //设置是否共享

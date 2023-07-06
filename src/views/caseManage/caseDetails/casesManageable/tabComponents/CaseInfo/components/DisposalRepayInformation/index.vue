@@ -16,7 +16,6 @@ const props = defineProps({
 })
 
 const { messageData } = toRefs(props)
-console.log(messageData)
 
 const caseInfoStore = useCaseStore()
 

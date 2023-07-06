@@ -723,7 +723,419 @@
                 "type": 3
               }
             ]
+          },
+          {
+            "name": "预委案",
+            "code": "PRE_CASE",
+            "icon": "",
+            "webPath": "/caseCirculation/delegatedCaseManage/preCase",
+            "type": 1,
+            "children": [
+              {
+                "name": "导入委案",
+                "code": "CASE_IMPORT",
+                "icon": "",
+                "webPath": "",
+                "type": 2,
+                "children": [
+                  {
+                    "name": "批量发布方案",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "删除委案方案",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "上传委案文件",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "下载导入模板",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "编辑",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "确认发布",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "删除",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  }
+                ]
+              },
+              {
+                "name": "模型委案",
+                "code": "CASE_MODEL",
+                "icon": "",
+                "webPath": "",
+                "type": 2,
+                "children": [
+                  {
+                    "name": "批量发布方案",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "删除委案方案",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "添加委案方案",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "配置",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "编辑",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "确认发布",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "删除",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  }
+                ]
+              },
+              {
+                "name": "产品委案",
+                "code": "IMPORT_CASE",
+                "icon": "",
+                "webPath": "",
+                "type": 2,
+                "children": [
+                  {
+                    "name": "批量发布方案",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "删除委案方案",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "上传委案文件",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "下载导入模板",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "配置",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "编辑",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "确认发布",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  },
+                  {
+                    "name": "删除",
+                    "code": "",
+                    "icon": "",
+                    "webPath": "",
+                    "type": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "委案记录",
+            "code": "CASE_RECORD",
+            "icon": "",
+            "webPath": "/caseCirculation/delegatedCaseManage/caseRecord",
+            "type": 1,
+            "children": [
+              {
+                "name": "导出委案记录",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "下载",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "委案预收回",
+            "code": " CASE_AHEAD_RECOVERY",
+            "icon": "",
+            "webPath": "/caseCirculation/delegatedCaseManage/caseAheadRecovery",
+            "type": 1,
+            "children": [
+              {
+                "name": "批量发布方案",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除收回方案",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "添加收回方案",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "编辑",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "确认发布",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "删除",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "委案收回记录",
+            "code": "CASE_RECOVERED",
+            "icon": "",
+            "webPath": "/caseCirculation/delegatedCaseManage/caseRecovered",
+            "type": 1,
+            "children": [
+              {
+                "name": "下载",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
           }
+        ]
+      },
+      {
+        "name": "分案管理",
+        "code": "DIVISION_MANAGE",
+        "icon": "",
+        "webPath": "/caseCirculation/divisionManage",
+        "type": 1,
+        "children": [
+          {
+            "name": "实时分案",
+            "code": "REALTIME_DIVISION",
+            "icon": "",
+            "webPath": "/caseCirculation/divisionManage/realtimeDivision",
+            "type": 1,
+            "children": [
+              {
+                "name": "实时分案",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "导入分案",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "分案汇总",
+            "code": "CASE_GATHER",
+            "icon": "",
+            "webPath": "/caseCirculation/divisionManage/caseGather",
+            "type": 1,
+            "children": [
+              {
+                "name": "CPE持案汇总",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 2
+              },
+              {
+                "name": "未分派案件汇总",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 2
+              }
+            ]
+          },
+          {
+            "name": "实时分案收回",
+            "code": "REALTIME_DIVISION_RECOVERY",
+            "icon": "",
+            "webPath": "/caseCirculation/divisionManage/realtimeDivisionRecovery",
+            "type": 1,
+            "children": [
+              {
+                "name": "实时收回",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "分案收回记录",
+            "code": "DIVISION_RECOVERED",
+            "icon": "",
+            "webPath": "/caseCirculation/divisionManage/divisionRecovered",
+            "type": 1,
+            "children": [
+              {
+                "name": "下载",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          },
+          {
+            "name": "机构策略分案",
+            "code": "DIVISION_STRATEGY",
+            "icon": "",
+            "webPath": "/caseCirculation/divisionManage/divisionStrategy",
+            "type": 1,
+            "children": [
+              {
+                "name": "新增管理机构",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "实时分案",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "CPE持案情况",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "修改负责人",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              },
+              {
+                "name": "移除机构",
+                "code": "",
+                "icon": "",
+                "webPath": "",
+                "type": 3
+              }
+            ]
+          }
+
         ]
       }
     ]

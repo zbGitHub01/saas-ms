@@ -24,9 +24,13 @@ const { caseInfo, principalSettlementInfo } = toRefs(state)
 const getCaseInfoData = async () => {
   const { data } = await Api.getCaseInfoList({ caseId: caseInfoStore?.caseId })
   state.caseInfo = data
-  console.log(state.caseInfo)
+}
+const getExtInfoData = async () => {
+  const { data } = await Api.getExtInfo({ caseId: caseInfoStore?.caseId })
+  // state.caseInfo = data
 }
 getCaseInfoData()
+getExtInfoData()
 
 //判断组件传值是否为空 解决异步传值组件渲染取不到props值的问题
 const isEmpty = computed(() => Object.keys(state.caseInfo).length > 0)
@@ -57,7 +61,7 @@ const handleChange = val => {
           <template #label>
             <span>
               本机构处置案件
-              <strong class="strong">{{ caseInfo.debtCaseIdNoList.length }}</strong>
+              <strong class="strong">{{ caseInfo.debtCaseIdNoList ? caseInfo.debtCaseIdNoList.length : '' }}</strong>
             </span>
           </template>
           <!--处置金额/还款方式-->
@@ -76,19 +80,21 @@ const handleChange = val => {
                 </el-col>
                 <el-col :span="12">
                   <div class="title">还款方式</div>
-                  <!-- <OtherPay v-if="[22, 25].includes(caseInfo.productId)" :payment-url="state.paymentUrl"></OtherPay>
-                  <ModeRepay v-else :case-info="caseInfo" /> -->
+                  <template v-if="isEmpty">
+                    <OtherPay v-if="[22, 25].includes(caseInfo.productId)" :payment-url="state.paymentUrl"></OtherPay>
+                    <ModeRepay v-else :case-info="caseInfo" />
+                  </template>
                 </el-col>
               </el-row>
             </div>
           </el-collapse-item>
           <!--基础信息-->
           <el-collapse-item title="基础信息" name="3">
-            <component :is="componentsObj['BasicInformation']" v-if="isEmpty" :message-data="state.caseInfo"></component>
+            <component :is="componentsObj['BasicInformation']" v-if="isEmpty" :message-data="caseInfo"></component>
           </el-collapse-item>
           <!--借款/转让信息-->
           <el-collapse-item title="借款/转让信息" name="4">
-            <component :is="componentsObj['LoanTransferInformation']" v-if="isEmpty" :message-data="state.caseInfo"></component>
+            <component :is="componentsObj['LoanTransferInformation']" v-if="isEmpty" :message-data="caseInfo"></component>
           </el-collapse-item>
         </el-tab-pane>
         <el-tab-pane name="1">

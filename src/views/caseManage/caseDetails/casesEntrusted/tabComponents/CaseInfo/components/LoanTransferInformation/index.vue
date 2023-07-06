@@ -11,6 +11,8 @@ const props = defineProps({
 
 const { messageData } = toRefs(props)
 
+console.log(messageData)
+
 /* state.messageData.caseTransferInfoVOList = [
   {
     loanPlatformUserId: 'BE-BQ-00fafafafa01017',

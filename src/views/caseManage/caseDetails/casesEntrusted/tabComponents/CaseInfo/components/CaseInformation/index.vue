@@ -15,7 +15,7 @@ const props = defineProps({
 // const emit = defineEmits(['getCaseInfo'])
 
 const { messageData } = toRefs(props)
-console.log(messageData)
+
 const state = reactive({
   type: 1,
   title: '',
