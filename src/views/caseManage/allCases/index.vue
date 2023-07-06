@@ -1,13 +1,13 @@
 <template>
   <div class="card-wrap">
     <el-tabs class="mb16" v-model="tabActive">
-      <el-tab-pane label="可管理案件" name="1"></el-tab-pane>
-      <el-tab-pane label="已委托案件" name="2"></el-tab-pane>
-      <el-tab-pane label="委派处置案件" name="3"></el-tab-pane>
+      <el-tab-pane v-if="authStore.tabVisible('MANAGE_CASE')" label="可管理案件" name="MANAGE_CASE"></el-tab-pane>
+      <el-tab-pane v-if="authStore.tabVisible('ENTRUST_CASE')" label="已委托案件" name="ENTRUST_CASE"></el-tab-pane>
+      <el-tab-pane v-if="authStore.tabVisible('APPOINT_DISPOSE_CASE')" label="委派处置案件" name="APPOINT_DISPOSE_CASE"></el-tab-pane>
     </el-tabs>
-    <ManageableCases v-if="tabActive === '1'" />
-    <EntrustedCases v-if="tabActive === '2'" />
-    <DelegatedCases v-if="tabActive === '3'" />
+    <ManageableCases v-show="tabActive === 'MANAGE_CASE'" />
+    <EntrustedCases v-show="tabActive === 'ENTRUST_CASE'" />
+    <DelegatedCases v-show="tabActive === 'APPOINT_DISPOSE_CASE'" />
   </div>
 </template>
 
@@ -16,7 +16,9 @@ import { ref } from 'vue'
 import ManageableCases from './ManageableCases/index.vue'
 import EntrustedCases from './EntrustedCases/index.vue'
 import DelegatedCases from './DelegatedCases/index.vue'
-const tabActive = ref('1')
+import { useAuthStore } from '@/store/modules/auth'
+const authStore = useAuthStore()
+const tabActive = ref(authStore.tabPage.tabActive || '')
 </script>
 
 <style lang="scss" scoped>

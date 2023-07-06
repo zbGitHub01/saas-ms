@@ -8,34 +8,11 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <LabelClass :labelData="props.timeData" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
-      <!-- <div class="flx-justify-between allTab">
-        <div class="flx-justify-between tab">
-          <el-icon class="icon"><Memo /></el-icon>
-          <div>
-            <div class="title">选中案件数</div>
-            <div class="money">{{ props.timeData.caseNum }}</div>
-          </div>
-        </div>
-        <div class="flx-justify-between tab">
-          <el-icon class="icon"><UserFilled /></el-icon>
-          <div>
-            <div class="title">选中案人数</div>
-            <div class="money">{{ props.timeData.personNum }}</div>
-          </div>
-        </div>
-        <div class="flx-justify-between tab">
-          <el-icon class="icon"><Money /></el-icon>
-          <div>
-            <div class="title">预计分库金额</div>
-            <div class="money">{{ props.timeData.totalAmount }}</div>
-          </div>
-        </div>
-      </div> -->
+      <LabelClass v-if="state.labelData" :labelData="state.labelData" :isSpaceAround="true" :isBkgColor="false" />
       <el-divider></el-divider>
-      <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="130px" :rules="rules" v-if="!last">
-        <el-form-item label="案件分库：" prop="bank">
-          <el-select clearable v-model="form.bank" placeholder="请选择案件分库" style="width: 250px">
+      <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="150px" :rules="rules" v-if="!last">
+        <el-form-item label="案件分库：" prop="storeId">
+          <el-select clearable v-model="form.storeId" filterable placeholder="请选择案件分库">
             <el-option
               v-for="item in selectData.bankList"
               :key="item.itemId"
@@ -45,25 +22,32 @@
           </el-select>
         </el-form-item>
         <el-form-item label="操作维度：" prop="entrustStrategy">
-          <el-radio-group v-model="form.entrustStrategy" @change="radioChange">
+          <el-radio-group v-model="form.entrustStrategy">
             <el-radio :label="1">案人</el-radio>
             <el-radio :label="2">案件</el-radio>
             <el-radio :label="3">库内剩余共债</el-radio>
           </el-radio-group>
         </el-form-item>
-        <!-- 这里要做成级联？最好给的接口内容有级联，不要做成两个接口 -->
         <el-form-item label="目标机构：" prop="orgId">
-          <el-select clearable v-model="form.orgId" filterable placeholder="请选择委案机构" style="width: 250px">
-            <el-option v-for="item in selectData.orgList" :key="item.id" :label="item.text" :value="item.id"></el-option>
+          <el-select clearable v-model="categoryId" filterable placeholder="机构分类" @change="changeCategory">
+            <el-option v-for="item in selectData.categoryData" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+          <el-select clearable v-model="form.orgId" filterable placeholder="请选择目标机构">
+            <el-option v-for="item in state.orgList" :key="item.itemId" :label="item.itemText" :value="item.itemId"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="委案类型：" prop="entrustType">
-          <el-select v-model="form.entrustType" placeholder="请选择委案类型" clearable style="width: 250px">
-            <el-option v-for="item in selectData.caseTypeList" :key="item.id" :label="item.text" :value="item.id"></el-option>
+          <el-select v-model="form.entrustType" placeholder="请选择委案类型" clearable>
+            <el-option
+              v-for="item in selectData.caseTypeList"
+              :key="item.itemId"
+              :label="item.itemText"
+              :value="item.itemId"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="委派间隔期数：" prop="duringMonth">
-          <el-select clearable v-model="form.duringMonth" placeholder="请选择委派间隔期数" style="width: 250px">
+          <el-select clearable v-model="form.duringMonth" placeholder="请选择委派间隔期数">
             <el-option label="不限" :value="0"></el-option>
             <el-option label="1个月" :value="1"></el-option>
             <el-option label="2个月" :value="2"></el-option>
@@ -105,24 +89,22 @@
             <el-input-number
               v-model="adjustNum"
               :min="1"
-              :max="timeData.personNum"
+              :max="state.lastData.personNum"
               controls-position="right"
               @change="handleChange"
             ></el-input-number>
             <span class="unit">人</span>
-            <!-- <el-button style="margin-left:10px">刷新</el-button> -->
           </div>
           <div class="num_warp" v-else>
             <span>委案金额调整为：</span>
             <el-input-number
               v-model="adjustNum"
               :min="0"
-              :max="timeData.totalAmount"
+              :max="state.lastData.totalAmount"
               controls-position="right"
               @change="handleChange"
             ></el-input-number>
             <span class="unit">元</span>
-            <!-- <el-button style="margin-left:10px">刷新</el-button> -->
           </div>
         </div>
         <p class="item-title mt10 mb10">委派预览</p>
@@ -161,64 +143,49 @@
   
 <script setup>
 import { ElMessage } from 'element-plus'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import moment from 'moment'
+import Apis from '@/api/modules/caseManage'
+import CaseLabelData3 from '@/constants/CaseLabelData3' //查询数据
+import { useGlobalStore } from '@/store/index'
+const globalStore = useGlobalStore()
+const tenantId = computed(() => globalStore.tenantId)
 const form = reactive({
   entrustStrategy: 1,
-  batchId: null,
+  // batchId: null,
   entrustType: null,
   duringMonth: null,
   isAutoRecover: 0,
   recoverDateStr: moment(moment().format('YYYY-MM-DD')).endOf('month').format('YYYY-MM-DD'), //当月最后一天
   isHideHisFollowRecord: 1,
   orgId: null,
-  bank: [] //分库
+  storeId: null //分库
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const state = reactive({
-  lastData: {}
+  lastData: {},
+  paramsSub: {}, //操作项参数
+  labelData: [], //查询统计数据
+  orgList: [] //机构下拉
 })
 const adjustNum = ref(0)
 const adjustType = ref(1)
 const remark = ref('')
 const last = ref(false)
+const categoryId = ref()
 // 接收props数据
-// const props = defineProps<{
-//   timeData: any
-//   taskId: any
-//   selectData: {
-//     caseTypeList: any[]
-//     orgList: any[]
-//     defalutType: any
-//     bankList: any[]
-//   }
-// }>()
 const props = defineProps({
-  timeData: {
-    type: Object,
-    default: () => ({})
-  },
-  taskId: {
-    type: Number,
-    default: null
-  },
   selectData: {
     type: Object,
     default: () => ({})
   }
 })
-const emits = defineEmits(['getTableData', 'fetchTimingSearch', 'toggleSelection'])
-onMounted(() => {
-  // 委案类型默认为 默认
-  const entrustItem = props.selectData.caseTypeList.find(item => item.itemText === '默认')
-  if (entrustItem) {
-    form.entrustType = entrustItem.itemId
-  }
-})
+const emits = defineEmits(['getTableData', 'toggleSelection'])
 // 校验规则
 const ruleFormRef = ref()
 const rules = reactive({
-  orgId: [{ required: true, message: '请选择委案机构', trigger: 'change' }],
+  storeId: [{ required: true, message: '请选择分库', trigger: 'change' }],
+  orgId: [{ required: true, message: '请选择目标机构', trigger: 'change' }],
   entrustType: [{ required: true, message: '请选择委案类型', trigger: 'change' }],
   isHideHisFollowRecord: [{ required: true, message: '请选择历史处置记录', trigger: 'change' }],
   recoverDateStr: [{ required: true, message: '请选择委案到期日', trigger: 'change' }],
@@ -227,10 +194,16 @@ const rules = reactive({
 })
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = () => {
+const open = paramsSub => {
   dialogVisible.value = true
   Object.assign(form, originFormData)
   last.value = false
+  state.paramsSub = { ...paramsSub }
+  // 委案类型默认为 默认
+  const entrustItem = props.selectData.caseTypeList.find(item => item.itemText === '默认')
+  if (entrustItem) {
+    form.entrustType = entrustItem.itemId
+  }
 }
 defineExpose({
   open
@@ -240,22 +213,25 @@ const nextStep = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      let params = Object.assign({}, form)
-      params['taskId'] = props.taskId
-      params['batchId'] = props.selectData.defalutType
+      let params = Object.assign({}, form, state.paramsSub)
+      // params['batchId'] = props.selectData.defalutType
       console.log('下一步参数：', params)
       // 请求得到数据
-      // const { code, data, msg } = await slectOrg(params)
-      // state.lastData = {...data, orgInfo: JSON.parse(data.orgInfo)}
-      state.lastData = {
-        adjustNum: 2,
-        adjustType: 1,
-        caseNum: 2,
-        orgInfo: '{"totalAmount":4,"orgName":"公司名称T79","caseNum":2,"personNum":2,"orgId":101}',
-        personNum: 1,
-        taskId: 2309,
-        totalAmount: 2
-      }
+      const { data } = await Apis.caseEntrustSelect(params)
+      state.lastData = data
+      // state.lastData = {
+      //   adjustNum: 2,
+      //   adjustType: 1,
+      //   orgInfo: '{"totalAmount":2309,"orgName":"公司名称T79","caseNum":2,"personNum":4,"orgId":101}',
+      //   caseNum: 2,
+      //   personNum: 4,
+      //   totalAmount: 32342,
+      //   taskId: 2309
+      // }
+      CaseLabelData3.forEach(item => {
+        item.value = state.lastData[item.key]
+      })
+      state.labelData = CaseLabelData3
       state.lastData.orgInfo = JSON.parse(state.lastData.orgInfo)
       adjustType.value = state.lastData.adjustType
       adjustNum.value = state.lastData.adjustNum
@@ -269,31 +245,29 @@ const handleStatus = val => {
   adjustType.value = val
 }
 // 刷新委案数据
-const handleChange = () => {
+const handleChange = async () => {
   let params = {
     adjustType: adjustType.value,
     adjustNum: adjustNum.value,
-    taskId: props.taskId
+    taskId: state.lastData.taskId
   }
   console.log('刷新委案数据参数：', params)
   // 请求得到数据
-  // const { code, data, msg } = await updateCaseEntrust(params)
-  // if(code !== 200){
-  //   return ElMessage.error(msg)
-  // }
-  state.lastData.orgInfo = JSON.parse('{"totalAmount":1,"orgName":"公司名称T79","caseNum":1,"personNum":1,"orgId":101}')
+  const { data } = await Apis.caseAllotRefresh(params)
+  state.lastData.orgInfo = JSON.parse(data.orgInfo)
+  // state.lastData.orgInfo = JSON.parse('{"totalAmount":2308,"orgName":"公司名称T79","caseNum":2,"personNum":4,"orgId":101}')
 }
 // 确认委派
-const submitForm = () => {
+const submitForm = async () => {
   const params = {
     adjustType: adjustType.value,
     adjustNum: adjustNum.value,
     remark: remark.value,
-    taskId: props.taskId
+    taskId: state.lastData.taskId
   }
   console.log(params)
   // 请求
-  // await caseEntrustSave(params)
+  await Apis.caseEntrustSave(params)
   ElMessage.success('委派成功！')
   emits('toggleSelection')
   emits('getTableData')
@@ -302,35 +276,27 @@ const submitForm = () => {
 // 取消
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
+  state.orgList = []
+  categoryId.value = null
   dialogVisible.value = false
 }
-const radioChange = val => {
-  emits('fetchTimingSearch', val)
+const changeCategory = async val => {
+  console.log(val)
+  if (val) {
+    const params = {
+      categoryId: val,
+      tenantId: tenantId.value
+    }
+    const { data } = await Apis.relationOrgList(params)
+    state.orgList = data
+  }else{
+    form.orgId = null
+    state.orgList = []
+  }
 }
 </script>
   
 <style lang="scss" scoped>
-// .allTab {
-//   height: 40px;
-//   margin-bottom: 40px;
-//   .tab {
-//     width: 33%;
-//     height: 40px;
-//     border-radius: 2px;
-//     padding: 5px;
-//     justify-content: flex-start;
-//     .icon {
-//       font-size: 35px;
-//       margin-right: 4px;
-//     }
-//     .title {
-//       color: #cccccc;
-//     }
-//     .money {
-//       font-weight: 500;
-//     }
-//   }
-// }
 .item-title {
   font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
   font-weight: 700;

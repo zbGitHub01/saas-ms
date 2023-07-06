@@ -3,7 +3,7 @@
     <div class="left">
       <div class="flx-justify-between">
         <div>委案类型</div>
-        <el-button type="primary" plain icon="Plus" @click="addOrEditCase(undefined, 1)">添加委案类型</el-button>
+        <el-button type="primary" plain icon="Plus" @click="addOrEditCase(undefined, 1)" v-auth="'CASE_TYPE_CONFIGURATION_ADD'">添加委案类型</el-button>
       </div>
       <el-divider></el-divider>
       <el-table :data="state.tableDataCase" border>
@@ -20,7 +20,7 @@
         <el-table-column label="案件等级" prop="caseLevelText" align="center" min-width="150"></el-table-column>
         <el-table-column label="操作" width="140" align="center" fixed="right">
           <template #default="scope">
-            <el-button link type="primary" @click="addOrEditCase(scope.row, 2)">编辑</el-button>
+            <el-button link type="primary" @click="addOrEditCase(scope.row, 2)" v-auth="'CASE_TYPE_CONFIGURATION_EDIT'">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>

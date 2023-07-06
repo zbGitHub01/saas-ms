@@ -23,11 +23,6 @@ const props = defineProps({
     type: Boolean,
     default: true
   }
-  // // items占比
-  // itemsPer: {
-  //   type: String,
-  //   default: '19%'
-  // }
 })
 
 const { isSpaceAround, isBkgColor } = toRefs(props)

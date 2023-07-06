@@ -8,30 +8,7 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <!-- <div class="flx-justify-between allTab">
-        <div class="flx-justify-between tab">
-          <el-icon class="icon"><Memo /></el-icon>
-          <div>
-            <div class="title">选中案件数</div>
-            <div class="money">{{ props.caseInfo.caseNum }}</div>
-          </div>
-        </div>
-        <div class="flx-justify-between tab">
-          <el-icon class="icon"><UserFilled /></el-icon>
-          <div>
-            <div class="title">选中案件人数</div>
-            <div class="money">{{ props.caseInfo.personNum }}</div>
-          </div>
-        </div>
-        <div class="flx-justify-between tab">
-          <el-icon class="icon"><Money /></el-icon>
-          <div>
-            <div class="title">预计操作金额</div>
-            <div class="money">{{ props.caseInfo.totalAmount }}</div>
-          </div>
-        </div>
-      </div> -->
-      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
+      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false" />
       <el-form ref="ruleFormRef" class="backform" label-position="top" label-width="90px">
         <el-form-item label="操作维度">
           <el-radio-group v-model="isWithProductPublicDebt" @change="radioChange">
@@ -59,7 +36,7 @@
             <el-radio :label="1">强制收回</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="留案分期还款计划关联案件" class="radio">
+        <!-- <el-form-item label="留案分期还款计划关联案件" class="radio">
           <el-radio-group v-model="retainStagingPlan">
             <el-radio :label="0">不收回留案分期还款案件</el-radio>
             <el-radio :label="1">只收回未签署协议的分期还款案件</el-radio>
@@ -78,7 +55,7 @@
             <el-radio :label="0">不收回关联案件</el-radio>
             <el-radio :label="1">强制收回关联案件</el-radio>
           </el-radio-group>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
     </span>
     <template #footer>
@@ -93,11 +70,12 @@
 <script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
+import Apis from '@/api/modules/caseManage'
 const isWithProductPublicDebt = ref(1)
 const isRecoverRetain = ref(0)
-const stagingPlan = ref(0)
-const retainStagingPlan = ref(0)
-const radio = ref(0)
+// const stagingPlan = ref(0)
+// const retainStagingPlan = ref(0)
+// const radio = ref(0)
 // 接收props数据
 const props = defineProps({
   caseInfo: {
@@ -125,18 +103,16 @@ const submitForm = () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(
-    () => {
+    async () => {
       const params = {
         isRecoverRetain: isRecoverRetain.value,
         taskId: props.taskId,
-        stagingPlan: stagingPlan.value,
-        retainStagingPlan:
-          retainStagingPlan.value === 0 ? retainStagingPlan.value : parseInt(retainStagingPlan.value) + parseInt(radio.value),
-        recoverType: 2
+        // stagingPlan: stagingPlan.value,
+        // retainStagingPlan: retainStagingPlan.value === 0 ? retainStagingPlan.value : parseInt(retainStagingPlan.value) + parseInt(radio.value),
+        recoverType: 1
       }
-      // 请求
-      // await xx(params)
       console.log(params)
+      await Apis.recoverNowSave(params)
       ElMessage.success('操作成功！')
       emits('getTableData')
       emits('toggleSelection')
@@ -152,9 +128,9 @@ const submitForm = () => {
 const cancelSubmit = () => {
   isRecoverRetain.value = 0
   isWithProductPublicDebt.value = 1
-  stagingPlan.value = 0
-  retainStagingPlan.value = 0
-  radio.value = 0
+  // stagingPlan.value = 0
+  // retainStagingPlan.value = 0
+  // radio.value = 0
   dialogVisible.value = false
 }
 const radioChange = val => {

@@ -1,60 +1,60 @@
 <template>
   <div class="card-wrap">
     <el-tabs class="mb16" v-model="tabActive" @tab-change="handleClick">
-      <el-tab-pane label="当前委托" name="1"></el-tab-pane>
-      <el-tab-pane label="委托历史" name="2"></el-tab-pane>
+      <el-tab-pane v-if="authStore.tabVisible('CURRENT_COMMITS')" label="当前委托" name="CURRENT_COMMITS"></el-tab-pane>
+      <el-tab-pane v-if="authStore.tabVisible('ENTRUST_HISTORY')" label="委托历史" name="ENTRUST_HISTORY"></el-tab-pane>
     </el-tabs>
     <OperationBar>
       <template #default>
-        <el-button type="primary" :icon="Plus" @click="addEntrust" v-if="tabActive === '1'">新增委托</el-button>
+        <el-button type="primary" :icon="Plus" @click="addEntrust" v-if="tabActive === 'CURRENT_COMMITS'" v-auth="'NEW_ENTRUST'">新增委托</el-button>
       </template>
     </OperationBar>
     <div class="mt20">
       <el-table :data="state.tableData" border>
         <el-table-column label="序" type="index" align="center" width="50" />
-        <el-table-column label="产品" prop="productName" align="center" min-width="150"></el-table-column>
-        <el-table-column label="债权方" prop="zhaiquanfang" align="center" min-width="200"></el-table-column>
-        <el-table-column label="委托方" prop="zhaiquanfang" align="center" min-width="200"></el-table-column>
-        <el-table-column label="受托方" prop="shoutuofang" align="center" min-width="200"></el-table-column>
-        <el-table-column label="委托起始时间" prop="startTime" align="center" min-width="200"></el-table-column>
+        <el-table-column label="产品" prop="productName" align="center" min-width="200"></el-table-column>
+        <el-table-column label="债权方" prop="creditorName" align="center" min-width="300"></el-table-column>
+        <el-table-column label="委托方" prop="tenantName" align="center" min-width="300"></el-table-column>
+        <el-table-column label="受托方" prop="trusteeName" align="center" min-width="300"></el-table-column>
+        <el-table-column label="委托起始时间" prop="proxyStartTime" align="center" min-width="200"></el-table-column>
         <el-table-column
           label="协议终止时间"
-          prop="xieyiEndTime"
+          prop="proxyEndTime"
           align="center"
           min-width="200"
-          v-if="tabActive === '2'"
+          v-if="tabActive === 'ENTRUST_HISTORY'"
         ></el-table-column>
         <el-table-column
           label="委托截止时间"
-          prop="endTime"
+          prop="proxyEndTime"
           align="center"
           min-width="200"
-          v-if="tabActive === '1'"
+          v-if="tabActive === 'CURRENT_COMMITS'"
         ></el-table-column>
-        <el-table-column label="委托协议" prop="xieyi" align="center" min-width="150">
+        <el-table-column label="委托协议" prop="proxyAgreement" align="center" min-width="150">
           <template #default="scope">
             <el-button link type="primary" @click="lookAgreement(scope.row)">查看</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="委托创建人" prop="people" align="center" min-width="150"></el-table-column>
+        <el-table-column label="委托创建人" prop="createName" align="center" min-width="150"></el-table-column>
         <el-table-column label="委托创建时间" prop="createTime" align="center" min-width="200"></el-table-column>
         <el-table-column
           label="实际终止时间"
-          prop="realEndTime"
+          prop="actualEndTime"
           align="center"
           min-width="200"
-          v-if="tabActive === '2'"
+          v-if="tabActive === 'ENTRUST_HISTORY'"
         ></el-table-column>
         <el-table-column
           label="终止操作人"
-          prop="endPeople"
+          prop="operatorName"
           align="center"
           min-width="150"
-          v-if="tabActive === '2'"
+          v-if="tabActive === 'ENTRUST_HISTORY'"
         ></el-table-column>
-        <el-table-column label="操作" width="140" align="center" fixed="right" v-if="tabActive === '1'">
+        <el-table-column label="操作" width="140" align="center" fixed="right" v-if="tabActive === 'CURRENT_COMMITS'">
           <template #default="scope">
-            <el-button link type="danger" @click="toStop(scope.row)">终止合作</el-button>
+            <el-button link type="danger" @click="toStop(scope.row)" v-auth="'TERM_IN_COOPER'">终止合作</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -69,13 +69,18 @@ console.log(333)
 import AddEntrustDialog from './components/AddEntrustDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
+import Apis, { proxyStop } from '@/api/modules/caseManage'
+import Apis2 from '@/api/modules/common'
 import { Plus } from '@element-plus/icons-vue'
+import { useAuthStore } from '@/store/modules/auth'
+const authStore = useAuthStore()
+const tabActive = ref(authStore.tabPage.tabActive || '')
 const form = reactive({
-  positionStatus: 1 //1当前委托 2历史委托
+  state: null //null当前委托 4历史委托
 })
 const selectData = reactive({
-  productList: [], //产品列表
-  orgList: [] //机构列表
+  productAndCreList: [], //产品列表
+  trustList: [] //机构列表
 })
 // 页码
 const query = reactive({
@@ -87,86 +92,79 @@ const state = reactive({
   total: 0
 })
 const addEntrustDialog = ref()
-const tabActive = ref('1')
 onMounted(() => {
   getTableData()
   getSelecData()
 })
 const getTableData = async () => {
-  console.log('查询', form)
   // 请求得到数据
-  // const { data } = await xx(form)
-  const tableDataSub = [
-    {
-      productName: '“360”借条',
-      zhaiquanfang: '丽水海树信用管理有限公司',
-      weituofang: '丽水海树信用管理有限公司',
-      shoutuofang: '丽水海树信用管理有限公司',
-      xieyi: '',
-      people: '赵光明',
-      startTime: '2020-03-05 22:22:22',
-      endTime: '2020-03-04 22:22:22',
-      createTime: '2020-03-04 22:22:22',
-      xieyiEndTime: '2020-03-04 22:22:22',
-      realEndTime: '2020-03-04 22:22:22',
-      endPeople: 'zzzz'
-    },
-    {
-      productName: '万达贷',
-      zhaiquanfang: '丽水海树信用管理有限公司',
-      weituofang: '丽水海树信用管理有限公司',
-      shoutuofang: '丽水海树信用管理有限公司',
-      xieyi: '',
-      people: '赵光明',
-      startTime: '2020-03-05 22:22:22',
-      endTime: '永久',
-      createTime: '2020-03-04 22:22:22',
-      xieyiEndTime: '2020-03-04 22:22:22',
-      realEndTime: '2020-03-04 22:22:22',
-      endPeople: 'zzzz'
-    }
-  ]
-  state.tableData = tableDataSub
-  query.page = 1
-  state.total = 12
+  const params = {
+    ...query,
+    ...form
+  }
+  console.log('查询', params)
+  const { data } = await Apis.proxyPage(params)
+  state.tableData = data.data
+  // state.tableData = [
+  //   {
+  //     productName: '“360”借条',
+  //     tenantName: '委托方',
+  //     creditorName: '丽水海树信用管理有限公司',
+  //     weituofang: '丽水海树信用管理有限公司',
+  //     shoutuofang: '丽水海树信用管理有限公司',
+  //     proxyAgreement: '//asfile.donganzichan.cn/bb99ad393bc74e9c83a031f9288bb58b.xlsx',
+  //     createName: '赵光明',
+  //     proxyStartTime: '2020-03-05 22:22:22',
+  //     proxyEndTime: '2020-03-04 22:22:22',
+  //     createTime: '2020-03-04 22:22:22',
+  //     actualEndTime: '2020-03-04 22:22:22',
+  //     operatorName: 'zzzz',
+  //     trusteeName: '受托方',
+  //     proxyId: 1
+  //   },
+  //   {
+  //     productName: '万达贷',
+  //     tenantName: '委托方',
+  //     creditorName: '丽水海树信用管理有限公司',
+  //     weituofang: '丽水海树信用管理有限公司',
+  //     shoutuofang: '丽水海树信用管理有限公司',
+  //     proxyAgreement: '//asfile.donganzichan.cn/bb99ad393bc74e9c83a031f9288bb58b.xlsx',
+  //     createName: '赵光明',
+  //     proxyStartTime: '2020-03-05 22:22:22',
+  //     proxyEndTime: '永久',
+  //     createTime: '2020-03-04 22:22:22',
+  //     actualEndTime: '2020-03-04 22:22:22',
+  //     operatorName: 'zzzz',
+  //     trusteeName: '受托方',
+  //     proxyId: 2
+  //   }
+  // ]
+  state.total = data.total
 }
 const getSelecData = async () => {
   // 请求得到数据
-  // const { data } = await xx(form)
-  selectData.productList = [
-    {
-      id: 1,
-      text: '小花袋'
-    },
-    {
-      id: 2,
-      text: '“360”借条'
-    },
-    {
-      id: 3,
-      text: '中腾信'
-    },
-    {
-      id: 4,
-      text: '万达袋'
-    }
-  ]
-  selectData.orgList = [
-    {
-      id: 1,
-      text: '小丽水海树信用管理有限公司花袋'
-    },
-    {
-      id: 2,
-      text: '浙江东岸科技有限公司'
-    }
-  ]
+  const { data } = await Apis.productList({ isProxy: 0, productStatus: 1 })
+  selectData.productAndCreList = data
+  const { data: data1} = await Apis2.findItemList({ codes: 'NORMAL_TENANT_LIST'})
+  // selectData.trustList = [
+  //   {
+  //     id: 1,
+  //     text: '小丽水海树信用管理有限公司花袋'
+  //   },
+  //   {
+  //     id: 2,
+  //     text: '浙江东岸科技有限公司'
+  //   }
+  // ]
+  selectData.trustList = data1['NORMAL_TENANT_LIST']
 }
 
 // 切换tab
-const handleClick = row => {
+const handleClick = tab => {
   // 整理form参数
-  form.positionStatus = Number(row)
+  tab === '1' ? (form.state = null) : (form.state = 4)
+  query.page = 1
+  query.pageSize = 10
   getTableData()
 }
 
@@ -182,9 +180,9 @@ const toStop = row => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(
-    () => {
+    async () => {
       // 请求
-      // await xx(form)
+      await proxyStop(row.proxyId)
       ElMessage.success('终止合作成功！')
       getTableData()
     },
@@ -194,9 +192,9 @@ const toStop = row => {
     }
   )
 }
-// 查看协议
+// 查看下载协议
 const lookAgreement = row => {
-  window.open(row.url)
+  window.open(row.proxyAgreement)
 }
 </script>
 

@@ -138,7 +138,9 @@ const formItems = ref([])
 //     { value: 15, label: '关闭|特殊原因' },
 //     { value: 12, label: '关闭|已核销' },
 //     { value: 16, label: '关闭|资产已转让' },
-//     { value: 17, label: '关闭|呆账/坏账' }
+//     { value: 17, label: '关闭|呆账/坏账' },
+//     { value: 20, label: '暂停|投诉' },
+//     { value: 25, label: '暂停|特殊原因' }
 //   ],
 //   CPE_LIST: []
 // })
@@ -151,7 +153,9 @@ const options = computed(() => {
       { value: 15, label: '关闭|特殊原因' },
       { value: 12, label: '关闭|已核销' },
       { value: 16, label: '关闭|资产已转让' },
-      { value: 17, label: '关闭|呆账/坏账' }
+      { value: 17, label: '关闭|呆账/坏账' },
+      { value: 20, label: '暂停|投诉' },
+      { value: 25, label: '暂停|特殊原因' }
     ],
     CPE_LIST: []
   }
@@ -257,7 +261,8 @@ onMounted(() => {
 })
 
 defineExpose({
-  getParams
+  getParams,
+  onReset
 })
 </script>
 

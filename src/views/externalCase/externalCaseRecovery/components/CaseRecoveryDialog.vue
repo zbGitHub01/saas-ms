@@ -31,7 +31,7 @@
           </div>
         </div>
       </div> -->
-      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
+      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false"/>
       <el-form ref="ruleFormRef" class="backform" label-position="top" label-width="90px">
         <el-form-item label="案件分库">
           <el-checkbox-group v-model="state.bankList">
@@ -107,7 +107,6 @@ const state = reactive({
   bankSelectList: [], //分库列表
   bankList: [] //选择的分库集合
 })
-// 接收props数据
 const props = defineProps({
   caseInfo: {
     type: Object,

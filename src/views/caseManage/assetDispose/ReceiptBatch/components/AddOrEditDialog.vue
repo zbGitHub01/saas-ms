@@ -9,38 +9,38 @@
   >
     <span>
       <el-form :model="form" :rules="rules" ref="ruleFormRef" label-position="right" label-width="120px">
-        <el-form-item label="批次号：" prop="picihao">
-          <el-input v-model="form.picihao" placeholder="请输入批次号" clearable></el-input>
+        <el-form-item label="批次号：" prop="batchNo">
+          <el-input v-model="form.batchNo" placeholder="请输入批次号" clearable></el-input>
         </el-form-item>
         <el-form-item label="关联产品：" prop="productId">
           <el-select v-model="form.productId" placeholder="请选择关联产品" clearable filterable>
             <el-option
-              v-for="(item, index) in selectData.productList"
+              v-for="(item, index) in selectData.productAndCreList"
               :key="index"
-              :label="item.text"
-              :value="item.id"
+              :label="item.productName"
+              :value="item.productId"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="资产包类型：" prop="packageId">
-          <el-select v-model="form.packageId" placeholder="请选择资产包类型" clearable filterable>
+        <el-form-item label="资产包类型：" prop="packageTypeId">
+          <el-select v-model="form.packageTypeId" placeholder="请选择资产包类型" clearable filterable>
             <el-option
               v-for="(item, index) in selectData.packageList"
               :key="index"
-              :label="item.text"
-              :value="item.id"
+              :label="item.packageTypeName"
+              :value="item.packageTypeId"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="购入日期：" prop="date">
-          <el-date-picker v-model="form.date" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD" />
+        <el-form-item label="购入日期：" prop="buyTime">
+          <el-date-picker v-model="form.buyTime" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD" />
         </el-form-item>
-        <el-form-item label="交割日期：" prop="date2">
-          <el-date-picker v-model="form.date2" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD" />
+        <el-form-item label="交割日期：" prop="deliveryDay">
+          <el-date-picker v-model="form.deliveryDay" type="date" placeholder="请选择购入日期" value-format="YYYY-MM-DD" />
         </el-form-item>
-        <el-form-item label="备注：" prop="note">
+        <el-form-item label="备注：" prop="remark">
           <el-input
-            v-model="form.note"
+            v-model="form.remark"
             placeholder="请输入备注"
             clearable
             style="width: 300px"
@@ -62,22 +62,18 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 import { reactive, ref } from 'vue'
+import Apis from '@/api/modules/caseManage'
 const form = reactive({
   productId: null,
-  picihao: '',
-  date: '',
-  date2: '',
-  packageId: null,
-  note: ''
+  batchNo: '',
+  batchId: null,
+  buyTime: '',
+  deliveryDay: '',
+  packageTypeId: null,
+  remark: ''
 })
+const originFormData = JSON.parse(JSON.stringify(form))
 const title = ref('')
-// 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     productList: any[]
-//     packageList: any[]
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,
@@ -87,25 +83,28 @@ const props = defineProps({
 // 校验规则
 const ruleFormRef = ref()
 const rules = reactive({
-  picihao: [{ required: true, trigger: 'blur', message: '批次号不能为空' }],
+  batchNo: [{ required: true, trigger: 'blur', message: '批次号不能为空' }],
   productId: [{ required: true, trigger: 'change', message: '关联产品不能为空' }],
-  date: [{ required: true, trigger: 'change', message: '购入日期不能为空' }],
-  date2: [{ required: true, trigger: 'change', message: '交割日期不能为空' }],
-  packageId: [{ required: true, trigger: 'change', message: '资产包类型不能为空' }]
+  buyTime: [{ required: true, trigger: 'change', message: '购入日期不能为空' }],
+  deliveryDay: [{ required: true, trigger: 'change', message: '交割日期不能为空' }],
+  packageTypeId: [{ required: true, trigger: 'change', message: '资产包类型不能为空' }]
 })
 const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
 const open = (row, type) => {
+  Object.assign(form, originFormData)
   if (type === 1) {
     title.value = '添加'
   } else if (type === 2) {
     title.value = '编辑'
     form.productId = row.productId
-    form.date = row.date
-    form.picihao = row.picihao
-    form.packageId = row.packageId
-    form.note = row.note
+    form.buyTime = row.buyTime
+    form.batchNo = row.batchNo
+    form.batchId = row.batchId
+    form.packageTypeId = row.packageTypeId
+    form.remark = row.remark
+    form.deliveryDay = row.deliveryDay
   }
   dialogVisible.value = true
 }
@@ -117,13 +116,16 @@ const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      console.log(form)
       // 请求得到数据
-      // const { data } = await xx(form)
-      ElMessage.success('操作成功！')
+      const params = { ...form }
+      if (title.value === '添加') {
+        await Apis.batchAdd(params)
+      } else if ((title.value = '编辑')) {
+        await Apis.batchEdit(params)
+      }
+      ElMessage.success('保存成功！')
       emits('getTableData')
-      formEl.resetFields()
-      dialogVisible.value = false
+      cancelSubmit()
     }
   })
 }

@@ -36,13 +36,6 @@ import { Plus } from '@element-plus/icons-vue'
 import AddOrEditDialog from './components/AddOrEditDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-// 接收props数据
-// const props = defineProps<{
-//   selectData: {
-//     productList: any[]
-//     packageList: any[]
-//   }
-// }>()
 const props = defineProps({
   selectData: {
     type: Object,

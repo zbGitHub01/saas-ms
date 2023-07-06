@@ -2,24 +2,25 @@
   <div>
     <OperationBar>
       <template #default>
-        <el-button type="primary" icon="Plus" @click="addOrEdit(undefined, 1)">新增</el-button>
+        <el-button type="primary" icon="Plus" @click="addOrEdit(undefined, 1)" v-auth="'ASSET_DISPOSE_CREDITOR_ADD'">新增</el-button>
       </template>
     </OperationBar>
     <div class="mt20">
       <el-table :data="state.tableData" border>
-        <el-table-column label="序" type="index" align="center" width="50" />
-        <el-table-column label="债权方" prop="zhaiquanfang" align="center" min-width="150"></el-table-column>
-        <!-- 校验当租户自建的债权方可编辑删除 -->
-        <el-table-column label="是否启用" prop="isUse" align="center" min-width="150">
+        <el-table-column label="公司ID" prop="tenantId" align="center" min-width="100"></el-table-column>
+        <el-table-column label="公司名称" prop="tenantName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="是否启用" prop="status" align="center" min-width="150">
           <template #default="scope">
-            <el-checkbox v-model="scope.row.isUse" @change="changeCheckbox(scope.row)"></el-checkbox>
+            <el-checkbox v-model="scope.row.status" @change="changeCheckbox(scope.row)"></el-checkbox>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="140" align="center" fixed="right">
           <template #default="scope">
-            <!-- 校验当租户自建的债权方可编辑删除 -->
-            <el-button link type="primary" @click="addOrEdit(scope.row, 2)">编辑</el-button>
-            <el-button link type="danger" @click="toDelete(scope.row)">删除</el-button>
+            <div v-if="scope.row.isEntrustParty === 0">
+              <el-button link type="primary" @click="addOrEdit(scope.row, 2)" v-auth="'ASSET_DISPOSE_CREDITOR_EDIT'">编辑</el-button>
+            <el-button link type="danger" @click="toDelete(scope.row)" v-auth="'ASSET_DISPOSE_CREDITOR_DELETE'">删除</el-button>
+            </div>
+            <div v-if="scope.row.isEntrustParty === 1" style="background-color: #67c23a">委托方</div>
           </template>
         </el-table-column>
       </el-table>
@@ -33,8 +34,11 @@
 import { Plus } from '@element-plus/icons-vue'
 import AddOrEditDialog from './components/AddOrEditDialog.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { reactive, ref, onMounted } from 'vue'
-const form = reactive({})
+import { reactive, ref, onMounted, computed } from 'vue'
+import Apis from '@/api/modules/company'
+import { useGlobalStore } from '@/store/index'
+const globalStore = useGlobalStore()
+const tenantId = computed(() => globalStore.tenantId)
 // 页码
 const query = reactive({
   page: 1,
@@ -50,34 +54,12 @@ onMounted(() => {
 })
 const getTableData = async () => {
   console.log('债权方')
-  // 请求得到数据
-  // const { data } = await xx(form)
-  const tableDataSub = [
-    {
-      zhaiquanfang: '“360”借条',
-      zhaiquanfangId: 1,
-      isUse: true,
-      code: 'code',
-      picture1: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
-      picture2: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
-      picture3: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
-      picture4: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
-      picture5: '//asfile.donganzichan.cn/a24b5577dc284f32b35e6babdfef7aac.jpeg',
-      address: '齐贤镇曙光村',
-      addressSub: [636, 1188, 1218],
-      people: '李思',
-      caseId: '330621111111111111',
-      phone: '11111111111'
-    },
-    {
-      zhaiquanfang: '我来带',
-      zhaiquanfangId: 2,
-      isUse: false
-    }
-  ]
-  state.tableData = tableDataSub
-  query.page = 1
-  state.total = 12
+  const { data } = await Apis.creditorPage({ ...query, tenantId: tenantId.value })
+  state.tableData = data.data
+  state.tableData.forEach(item => {
+    item.status = !!item.status
+  })
+  state.total = data.total
 }
 
 // 新增/编辑
@@ -92,9 +74,8 @@ const toDelete = row => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(
-    () => {
-      // 请求
-      // await xx(params)
+    async () => {
+      await Apis.creditorDelete({ id: row.id })
       ElMessage.success('删除成功！')
       getTableData()
     },
@@ -105,10 +86,16 @@ const toDelete = row => {
   )
 }
 // 是否启用
-const changeCheckbox = row => {
-  console.log(row.isUse)
-  // 请求
-  // await xx(form)
+const changeCheckbox = async row => {
+  const { data } = await Apis.creditorDetail({ id: row.id })
+  const params = { ...data }
+  params.status = Number(row.status)
+  params.relationId = params.id
+  delete params.tenantId
+  delete params.id
+  await Apis.creditorEdit(params)
+  ElMessage.success('操作成功！')
+  getTableData()
 }
 </script>
 

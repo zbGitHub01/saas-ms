@@ -30,19 +30,25 @@
 <script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref } from 'vue'
+import Apis from '@/api/modules/caseManage'
+import Apis1 from '@/api/modules/common'
 const form = reactive({
   followStatusId: null, //处置状态
   isSyncDebt: true //是否同步至同产品共债案件
+})
+const state = reactive({
+  paramsSub: {}
 })
 const ruleFormRef = ref()
 const originFormData = JSON.parse(JSON.stringify(form))
 const selectData = reactive({
   statusList: [] //处置状态列表
 })
-const emits = defineEmits(['submitForm'])
+const emits = defineEmits(['getTableData'])
 // 打开弹窗
 const dialogVisible = ref(false)
-const open = () => {
+const open = paramsSub => {
+  state.paramsSub = { ...paramsSub }
   getSelecData()
   Object.assign(form, originFormData)
   dialogVisible.value = true
@@ -52,12 +58,15 @@ defineExpose({
 })
 
 // 确认
-const submitForm = () => {
+const submitForm = async () => {
   const params = {
     isSyncDebt: form.isSyncDebt === true ? 1 : 0,
-    followStatusId: form.followStatusId
+    followStatusId: form.followStatusId,
+    ...state.paramsSub
   }
-  emits('submitForm', params)
+  await Apis.updateFollowStatus(params)
+  ElMessage.success('修改成功！')
+  emits('getTableData')
   cancelSubmit()
 }
 // 取消
@@ -67,21 +76,8 @@ const cancelSubmit = () => {
 }
 const getSelecData = async () => {
   // 请求得到数据
-  // const { data } = await xx()
-  selectData.statusList = [
-    {
-      itemId: 201,
-      itemText: '后续再跟进'
-    },
-    {
-      itemId: 202,
-      itemText: '初步沟通，后续再跟进'
-    },
-    {
-      itemId: 203,
-      itemText: '约定承诺还款'
-    }
-  ]
+  const { data } = await Apis1.findItemList({ codes: 'DISPOSAL_STATUS'})
+  selectData.statusList = data.DISPOSAL_STATUS
 }
 </script>
   

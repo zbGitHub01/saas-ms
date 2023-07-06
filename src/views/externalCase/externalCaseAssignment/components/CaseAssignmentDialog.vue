@@ -31,7 +31,7 @@
           </div>
         </div>
       </div> -->
-      <LabelClass :labelData="props.timeData" :isSpaceAround="true" :isBkgColor="false" :itemsPer="'30%'" />
+      <LabelClass :labelData="props.timeData" :isSpaceAround="true" :isBkgColor="false"/>
       <el-divider style="margin-top: 40px"></el-divider>
       <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="130px" :rules="rules" v-if="!last">
         <el-form-item label="案件分库：" prop="bank">
@@ -182,17 +182,6 @@ const adjustNum = ref(0)
 const adjustType = ref(1)
 const remark = ref('')
 const last = ref(false)
-// 接收props数据
-// const props = defineProps<{
-//   timeData: any
-//   taskId: any
-//   selectData: {
-//     caseTypeList: any[]
-//     orgList: any[]
-//     defalutType: any
-//     bankList: any[]
-//   }
-// }>()
 const props = defineProps({
   timeData: {
     type: Object,

@@ -76,7 +76,6 @@ const statusMap = Object.freeze(
   ])
 )
 const router = useRouter()
-// 接收props数据
 const props = defineProps({
   row: {
     type: Object,
@@ -129,6 +128,7 @@ const calcStyleClass = key => {
   const classKey = timeClassMap[key]
   map[classKey] = classMap[classMapKey]
 }
+// 点击案件编号，跳转案件详情
 const goDetail = () => {
   if (!props.row.caseId) return
   router.push({

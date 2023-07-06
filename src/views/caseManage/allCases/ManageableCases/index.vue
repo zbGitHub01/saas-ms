@@ -1,95 +1,52 @@
 <template>
   <div>
-    <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" />
+    <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
     <div class="spacing"></div>
-    <!-- <LabelData :labelData="state.labelData" /> -->
-    <LabelClass :labelData="state.labelData" />
+    <LabelClass :labelData="state.CaseStatistics" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
         <template #default>
           <div v-for="(item, index) in operationList" :key="index" class="mr10">
-            <el-button v-if="item.isShow" plain type="primary" :icon="item.icon" @click="handleClick(item.title)">
+            <el-button v-auth="item.code" plain type="primary" :icon="item.icon" @click="handleClick(item.title)">
               {{ item.title }}
             </el-button>
           </div>
         </template>
       </OperationBar>
-      <div class="mb10">
+      <!-- <div class="mb10">
         <span>选中项：{{ state.selectData.length }}</span>
         <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
-      </div>
-      <el-table :data="state.tableData" border @selection-change="handleSelectionChange" ref="multipleTable">
-        <el-table-column type="selection" fixed align="center" width="55"></el-table-column>
-        <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left" :show-overflow-tooltip="true">
+      </div> -->
+      <el-table
+        :data="state.tableData"
+        border
+        @selection-change="handleSelectionChange"
+        ref="multipleTable"
+        :row-key="getRowKeys"
+      >
+        <el-table-column type="selection" fixed align="center" width="55" :reserve-selection="true"></el-table-column>
+        <el-table-column label="案件ID" prop="caseNo" align="center" min-width="150" fixed="left">
           <template #default="scope">
             <status :row="scope.row" pageType="disposalCasemessage" />
           </template>
         </el-table-column>
-        <el-table-column
-          label="产品"
-          prop="productName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="姓名"
-          prop="userName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="证件号"
-          prop="idno"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="手机号"
-          prop="userPhone"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="处置金额"
-          prop="handleAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="还款入账金额"
-          prop="totalRefundAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="减免金额"
-          prop="totalReductionAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="剩余待还金额"
-          prop="residueAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column label="临时标签" prop="tagTempName" align="left" min-width="180" :show-overflow-tooltip="true">
+        <el-table-column label="产品" prop="productName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="姓名" prop="userName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="证件号" prop="idno" align="center" min-width="180"></el-table-column>
+        <el-table-column label="手机号" prop="userPhone" align="center" min-width="150"></el-table-column>
+        <el-table-column label="处置金额" prop="handleAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="还款入账金额" prop="totalRefundAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="减免金额" prop="totalReductionAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="剩余待还金额" prop="residueAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="临时标签" prop="tagTempList" align="left" min-width="180" :show-overflow-tooltip="true">
           <template #default="scope">
             <span v-for="(item, index) in scope.row.tagTempList" :key="index">
               <span>{{ index === scope.row.tagTempList.length - 1 ? item.tagName : item.tagName + ',' }}</span>
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="预警标签" prop="tagAlterName" align="left" min-width="180" :show-overflow-tooltip="true">
+        <el-table-column label="预警标签" prop="tagAlterList" align="left" min-width="180" :show-overflow-tooltip="true">
           <template #default="scope">
             <span v-for="(item, index) in scope.row.tagAlterList" :key="index">
               <span :style="{ color: item.isShare === 1 ? 'red' : '' }">
@@ -102,98 +59,44 @@
           label="IVR标签"
           prop="ivrTag"
           align="center"
-          min-width="150"
+          min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="机器人外呼标签"
           prop="robotTag"
           align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="入库批次号"
-          prop="batchNo"
-          align="center"
-          min-width="250"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="债权方"
-          prop="creditorName"
-          align="center"
           min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
-        <el-table-column
-          label="所属分库"
-          prop="storeName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="分库时间"
-          prop="distTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="处置机构"
-          prop="orgTitle"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="委案时间"
-          prop="entrustTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="委案金额"
-          prop="entrustAmount"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="CPE"
-          prop="cpeName"
-          align="center"
-          min-width="150"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column
-          label="分案时间"
-          prop="allotTime"
-          align="center"
-          min-width="180"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column label="入库批次号" prop="batchNo" align="center" min-width="250"></el-table-column>
+        <el-table-column label="债权方" prop="creditorName" align="center" min-width="200"></el-table-column>
+        <el-table-column label="所属分库" prop="storeName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="分库时间" prop="distTime" align="center" min-width="180"></el-table-column>
+        <el-table-column label="处置机构" prop="orgTitle" align="center" min-width="150"></el-table-column>
+        <el-table-column label="委案时间" prop="entrustTime" align="center" min-width="180"></el-table-column>
+        <el-table-column label="委案金额" prop="entrustAmount" align="center" min-width="150"></el-table-column>
+        <el-table-column label="CPE" prop="cpeName" align="center" min-width="150"></el-table-column>
+        <el-table-column label="分案时间" prop="allotTime" align="center" min-width="180"></el-table-column>
         <el-table-column
           label="特殊原因备注"
           prop="caseStatusRemark"
           align="center"
-          min-width="150"
+          min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           label="法诉状态标签"
           prop="lawsuitStatus"
           align="center"
-          min-width="150"
+          min-width="180"
           :show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column label="案件状态" prop="caseStatusText" align="center" min-width="150" fixed="right"></el-table-column>
       </el-table>
       <pagination :total="state.total" v-model:page="query.page" v-model:page-size="query.pageSize" @pagination="getTableData" />
     </div>
-    <AddOrRemoveTagDialog ref="addOrRemoveTagDialog" @submitForm="submitTagForm" />
+    <TemporaryLabel ref="temporaryLabel" @get-table-data="getTableData" />
     <HandleCaseDialog ref="handleCaseDialog" @submitForm="submitCaseForm" />
     <ExportDialog ref="exportDialog" @submitExport="submitExport" />
   </div>
@@ -204,17 +107,14 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { Close, VideoPause, VideoPlay, CirclePlus, Delete, Download, Document } from '@element-plus/icons-vue'
 import DynamoSearchForm from '@/components/DynamoSearchForm/index.vue'
-import AddOrRemoveTagDialog from './components/AddOrRemoveTagDialog.vue'
 import HandleCaseDialog from './components/HandleCaseDialog.vue'
 import ExportDialog from './components/ExportDialog.vue'
-
+import Apis from '@/api/modules/caseManage'
+import Apis2 from '@/api/modules/common'
+import CaseStatistics from '@/constants/CaseStatistics' //统计数据
 const dynamoSearchFormRef = ref()
 const multipleTable = ref(null)
-const form = reactive({
-  caseId: ''
-})
-const originFormData = JSON.parse(JSON.stringify(form))
-const addOrRemoveTagDialog = ref()
+const temporaryLabel = ref()
 const handleCaseDialog = ref()
 const exportDialog = ref()
 // 页码
@@ -225,7 +125,7 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  labelData: [], //标签数据
+  CaseStatistics: [], //统计数据
   selectData: [], //选中项
   handleparams: {}, //操作的参数
   exportData: {} //导出项参数
@@ -235,59 +135,57 @@ const operationList = reactive([
   {
     title: '关闭案件',
     icon: 'Close',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_close"),
+    code: 'CLOSE_CASE',
   },
   {
     title: '暂停案件',
     icon: 'VideoPause',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_stop"),
+    code: 'SUSPEND_CASE',
   },
   {
     title: '恢复案件',
     icon: 'VideoPlay',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_ref"),
+    code: 'REINSTATE_CASE',
   },
   {
     title: '添加临时标签',
     icon: 'CirclePlus',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_addlabel"),
+    code: 'ADD_TEMPORARY_LABEL',
   },
   {
     title: '删除临时标签',
     icon: 'Delete',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_dellabel"),
+    code: 'DELETE_TEMPORARY_LABEL',
   },
   {
     title: '导出案件',
     icon: 'Download',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_excase"),
+    code: 'EXPORT_CASE',
   },
   {
     title: '导出处置记录',
     icon: 'Download',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_exrecord"),
+    code: 'EXPORT_DISPOSE_RECORD',
   },
   {
     title: '生成结清证明',
     icon: 'Document',
-    isShow: true
-    // isShow: this.hasPerm("disposal_case_qing"),
+    code: 'GENERAL_SETTLEMENT_CERTIFY',
   }
 ])
 onMounted(() => {
   getTableData()
 })
 const getTableData = async () => {
-  console.log('可管理案件搜索', form)
+  console.log('可管理案件搜索')
   // 请求得到数据
-  // const { data } = await xx(form)
+  const params = {
+    ...dynamoSearchFormRef.value.getParams(),
+    ...query,
+    queryType: 'MANAGEABLE' //案件查询类型：MANAGEABLE-可管理案件
+  }
+  const { data } = await Apis.caseList(params)
+  state.tableData = data.data
   state.tableData = [
     {
       allotLogId: 0,
@@ -454,60 +352,12 @@ const getTableData = async () => {
       userPhone: '18435838528'
     }
   ]
-  query.page = 1
-  state.total = 12
-  // 得到label数据
-  state.labelData = [
-    {
-      customizeIcon: 'caselist',
-      eplusIcon: '',
-      labelTitle: '案件数量',
-      isHaveRmbSign: false,
-      value: null, //total
-      key: 'total'
-    },
-    {
-      customizeIcon: 'caselist',
-      eplusIcon: '',
-      labelTitle: '案人人数',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'caseUserCount'
-    },
-    {
-      customizeIcon: 'caselist',
-      eplusIcon: '',
-      labelTitle: '处置金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumHandleAmount'
-    },
-    {
-      customizeIcon: 'caselist',
-      eplusIcon: '',
-      labelTitle: '已还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumRefundAmount'
-    },
-    {
-      customizeIcon: 'caselist',
-      eplusIcon: '',
-      labelTitle: '待还金额',
-      isHaveRmbSign: false,
-      value: null,
-      key: 'sumResidueAmount'
-    }
-  ]
-  const labelData2 = {
-    caseUserCount: 239278,
-    sumHandleAmount: 4889285788.62,
-    sumRefundAmount: 184079143.85,
-    sumResidueAmount: 4711200212.03
-  }
-  state.labelData.forEach(item => {
-    item.value = labelData2[item.key]
+  state.total = data.total
+  const { data: data1 } = await Apis.caseListStats(params)
+  CaseStatistics.forEach(item => {
+    item.value = data1[item.key]
   })
+  state.CaseStatistics = CaseStatistics
 }
 //表格选择
 const handleSelectionChange = val => {
@@ -529,6 +379,10 @@ const toggleSelection = () => {
   multipleTable.value.clearSelection()
   console.log(state.selectData)
 }
+//跨页选择
+const getRowKeys = row => {
+  return row.caseId
+}
 //通过此函数整体过滤事件
 const handleClick = item => {
   if (state.selectData.length === 0 && operation.value === 1) {
@@ -539,7 +393,6 @@ const handleClick = item => {
         handleCase(1)
         break
       case '暂停案件':
-        // this.form.caseStatus = 25;
         handleCase(2)
         break
       case '恢复案件':
@@ -567,22 +420,7 @@ const handleClick = item => {
 }
 // 1添加临时标签/2删除临时标签
 const handleTag = type => {
-  addOrRemoveTagDialog.value.open(type)
-}
-// 确认添加/删除临时标签
-const submitTagForm = (tempTagName, type, isDeleteAllRelationTag) => {
-  // 处理入参
-  let params = getParams()
-  params.tempTagName = tempTagName
-  if (type === 2) {
-    params['isDeleteAllRelationTag'] = isDeleteAllRelationTag === true ? 1 : 0
-  }
-  console.log(params)
-  // 请求得到数据
-  // await xx(form)
-  ElMessage.success('操作成功！')
-  toggleSelection()
-  getTableData()
+  temporaryLabel.value.open(type, getParams())
 }
 // 1关闭案件/2暂停案件/3恢复案件
 const handleCase = type => {
@@ -612,88 +450,19 @@ const submitCaseForm = async paramsSub => {
   Object.assign(params, paramsSub)
   // 发送处理案件接口
   console.log('处理案件：', params)
-  // await xx(params)
+  await Apis.caseStatusUpdate(params)
   ElMessage.success('操作成功！')
   toggleSelection()
   getTableData()
 }
 // 0导出案件/1导出处置记录
 const exportModel = async (code, type) => {
+  const codes = type === 0 ? 'EXPORT_CASE_FIELD' : 'EXPORT_FOLLOW_FIELD'
   let params = {
-    codes: code
+    codes
   }
-  // const { data } = await xx(params)
-  // state.exportData = data[code]
-  state.exportData = {
-    amountTime: {
-      loanPactAmount: '合同金额',
-      loanArrivalAmount: '到账金额',
-      loanBorrRate: '借款费率',
-      loanServeRate: '服务费率',
-      loanPeriod: '借款周期',
-      transBeforeRefundAmount: '转让前已还金额',
-      transAmount: '转让金额',
-      transPrincipal: '转让本金',
-      transFee: '转让利息',
-      loanTime: '借款时间',
-      loanStartTime: '借款起算时间',
-      loanEndTime: '借款到期时间',
-      loanExpireTime: '最后还款日',
-      transTime: '转让日期',
-      creditAmount: '征信金额'
-    },
-    baseInfo: {
-      caseNo: '案件ID',
-      productName: '产品',
-      batchNo: '入库批次号',
-      creditorName: '债权方',
-      loanPactNo: '订单合同号',
-      loanPlatformUserId: '平台用户ID',
-      originCreditor: '原债权公司',
-      userName: '姓名',
-      idno: '证件号',
-      userPhone: '手机号',
-      sosPhone: '紧急联系人',
-      sex: '性别',
-      marital: '婚姻状况',
-      qq: 'QQ',
-      mail: '邮箱',
-      regAddrRange: '户籍区域',
-      regAddr: '户籍地址',
-      homeAddr: '家庭地址',
-      homePhone: '家庭电话',
-      companyName: '单位名称',
-      companyAddr: '单位地址',
-      companyPhone: '单位电话',
-      investorName: '出资方',
-      receiptBank: '收款银行',
-      receiptBankCode: '收款银行卡号',
-      refundBank: '还款银行',
-      refundBankCode: '还款银行卡号',
-      caseStatusRemark: '特殊备注',
-      ethnicity: '民族'
-    },
-    handleRelevant: {
-      storeName: '所属分库',
-      orgTitle: '处置机构',
-      cpeName: 'CPE',
-      handleAmount: '处置金额',
-      totalRefundAmount: '还款入账金额',
-      totalReductionAmount: '减免金额',
-      residueAmount: '剩余待还金额',
-      intermediateCourtName: '中级法院',
-      grassRootCourtName: '基层法院',
-      caseStatusText: '案件状态',
-      entrustTypeText: '委案类型'
-    },
-    followFile: {
-      callRecording: '通话录音',
-      letter: '信函',
-      smsRecord: '短信联系记录',
-      wechatRecord: '微信联系记录',
-      qqRecord: 'QQ联系记录'
-    }
-  }
+  const { data } = await Apis2.findSingleInfo(params)
+  state.exportData = data[codes]
   exportDialog.value.open(state.exportData, type)
 }
 // 确认导出案件/导出处置记录
@@ -701,29 +470,38 @@ const submitExport = async (paramsSub, type) => {
   let params = getParams()
   Object.assign(params, paramsSub)
   //此处做判断是为了判断是否是委外库
-  // 再处理 原代码里的store没传，
+  // 再处理 原代码里的store就没传嘛
   // if (this.store && params.operateType === 2) {
   //   params.caseSearchParam['storeId'] = this.store
   // }
   // 发送处理案件接口
   console.log('导出：', params)
   if (type === 0) {
-    // const { data } = await caseexport(params)
-    // data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
+    const { data } = await Apis.caseExport(params)
+    data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
     console.log(type)
   } else if (type === 1) {
-    // const { data } = await followexport(params)
-
-    // data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
+    const { data } = await Apis.followExport(params)
+    data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
     console.log(type)
   }
-  ElMessage.success('操作成功！')
   toggleSelection()
 }
 //导出下载
 const exportDownload = item => {
-  ElMessage.success('导出成功')
-  // exportMethod(item)
+  ElMessage.success('导出成功！')
+  exportMethod(item)
+}
+const exportMethod = (data, target = '_self') => {
+  if (data === null || data === '') {
+    ElMessage.error('下载链接异常！')
+  } else {
+    let url = data
+    let a = document.createElement('a')
+    a.href = url
+    a.target = target || '_self'
+    a.click()
+  }
 }
 // 生成结清证明
 const certificate = async () => {
@@ -732,12 +510,12 @@ const certificate = async () => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(
-    () => {
+    async () => {
       let params = getParams()
-      console.log('结清证明', params)
-      // await xx(params)
-      toggleSelection()
+      await Apis.generateCertificate(params)
+      ElMessage.success('操作成功！')
       getTableData()
+      toggleSelection()
     },
     res => {
       ElMessage.info('已取消')
@@ -747,7 +525,9 @@ const certificate = async () => {
 // 处理基础入参
 const getParams = () => {
   let params =
-    operation.value === 1 ? Object.assign({}, state.handleparams) : { operateType: 2, caseSearchParam: Object.assign({}, form) }
+    operation.value === 1
+      ? Object.assign({}, state.handleparams)
+      : { operateType: 2, caseSearchParam: Object.assign({}, dynamoSearchFormRef.value.getParams()) }
   return params
 }
 </script>

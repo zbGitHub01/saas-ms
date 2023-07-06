@@ -3,7 +3,7 @@
     <div class="left">
       <div class="flx-justify-between">
         <div>分库名称</div>
-        <el-button type="primary" plain icon="Plus" @click="addOrEditBank(undefined, 1)">添加分库</el-button>
+        <el-button type="primary" plain icon="Plus" @click="addOrEditBank(undefined, 1)" v-auth="'BANK_SET_NAME_ADD'">添加分库</el-button>
       </div>
       <el-divider></el-divider>
       <el-table :data="state.tableDataBank" border>
@@ -19,7 +19,7 @@
         <el-table-column label="分库名称" prop="itemText" align="center" min-width="150"></el-table-column>
         <el-table-column label="操作" min-width="140" align="center">
           <template #default="scope">
-            <el-button link type="primary" @click="addOrEditBank(scope.row, 2)">编辑</el-button>
+            <el-button link type="primary" @click="addOrEditBank(scope.row, 2)" v-auth="'BANK_SET_NAME_EDIT'">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
