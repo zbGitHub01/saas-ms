@@ -19,7 +19,7 @@ const apiConfig = {
     batchInfoList: 'POST /caseCenter/batch/info/batchInfoList', //入库批次详情批量
     productIds: 'POST /caseCenter/batch/info/productIds', //通过产品Ids获取批次ID及批次号
     batchList: 'GET /caseCenter/batch/list', //入库批次下拉
-    
+
     // 资产委托
     proxyPage: 'GET /caseCenter/case/proxy/page', //分页查询
     proxyCreate: 'POST /caseCenter/case/proxy/create', //新增委托
@@ -66,11 +66,14 @@ const apiConfig = {
     // 资产包类型
     packagetypeList: 'GET /caseCenter/packagetype/list', //不分页资产包类型
     // 债权方列表
-    dictCreditorList: 'GET /upms/client/dict/creditor/list', 
+    dictCreditorList: 'GET /upms/client/dict/creditor/list',
     // 获取租户合作机构
-    relationOrgList: 'GET /upms/client/dict/relationOrg/list',  
+    relationOrgList: 'GET /upms/client/dict/relationOrg/list',
     // 获取租户-部门下员工列表
     empolyeeList: 'GET /upms/client/dict/empolyee/list',
+    // 动态搜索表单
+    findFieldList: 'GET /upms/client/user/field/list',
+    saveFieldList: 'POST /upms/client/user/field/save',
 }
 
 // 删除产品名录

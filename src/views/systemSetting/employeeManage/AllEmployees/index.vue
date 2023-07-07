@@ -1,6 +1,6 @@
 <template>
   <div class="mt16">
-    <el-radio-group v-model="isDimission" @change="fetchAllEmployees" class="mb20">
+    <el-radio-group v-model="isDimission" class="mb20" @change="fetchAllEmployees">
       <el-radio :label="0">在职员工</el-radio>
       <el-radio :label="1">离职员工</el-radio>
     </el-radio-group>
