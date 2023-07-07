@@ -30,7 +30,7 @@ const caseRouter = [
         meta: { title: '资产基础配置', icon: '' }
       },
       {
-        path: '/caseManage/casesDetails',
+        path: '/caseManage/casesDetails/casesManageable',
         name: 'casesDetails',
         hidden: true,
         meta: { title: '可管理案件', icon: '' },

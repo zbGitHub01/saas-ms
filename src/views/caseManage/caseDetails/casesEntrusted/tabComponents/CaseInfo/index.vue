@@ -25,8 +25,8 @@ const getCaseInfoData = async () => {
   const { data } = await Api.getCaseInfoList({ caseId: caseInfoStore?.caseId })
   state.caseInfo = data
 }
-const getExtInfoData = async () => {
-  const { data } = await Api.getExtInfo({ caseId: caseInfoStore?.caseId })
+const getExtInfoData = async caseId => {
+  const { data } = await Api.getExtInfo({ caseId: caseId ? caseId : caseInfoStore?.caseId })
   // state.caseInfo = data
 }
 getCaseInfoData()
@@ -40,6 +40,10 @@ const caseType = ref('0')
 
 const handleChange = val => {
   console.log(val)
+}
+
+const tabChange = val => {
+  getExtInfoData(val)
 }
 </script>
 
@@ -94,7 +98,12 @@ const handleChange = val => {
           </el-collapse-item>
           <!--借款/转让信息-->
           <el-collapse-item title="借款/转让信息" name="4">
-            <component :is="componentsObj['LoanTransferInformation']" v-if="isEmpty" :message-data="caseInfo"></component>
+            <component
+              :is="componentsObj['LoanTransferInformation']"
+              v-if="isEmpty"
+              :message-data="caseInfo"
+              @tab-change="tabChange"
+            ></component>
           </el-collapse-item>
         </el-tab-pane>
         <el-tab-pane name="1">
