@@ -8,7 +8,7 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <LabelClass :labelData="props.distInfo" :isSpaceAround="true" :isBkgColor="false" />
+      <LabelClass :labelData="props.labelList" :label-obj="props.labelObjData" :isSpaceAround="true" :isBkgColor="false" />
       <el-divider></el-divider>
       <el-form :model="form" ref="ruleFormRef">
         <el-form-item label="操作维度" prop="isWithProductPublicDebt">
@@ -48,9 +48,13 @@ const form = reactive({
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const props = defineProps({
-  distInfo: {
+  labelList: {
     type: Object,
-    default: () => ({})
+    default: () => ([])
+  },
+  labelObjData: {
+    type: Object,
+    default: ()=>{{}}
   },
   resouerdistList: {
     type: Array,

@@ -8,7 +8,7 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <LabelClass :labelData="props.caseInfo" :isSpaceAround="true" :isBkgColor="false" />
+      <LabelClass :labelData="props.labelList" :label-obj="props.labelObjData" :isSpaceAround="true" :isBkgColor="false" />
       <el-form ref="ruleFormRef" class="backform" label-position="top" label-width="90px">
         <el-form-item label="操作维度">
           <el-radio-group v-model="isWithProductPublicDebt" @change="radioChange">
@@ -78,9 +78,13 @@ const isRecoverRetain = ref(0)
 // const radio = ref(0)
 // 接收props数据
 const props = defineProps({
-  caseInfo: {
+  labelList: {
     type: Object,
-    default: () => ({})
+    default: () => ([])
+  },
+  labelObjData: {
+    type: Object,
+    default: ()=>{{}}
   },
   taskId: {
     type: Number,
@@ -137,27 +141,6 @@ const radioChange = val => {
 </script>
   
 <style lang="scss" scoped>
-// .allTab {
-//   height: 40px;
-//   margin-bottom: 40px;
-//   .tab {
-//     width: 33%;
-//     height: 40px;
-//     border-radius: 2px;
-//     padding: 5px;
-//     justify-content: flex-start;
-//     .icon {
-//       font-size: 35px;
-//       margin-right: 4px;
-//     }
-//     .title {
-//       color: #cccccc;
-//     }
-//     .money {
-//       font-weight: 500;
-//     }
-//   }
-// }
 .warning_warp {
   margin: -12px 0 14px 0;
   padding: 10px;

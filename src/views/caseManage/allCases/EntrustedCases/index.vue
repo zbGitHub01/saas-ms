@@ -2,7 +2,7 @@
   <div>
     <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
     <div class="spacing"></div>
-    <LabelClass :labelData="state.CaseStatistics" />
+    <LabelClass :labelData="state.CaseStatistics" :label-obj="state.labelObjData" />
     <div class="spacing"></div>
     <div class="mt20">
       <el-table :data="state.tableData" border>
@@ -44,7 +44,8 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  CaseStatistics: [] //统计数据
+  CaseStatistics, //统计数据表头
+  labelObjData: {} //统计数据值
 })
 onMounted(() => {
   getTableData()
@@ -93,10 +94,7 @@ const getTableData = async () => {
   // ]
   state.total = data.total
   const { data: data1 } = await Apis.caseListStats(params)
-  CaseStatistics.forEach(item => {
-    item.value = data1[item.key]
-  })
-  state.CaseStatistics = CaseStatistics
+  state.labelObjData = { ...data1, pageTotal: state.total }
 }
 </script>
 

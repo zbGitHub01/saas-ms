@@ -5,7 +5,7 @@ const CaseStatisticsExternal = [
     labelTitle: '案件数量',
     isHaveRmbSign: false,
     value: null,
-    key: 'totalCase'
+    property: 'pageTotal'
   },
   {
     customizeIcon: 'peoplenum',
@@ -13,7 +13,7 @@ const CaseStatisticsExternal = [
     labelTitle: '案人人数',
     isHaveRmbSign: false,
     value: null,
-    key: 'caseUserCount'
+    property: 'caseUserCount'
   },
   {
     customizeIcon: 'moneynum',
@@ -21,23 +21,23 @@ const CaseStatisticsExternal = [
     labelTitle: '处置金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'sumHandleAmount'
+    property: 'sumHandleAmount'
   },
-  // {
-  //   customizeIcon: 'backmoney',
-  //   eplusIcon: '',
-  //   labelTitle: '已还金额',
-  //   isHaveRmbSign: false,
-  //   value: null,
-  //   key: 'sumRefundAmount'
-  // },
-  // {
-  //   customizeIcon: 'moneing',
-  //   eplusIcon: '',
-  //   labelTitle: '待还金额',
-  //   isHaveRmbSign: false,
-  //   value: null,
-  //   key: 'sumResidueAmount'
-  // }
+  {
+    customizeIcon: 'backmoney',
+    eplusIcon: '',
+    labelTitle: '已还金额',
+    isHaveRmbSign: false,
+    value: null,
+    property: 'sumRefundAmount'
+  },
+  {
+    customizeIcon: 'moneing',
+    eplusIcon: '',
+    labelTitle: '待还金额',
+    isHaveRmbSign: false,
+    value: null,
+    property: 'sumResidueAmount'
+  }
 ]
 export default CaseStatisticsExternal

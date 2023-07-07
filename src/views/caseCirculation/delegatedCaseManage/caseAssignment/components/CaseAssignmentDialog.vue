@@ -8,7 +8,13 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <LabelClass v-if="state.labelData" :labelData="state.labelData" :isSpaceAround="true" :isBkgColor="false" />
+      <LabelClass
+        v-if="state.labelObjData && Object.keys(state.labelObjData).length"
+        :labelData="state.CaseLabelData3"
+        :label-obj="state.labelObjData"
+        :isSpaceAround="true"
+        :isBkgColor="false"
+      />
       <el-divider></el-divider>
       <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="150px" :rules="rules" v-if="!last">
         <el-form-item label="案件分库：" prop="storeId">
@@ -165,7 +171,8 @@ const originFormData = JSON.parse(JSON.stringify(form))
 const state = reactive({
   lastData: {},
   paramsSub: {}, //操作项参数
-  labelData: [], //查询统计数据
+  CaseLabelData3, //查询统计数据标头
+  labelObjData: {}, //查询统计数据值
   orgList: [] //机构下拉
 })
 const adjustNum = ref(0)
@@ -216,8 +223,7 @@ const nextStep = formEl => {
       let params = Object.assign({}, form, state.paramsSub)
       // params['batchId'] = props.selectData.defalutType
       const { data } = await Apis.caseEntrustSelect(params)
-      state.lastData = data
-      // state.lastData = {
+      // const data = {
       //   adjustNum: 2,
       //   adjustType: 1,
       //   orgInfo: '{"totalAmount":2309,"orgName":"公司名称T79","caseNum":2,"personNum":4,"orgId":101}',
@@ -226,10 +232,8 @@ const nextStep = formEl => {
       //   totalAmount: 32342,
       //   taskId: 2309
       // }
-      CaseLabelData3.forEach(item => {
-        item.value = state.lastData[item.key]
-      })
-      state.labelData = CaseLabelData3
+      state.lastData = { ...data }
+      state.labelObjData = { ...data }
       state.lastData.orgInfo = JSON.parse(state.lastData.orgInfo)
       adjustType.value = state.lastData.adjustType
       adjustNum.value = state.lastData.adjustNum
