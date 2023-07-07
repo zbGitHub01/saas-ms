@@ -2,7 +2,7 @@
   <div>
     <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
     <div class="spacing"></div>
-    <LabelClass :labelData="state.CaseStatisticsEntrust" />
+    <LabelClass :labelData="state.CaseStatisticsEntrust" :label-obj="state.labelObjData" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -132,7 +132,8 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  CaseStatisticsEntrust: [], //统计数据
+  CaseStatisticsEntrust, //统计数据表头
+  labelObjData: {}, //统计数据值
   selectData: [], //选中项
   handleparams: {
     caseIdList: [],
@@ -390,10 +391,7 @@ const getTableData = async paramsSub => {
   // ]
   state.total = data.total
   const { data: data1 } = await Apis.caseListStats(params)
-  CaseStatisticsEntrust.forEach(item => {
-    item.value = data1[item.key]
-  })
-  state.CaseStatisticsEntrust = CaseStatisticsEntrust
+  state.labelObjData = { ...data1, pageTotal: state.total }
 }
 //表格选择
 const handleSelectionChange = val => {
@@ -493,7 +491,7 @@ const exportModel = async code => {
   state.exportData = {
     baseInfo: {
       caseNo: '案件ID',
-      loanPactNo: '订单合同号',
+      loanPactNo: '订单合同号'
     }
   }
   exportDialog.value.open(state.exportData)

@@ -5,7 +5,7 @@ const CaseLabelData3 = [
     labelTitle: '操作案件数',
     isHaveRmbSign: false,
     value: null,
-    key: 'caseNum'
+    property: 'caseNum'
   },
   {
     customizeIcon: 'peoplenum',
@@ -13,7 +13,7 @@ const CaseLabelData3 = [
     labelTitle: '操作案人数',
     isHaveRmbSign: false,
     value: null,
-    key: 'personNum'
+    property: 'personNum'
   },
   {
     customizeIcon: 'moneynum',
@@ -21,7 +21,7 @@ const CaseLabelData3 = [
     labelTitle: '操作金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'totalAmount'
+    property: 'totalAmount'
   }
 ]
 export default CaseLabelData3

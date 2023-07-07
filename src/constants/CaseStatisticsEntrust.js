@@ -5,7 +5,7 @@ const CaseStatisticsEntrust = [
     labelTitle: '案件数量',
     isHaveRmbSign: false,
     value: null,
-    key: 'totalCase'
+    property: 'pageTotal'
   },
   {
     customizeIcon: 'peoplenum',
@@ -13,7 +13,7 @@ const CaseStatisticsEntrust = [
     labelTitle: '案人人数',
     isHaveRmbSign: false,
     value: null,
-    key: 'caseUserCount'
+    property: 'caseUserCount'
   },
   {
     customizeIcon: 'moneynum',
@@ -21,7 +21,7 @@ const CaseStatisticsEntrust = [
     labelTitle: '委案金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'sumEntrustAmount'
+    property: 'sumEntrustAmount'
   },
   {
     customizeIcon: 'backmoney',
@@ -29,7 +29,7 @@ const CaseStatisticsEntrust = [
     labelTitle: '已还金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'sumEntrustRefundAmount'
+    property: 'sumRefundAmount'
   },
   {
     customizeIcon: 'moneing',
@@ -37,7 +37,7 @@ const CaseStatisticsEntrust = [
     labelTitle: '待还金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'sumEntrustResidueAmount'
+    property: 'sumResidueAmount'
   }
 ]
 export default CaseStatisticsEntrust
