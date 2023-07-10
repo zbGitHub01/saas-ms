@@ -144,7 +144,11 @@ const uploadSubmit = () => {
   uploadRef.value.submit()
 }
 
-defineExpose({ uploadSubmit })
+const clearFiles = () => {
+  uploadRef.value.clearFiles()
+}
+
+defineExpose({ uploadSubmit, clearFiles })
 </script>
 
 <style lang="scss" scoped>

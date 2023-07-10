@@ -61,6 +61,7 @@ const submitForm = async () => {
 // 取消
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
+  uploadFileRef.value.clearFiles()
   dialogVisible.value = false
 }
 </script>

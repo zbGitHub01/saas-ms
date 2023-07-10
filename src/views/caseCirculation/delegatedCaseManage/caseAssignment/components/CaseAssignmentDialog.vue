@@ -34,7 +34,7 @@
             <el-radio :label="3">库内剩余共债</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="目标机构：" prop="orgId">
+        <el-form-item label="目标机构：" prop="orgId" class="form-item__inline">
           <el-select clearable v-model="categoryId" filterable placeholder="机构分类" @change="changeCategory">
             <el-option v-for="item in selectData.categoryData" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
@@ -334,6 +334,15 @@ const changeCategory = async val => {
   margin: 20px 0;
   label {
     width: 50px;
+  }
+}
+:deep(.form-item__inline) {
+  .el-form-item__content {
+    gap: 4px;
+    display: flex;
+    .el-input {
+      width: 150px;
+    }
   }
 }
 </style>

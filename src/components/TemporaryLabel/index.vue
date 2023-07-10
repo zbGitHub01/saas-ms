@@ -113,6 +113,8 @@ const submitForm = formEl => {
 // 取消
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
+  uploadFileRef.value.clearFiles()
+  fileList.value = []
   dialogVisible.value = false
 }
 const getSelecData = async () => {
