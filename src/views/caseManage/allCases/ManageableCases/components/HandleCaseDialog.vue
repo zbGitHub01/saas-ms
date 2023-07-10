@@ -184,7 +184,7 @@ const submitForm = formEl => {
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
   form.pauseUrl = []
-  uploadFileRef.value.clearFiles()
+  uploadFileRef.value?.clearFiles()
   dialogVisible.value = false
 }
 const getSelecData = async () => {

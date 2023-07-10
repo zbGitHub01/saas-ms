@@ -64,7 +64,7 @@ const submitForm = () => {
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
   fileList.value = []
-  uploadFileRef.value.clearFiles()
+  uploadFileRef.value?.clearFiles()
   dialogVisible.value = false
 }
 </script>

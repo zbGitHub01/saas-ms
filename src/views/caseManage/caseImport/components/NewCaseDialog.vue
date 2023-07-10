@@ -171,7 +171,7 @@ const submitForm = formEl => {
 // 取消
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
-  uploadFileRef.value.clearFiles()
+  uploadFileRef.value?.clearFiles()
   uploadFileRefSub.value.clearFiles()
   dialogVisible.value = false
   time.value = ''

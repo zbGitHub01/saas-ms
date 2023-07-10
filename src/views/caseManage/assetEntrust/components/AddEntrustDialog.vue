@@ -163,7 +163,7 @@ const changeProduct = productId => {
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
   time.value = ''
-  uploadFileRef.value.clearFiles()
+  uploadFileRef.value?.clearFiles()
   dialogVisible.value = false
 }
 const disabledDate = time => {
