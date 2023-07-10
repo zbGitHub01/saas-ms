@@ -74,7 +74,6 @@ const formFieldsList = computed(() => {
     if (item.prop === 'entrustFileUrl') {
       item.headers = { Authorization: globalState.token }
       item.action = import.meta.env.VITE_BASE_URL + 'upms/client/sys-file/upload'
-      console.log(item.action)
     }
   })
   return dialogFormFieldsList
@@ -156,6 +155,7 @@ const handleDel = (index, row) => {
     ElMessage({ message: '请选择操作对象.', type: 'warning' })
     return
   }
+  state.entrustIds = state.currSelectArr.map(item => item.entrustId)
   ElMessageBox.confirm('确认删除委案方案?', '注意', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
@@ -212,12 +212,15 @@ const fileListSave = file => {
   fileList.value = file
 }
 //保存编辑及新增
-const handleSubmit = async (data, form1) => {
+const handleSubmit = async (obj, form1) => {
   // delete data['categoryCompany']
-  data['entrustFileUrl'] = fileList.value[0]?.url
+  // data['entrustFileUrl'] = fileList.value[0]?.url
+  const data = {
+    ...obj,
+    entrustFileUrl: fileList.value[0]?.url
+  }
   try {
-    const datas = await Api.entrustSave(data)
-    console.log(datas)
+    await Api.entrustSave(data)
     form1.resetFields()
     state.dialogVisible = false
     getEntrustList()

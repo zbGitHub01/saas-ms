@@ -51,7 +51,7 @@ const props = defineProps({
   //自定义upload事件
   httpRequest: {
     type: Function,
-    default: null
+    default: undefined
   },
   //form校验规则
   rules: {
@@ -61,7 +61,7 @@ const props = defineProps({
 })
 const instance = getCurrentInstance()?.proxy
 
-const { ruleForm, rules } = toRefs(props)
+const { ruleForm, rules, dialogFormVisible } = toRefs(props)
 
 let state = reactive({
   form: instance?.$deepCopy(ruleForm.value, true)
@@ -183,7 +183,7 @@ const resetFunc = formEl => {
 <template>
   <el-dialog
     :width="props.width"
-    :model-value="props.dialogFormVisible"
+    :model-value="dialogFormVisible"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :title="props.title"

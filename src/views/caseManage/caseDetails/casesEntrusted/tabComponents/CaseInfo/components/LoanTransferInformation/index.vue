@@ -1,5 +1,5 @@
 <script setup>
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, onMounted } from 'vue'
 import PayInfo from './component/PayInfo.vue'
 
 const props = defineProps({
@@ -9,9 +9,9 @@ const props = defineProps({
   }
 })
 
-const { messageData } = toRefs(props)
+const emit = defineEmits(['tabChange'])
 
-console.log(messageData)
+const { messageData } = toRefs(props)
 
 /* state.messageData.caseTransferInfoVOList = [
   {
@@ -84,22 +84,22 @@ console.log(messageData)
   }
 ] */
 
-const tabActive = ref(0)
+const tabActive = ref('')
+
+onMounted(() => {
+  if (Object.keys(messageData.value).length < 1) return
+  tabActive.value = messageData.value.debtCaseIdNoList[0]['caseId']
+})
 
 const tabClick = () => {
-  console.log(tabActive.value)
+  emit('tabChange', tabActive.value)
 }
 </script>
 
 <template>
   <div>
     <el-tabs v-model="tabActive" class="mb20" @tab-click="tabClick">
-      <el-tab-pane
-        v-for="(item, index) in messageData.caseTransferInfoVOList"
-        :key="index"
-        :label="index === 0 ? '当前案件' : `共债案件${index}`"
-        :name="index"
-      >
+      <el-tab-pane v-for="item in messageData.debtCaseIdNoList" :key="item.caseId" :label="item.caseNo" :name="item.caseId">
         <PayInfo ref="payInfo" :message-data="item" :active-name="item.loanIsPeriod" @get-detail="getDetail" />
       </el-tab-pane>
     </el-tabs>
