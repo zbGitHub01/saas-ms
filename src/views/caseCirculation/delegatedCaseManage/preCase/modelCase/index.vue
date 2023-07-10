@@ -212,6 +212,7 @@ const handleDel = (index, row) => {
     ElMessage({ message: '请选择操作对象.', type: 'warning' })
     return
   }
+  state.entrustIds = state.currSelectArr.map(item => item.entrustId)
   ElMessageBox.confirm('确认删除委案方案?', '注意', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',

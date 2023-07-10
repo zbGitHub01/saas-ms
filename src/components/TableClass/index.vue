@@ -56,7 +56,7 @@ export default {
     //列合并方法
     spanMethod: {
       type: Function,
-      default: null
+      default: undefined
     },
     //单元格style样式方法
     cellStyle: {
@@ -75,7 +75,7 @@ export default {
     //自定义合计方法
     summaryMethod: {
       type: Function,
-      default: null
+      default: undefined
     },
     //是否有纵向边框
     border: {
