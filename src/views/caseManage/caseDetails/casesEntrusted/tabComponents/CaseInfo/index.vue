@@ -10,6 +10,7 @@ const caseInfoStore = useCaseStore()
 
 const state = reactive({
   caseInfo: {},
+  caseExtInfo: {},
   principalSettlementInfo: {
     buttonStatus: 0,
     diffAmount: 0
@@ -27,7 +28,8 @@ const getCaseInfoData = async () => {
 }
 const getExtInfoData = async caseId => {
   const { data } = await Api.getExtInfo({ caseId: caseId ? caseId : caseInfoStore?.caseId })
-  // state.caseInfo = data
+  state.caseExtInfo = data
+  console.log(state.caseExtInfo)
 }
 getCaseInfoData()
 getExtInfoData()
@@ -102,6 +104,7 @@ const tabChange = val => {
               :is="componentsObj['LoanTransferInformation']"
               v-if="isEmpty"
               :message-data="caseInfo"
+              :case-ext-info="state.caseExtInfo"
               @tab-change="tabChange"
             ></component>
           </el-collapse-item>

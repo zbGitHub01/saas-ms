@@ -87,12 +87,12 @@ export default [
     prop: 'loanBorrRate'
   },
   {
-    label: '借款周期',
-    prop: 'loanPeriod'
-  },
-  {
     label: '服务费率',
     prop: 'loanServeRate'
+  },
+  {
+    label: '转让前已还金额',
+    prop: 'transBeforeRefundAmount'
   },
   {
     label: '转让前已还金额',
@@ -123,7 +123,7 @@ export default [
     prop: 'transOther'
   },
   {
-    label: '转让后LPR利息',
+    label: '转让后LPR',
     prop: 'transAfterLprFee'
   },
   {

@@ -39,7 +39,7 @@ const state = reactive({
     modelArr: [
       {
         modelName: '测试模型',
-        modelId: 123124
+        modelId: 1
       }
     ],
     productArr: [
@@ -277,6 +277,7 @@ const handleSubmit = async (data, form1) => {
     })
     data.modelArr = newModelArr
   }
+  console.log(data)
   // 重组备用模型对象
   if (data.modelArr.length > 0) {
     const newModelArr = []
