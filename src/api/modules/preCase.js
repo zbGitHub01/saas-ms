@@ -11,6 +11,7 @@ const apiConfig = {
   entrustSave: 'POST /caseCenter/case/entrust/caseImportEntrustSave', //导入委案保存
   proEntrustSave: 'POST /caseCenter/case/entrust/casePreEntrustSave', //产品委案保存
   entrustListInfo: 'GET /caseCenter/case/entrust/entrustPlanDetail', //委案列表详情
+  getImportExcelPath: 'GET /caseCenter/caseImport/importExcelPath', //获取各类模板url
   casePreEntrustCfg: 'POST /caseCenter/case/entrust/casePreEntrustCfg', //产品委案配置保存
   caseModelEntrustCfg: 'POST /caseCenter/case/entrust/caseModelEntrustCfg', //模型委案配置保存
   caseModelEntrustSave: 'POST /caseCenter/case/entrust/caseModelEntrustSave' //模型委案保存

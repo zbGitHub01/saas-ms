@@ -229,8 +229,9 @@ const handleSubmit = async (obj, form1) => {
   }
 }
 
-const handleClick = () => {
-  console.log(111)
+const handleClick = async () => {
+  const { data } = await Api.getImportExcelPath()
+  window.open(data?.customEntrustTemplateUrl)
 }
 </script>
 

@@ -6,12 +6,16 @@ const props = defineProps({
   messageData: {
     type: Object,
     default: () => {}
+  },
+  caseExtInfo: {
+    type: Object,
+    default: () => {}
   }
 })
 
 const emit = defineEmits(['tabChange'])
 
-const { messageData } = toRefs(props)
+const { messageData, caseExtInfo } = toRefs(props)
 
 /* state.messageData.caseTransferInfoVOList = [
   {
@@ -100,7 +104,7 @@ const tabClick = () => {
   <div>
     <el-tabs v-model="tabActive" class="mb20" @tab-click="tabClick">
       <el-tab-pane v-for="item in messageData.debtCaseIdNoList" :key="item.caseId" :label="item.caseNo" :name="item.caseId">
-        <PayInfo ref="payInfo" :message-data="item" :active-name="item.loanIsPeriod" @get-detail="getDetail" />
+        <PayInfo ref="payInfo" :message-data="caseExtInfo" :active-name="messageData.loanIsPeriod" @get-detail="getDetail" />
       </el-tab-pane>
     </el-tabs>
   </div>
