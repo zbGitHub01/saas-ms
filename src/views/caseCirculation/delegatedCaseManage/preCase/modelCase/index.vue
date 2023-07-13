@@ -173,7 +173,7 @@ const handleBatchPub = () => {
 const handlePub = (index, row) => {
   tipDialogVisible.value = true
   state.entrustIds = [row.entrustId]
-  console.log(index, row)
+  // console.log(index, row)
 }
 
 const handleAdd = () => {
@@ -263,7 +263,7 @@ const handleEdit = (index, row) => {
   }
   //处理文件回显
   state.dialogRuleForm = deepCopy(rowObj, true)
-  console.log(state.dialogRuleForm)
+  // console.log(state.dialogRuleForm)
   state.dialogVisible = true
 }
 const handleSubmit = async (data, form1) => {
@@ -277,7 +277,6 @@ const handleSubmit = async (data, form1) => {
     })
     data.modelArr = newModelArr
   }
-  console.log(data)
   // 重组备用模型对象
   if (data.modelArr.length > 0) {
     const newModelArr = []

@@ -135,7 +135,7 @@ const tabChange = val => {
 }
 .tabs {
   margin-top: 24px;
-  ::v-deep .el-tabs__nav-wrap::after {
+  :deep(.el-tabs__nav-wrap::after) {
     content: none;
   }
   .strong {

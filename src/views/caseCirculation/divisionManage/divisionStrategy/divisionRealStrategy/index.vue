@@ -167,7 +167,7 @@ const handleDownload = async () => {
     ...formClass.value.getEntity()
   }
   //下载文件流
-  downArrayBufferFile('post', '/api/caseCenter/case/allot/strategy/export', data)
+  downArrayBufferFile('post', '/caseCenter/case/allot/strategy/export', data)
 }
 
 //自动分配金额

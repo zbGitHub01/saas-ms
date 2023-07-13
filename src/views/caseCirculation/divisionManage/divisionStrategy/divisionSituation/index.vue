@@ -33,7 +33,7 @@ const handleBack = () => {
 
 const handleExport = () => {
   //下载文件流
-  downArrayBufferFile('get', `/api/caseCenter/case/allot/stats/export?orgId=${route?.query?.orgId}`)
+  downArrayBufferFile('get', `/caseCenter/case/allot/stats/export?orgId=${route?.query?.orgId}`)
 }
 
 getCPEList()
