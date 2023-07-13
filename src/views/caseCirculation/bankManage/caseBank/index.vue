@@ -5,7 +5,7 @@
     </el-tabs>
     <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
     <div class="spacing"></div>
-    <LabelClass :labelData="state.CaseStatistics" />
+    <LabelClass :labelData="state.CaseStatistics" :label-obj="state.labelObjData" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -78,7 +78,8 @@
     <TemporaryLabel ref="temporaryLabel" @get-table-data="getTableData" />
     <CaseBankDialog
       ref="caseBankDialog"
-      :distInfo="state.distInfo"
+      :labelList="state.CaseLabelData1"
+      :labelObjData="state.labelObjData2"
       :taskId="state.taskId"
       :sourceStoreId="tabActive"
       :resouerdistList="state.tabListSub"
@@ -89,7 +90,8 @@
     <CaseRecoveryDialog
       ref="caseRecoveryDialog"
       :taskId="state.taskId"
-      :caseInfo="state.distInfo"
+      :labelList="state.CaseLabelData2"
+      :labelObjData="state.labelObjData2"
       @get-table-data="getTableData"
       @toggleSelection="toggleSelection"
       @fetchCaseDistSelect="fetchCaseDistSelect"
@@ -123,12 +125,15 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  CaseStatistics: [], //统计数据
+  CaseStatistics, //统计数据标头
+  labelObjData: {}, //统计数据值
   selectData: [], //选中项
   handleparams: {}, //操作的参数
   tabList: [], //分库列表
   tabListSub: [], //剔除目标分库的分库列表
-  distInfo: {}, //委案数据
+  CaseLabelData1, //分库委案数据标头
+  CaseLabelData2, //收回委案数据标头
+  labelObjData2: {}, //委案数据值
   taskId: null //对选中数据操作的唯一标记id
 })
 const operation = ref(1)
@@ -164,7 +169,6 @@ onMounted(() => {
 })
 // 获取表格数据
 const getTableData = async () => {
-  // 请求得到数据
   const params = { ...dynamoSearchFormRef.value.getParams(), ...query, storeId: tabActive.value }
   // 待分配库和已分配库分开的接口
   const { data } = tabActive.value === 1 ? await Apis.waitDistCaseList(params) : await Apis.doneDistCaseList(params)
@@ -339,22 +343,10 @@ const getTableData = async () => {
   // 得到labelData数据
   const { data: data1 } =
     tabActive.value === 1 ? await Apis.waitDistCaseListStats(params) : await Apis.doneDistCaseListStats(params)
-  // const labelData2 = data1
-  // const labelData2 = {
-  //   totalCase: 23,
-  //   caseUserCount: 239278,
-  //   sumHandleAmount: 4889285788.62,
-  //   sumRefundAmount: 184079143.85,
-  //   sumResidueAmount: 4711200212.03
-  // }
-  CaseStatistics.forEach(item => {
-    item.value = data1[item.key]
-  })
-  state.CaseStatistics = CaseStatistics
+  state.labelObjData = { ...data1, pageTotal: state.total }
 }
 // 获取分库数据
 const getTabList = async () => {
-  // 请求得到数据
   const { data } = await Apis2.findItemList({ codes: 'DIST_LIST' })
   state.tabList = data.DIST_LIST
   //去掉待分库配这个选项
@@ -376,13 +368,11 @@ const handleSelectionChange = val => {
     caseIdList: state.selectData,
     operateType: 1
   }
-  console.log(state.selectData, state.handleparams, operation.value)
 }
 //取消选择
 const toggleSelection = () => {
   state.selectData = []
   multipleTable.value.clearSelection()
-  console.log(state.selectData)
 }
 //跨页选择
 const getRowKeys = row => {
@@ -442,24 +432,9 @@ const fetchCaseDistSelect = async (type, isWithProductPublicDebt = true) => {
   if (type === 2) {
     params['recoverType'] = 1
   }
-  console.log('委案数据参数：', params)
-  // 请求得到数据
   const { data } = type === 1 ? await Apis.caseDistSelect(params) : await Apis.recoverNowSelect(params)
   state.taskId = data.taskId
-  // state.taskId = 2323
-  state.distInfo = data
-  // state.distInfo = {
-  //   caseNum: 1,
-  //   personNum: 1,
-  //   taskId: 2313,
-  //   totalAmount: 7266.75
-  // }
-  // 区分分库和收回时的label不一样
-  const labelData = type === 1 ? CaseLabelData1 : CaseLabelData2
-  labelData.forEach(item => {
-    item.value = state.distInfo[item.key]
-  })
-  state.distInfo = labelData
+  state.labelObjData2 = { ...data }
 }
 // 切换分库
 const changTab = () => {

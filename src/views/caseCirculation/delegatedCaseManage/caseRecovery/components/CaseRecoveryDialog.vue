@@ -8,7 +8,7 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <LabelClass :labelData="state.caseInfo" :isSpaceAround="true" :isBkgColor="false" />
+      <LabelClass :labelData="state.CaseLabelData4" :label-obj="state.labelObjData" :isSpaceAround="true" :isBkgColor="false" />
       <el-form ref="ruleFormRef" class="backform" label-position="top" label-width="90px">
         <el-form-item label="案件分库">
           <!-- <el-checkbox-group v-model="state.bankList">
@@ -95,7 +95,8 @@ const storeId = ref()
 const state = reactive({
   bankSelectList: [], //分库列表
   // bankList: [], //选择的分库集合
-  caseInfo: {}, //统计数据
+  CaseLabelData4, ////统计数据标头
+  labelObjData: {}, //统计数据
   paramsSub: {},
   taskId: null
 })
@@ -130,7 +131,6 @@ const submitForm = () => {
         storeId: storeId.value
       }
       await Apis.recoverNowSave(params)
-      console.log(params)
       ElMessage.success('操作成功！')
       emits('getTableData')
       emits('toggleSelection')
@@ -138,7 +138,6 @@ const submitForm = () => {
     },
     res => {
       ElMessage.info('已取消')
-      console.log(res)
     }
   )
 }
@@ -168,21 +167,9 @@ const fetchRecoverNowSelect = async () => {
     storeId: storeId.value,
     recoverType: 2
   }
-  console.log(params)
   const { data } = await Apis.recoverNowSelect(params)
   state.taskId = data.taskId
-  state.caseInfo = data
-  // state.taskId = 1
-  // state.caseInfo = {
-  //   caseNum: 730330,
-  //   personNum: 350085,
-  //   taskId: 2210,
-  //   totalAmount: 1815372575.82
-  // }
-  CaseLabelData4.forEach(item => {
-    item.value = state.caseInfo[item.key]
-  })
-  state.caseInfo = CaseLabelData4
+  state.labelObjData = { ...data }
 }
 </script>
   

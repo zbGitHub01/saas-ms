@@ -1,6 +1,6 @@
 <template>
   <div class="mt16">
-    <el-radio-group v-model="isDimission" @change="fetchAllEmployees" class="mb20">
+    <el-radio-group v-model="isDimission" class="mb20" @change="fetchAllEmployees">
       <el-radio :label="0">在职员工</el-radio>
       <el-radio :label="1">离职员工</el-radio>
     </el-radio-group>
@@ -74,7 +74,7 @@
   </div>
   <InviteEmployeesDialog v-model:dialog-visible="inviteEmployeesShow" />
   <BatchImportDialog v-model:dialog-visible="batchImportVisible" />
-  <EditEmployeeDialog v-model:drawer-visible="editEmployeeVisible" />
+  <EditEmployeeDialog v-model:drawer-visible="editEmployeeVisible" :row="currItem" />
 </template>
 
 <script setup>
@@ -99,6 +99,7 @@ const searchForm = reactive({
 const total = ref(0)
 const page = ref(1)
 const pageSize = ref(10)
+const currItem = ref({})
 
 const onReset = () => {}
 const employeeList = ref([])
@@ -142,7 +143,7 @@ const setDimission = async row => {
   await fetchAllEmployees()
 }
 const editEmployee = row => {
-  console.log(row)
+  currItem.value = row
   editEmployeeVisible.value = true
 }
 fetchAllEmployees()

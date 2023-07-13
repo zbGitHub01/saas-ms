@@ -116,7 +116,6 @@ const submitForm = formEl => {
   if (!formEl) return
   formEl.validate(async valid => {
     if (valid) {
-      // 请求得到数据
       const params = { ...form }
       if (title.value === '添加') {
         await Apis.batchAdd(params)

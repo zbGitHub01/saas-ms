@@ -100,6 +100,7 @@ const self_disabled = computed(() => props.disabled || formContext?.disabled)
 
 const deleteImg = () => {
   emit('update:imageFile', null)
+  emit('check-validate')
 }
 
 const handleHttpUpload = async options => {

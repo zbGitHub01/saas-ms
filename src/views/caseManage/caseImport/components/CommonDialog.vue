@@ -55,15 +55,13 @@ const submitForm = async () => {
     importFileType: importFileType.value,
     importUrl: fileList.value[0].url
   }
-  console.log(params)
-  // 文件手动上传
-  // uploadFileRef.value.uploadSubmit()
   await Apis.caseImport(params)
   cancelSubmit()
 }
 // 取消
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
+  uploadFileRef.value?.clearFiles()
   dialogVisible.value = false
 }
 </script>

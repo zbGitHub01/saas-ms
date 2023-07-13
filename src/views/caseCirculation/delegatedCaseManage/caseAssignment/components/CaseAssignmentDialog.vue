@@ -8,7 +8,13 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <LabelClass v-if="state.labelData" :labelData="state.labelData" :isSpaceAround="true" :isBkgColor="false" />
+      <LabelClass
+        v-if="state.labelObjData && Object.keys(state.labelObjData).length"
+        :labelData="state.CaseLabelData3"
+        :label-obj="state.labelObjData"
+        :isSpaceAround="true"
+        :isBkgColor="false"
+      />
       <el-divider></el-divider>
       <el-form :model="form" ref="ruleFormRef" label-position="right" label-width="150px" :rules="rules" v-if="!last">
         <el-form-item label="案件分库：" prop="storeId">
@@ -28,7 +34,7 @@
             <el-radio :label="3">库内剩余共债</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="目标机构：" prop="orgId">
+        <el-form-item label="目标机构：" prop="orgId" class="form-item__inline">
           <el-select clearable v-model="categoryId" filterable placeholder="机构分类" @change="changeCategory">
             <el-option v-for="item in selectData.categoryData" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
@@ -165,7 +171,8 @@ const originFormData = JSON.parse(JSON.stringify(form))
 const state = reactive({
   lastData: {},
   paramsSub: {}, //操作项参数
-  labelData: [], //查询统计数据
+  CaseLabelData3, //查询统计数据标头
+  labelObjData: {}, //查询统计数据值
   orgList: [] //机构下拉
 })
 const adjustNum = ref(0)
@@ -215,11 +222,8 @@ const nextStep = formEl => {
     if (valid) {
       let params = Object.assign({}, form, state.paramsSub)
       // params['batchId'] = props.selectData.defalutType
-      console.log('下一步参数：', params)
-      // 请求得到数据
       const { data } = await Apis.caseEntrustSelect(params)
-      state.lastData = data
-      // state.lastData = {
+      // const data = {
       //   adjustNum: 2,
       //   adjustType: 1,
       //   orgInfo: '{"totalAmount":2309,"orgName":"公司名称T79","caseNum":2,"personNum":4,"orgId":101}',
@@ -228,10 +232,8 @@ const nextStep = formEl => {
       //   totalAmount: 32342,
       //   taskId: 2309
       // }
-      CaseLabelData3.forEach(item => {
-        item.value = state.lastData[item.key]
-      })
-      state.labelData = CaseLabelData3
+      state.lastData = { ...data }
+      state.labelObjData = { ...data }
       state.lastData.orgInfo = JSON.parse(state.lastData.orgInfo)
       adjustType.value = state.lastData.adjustType
       adjustNum.value = state.lastData.adjustNum
@@ -251,8 +253,6 @@ const handleChange = async () => {
     adjustNum: adjustNum.value,
     taskId: state.lastData.taskId
   }
-  console.log('刷新委案数据参数：', params)
-  // 请求得到数据
   const { data } = await Apis.caseAllotRefresh(params)
   state.lastData.orgInfo = JSON.parse(data.orgInfo)
   // state.lastData.orgInfo = JSON.parse('{"totalAmount":2308,"orgName":"公司名称T79","caseNum":2,"personNum":4,"orgId":101}')
@@ -265,8 +265,6 @@ const submitForm = async () => {
     remark: remark.value,
     taskId: state.lastData.taskId
   }
-  console.log(params)
-  // 请求
   await Apis.caseEntrustSave(params)
   ElMessage.success('委派成功！')
   emits('toggleSelection')
@@ -281,7 +279,6 @@ const cancelSubmit = () => {
   dialogVisible.value = false
 }
 const changeCategory = async val => {
-  console.log(val)
   if (val) {
     const params = {
       categoryId: val,
@@ -289,7 +286,7 @@ const changeCategory = async val => {
     }
     const { data } = await Apis.relationOrgList(params)
     state.orgList = data
-  }else{
+  } else {
     form.orgId = null
     state.orgList = []
   }
@@ -337,6 +334,15 @@ const changeCategory = async val => {
   margin: 20px 0;
   label {
     width: 50px;
+  }
+}
+:deep(.form-item__inline) {
+  .el-form-item__content {
+    gap: 4px;
+    display: flex;
+    .el-input {
+      width: 150px;
+    }
   }
 }
 </style>

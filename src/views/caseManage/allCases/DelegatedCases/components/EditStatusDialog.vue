@@ -75,8 +75,7 @@ const cancelSubmit = () => {
   dialogVisible.value = false
 }
 const getSelecData = async () => {
-  // 请求得到数据
-  const { data } = await Apis1.findItemList({ codes: 'DISPOSAL_STATUS'})
+  const { data } = await Apis1.findItemList({ codes: 'DISPOSAL_STATUS' })
   selectData.statusList = data.DISPOSAL_STATUS
 }
 </script>

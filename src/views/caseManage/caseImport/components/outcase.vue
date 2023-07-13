@@ -35,15 +35,9 @@
 
 <script setup>
 import { reactive, ref, computed } from 'vue'
-// import { useGlobalStore } from '@/store'
 import NewCaseDialog from './NewCaseDialog.vue'
 import CommonDialog from './CommonDialog.vue'
 import LegalDialog from './LegalDialog.vue'
-// const globalState = useGlobalStore()
-// const tokens = reactive({
-//   Authorization: globalState.token
-// })
-// 接收props数据
 const props = defineProps({
   selectData: {
     type: Object,
@@ -58,7 +52,6 @@ const inputdata = reactive([
     title: '新案入库',
     btn: '导入案件',
     type: 101,
-    // select: true, //弹窗内容是否展示其他选项
     downloadUrlKey: 'caseTemplateUrl',
     show: true
     // show: this.hasPerm("base_import_case"),
@@ -67,7 +60,6 @@ const inputdata = reactive([
     title: '更新覆盖案件信息',
     btn: '更新覆盖案件',
     type: 102,
-    // select: false,
     downloadUrlKey: 'caseTemplateUrl',
     tipsList: ['1、案件更新模板同案件导入模板；', '2、导入文档必须保留“案件ID”字段；'],
     show: true
@@ -77,7 +69,6 @@ const inputdata = reactive([
     title: '导入案件评语',
     btn: '导入评语',
     type: 103,
-    // select: false,
     downloadUrlKey: 'wordTemplateUrl',
     show: true
     // show: this.hasPerm('base_import_word'),
@@ -86,7 +77,6 @@ const inputdata = reactive([
   //   title: '导入案件联系人',
   //   btn: '导入联系人',
   //   type: 104,
-  //   select: false,
   //   downloadUrlKey: 'contactTemplateUrl',
   //   show: true
   //   // show: this.hasPerm('base_import_contact'),
@@ -95,7 +85,6 @@ const inputdata = reactive([
   //   title: '导入案件地址',
   //   btn: '导入地址',
   //   type: 105,
-  //   select: false,
   //   downloadUrlKey: 'addressTemplateUrl',
   //   show: true
   //   // show: this.hasPerm('base_import_address'),
@@ -113,7 +102,6 @@ const inputdata = reactive([
     title: '导入捷信还款账户',
     btn: '导入还款账户',
     type: 107,
-    // select: false,
     downloadUrlKey: 'refund4JXTemplateUrl',
     show: true
     // show: this.hasPerm('base_import_account'),
@@ -122,7 +110,6 @@ const inputdata = reactive([
     title: '导入债转通知记录',
     btn: '导入债转通知',
     type: 108,
-    // select: false,
     downloadUrlKey: 'caseNoticeTemplateUrl',
     show: true
     // show: this.hasPerm('mng_case_data_base_import_irodtn'),
@@ -131,7 +118,6 @@ const inputdata = reactive([
     title: '导入自定义字段',
     btn: '导入自定义字段',
     type: 109,
-    // select: false,
     downloadUrlKey: 'customFieldTemplateUrl',
     tipsList: ['1、导入文档必须保留“案件ID”字段；', '2、模板表头自定义字段名称可修改；'],
     show: true
@@ -141,7 +127,6 @@ const inputdata = reactive([
   //   title: '导入车贷特殊关联人',
   //   btn: '导入关联人',
   //   type: 110,
-  //   select: false,
   //   downloadUrlKey: 'specialRelationTemplateUrl',
   //   show: true
   //   // show: this.hasPerm('mng_case_data_base_import_rv'),
@@ -150,7 +135,6 @@ const inputdata = reactive([
     title: '导入法诉状态标签',
     btn: '导入标签',
     type: 111,
-    // select: false,
     downloadUrlKey: 'caseLawsuitStatusTagUrl',
     show: true
     // show: this.hasPerm('mng_case_data_base_import_lst'),
@@ -163,14 +147,6 @@ const inputdateShow = computed(() => {
     }
   })
 })
-
-// watch: {
-//   $route: {
-//     handler: function (route) {
-//       this.redirect = route.query && route.query.redirect;
-//     },
-//     immediate: true,
-//   }
 
 //下载模版
 const importExcelPath = key => {

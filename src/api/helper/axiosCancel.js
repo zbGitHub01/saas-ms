@@ -62,4 +62,4 @@ export class AxiosCanceler {
   }
 }
 // 不需要被cancel的地址
-export const axiosCancelWhiteList = []
+export const axiosCancelWhiteList = ['/upms/client/user/field/list']

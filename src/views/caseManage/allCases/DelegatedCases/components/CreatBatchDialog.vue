@@ -167,6 +167,7 @@ const onDownload = async () => {
 // 取消
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
+  uploadFile.value.clearFiles()
   dialogVisible.value = false
 }
 // 处理数组

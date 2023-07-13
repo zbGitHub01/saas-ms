@@ -2,7 +2,7 @@
   <div class="card-wrap">
     <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
     <div class="spacing"></div>
-    <LabelClass :labelData="state.CaseStatistics" />
+    <LabelClass :labelData="state.CaseStatistics" :label-obj="state.labelObjData" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -99,7 +99,8 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  CaseStatistics: [], //统计数据
+  CaseStatistics, //统计数据标头
+  labelObjData: {}, //统计数据值
   selectedData: [], //选中项
   handleparams: {} //操作的参数
 })
@@ -109,7 +110,7 @@ const operationList = reactive([
   {
     title: '实时委案',
     icon: 'Folder',
-    code: 'CASE_ASSIGNMENT_ASSIGNMENT',
+    code: 'CASE_ASSIGNMENT_ASSIGNMENT'
   }
 ])
 onMounted(() => {
@@ -118,7 +119,6 @@ onMounted(() => {
 })
 const getTableData = async () => {
   const params = { ...dynamoSearchFormRef.value.getParams(), ...query }
-  // 请求得到数据
   const { data } = await Apis.entrustCaseList(params)
   state.tableData = data.data
   // state.tableData = [
@@ -286,52 +286,26 @@ const getTableData = async () => {
   state.total = data.total
   // 得到labelData数据
   const { data: data1 } = await Apis.entrustCaseListStats(params)
-  // const labelData2 = {
-  //   totalCase: 33,
-  //   caseUserCount: 239278,
-  //   sumHandleAmount: 4889285788.62,
-  //   sumRefundAmount: 184079143.85,
-  //   sumResidueAmount: 4711200212.03
-  // }
-  CaseStatistics.forEach(item => {
-    item.value = data1[item.key]
-  })
-  state.CaseStatistics = CaseStatistics
+  state.labelObjData = { ...data1, pageTotal: state.total }
 }
 const getSelecData = async () => {
-  // 请求得到数据
-  let params = {
-    codes: 'IVR_TAG,ROBOT_TAG,PRODUCT_LIST,BATCH_LIST,CREDITOR_LIST,DUTY_ORG_LIST,CASE_BATCH_TYPE,ENTRUST_TYPE',
-    orgCategoryId: 0
-  }
-  // const { code, data, msg } = await selectList(params)
-  // selectData.caseTypeList = data.ENTRUST_TYPE
   // selectData.defalutType = data.batchTypeList.map(item => {
   //   if (item.itemText === '普通批次') {
   //     selectData.defalutType = item.itemId
   //   }
   // })
-  selectData.caseTypeList = [
-    {
-      itemId: 1,
-      itemText: '默认'
-    },
-    {
-      itemId: 2,
-      itemText: '综合案件-温泽（2022年9月）'
-    }
-  ]
+  const { data } = await Apis3.findItemList({ codes: 'ENTRUST_TYPE,DIST_LIST' })
+  selectData.caseTypeList = data.ENTRUST_TYPE
+  selectData.bankList = data.DIST_LIST
   const { data: data2 } = await Apis2.optionList({ codes: 'ORG_CATEGORY' })
   selectData.categoryData = data2?.ORG_CATEGORY ?? []
-  selectData.categoryData = [
-    {
-      id: 1,
-      name: '机构1'
-    }
-  ]
+  // selectData.categoryData = [
+  //   {
+  //     id: 1,
+  //     name: '机构1'
+  //   }
+  // ]
   selectData.defalutType = 92
-  const { data: data3 } = await Apis3.findItemList({ codes: 'DIST_LIST' })
-  selectData.bankList = data3.DIST_LIST
 }
 //表格选择
 const handleSelectionChange = val => {
@@ -345,13 +319,11 @@ const handleSelectionChange = val => {
     caseIdList: state.selectedData,
     operateType: 1
   }
-  console.log(state.selectedData, state.handleparams, operation.value)
 }
 //取消选择
 const toggleSelection = () => {
   state.selectedData = []
   multipleTable.value.clearSelection()
-  console.log(state.selectedData)
 }
 //跨页选择
 const getRowKeys = row => {

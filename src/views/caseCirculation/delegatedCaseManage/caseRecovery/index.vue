@@ -2,7 +2,7 @@
   <div class="card-wrap">
     <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
     <div class="spacing"></div>
-    <LabelClass :labelData="state.CaseStatistics" />
+    <LabelClass :labelData="state.CaseStatistics" :label-obj="state.labelObjData" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -86,7 +86,8 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  CaseStatistics: [], //统计数据
+  CaseStatistics, //统计数据标头
+  labelObjData: {}, //统计数据值
   selectData: [], //选中项
   handleparams: {} //操作的参数
 })
@@ -103,7 +104,6 @@ onMounted(() => {
   getTableData()
 })
 const getTableData = async () => {
-  // 请求得到数据
   const params = { ...dynamoSearchFormRef.value.getParams(), ...query, recoverType: 2 }
   const { data } = await Apis.recoverCaseList(params)
   state.tableData = data.data
@@ -272,17 +272,7 @@ const getTableData = async () => {
   state.total = data.total
   // 得到labelData数据
   const { data: data1 } = await Apis.recoverCaseListStats(params)
-  // const labelData2 = {
-  //   totalCase: 33,
-  //   caseUserCount: 239278,
-  //   sumHandleAmount: 4889285788.62,
-  //   sumRefundAmount: 184079143.85,
-  //   sumResidueAmount: 4711200212.03
-  // }
-  CaseStatistics.forEach(item => {
-    item.value = data1[item.key]
-  })
-  state.CaseStatistics = CaseStatistics
+  state.labelObjData = { ...data1, pageTotal: state.total }
 }
 //表格选择
 const handleSelectionChange = val => {
@@ -301,7 +291,6 @@ const handleSelectionChange = val => {
 const toggleSelection = () => {
   state.selectData = []
   multipleTable.value.clearSelection()
-  console.log(state.selectData)
 }
 //跨页选择
 const getRowKeys = row => {

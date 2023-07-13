@@ -2,7 +2,7 @@
   <div>
     <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
     <div class="spacing"></div>
-    <LabelClass :labelData="state.CaseStatisticsEntrust" />
+    <LabelClass :labelData="state.CaseStatisticsEntrust" :label-obj="state.labelObjData" />
     <div class="spacing"></div>
     <div class="mt20">
       <OperationBar v-model:active="operation">
@@ -27,10 +27,6 @@
           </div>
         </template>
       </OperationBar>
-      <!-- <div class="mb10">
-        <span>选中项：{{ state.selectData.length }}</span>
-        <el-button link type="primary" size="large" @click="toggleSelection" class="ml20">取消</el-button>
-      </div> -->
       <el-table
         :data="state.tableData"
         border
@@ -136,7 +132,8 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  CaseStatisticsEntrust: [], //统计数据
+  CaseStatisticsEntrust, //统计数据表头
+  labelObjData: {}, //统计数据值
   selectData: [], //选中项
   handleparams: {
     caseIdList: [],
@@ -147,14 +144,9 @@ const state = reactive({
 const operation = ref(1)
 const operationList = reactive([
   {
-    title: '导出案件1',
+    title: '导出案件',
     icon: 'Download',
-    code: 'EXPORT_CASE_1'
-  },
-  {
-    title: '导出案件2',
-    icon: 'Download',
-    code: 'EXPORT_CASE_2'
+    code: 'EXPORT_CASE_ENTRUST'
   },
   {
     title: '案件标色',
@@ -222,7 +214,6 @@ onMounted(() => {
 })
 const getTableData = async paramsSub => {
   console.log('可管理案件搜索')
-  // 请求得到数据
   const params = {
     ...dynamoSearchFormRef.value.getParams(),
     ...query,
@@ -232,178 +223,175 @@ const getTableData = async paramsSub => {
   }
   const { data } = await Apis.caseList(params)
   state.tableData = data.data
-  state.tableData = [
-    {
-      allotLogId: 0,
-      allotState: 0,
-      allotTime: '2022-12-02 09:50:43',
-      arbitrationStatus: 1,
-      arbitrationTime: '2023-03-31 14:49:46',
-      batchId: 117,
-      batchNo: '丽水邦恩-邦恩佰仟20201118',
-      caseId: 3,
-      caseNo: 'BE-BQ-0001003',
-      caseStatus: 1,
-      caseStatusChild: 0,
-      caseStatusRemark: '',
-      caseStatusText: '正常',
-      orgTitle: '公司名称T79',
-      caseUserId: 1001,
-      color: 97,
-      cpeId: 0,
-      cpeName: '钱龙',
-      creditorId: 8,
-      creditorName: '测试债权方1',
-      debtResidueAmount: 127493.92,
-      distLogId: 0,
-      distState: 0,
-      entrustAmount: 1,
-      entrustContactResultId: 187,
-      entrustFollowTimes: 125,
-      entrustLastFollowTime: '2023-02-27 10:27:30',
-      entrustLock: 0,
-      entrustLogId: 0,
-      entrustState: 0,
-      entrustTime: '2022-12-01 15:41:40',
-      entrustType: 368,
-      followStatusId: 201,
-      followStatusText: '后续再跟进',
-      handleAmount: 7266.75,
-      idno: '1411811987******12',
-      investorName: '中信信托有限责任公司',
-      isOutsidePhone: 1,
-      isSendLawyer: 0,
-      mediateStatusText: '',
-      orgId: 0,
-      orgTagTempList: [],
-      pauseCaseType: [],
-      productId: 20,
-      productName: '邦恩佰仟',
-      regAddrArea: '孝义市',
-      regAddrCity: '吕梁市',
-      regAddrProvince: '山西省',
-      repairStatus: 'RPS001',
-      residueAmount: 7266.75,
-      retainId: 0,
-      robotTag: '机器人评语',
-      stagingPlan: { stagingPlanUuid: 'e20a60db43fd43f190ea2e8c919d62c5', historyRetainCount: 0, debtSignStatus: 0 },
-      storeId: 1,
-      storeName: '待分配库',
-      lawsuitStatus: '内部已执行',
-      tagAlterList: [
-        //预警标签
-        {
-          id: 11,
-          idno: '330124199408180716',
-          isShare: 1,
-          markCount: 0,
-          tagAlertId: 13,
-          tagAlertName: '新闻媒体'
-        },
-        {
-          id: 9,
-          idno: '330124199408180716',
-          isShare: 0,
-          markCount: 1,
-          tagAlertId: 190,
-          tagAlertName: '思想那1'
-        }
-      ],
-      tagTempList: [
-        //临时标签
-        {
-          caseId: 3,
-          caseTagId: 1096075,
-          tagName: '2132'
-        },
-        {
-          caseId: 3,
-          caseTagId: 1097866,
-          tagName: 'tmp1'
-        }
-      ],
-      totalCouponAmount: 0,
-      totalIntegralAmount: 0,
-      totalReductionAmount: 0,
-      totalRefundAmount: 0,
-      transAmount: 4844.5,
-      userName: '马海山',
-      userPhone: '18435838528'
-    },
-    {
-      allotLogId: 0,
-      allotState: 0,
-      allotTime: '2022-12-02 09:50:43',
-      arbitrationStatus: 1,
-      arbitrationTime: '2023-03-31 14:49:46',
-      batchId: 117,
-      batchNo: '丽水邦恩-邦恩佰仟20201118',
-      caseId: 1,
-      caseNo: 'BE-BQ-0001001',
-      caseStatus: 1,
-      caseStatusChild: 0,
-      caseStatusRemark: '',
-      caseStatusText: '正常',
-      caseUserId: 1001,
-      color: 98,
-      cpeId: 0,
-      orgTitle: '公司名称T79',
-      cpeName: '钱龙',
-      creditorId: 8,
-      creditorName: '测试债权方1',
-      debtResidueAmount: 127493.92,
-      distLogId: 0,
-      distState: 0,
-      entrustAmount: 2,
-      entrustContactResultId: 187,
-      entrustFollowTimes: 125,
-      entrustLastFollowTime: '2023-02-27 10:27:30',
-      entrustLock: 0,
-      entrustLogId: 0,
-      entrustState: 0,
-      entrustTime: '2022-12-01 15:41:40',
-      entrustType: 368,
-      followStatusId: 201,
-      followStatusText: '后续再跟进',
-      handleAmount: 7266.75,
-      idno: '1411811987******12',
-      investorName: '中信信托有限责任公司',
-      isOutsidePhone: 1,
-      isSendLawyer: 0,
-      mediateStatusText: '',
-      orgId: 0,
-      orgTagTempList: [],
-      pauseCaseType: [],
-      lawsuitStatus: '内部已执行',
-      productId: 20,
-      productName: '邦恩佰仟',
-      regAddrArea: '孝义市',
-      regAddrCity: '吕梁市',
-      regAddrProvince: '山西省',
-      repairStatus: 'RPS001',
-      residueAmount: 7266.75,
-      retainId: 0,
-      robotTag: '机器人评语',
-      stagingPlan: { stagingPlanUuid: 'e20a60db43fd43f190ea2e8c919d62c5', historyRetainCount: 0, debtSignStatus: 0 },
-      storeId: 1,
-      storeName: '待分配库',
-      tagAlterList: [],
-      tagTempList: [{ caseId: 1, caseTagId: 3371889, tagName: '888' }],
-      totalCouponAmount: 0,
-      totalIntegralAmount: 0,
-      totalReductionAmount: 0,
-      totalRefundAmount: 0,
-      transAmount: 4844.5,
-      userName: '马海山',
-      userPhone: '18435838528'
-    }
-  ]
+  // state.tableData = [
+  //   {
+  //     allotLogId: 0,
+  //     allotState: 0,
+  //     allotTime: '2022-12-02 09:50:43',
+  //     arbitrationStatus: 1,
+  //     arbitrationTime: '2023-03-31 14:49:46',
+  //     batchId: 117,
+  //     batchNo: '丽水邦恩-邦恩佰仟20201118',
+  //     caseId: 3,
+  //     caseNo: 'BE-BQ-0001003',
+  //     caseStatus: 1,
+  //     caseStatusChild: 0,
+  //     caseStatusRemark: '',
+  //     caseStatusText: '正常',
+  //     orgTitle: '公司名称T79',
+  //     caseUserId: 1001,
+  //     color: 97,
+  //     cpeId: 0,
+  //     cpeName: '钱龙',
+  //     creditorId: 8,
+  //     creditorName: '测试债权方1',
+  //     debtResidueAmount: 127493.92,
+  //     distLogId: 0,
+  //     distState: 0,
+  //     entrustAmount: 1,
+  //     entrustContactResultId: 187,
+  //     entrustFollowTimes: 125,
+  //     entrustLastFollowTime: '2023-02-27 10:27:30',
+  //     entrustLock: 0,
+  //     entrustLogId: 0,
+  //     entrustState: 0,
+  //     entrustTime: '2022-12-01 15:41:40',
+  //     entrustType: 368,
+  //     followStatusId: 201,
+  //     followStatusText: '后续再跟进',
+  //     handleAmount: 7266.75,
+  //     idno: '1411811987******12',
+  //     investorName: '中信信托有限责任公司',
+  //     isOutsidePhone: 1,
+  //     isSendLawyer: 0,
+  //     mediateStatusText: '',
+  //     orgId: 0,
+  //     orgTagTempList: [],
+  //     pauseCaseType: [],
+  //     productId: 20,
+  //     productName: '邦恩佰仟',
+  //     regAddrArea: '孝义市',
+  //     regAddrCity: '吕梁市',
+  //     regAddrProvince: '山西省',
+  //     repairStatus: 'RPS001',
+  //     residueAmount: 7266.75,
+  //     retainId: 0,
+  //     robotTag: '机器人评语',
+  //     stagingPlan: { stagingPlanUuid: 'e20a60db43fd43f190ea2e8c919d62c5', historyRetainCount: 0, debtSignStatus: 0 },
+  //     storeId: 1,
+  //     storeName: '待分配库',
+  //     lawsuitStatus: '内部已执行',
+  //     tagAlterList: [
+  //       //预警标签
+  //       {
+  //         id: 11,
+  //         idno: '330124199408180716',
+  //         isShare: 1,
+  //         markCount: 0,
+  //         tagAlertId: 13,
+  //         tagAlertName: '新闻媒体'
+  //       },
+  //       {
+  //         id: 9,
+  //         idno: '330124199408180716',
+  //         isShare: 0,
+  //         markCount: 1,
+  //         tagAlertId: 190,
+  //         tagAlertName: '思想那1'
+  //       }
+  //     ],
+  //     tagTempList: [
+  //       //临时标签
+  //       {
+  //         caseId: 3,
+  //         caseTagId: 1096075,
+  //         tagName: '2132'
+  //       },
+  //       {
+  //         caseId: 3,
+  //         caseTagId: 1097866,
+  //         tagName: 'tmp1'
+  //       }
+  //     ],
+  //     totalCouponAmount: 0,
+  //     totalIntegralAmount: 0,
+  //     totalReductionAmount: 0,
+  //     totalRefundAmount: 0,
+  //     transAmount: 4844.5,
+  //     userName: '马海山',
+  //     userPhone: '18435838528'
+  //   },
+  //   {
+  //     allotLogId: 0,
+  //     allotState: 0,
+  //     allotTime: '2022-12-02 09:50:43',
+  //     arbitrationStatus: 1,
+  //     arbitrationTime: '2023-03-31 14:49:46',
+  //     batchId: 117,
+  //     batchNo: '丽水邦恩-邦恩佰仟20201118',
+  //     caseId: 1,
+  //     caseNo: 'BE-BQ-0001001',
+  //     caseStatus: 1,
+  //     caseStatusChild: 0,
+  //     caseStatusRemark: '',
+  //     caseStatusText: '正常',
+  //     caseUserId: 1001,
+  //     color: 98,
+  //     cpeId: 0,
+  //     orgTitle: '公司名称T79',
+  //     cpeName: '钱龙',
+  //     creditorId: 8,
+  //     creditorName: '测试债权方1',
+  //     debtResidueAmount: 127493.92,
+  //     distLogId: 0,
+  //     distState: 0,
+  //     entrustAmount: 2,
+  //     entrustContactResultId: 187,
+  //     entrustFollowTimes: 125,
+  //     entrustLastFollowTime: '2023-02-27 10:27:30',
+  //     entrustLock: 0,
+  //     entrustLogId: 0,
+  //     entrustState: 0,
+  //     entrustTime: '2022-12-01 15:41:40',
+  //     entrustType: 368,
+  //     followStatusId: 201,
+  //     followStatusText: '后续再跟进',
+  //     handleAmount: 7266.75,
+  //     idno: '1411811987******12',
+  //     investorName: '中信信托有限责任公司',
+  //     isOutsidePhone: 1,
+  //     isSendLawyer: 0,
+  //     mediateStatusText: '',
+  //     orgId: 0,
+  //     orgTagTempList: [],
+  //     pauseCaseType: [],
+  //     lawsuitStatus: '内部已执行',
+  //     productId: 20,
+  //     productName: '邦恩佰仟',
+  //     regAddrArea: '孝义市',
+  //     regAddrCity: '吕梁市',
+  //     regAddrProvince: '山西省',
+  //     repairStatus: 'RPS001',
+  //     residueAmount: 7266.75,
+  //     retainId: 0,
+  //     robotTag: '机器人评语',
+  //     stagingPlan: { stagingPlanUuid: 'e20a60db43fd43f190ea2e8c919d62c5', historyRetainCount: 0, debtSignStatus: 0 },
+  //     storeId: 1,
+  //     storeName: '待分配库',
+  //     tagAlterList: [],
+  //     tagTempList: [{ caseId: 1, caseTagId: 3371889, tagName: '888' }],
+  //     totalCouponAmount: 0,
+  //     totalIntegralAmount: 0,
+  //     totalReductionAmount: 0,
+  //     totalRefundAmount: 0,
+  //     transAmount: 4844.5,
+  //     userName: '马海山',
+  //     userPhone: '18435838528'
+  //   }
+  // ]
   state.total = data.total
   const { data: data1 } = await Apis.caseListStats(params)
-  CaseStatisticsEntrust.forEach(item => {
-    item.value = data1[item.key]
-  })
-  state.CaseStatisticsEntrust = CaseStatisticsEntrust
+  state.labelObjData = { ...data1, pageTotal: state.total }
 }
 //表格选择
 const handleSelectionChange = val => {
@@ -434,15 +422,8 @@ const handleClick = item => {
     ElMessage.warning('请先选择操作对象!')
   } else {
     switch (item.title) {
-      case '导出案件1':
-        exportModel('EXPORT_CASE_FIELD', 0)
-        break
-      case '导出案件2':
-        exportModel('EXPORT_CASE_FIELD', 0)
-        break
-      case '导出处置记录':
-        // this.form.caseStatus = 25;
-        exportModel('EXPORT_FOLLOW_FIELD', 1)
+      case '导出案件':
+        exportModel('xxxx')
         break
       case '案件标色':
         colorShow()
@@ -500,105 +481,32 @@ const handlesort = val => {
 const editStatus = () => {
   editStatusDialog.value.open(getParams())
 }
-// 0导出案件1和导出案件2， 1导出处置记录
-const exportModel = async (code, type) => {
+// 导出案件
+const exportModel = async code => {
   let params = {
     codes: code
   }
   // const { data } = await xx(params)
   // state.exportData = data[code]
   state.exportData = {
-    amountTime: {
-      loanPactAmount: '合同金额',
-      loanArrivalAmount: '到账金额',
-      loanBorrRate: '借款费率',
-      loanServeRate: '服务费率',
-      loanPeriod: '借款周期',
-      transBeforeRefundAmount: '转让前已还金额',
-      transAmount: '转让金额',
-      transPrincipal: '转让本金',
-      transFee: '转让利息',
-      loanTime: '借款时间',
-      loanStartTime: '借款起算时间',
-      loanEndTime: '借款到期时间',
-      loanExpireTime: '最后还款日',
-      transTime: '转让日期',
-      creditAmount: '征信金额'
-    },
     baseInfo: {
       caseNo: '案件ID',
-      productName: '产品',
-      batchNo: '入库批次号',
-      creditorName: '债权方',
-      loanPactNo: '订单合同号',
-      loanPlatformUserId: '平台用户ID',
-      originCreditor: '原债权公司',
-      userName: '姓名',
-      idno: '证件号',
-      userPhone: '手机号',
-      sosPhone: '紧急联系人',
-      sex: '性别',
-      marital: '婚姻状况',
-      qq: 'QQ',
-      mail: '邮箱',
-      regAddrRange: '户籍区域',
-      regAddr: '户籍地址',
-      homeAddr: '家庭地址',
-      homePhone: '家庭电话',
-      companyName: '单位名称',
-      companyAddr: '单位地址',
-      companyPhone: '单位电话',
-      investorName: '出资方',
-      receiptBank: '收款银行',
-      receiptBankCode: '收款银行卡号',
-      refundBank: '还款银行',
-      refundBankCode: '还款银行卡号',
-      caseStatusRemark: '特殊备注',
-      ethnicity: '民族'
-    },
-    handleRelevant: {
-      storeName: '所属分库',
-      orgTitle: '处置机构',
-      cpeName: 'CPE',
-      handleAmount: '处置金额',
-      totalRefundAmount: '还款入账金额',
-      totalReductionAmount: '减免金额',
-      residueAmount: '剩余待还金额',
-      intermediateCourtName: '中级法院',
-      grassRootCourtName: '基层法院',
-      caseStatusText: '案件状态',
-      entrustTypeText: '委案类型'
-    },
-    followFile: {
-      callRecording: '通话录音',
-      letter: '信函',
-      smsRecord: '短信联系记录',
-      wechatRecord: '微信联系记录',
-      qqRecord: 'QQ联系记录'
+      loanPactNo: '订单合同号'
     }
   }
-  exportDialog.value.open(state.exportData, type)
+  exportDialog.value.open(state.exportData)
 }
-// 确认导出案件1和导出案件2/导出处置记录
-const submitExport = async (paramsSub, type) => {
+// 确认导出案件
+const submitExport = async paramsSub => {
   let params = getParams()
   Object.assign(params, paramsSub)
   //此处做判断是为了判断是否是委外库
-  // 再处理 原代码里的store没传，
+  // 机构端原代码里的store没传，暂不处理
   // if (this.store && params.operateType === 2) {
   //   params.companyCaseSearchParam['storeId'] = this.store
   // }
-  // 发送处理案件接口
-  console.log('导出：', params)
-  if (type === 0) {
-    // const { data } = await caseexport(params)
-    // data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
-    console.log(type)
-  } else if (type === 1) {
-    // const { data } = await followexport(params)
-    // data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
-    console.log(type)
-  }
+  const { data } = await Apis.companyCaseExport(params)
+  data.isAsync === 0 ? exportDownload(data.data.fileUrl) : ElMessage.success('数据量较大请稍后')
   ElMessage.success('操作成功！')
   toggleSelection()
 }

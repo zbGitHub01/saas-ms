@@ -5,7 +5,7 @@ const CaseStatistics = [
     labelTitle: '案件数量',
     isHaveRmbSign: false,
     value: null,
-    key: 'totalCase'
+    property: 'pageTotal'
   },
   {
     customizeIcon: 'peoplenum',
@@ -13,7 +13,7 @@ const CaseStatistics = [
     labelTitle: '案人人数',
     isHaveRmbSign: false,
     value: null,
-    key: 'caseUserCount'
+    property: 'caseUserCount'
   },
   {
     customizeIcon: 'moneynum',
@@ -21,7 +21,7 @@ const CaseStatistics = [
     labelTitle: '处置金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'sumHandleAmount'
+    property: 'sumHandleAmount'
   },
   {
     customizeIcon: 'backmoney',
@@ -29,7 +29,7 @@ const CaseStatistics = [
     labelTitle: '已还金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'sumRefundAmount'
+    property: 'sumRefundAmount'
   },
   {
     customizeIcon: 'moneing',
@@ -37,7 +37,7 @@ const CaseStatistics = [
     labelTitle: '待还金额',
     isHaveRmbSign: false,
     value: null,
-    key: 'sumResidueAmount'
+    property: 'sumResidueAmount'
   }
 ]
 export default CaseStatistics

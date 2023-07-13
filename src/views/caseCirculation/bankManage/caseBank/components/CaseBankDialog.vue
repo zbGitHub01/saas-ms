@@ -8,7 +8,7 @@
     :before-close="cancelSubmit"
   >
     <span>
-      <LabelClass :labelData="props.distInfo" :isSpaceAround="true" :isBkgColor="false" />
+      <LabelClass :labelData="props.labelList" :label-obj="props.labelObjData" :isSpaceAround="true" :isBkgColor="false" />
       <el-divider></el-divider>
       <el-form :model="form" ref="ruleFormRef">
         <el-form-item label="操作维度" prop="isWithProductPublicDebt">
@@ -19,7 +19,12 @@
         </el-form-item>
         <el-form-item label="目标案件库">
           <el-select clearable v-model="form.targetStoreId" placeholder="请选择目标案件库">
-            <el-option v-for="item in props.resouerdistList" :key="item.itemId" :label="item.itemText" :value="item.itemId"></el-option>
+            <el-option
+              v-for="item in props.resouerdistList"
+              :key="item.itemId"
+              :label="item.itemText"
+              :value="item.itemId"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -35,7 +40,7 @@
   
 <script setup>
 import { ElMessage } from 'element-plus'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref } from 'vue'
 import Apis from '@/api/modules/caseManage'
 const form = reactive({
   isWithProductPublicDebt: 1,
@@ -43,9 +48,13 @@ const form = reactive({
 })
 const originFormData = JSON.parse(JSON.stringify(form))
 const props = defineProps({
-  distInfo: {
+  labelList: {
     type: Object,
-    default: () => ({})
+    default: () => ([])
+  },
+  labelObjData: {
+    type: Object,
+    default: ()=>{{}}
   },
   resouerdistList: {
     type: Array,
@@ -77,8 +86,6 @@ const submitForm = async () => {
     sourceStoreId: props.sourceStoreId, //当前所在库的id
     targetStoreId: form.targetStoreId
   }
-  console.log(params)
-  // 请求
   await Apis.caseDistSave(params)
   ElMessage.success('分库成功！')
   emits('toggleSelection')

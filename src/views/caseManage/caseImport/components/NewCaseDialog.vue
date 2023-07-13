@@ -162,7 +162,6 @@ const submitForm = formEl => {
           params.proxyDurationType = 2
         }
       }
-      console.log(params)
       await Apis.caseImport(params)
       ElMessage.success('导入成功！')
       cancelSubmit()
@@ -172,6 +171,8 @@ const submitForm = formEl => {
 // 取消
 const cancelSubmit = () => {
   ruleFormRef.value?.resetFields()
+  uploadFileRef.value?.clearFiles()
+  uploadFileRefSub.value.clearFiles()
   dialogVisible.value = false
   time.value = ''
 }

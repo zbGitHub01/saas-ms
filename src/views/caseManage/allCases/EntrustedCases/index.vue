@@ -2,7 +2,7 @@
   <div>
     <DynamoSearchForm ref="dynamoSearchFormRef" code="MNG_CASE_SEARCH_FIELD" @search="getTableData" />
     <div class="spacing"></div>
-    <LabelClass :labelData="state.CaseStatistics" />
+    <LabelClass :labelData="state.CaseStatistics" :label-obj="state.labelObjData" />
     <div class="spacing"></div>
     <div class="mt20">
       <el-table :data="state.tableData" border>
@@ -44,14 +44,13 @@ const query = reactive({
 const state = reactive({
   tableData: [],
   total: 0,
-  CaseStatistics: [] //统计数据
+  CaseStatistics, //统计数据表头
+  labelObjData: {} //统计数据值
 })
 onMounted(() => {
   getTableData()
 })
 const getTableData = async () => {
-  console.log('已委托案件搜索')
-  // 请求得到数据
   const params = {
     ...dynamoSearchFormRef.value.getParams(),
     ...query,
@@ -59,53 +58,43 @@ const getTableData = async () => {
   }
   const { data } = await Apis.caseList(params)
   state.tableData = data.data
-  state.tableData = [
-    {
-      caseId: 1,
-      caseNo: 'BE-BQ-0001003',
-      productName: '“360”借条',
-      userName: '王亚瑞',
-      idno: '4503321989082027',
-      userPhone: '1234567',
-      handleAmount: 11,
-      totalRefundAmount: 22,
-      totalReductionAmount: 33,
-      residueAmount: 44,
-      batchNo: '万腾浩达资产-手机贷20190326',
-      creditorName: '丽水海树信用管理有限公司',
-      trusteeName: '丽水海树信用管理有限公司',
-      caseStatusText: '正常'
-    },
-    {
-      caseId: 3,
-      caseNo: 'BE-BQ-0001001',
-      productName: '“360”借条',
-      userName: '王亚瑞',
-      idno: '4503321989082027',
-      userPhone: '1234567',
-      handleAmount: 11,
-      totalRefundAmount: 22,
-      totalReductionAmount: 33,
-      residueAmount: 44,
-      batchNo: '万腾浩达资产-手机贷20190326',
-      creditorName: '丽水海树信用管理有限公司',
-      trusteeName: '丽水海树信用管理有限公司',
-      caseStatusText: '暂停 | 投诉'
-    }
-  ]
+  // state.tableData = [
+  //   {
+  //     caseId: 1,
+  //     caseNo: 'BE-BQ-0001003',
+  //     productName: '“360”借条',
+  //     userName: '王亚瑞',
+  //     idno: '4503321989082027',
+  //     userPhone: '1234567',
+  //     handleAmount: 11,
+  //     totalRefundAmount: 22,
+  //     totalReductionAmount: 33,
+  //     residueAmount: 44,
+  //     batchNo: '万腾浩达资产-手机贷20190326',
+  //     creditorName: '丽水海树信用管理有限公司',
+  //     trusteeName: '丽水海树信用管理有限公司',
+  //     caseStatusText: '正常'
+  //   },
+  //   {
+  //     caseId: 3,
+  //     caseNo: 'BE-BQ-0001001',
+  //     productName: '“360”借条',
+  //     userName: '王亚瑞',
+  //     idno: '4503321989082027',
+  //     userPhone: '1234567',
+  //     handleAmount: 11,
+  //     totalRefundAmount: 22,
+  //     totalReductionAmount: 33,
+  //     residueAmount: 44,
+  //     batchNo: '万腾浩达资产-手机贷20190326',
+  //     creditorName: '丽水海树信用管理有限公司',
+  //     trusteeName: '丽水海树信用管理有限公司',
+  //     caseStatusText: '暂停 | 投诉'
+  //   }
+  // ]
   state.total = data.total
   const { data: data1 } = await Apis.caseListStats(params)
-  // const labelData2 = {
-  //   totalCase: 23,
-  //   caseUserCount: 239278,
-  //   sumHandleAmount: 4889285788.62,
-  //   sumRefundAmount: 184079143.85,
-  //   sumResidueAmount: 4711200212.03
-  // }
-  CaseStatistics.forEach(item => {
-    item.value = data1[item.key]
-  })
-  state.CaseStatistics = CaseStatistics
+  state.labelObjData = { ...data1, pageTotal: state.total }
 }
 </script>
 

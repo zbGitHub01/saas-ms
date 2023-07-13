@@ -78,7 +78,7 @@
             <el-input v-model="searchText" placeholder="请输入搜索内容" :prefix-icon="Search" />
             <el-scrollbar class="scroll">
               <div class="check-list">
-                <el-checkbox v-for="item in checkList" :key="item.key" :value="!!item.isShow" @change="checkChange($event, item)">
+                <el-checkbox v-for="item in checkList" :key="item.key" :model-value="!!item.isShow" @change="checkChange($event, item)">
                   {{ item.title }}
                 </el-checkbox>
               </div>
@@ -100,10 +100,10 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { Operation, Search } from '@element-plus/icons-vue'
 import { useCommonStore } from '@/store/modules/common'
 import NumberRange from './NumberRange.vue'
-// import { cpeList, fieldlist, fieldsave, selectList } from '@/api/comment'
 import { foreara } from '@/utils/formatedate'
 // import { caseStatePauseConfigList } from '@/api/casestop'
 import formData from './formData.json'
+import Apis from '@/api/modules/caseManage'
 // text: 输入框, select: 单选下拉框, multipleSelect: 多选下拉框, radio: 简易下拉框, lazySelect: 懒加载下拉框. lazyMultipleSelect: 懒加载多选下拉框, area: 区域选择, dateRange: 日期区间选择器, date: 日期选择器, sumRange: 数值金额区间
 // tips: 日期区间参数为key值后面加 Start | End, 数值区间参数为key值后面加 Max | Min
 
@@ -127,38 +127,21 @@ const rangeType = ['dateRange', 'sumRange', 'area']
 const valueStringKey = ['IVR_TAG', 'ROBOT_TAG', 'CASE_LAWSUIT_STATUS_TAG']
 const formStaticCode = {
   // 前端调用的下拉数据
-  caseStatusList: 'CASE_STATUS_LIST',
   cpeId: 'CPE_LIST'
 }
 const formItems = ref([])
-// const options = reactive({
-//   CASE_STATUS_LIST: [
-//     { value: 1, label: '正常' },
-//     { value: 10, label: '关闭|已结清' },
-//     { value: 15, label: '关闭|特殊原因' },
-//     { value: 12, label: '关闭|已核销' },
-//     { value: 16, label: '关闭|资产已转让' },
-//     { value: 17, label: '关闭|呆账/坏账' },
-//     { value: 20, label: '暂停|投诉' },
-//     { value: 25, label: '暂停|特殊原因' }
-//   ],
-//   CPE_LIST: []
-// })
-const options = computed(() => {
-  return {
-    ...commonStore.dropdownList,
-    CASE_STATUS_LIST: [
-      { value: 1, label: '正常' },
-      { value: 10, label: '关闭|已结清' },
-      { value: 15, label: '关闭|特殊原因' },
-      { value: 12, label: '关闭|已核销' },
-      { value: 16, label: '关闭|资产已转让' },
-      { value: 17, label: '关闭|呆账/坏账' },
-      { value: 20, label: '暂停|投诉' },
-      { value: 25, label: '暂停|特殊原因' }
-    ],
-    CPE_LIST: []
-  }
+const options = reactive({
+  CASE_STATUS_LIST: [
+    { value: 1, label: '正常' },
+    { value: 10, label: '关闭|已结清' },
+    { value: 15, label: '关闭|特殊原因' },
+    { value: 12, label: '关闭|已核销' },
+    { value: 16, label: '关闭|资产已转让' },
+    { value: 17, label: '关闭|呆账/坏账' },
+    { value: 20, label: '暂停|投诉' },
+    { value: 25, label: '暂停|特殊原因' }
+  ],
+  CPE_LIST: []
 })
 const form = reactive({})
 const areaList = computed(() => commonStore.regionData)
@@ -169,34 +152,44 @@ const checkList = computed(() => {
 })
 
 const fetchFieldList = async () => {
-  // const { code, data } = await fieldlist({ codes: props.code })
-  // if (code === 200) {
-  //   setFormData(data[props.code])
-  // }
-  setFormData(formData)
+  const { data } = await Apis.findFieldList({ codes: props.code })
+  setFormData(data[props.code])
+  // setFormData(formData)
 }
 const setFormData = data => {
+  const codes = []
   formItems.value = data.map(item => {
+    if (item.code) {
+      codes.push(item.code)
+    }
     if (formStaticCode[item.key]) {
       item.code = formStaticCode[item.key]
     }
     form[item.key] = rangeType.includes(item.type) ? [] : null
     return item
   })
-  // fetchSelectList(codes)
+  fetchSelectList(codes)
 }
 const fetchSelectList = async codes => {
-  if (!codes) return
-  const { data, code } = await selectList({ codes })
-  if (code === 200) {
-    Object.keys(data).forEach(key => {
-      const items = data[key].map(item => {
+  if (!codes.length) return
+  codes.forEach(key => {
+    if (commonStore.dropdownList[key]) {
+      options[key] = commonStore.dropdownList[key]?.map(item => {
         const value = valueStringKey.includes(key) ? item.itemText : item.itemId
         return { label: item.itemText, value: value || item.itemText }
       })
-      this.$set(this.options, key, items)
-    })
-  }
+    }
+    if (key === 'PRODUCT_LIST') {
+      fetchProductList()
+    }
+  })
+  console.log(options, '---options')
+}
+const fetchProductList = async () => {
+  const { data } = await Apis.productList({ isProxy: 0, productStatus: 1 })
+  options.PRODUCT_LIST = data.map(item => {
+    return { label: item.productName, value: item.productId }
+  })
 }
 // const fetchCpeList = async () => {
 //   const { code, data } = await cpeList({ positionStatus: 1 })
@@ -206,25 +199,15 @@ const fetchSelectList = async codes => {
 //     })
 //   }
 // }
-// const fetchCaseStateList = async () => {
-//   const { code, data } = await caseStatePauseConfigList({ page: 1, pageSize: 999 })
-//   if (code === 200) {
-//     data.data.forEach(item => {
-//       if (item.state === 0 && item.id !== 30) {
-//         this.options.CASE_STATUS_LIST.push({ value: item.id, label: item.reason })
-//       }
-//     })
-//   }
-// }
 const checkChange = async (value, item) => {
-  // item.isShow = Number(value)
-  // const fieldInfo = formItems.value.map(item => {
-  //   return { isShow: item.isShow, title: item.title }
-  // })
-  // fieldsave({
-  //   code: props.code,
-  //   fieldInfo: JSON.stringify(fieldInfo)
-  // })
+  item.isShow = Number(value)
+  const fieldInfo = formItems.value.map(item => {
+    return { isShow: item.isShow, title: item.title }
+  })
+  Apis.saveFieldList({
+    code: props.code,
+    fieldInfo: JSON.stringify(fieldInfo)
+  })
 }
 const onSearch = () => {
   emit('search')
@@ -257,7 +240,6 @@ const getParams = () => {
 onMounted(() => {
   fetchFieldList()
   // fetchCpeList()
-  // fetchCaseStateList()
 })
 
 defineExpose({
