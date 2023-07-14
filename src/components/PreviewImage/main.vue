@@ -1,14 +1,11 @@
 <template>
-  <el-image-viewer v-if="props.visible" :url-list="props.urlList" :initial-index="props.zIndex" @close="onClose" />
+  <el-image-viewer v-if="visible" :url-list="props.urlList" :initial-index="props.zIndex" @close="onClose" />
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { ElImageViewer } from 'element-plus'
 const props = defineProps({
-  visible: {
-    type: Boolean,
-    default: false
-  },
   urlList: {
     type: Array,
     default: () => []
@@ -22,12 +19,13 @@ const props = defineProps({
     default: 0
   }
 })
-const emit = defineEmits(['update:visible'])
 
+const visible = ref(true)
 const onClose = () => {
-  emit('update:visible', false)
+  visible.value = false
   props.remove()
 }
+defineExpose({ visible })
 </script>
 
 <style lang="scss" scoped></style>

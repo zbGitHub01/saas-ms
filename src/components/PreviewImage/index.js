@@ -4,7 +4,6 @@ import PreviewImageConstructor from './main.vue'
 const createPreviewImage = options => {
   const container = document.createElement('div')
   const props = {
-    visible: true,
     remove() {
       render(null, container)
     },
@@ -13,6 +12,9 @@ const createPreviewImage = options => {
   const vnode = createVNode(PreviewImageConstructor, props)
   render(vnode, container)
   document.body.appendChild(container.firstElementChild)
+  // const vm = vnode.component
+  // console.log(vm)
+  // vm.exposed.visible.value = true
 }
 /**
  * @description: 图片预览方法
