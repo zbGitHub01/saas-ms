@@ -183,7 +183,6 @@ const fetchSelectList = async codes => {
       fetchProductList()
     }
   })
-  console.log(options, '---options')
 }
 const fetchProductList = async () => {
   const { data } = await Apis.productList({ isProxy: 0, productStatus: 1 })
